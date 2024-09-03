@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class test_controller {
 	@GetMapping("/test.do")
 	public String test(){
-		
 		return null;
 	}
 }
