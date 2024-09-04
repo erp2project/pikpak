@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class test_controller {
 	@GetMapping("/test.do")
 	public String test(){
+		String name = "이희우";
 		return null;
 	}
 }
