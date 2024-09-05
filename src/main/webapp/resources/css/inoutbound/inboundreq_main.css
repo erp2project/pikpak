@@ -1,0 +1,32 @@
+@charset "UTF-8";
+
+.menu {
+    height: 30px;
+    border-bottom: 1px solid black;
+}
+
+.menu-item {
+    padding: 7px;
+    cursor: pointer;
+    position: relative;
+}
+
+.menu-item:after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 5px;
+    background: black;
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    /*transition: width 0.3s ease;*/
+}
+
+.menu-item:hover:after {
+    width: 100%;
+}
+
+.active:after {
+    width: 100%;
+}
