@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<title>PikPak</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<!-- VENDOR CSS -->
+	<link rel="stylesheet" href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/resources/assets/vendor/linearicons/style.css">
+	<link rel="stylesheet" href="/resources/assets/vendor/chartist/css/chartist-custom.css">
+	<!-- MAIN CSS -->
+	<link rel="stylesheet" href="/resources/css/inventory/main.css">
+	<link rel="stylesheet" href="/resources/css/inventory/warehouse_inventory.css">
+	<link rel="stylesheet" href="/resources/assets/css/demo.css">
+	<!-- GOOGLE FONTS -->
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+	<!-- ICONS -->
+	<link rel="apple-touch-icon" sizes="76x76" href="/resources/assets/img/apple-icon.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/resources/assets/img/favicon.png">
+</head>
+
+<body>
+	<!-- WRAPPER -->
+	<div id="wrapper">
+		<!-- 최상단 -->
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="brand" style="height: 30px;">
+				<a href="index.html">
+					<span class="fa fa-paper-plane-o" style="font-size: 23px; margin-right: 5px;"></span>
+					<span style="font-size: 23px;">PikPak</span>
+				</a>
+			</div>
+			<div class="container-fluid">
+				<div class="navbar-btn">
+					<button type="button" class="btn-toggle-fullwidth"><i class="lnr lnr-arrow-left-circle"></i></button>
+				</div>
+			
+				<div class="navbar-btn navbar-btn-right">
+					<span style="vertical-align: -3px;">
+					<i class="lnr lnr-user"></i> <span>관리자님 환영합니다.</span>
+				    </span>
+					<a class="btn btn-success update-pro" href=""><span>로그아웃</span></a>
+				</div>
+			</div>
+		</nav>
+		<!-- 최상단 끝 -->
+		<!-- 왼쪽 SIDEBAR -->
+		<div id="sidebar-nav" class="sidebar">
+			<div class="sidebar-scroll">
+				<nav>
+					<ul class="nav">
+						<li>
+							<a href="#subPages" data-toggle="collapse" class="collapsed active">
+							<i class="lnr lnr-file-empty"></i> <span>기준정보 관리</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">거래처 관리</a></li>
+									<li><a href="" class="">품목 관리</a></li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<a href="#subPages2" data-toggle="collapse" class="collapsed">
+							<i class="lnr lnr-dice"></i> <span>주문 | 반품</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages2" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">주문 관리</a></li>
+									<li><a href="" class="">반품 관리</a></li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<a href="#subPages3" data-toggle="collapse" class="collapsed">
+							<i class="lnr lnr-inbox"></i> <span>재고</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages3" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">재고 현황</a></li>
+									<li><a href="" class="">창고 관리</a></li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<a href="#subPages4" data-toggle="collapse" class="collapsed">
+							<i class="lnr lnr-download"></i> <span>입고 | 출고</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages4" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">입고 관리</a></li>
+									<li><a href="" class="">출고 관리</a></li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<a href="#subPages5" data-toggle="collapse" class="collapsed">
+							<i class="lnr lnr-chart-bars"></i> <span>납품</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages5" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">납품 관리</a></li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<a href="#subPages6" data-toggle="collapse" class="collapsed">
+							<i class="lnr lnr-cog"></i> <span>사이트 설정</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages6" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">재고기록 관리</a></li>
+									<li><a href="" class="">인사 관리</a></li>
+								</ul>
+							</div>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+		<!-- 왼쪽 SIDEBAR -->
+		<!-- MAIN -->
+		<div class="main">
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+					<!-- MAIN DATA VIEW -->
+					<div class="panel panel-headline">
+						<div class="panel-heading">
+							<p class="panel-subtitle">홈 > 재고 > <span style="color: black;">창고관리</span></p>
+						</div>
+						<div class="panel-body" >
+							<ul class = "panel_menu">
+								<li class="panel_menu-item active">
+									<a href="./warehouse_inventory" onclick="selectMenu(this, 'inventory')" class="active">창고별 재고 현황</a>
+								</li>
+								<li class="panel_menu-item">
+									<a href="./warehouse_management" onclick="selectMenu(this, 'warehouse')">창고 관리</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+			<!-- MAIN -->
+			</div>
+		</div>
+<div class="warehouse-container">
+    <!-- 왼쪽 섹션 (창고 구역) -->
+<div class="left-section">
+    <div class="zone" data-id="A" onclick="selectZone('A')">A구역</div>
+    <div class="zone-info-container" id="info-A"></div> <!-- A구역 정보가 출력될 부분 -->
+
+    <div class="zone" data-id="B" onclick="selectZone('B')">B구역</div>
+    <div class="zone-info-container" id="info-B"></div> <!-- B구역 정보가 출력될 부분 -->
+
+    <div class="zone" data-id="C" onclick="selectZone('C')">C구역</div>
+    <div class="zone-info-container" id="info-C"></div> <!-- C구역 정보가 출력될 부분 -->
+
+    <div class="zone" data-id="D" onclick="selectZone('D')">D구역</div>
+    <div class="zone-info-container" id="info-D"></div> <!-- D구역 정보가 출력될 부분 -->
+</div>
+
+
+    <!-- 가운데 섹션 (랙 번호) -->
+    <div class="rack-numbers">
+        <span class="rack-number" data-id="01" onclick="selectRack('01')">01</span>
+        <span class="rack-number" data-id="02" onclick="selectRack('02')">02</span>
+        <span class="rack-number" data-id="03" onclick="selectRack('03')">03</span>
+        <span class="rack-number" data-id="04" onclick="selectRack('04')">04</span>
+        <span class="rack-number" data-id="05" onclick="selectRack('05')">05</span>
+        <span class="rack-number" data-id="06" onclick="selectRack('06')">06</span>
+        <span class="rack-number" data-id="07" onclick="selectRack('07')">07</span>
+        <span class="rack-number" data-id="08" onclick="selectRack('08')">08</span>
+        <!-- 아래에 "랙 번호" 텍스트 추가 -->
+        <div class="rack-label">랙 번호</div>
+    </div>
+
+		    <!-- 오른쪽 섹션 (랙 상태) -->
+		    <div class="right-section">
+		        <div class="level" data-level="4L">
+		            <div class="rack">1P</div>
+		            <div class="rack">2P</div>
+		            <div class="rack">3P</div>
+		        </div>
+		        <div class="level" data-level="3L">
+		            <div class="rack">1P</div>
+		            <div class="rack">2P</div>
+		            <div class="rack">3P</div>
+		        </div>
+		        <div class="level" data-level="2L">
+		            <div class="rack selected">1P</div>
+		            <div class="rack selected">2P</div>
+		            <div class="rack">3P</div>
+		        </div>
+		        <div class="level" data-level="1L">
+		            <div class="rack">1P</div>
+		            <div class="rack">2P</div>
+		            <div class="rack">3P</div>
+		        </div>
+		    </div>
+		    
+		    <!-- 오른쪽 리스트 및 정보 -->
+		    <div class="right-info-container"> 
+		       	<!-- 재고 리스트 섹션 -->
+		        <div class="info-section">
+		            <div class="rack-info">
+		                <p id="rack-info-text">선택된 구역 · 랙 번호 · 랙 상태의 재고 리스트</p>
+		                <table>
+		                    <thead>
+		                        <tr>
+		                            <th>상품 코드</th>
+		                            <th>위치 코드</th>
+		                            <th>상품명</th>
+		                            <th>상품 수량</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody id="inventory-list">
+		                        <!-- 재고 리스트가 표시될 영역 -->
+		                    </tbody>
+		                </table>
+		            </div>
+		        </div>
+		        
+		        <!-- 선택된 구역 정보 추가 -->
+		        <div class="selected-zone-info">
+		            <h4>선택 파트(1P) 구역 정보</h4>
+		            <table>
+		                <tr>
+		                    <th>담당자명</th>
+		                    <td id="manager-name">-</td>
+		                    <th>연락처</th>
+		                    <td id="contact-info">-</td>
+		                </tr>
+		                <tr>
+		                    <th>구역 상태</th>
+		                    <td id="zone-status">-</td>
+		                    <th>구역별 총 수량</th>
+		                    <td id="total-items">-</td>
+		                </tr>
+		                <tr>
+		                    <th>점검 히스토리</th>
+		                    <td colspan="3" id="check-history">-</td>
+		                </tr>
+		            </table>
+		        </div>
+		    </div>
+		</div>
+		<div class="clearfix"></div>
+		<footer>
+			<div class="container-fluid">
+				<p class="copyright">Copyright ⓒ 2024<i class="fa fa-love"></i><a href="pikpak.com">pikpak.com</a> All rights Reserved.</p>
+			</div>
+		</footer>
+	</div>
+	<!-- END WRAPPER -->
+	<!-- Javascript -->
+	<script src="/resources/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="/resources/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="/resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="/resources/assets/vendor/chartist/js/chartist.min.js"></script>
+	<script src="/resources/assets/scripts/klorofil-common.js"></script>
+	<script src="/resources/js/inventory/warehouse_inventory.js"></script>	
+</body>
+
+</html>
