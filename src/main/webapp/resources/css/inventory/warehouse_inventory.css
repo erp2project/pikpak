@@ -1,11 +1,38 @@
 @charset "EUC-KR";
 
-/* 컨테이너 */
+/* 컨테이너 .warehouse 영역*/
 .warehouse-container {
     display: flex;
     justify-content: space-between;
     padding: 20px;
     background-color: #f5f5fa;
+}
+
+.warehouse-section {
+    position: relative; /* 부모 요소에 상대 위치 부여 */
+    margin-bottom: 30px;
+}
+
+/* 테이블과 버튼을 가까이 두기 */
+.warehouse-section .table {
+    margin-bottom: 0; /* 테이블 아래에 불필요한 간격을 제거 */
+}
+
+.warehouse-management-header {
+    display: flex; /* Flexbox를 적용 */
+    justify-content: flex-end; /* 오른쪽으로 정렬 */
+    width: 100%; /* 부모 요소가 전체 너비를 차지 */
+    margin-top: 10px; /* 메뉴와 버튼 사이에 간격 추가 */
+}
+
+.warehouse-management-header button {
+    margin-left: 10px; /* 버튼들 사이에 간격 추가 */
+}
+
+.btn-right {
+    float: right; /* 오른쪽에 배치 */
+    margin-top: 0px; /* 표와 버튼 사이에 약간의 간격 추가 */
+    
 }
 
 /* 창고 영역 */
@@ -223,4 +250,21 @@
 .selected-zone-info th {
     background-color: #f2f2f2;
     text-align: left;
+}
+
+/* 상세 보기 링크 스타일 */
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+    .warehouse-grid {
+        grid-template-columns: 1fr; /* 모바일에서는 1열로 표시 */
+    }
 }
