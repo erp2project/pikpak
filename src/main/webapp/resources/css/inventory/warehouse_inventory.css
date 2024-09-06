@@ -13,6 +13,12 @@
     margin-bottom: 30px;
 }
 
+.warehouse-section h5 {
+    font-size: 20px; /* 원하는 글자 크기 설정 */
+    font-weight: bold; /* 강조 효과를 추가하려면 사용 */
+    margin-bottom: 10px; /* 제목과 테이블 사이 간격 조정 */
+}
+
 /* 테이블과 버튼을 가까이 두기 */
 .warehouse-section .table {
     margin-bottom: 0; /* 테이블 아래에 불필요한 간격을 제거 */
@@ -33,6 +39,16 @@
     float: right; /* 오른쪽에 배치 */
     margin-top: 0px; /* 표와 버튼 사이에 약간의 간격 추가 */
     
+}
+.table {
+    width: 100%;
+    table-layout: fixed; /* 테이블의 고정된 레이아웃 */
+}
+
+.table-wrapper {
+    max-height: 150px; /* 테이블 최대 높이 설정 */
+    overflow-y: auto;  /* 스크롤 가능하게 설정 */
+    margin-bottom: 10px; /* 테이블과 버튼 사이 간격 */
 }
 
 /* 창고 영역 */
