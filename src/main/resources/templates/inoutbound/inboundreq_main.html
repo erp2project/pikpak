@@ -5,128 +5,130 @@
 <title>입고요청 메인</title>
 </head>
 <body>
-<section class="main" th:fragment="main">
-			<!-- MAIN CONTENT -->
-			<div class="main-content">
-				<div class="container-fluid">
-					<!-- MAIN DATA VIEW -->
-					<div class="panel panel-headline">
-						<div class="panel-heading">
-							<p class="panel-subtitle">
-								홈 > 입고|출고 > <span style="color: black;">입고관리</span>
-							</p>
-						</div>
-						<div class="panel-body">
-							<p class="menu">
-								<span class="menu-item active">입고요청</span> <span
-									class="menu-item">가입고등록</span> <span class="menu-item">입고등록</span>
-							</p>
-							<section>
-								<span style="float: right; height: 40px;">
-									<button type="button" class="btn btn-success">초기화</button>
-									<button type="button" class="btn btn-danger">EXCEL</button>
-									<button type="button" class="btn btn-warning">조회</button>
-								</span>
-								<p style="font-size: 12px; height: 25px; line-height: 30px;">※
-									조회옵션</p>
-								<table class="table table-bordered">
-									<tbody>
-										<tr>
-											<td style="width: 10%; height: 34px; line-height: 34px;">입고요청일자</td>
-											<td style="width: 20%; line-height: 34px;">
-												<div style="display: flex; align-items: center;">
-													<input type="date" class="form-control" style="width: 40%;">&nbsp;&nbsp;
-													~ &nbsp;&nbsp; <input type="date" class="form-control"
-														style="width: 40%;">
-												</div>
-											</td>
-											<td style="width: 10%; height: 34px; line-height: 34px;">매입처
-												회사명</td>
-											<td style="width: 15%; line-height: 34px;">
-												<div style="display: flex; align-items: center;">
-													<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
-													<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
-													<button class="btn btn-primary" type="button">검색</button>
-												</div>
-											</td>
-											<td style="width: 10%; height: 34px; line-height: 34px;">상품코드
-												/ 상품명</td>
-											<td style="width: 15%; line-height: 34px;">
-												<div style="display: flex; align-items: center;">
-													<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
-													<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
-													<button class="btn btn-primary" type="button" onclick="search_test()">검색</button>
-												</div>
-												</td>
-										</tr>
-										<tr>
-											<td style="width: 10%; height: 34px; line-height: 34px;">상태</td>
-											<td style="width: 20%; line-height: 34px;">
-												<select class="form-control" style="width: 35%; float: left; margin-right: 5px;">
-													<option value="">상태 선택</option>
-												</select>
-		
-											</td>
-											<td style="width: 10%; height: 34px; line-height: 34px;">관리자</td>
-											<td style="width: 15%; line-height: 34px;">
-												<div style="display: flex; align-items: center;">
-													<input type="text" class="form-control" style="width: 40%;">
-												</div>
-									
-											</td>
-											
-										</tr>
-									</tbody>
-								</table>
-								<p style="font-size: 12px; height: 25px; line-height: 30px;">※
-									조회결과</p>
-								<div class="panel-body" style="height: 400px; overflow-y: auto;">
-									<table class="table table-hover">
-										<thead style="background-color: rgb(130, 210, 213);">
-											<tr>
-												<th><input type="checkbox"
-													style="border: 1px solid #ccc;"></th>
-												<th>위치 코드</th>
-												<th>상품 코드</th>
-												<th>상품명</th>
-												<th>상품수량</th>
-												<th style="text-align: center;">희망 납기일자</th>
-												<th style="text-align: center;">추가 요청사항</th>
-												<th style="text-align: center;">상태</th>
-												<th style="text-align: center;">등록일</th>
-												<th style="text-align: center;">관리자</th>
-												<th style="text-align: center;">수정</th>
-											</tr>
-										</thead>
-										<tbody>
-										<tr>
-												<td colspan='10' style="text-align: center;">조회된 정보가 없습니다.</td>
-	
-											</tr>
-
-											<tr>
-												<td><input type="checkbox"></td>
-												<td>A0132</td>
-												<td>SM-12345</td>
-												<td>로봇 청소기</td>
-												<td>5EA</td>
-												<td style="text-align: center;">2023-09-30</td>
-												<td style="text-align: center;">-</td>
-												<td style="text-align: center;">대기</td>
-												<td style="text-align: center;">2024-09-01</td>
-												<td style="text-align: center;">홍길동</td>
-												<td style="text-align: center;">관리</td>
-											</tr>
-											
-										</tbody>
-									</table>
-								</div>
-							</section>
-						</div>
+	<section class="main" th:fragment="main_inboundreq">
+		<!-- MAIN CONTENT -->
+		<div class="main-content">
+			<div class="container-fluid">
+				<!-- MAIN DATA VIEW -->
+				<div class="panel panel-headline">
+					<div class="panel-heading">
+						<p class="panel-subtitle">
+							홈 > 입고|출고 > <span style="color: black;">입고관리</span>
+						</p>
 					</div>
-					<!-- MAIN DATAVIEW -->
+					<div class="panel-body">
+						<p class="menu">
+							<span class="menu-item active" id="go_inoutreq">입고요청</span> <span
+								class="menu-item" id="go_exrecv">가입고등록</span> <span
+								class="menu-item">입고등록</span>
+						</p>
+						<section>
+							<span style="float: right; height: 40px;">
+								<button type="button" class="btn btn-success">초기화</button>
+								<button type="button" class="btn btn-danger">EXCEL</button>
+								<button type="button" class="btn btn-warning">조회</button>
+							</span>
+							<p style="font-size: 12px; height: 25px; line-height: 30px;">※
+								조회옵션</p>
+
+							<table class="table table-bordered">
+								<tbody>
+									<tr>
+										<td style="width: 10%; height: 34px; line-height: 34px;">입고요청일자</td>
+										<td style="width: 20%; line-height: 34px;">
+											<div style="display: flex; align-items: center;">
+												<input type="date" class="form-control" style="width: 40%;">&nbsp;&nbsp;
+												~ &nbsp;&nbsp; <input type="date" class="form-control"
+													style="width: 40%;">
+											</div>
+										</td>
+										<td style="width: 10%; height: 34px; line-height: 34px;">매입처
+											회사명</td>
+										<td style="width: 15%; line-height: 34px;">
+											<div style="display: flex; align-items: center;">
+												<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
+												<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
+												<button class="btn btn-primary" type="button" id="cp_search">검색</button>
+											</div>
+										</td>
+										<td style="width: 10%; height: 34px; line-height: 34px;">상품코드
+											/ 상품명</td>
+										<td style="width: 15%; line-height: 34px;">
+											<div style="display: flex; align-items: center;">
+												<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
+												<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
+												<button class="btn btn-primary" type="button" id="pd_search">검색</button>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td style="width: 10%; height: 34px; line-height: 34px;">상태</td>
+										<td style="width: 20%; line-height: 34px;"><select
+											class="form-control"
+											style="width: 35%; float: left; margin-right: 5px;">
+												<option value="">상태 선택</option>
+												<option value="대기">대기</option>
+												<option value="거절">거절</option>
+												<option value="승인">승인</option>
+												<option value="완료">완료</option>
+										</select></td>
+										<td style="width: 10%; height: 34px; line-height: 34px;">관리자</td>
+										<td style="width: 15%; line-height: 34px;">
+											<div style="display: flex; align-items: center;">
+												<input type="text" class="form-control" style="width: 40%;">
+											</div>
+
+										</td>
+
+									</tr>
+								</tbody>
+							</table>
+
+							<div class="panel-body table-container" style="height: 400px">
+    <table class="table table-hover table-fixed">
+        <thead style="background-color: rgb(130, 210, 213);">
+            <tr>
+                <th><input type="checkbox" style="border: 1px solid #ccc;"></th>
+                <th>위치 코드</th>
+                <th>상품 코드</th>
+                <th>상품명</th>
+                <th>상품수량</th>
+                <th style="text-align: center;">희망 납기일자</th>
+                <th style="text-align: center;">추가 요청사항</th>
+                <th style="text-align: center;">상태</th>
+                <th style="text-align: center;">등록일</th>
+                <th style="text-align: center;">관리자</th>
+                <th style="text-align: center;">수정</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="checkbox"></td>
+                <td>A0132</td>
+                <td>SM-12345</td>
+                <td>로봇 청소기</td>
+                <td>5EA</td>
+                <td style="text-align: center;">2023-09-30</td>
+                <td style="text-align: center;">-</td>
+                <td style="text-align: center;">대기</td>
+                <td style="text-align: center;">2024-09-01</td>
+                <td style="text-align: center;">홍길동</td>
+                <td style="text-align: center;">관리</td>
+            </tr>
+            <!-- 반복적인 열 생략 -->
+        </tbody>
+    </table>
+</div>
+							
+							
+							</div>
+						</section>
+					</div>
 				</div>
+				<!-- MAIN DATAVIEW -->
 			</div>
-			</section>
+		</div>
+	</section>
 </body>
+
 </html>

@@ -11,8 +11,17 @@ public class InoutBoundController {
 		return null;
 	}
 	
-	@GetMapping("/inoutbound/comp_search_popup")
-	public String showCompSearchPopup() {
-	    return "inoutbound/comp_search_popup";  // Thymeleaf 템플릿 경로
+	/*
+	// 상품코드/상품명 찾기 팝업
+	@GetMapping("/inoutbound/pd_search_popup")
+	public String pd_search_popup() {
+	    return "inoutbound/pd_search_popup";  // Thymeleaf 템플릿 경로
 	}
+	
+	// 매입처 회사명 찾기 팝업
+	@GetMapping("/inoutbound/cp_search_popup")
+	public String cp_search_popup() {
+	    return "inoutbound/cp_search_popup";
+	}
+	*/
 }

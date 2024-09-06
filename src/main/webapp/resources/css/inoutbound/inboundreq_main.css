@@ -30,3 +30,38 @@
 .active:after {
     width: 100%;
 }
+
+.table-fixed {
+    width: 100%;
+    table-layout: fixed; /* 열 너비 고정 */
+}
+
+.table-fixed thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: rgb(130, 210, 213); /* 헤더의 배경색 고정 */
+}
+
+.table-fixed tbody {
+    display: block;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.table-fixed th, .table-fixed td {
+    white-space: nowrap;
+    text-align: center;
+    padding: 8px;
+    border-bottom: 1px solid #ccc; /* 열 사이 구분 */
+}
+
+/* 첫 번째 열(checkbox) 너비를 넉넉히 설정 */
+.table-fixed th:nth-child(1), .table-fixed td:nth-child(1) {
+    width: 40px;
+}
+
+/* 나머지 열들의 너비를 유동적으로 설정 */
+.table-fixed th, .table-fixed td {
+    width: auto;
+}

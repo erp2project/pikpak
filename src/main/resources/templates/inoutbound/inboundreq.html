@@ -20,6 +20,8 @@
 <link rel="stylesheet" href="../resources/assets/css/demo.css">
 <link rel="stylesheet"
 	href="../resources/css/inoutbound/inboundreq_main.css">
+	<link rel="stylesheet"
+	href="../resources/css/inoutbound/pd_search.css">
 <!-- GOOGLE FONTS -->
 <link
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700"
@@ -29,6 +31,7 @@
 	href="assets/img/apple-icon.png">
 <link rel="icon" type="image/png" sizes="96x96"
 	href="assets/img/favicon.png">
+	
 </head>
 
 <body>
@@ -128,9 +131,14 @@
 		</div>
 		<!-- 왼쪽 SIDEBAR -->
 		<!-- MAIN -->
-		<section th:replace="~{inoutbound/inboundreq_main :: main}"></section>
+		<!--  <section th:replace="~{inoutbound/inboundreq_main :: main_inoutmenu}"></section> -->
+		<section th:replace="~{inoutbound/inboundreq_main :: main_inboundreq}"></section>
+		<!-- MAIN 끝-->
 		
-			<!-- MAIN -->
+		<!-- 모달 -->
+		<section th:replace="~{inoutbound/product_search :: product_search_popup}"></section>
+		<section th:replace="~{inoutbound/company_search :: company_search_popup}"></section> 
+		
 		</div>
 		<div class="clearfix"></div>
 		<footer>
@@ -152,7 +160,28 @@
 		src="../resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
 	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
 	<script src="../resources/assets/scripts/klorofil-common.js"></script>
-	<script src="../resources/js/inoutbound/inboundreq_main.js"></script>
-</body>
+<script>
+$(document).ready(function() {
+    // 상품코드/상품명 모달 검색 버튼 클릭 시
+    $("#pd_search").on("click", function() {
+        $("#productModal").modal('show');
+    });
+   
+    
+ 	//매입처 회사명 모달 검색 버튼 클릭 시 (새로 추가)
+    $("#cp_search").on("click", function() {
+        $("#companyModal").modal('show');
+    });
+    
+    
+    
+});
+</script>	
 
+ <script type="module">
+    //import { popup } from "../resources/js/inoutbound/inboundreq_main.js?v=1";
+
+
+    </script>
+</body>
 </html>
