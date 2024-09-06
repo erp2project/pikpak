@@ -1,0 +1,34 @@
+@charset "EUC-KR";
+/* 테이블을 감싸는 컨테이너에 스크롤을 적용 */
+.table-scrollable {
+    max-height: 400px; /* 테이블 높이를 고정 */
+    overflow-y: auto;
+    position: relative;
+}
+
+/* thead 고정 스타일 */
+.custom-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: rgb(130, 210, 213); /* thead 배경색 */
+}
+
+/* tbody 스크롤에 맞춰 테이블 레이아웃 고정 */
+.custom-table tbody {
+    display: block;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.custom-table thead tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.custom-table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed; /* 열 너비를 고정 */
+}

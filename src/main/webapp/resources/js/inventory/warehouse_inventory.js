@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
     updateRackInfo(); // 초기 값으로 정보 업데이트
   
 });
+
 function selectMenu(element, menu) {
     // 모든 메뉴 항목의 선택 상태를 해제
     document.querySelectorAll('.panel_menu-item a').forEach(function(link) {
@@ -54,6 +55,7 @@ function selectMenu(element, menu) {
     // 선택된 메뉴 항목에 선택 상태 추가
     element.classList.add('active');
 }
+
 function selectRack(areaId) {
     // 모든 구역의 선택을 해제
     document.querySelectorAll('.area').forEach(function(area) {
