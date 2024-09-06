@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 
 import jakarta.annotation.Resource;
+import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import kr.co.pikpak.dto.HomeLoginDTO;
 import kr.co.pikpak.service.HomeService;
 
@@ -23,11 +26,14 @@ public class HomeController {
 	@Autowired
 	private HomeService hs;
 	
+	@Autowired
+	private HttpSession session;
+	
 	PrintWriter pw = null;
 	
 	
 	@PostMapping("/login/auth")
-	public String loginVerify(@ModelAttribute HomeLoginDTO logindto, ServletResponse res) {
+	public String loginVerify(@ModelAttribute HomeLoginDTO logindto, ServletResponse res, HttpServletRequest req) {
 		res.setContentType("text/html;charset=utf-8");
 		List<HomeLoginDTO> userData = hs.userAuth(logindto.getUser_id());
 		String encodedPass = DigestUtils.sha256Hex(logindto.getUser_pw());
@@ -42,6 +48,10 @@ public class HomeController {
 			}
 			else {
 				if(encodedPass.equals(userData.get(0).getUser_pw())) {
+					session = req.getSession();
+					session.setAttribute("activeUserId",userData.get(0).getUser_id());
+					session.setAttribute("activeUserName",userData.get(0).getUser_nm());
+					session.setAttribute("activeUserType",userData.get(0).getUser_type());
 					this.pw.print("<script>"
 							+ "alert('로그인 하셨습니다');"
 							+ "location='/home'"

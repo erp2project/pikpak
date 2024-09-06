@@ -7,5 +7,5 @@ import lombok.Data;
 @Data
 @Repository("HomeLoginDTO")
 public class HomeLoginDTO {
-	String user_id, user_pw, user_tel, user_mail, user_type;
+	String user_id, user_nm, user_pw, user_tel, user_mail, user_type;
 }
