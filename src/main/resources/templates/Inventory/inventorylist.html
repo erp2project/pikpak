@@ -140,7 +140,7 @@
 							<p class="panel-subtitle">홈 > 재고 > <span style="color: black;">재고현황</span></p>
 						</div>
 						<div class="panel-body">
-							<p style="border-bottom: 1px solid black; height: 30px;">재고현황</p>
+							<p class="title-with-underline">재고현황</p>
 							<section>
 								<span style="float: right; height: 40px;">
 								<button type="button" class="btn btn-success">초기화</button>
@@ -179,16 +179,16 @@
 											<input type="date" class="form-control" style="width: 45%;">&nbsp;&nbsp; ~ &nbsp;&nbsp;<input type="date" class="form-control" style="width: 45%;">
 											</td>
 											<td style="width: 10%; height: 34px; line-height: 34px;">상품코드 / 상품명</td>
-											<td style="display: flex; flex-direction: row; line-height: 34px;">
-												<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
-												<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
-												<span class="input-group-btn"><button class="btn btn-primary" type="button" data-toggle="modal" data-target="#productModal">검 색</button></span>
+											<td style="display: flex; flex-direction: row; align-items: center; width: 100%;">
+												<input type="text" class="form-control" style="flex: 4; margin-right: 5px; min-width: 100px;">&nbsp;&nbsp;
+												<input type="text" class="form-control" style="flex: 4; margin-right: 5px; min-width: 100px;">&nbsp;&nbsp;
+												<span class="input-group-btn" style="flex: 2; min-width: 80px;"><button class="btn btn-primary" type="button" data-toggle="modal" data-target="#productModal">검 색</button></span>
 											</td>
-											<td style="height: 34px; line-height: 34px;">회사명</td>
-											<td style="display: flex; flex-direction: row; line-height: 34px;">
-												<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
-												<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
-												<span class="input-group-btn"><button class="btn btn-primary" type="button" data-toggle="modal" data-target="#corpModal">검 색</button></span>
+											<td style="width: 10%; height: 34px; line-height: 34px;">회사명</td>
+											<td style="display: flex; flex-direction: row; align-items: center; width: 100%;">
+												<input type="text" class="form-control" style="flex: 4; margin-right: 5px; min-width: 100px;">&nbsp;&nbsp;
+												<input type="text" class="form-control" style="flex: 4; margin-right: 5px; min-width: 100px;">&nbsp;&nbsp;
+												<span class="input-group-btn" style="flex: 2; min-width: 80px;"><button class="btn btn-primary" type="button" data-toggle="modal" data-target="#corpModal">검 색</button></span>
 											</td>
 										</tr>
 									</tbody>
@@ -213,8 +213,8 @@
 											</tr>
 										</thead>
 										<tbody>
-											<tr>
-												<td><input type="checkbox"></td>
+											<tr onclick="toggleCheckbox(this)">
+												<td><input type="checkbox" onclick="event.stopPropagation();"></td>
 												<td>A0132</td>
 												<td>SM-12345</td>
 												<td>로봇 청소기</td>
@@ -223,10 +223,12 @@
 												<td style="text-align: center;">12</td>
 												<td>2024-09-01</td>
 												<td style="text-align: center;">미정</td>
-												<td style="text-align: center;">관리</td>
+												<td style="text-align: center;">
+													<button class="btn btn-info" onclick="event.stopPropagation();">관리</button>
+												</td>
 											</tr>
-											<tr>
-												<td><input type="checkbox"></td>
+											<tr onclick="toggleCheckbox(this)">
+												<td><input type="checkbox" onclick="event.stopPropagation();"></td>
 												<td>A0132</td>
 												<td>SM-12345</td>
 												<td>로봇 청소기</td>
@@ -235,10 +237,12 @@
 												<td style="text-align: center;">12</td>
 												<td>2024-09-01</td>
 												<td style="text-align: center;">미정</td>
-												<td style="text-align: center;">관리</td>
+												<td style="text-align: center;">
+													<button class="btn btn-info" onclick="event.stopPropagation();">관리</button>
+												</td>
 											</tr>
-											<tr>
-												<td><input type="checkbox"></td>
+											<tr onclick="toggleCheckbox(this)">
+												<td><input type="checkbox" onclick="event.stopPropagation();"></td>
 												<td>A0132</td>
 												<td>SM-12345</td>
 												<td>로봇 청소기</td>
@@ -247,10 +251,12 @@
 												<td style="text-align: center;">12</td>
 												<td>2024-09-01</td>
 												<td style="text-align: center;">미정</td>
-												<td style="text-align: center;">관리</td>
+												<td style="text-align: center;">
+													<button class="btn btn-info" onclick="event.stopPropagation();">관리</button>
+												</td>
 											</tr>
-											<tr>
-												<td><input type="checkbox"></td>
+											<tr onclick="toggleCheckbox(this)">
+												<td><input type="checkbox" onclick="event.stopPropagation();"></td>
 												<td>A0132</td>
 												<td>SM-12345</td>
 												<td>로봇 청소기</td>
@@ -259,10 +265,12 @@
 												<td style="text-align: center;">12</td>
 												<td>2024-09-01</td>
 												<td style="text-align: center;">미정</td>
-												<td style="text-align: center;">관리</td>
+												<td style="text-align: center;">
+													<button class="btn btn-info" onclick="event.stopPropagation();">관리</button>
+												</td>
 											</tr>
-											<tr>
-												<td><input type="checkbox"></td>
+											<tr onclick="toggleCheckbox(this)">
+												<td><input type="checkbox" onclick="event.stopPropagation();"></td>
 												<td>A0132</td>
 												<td>SM-12345</td>
 												<td>로봇 청소기</td>
@@ -271,10 +279,12 @@
 												<td style="text-align: center;">12</td>
 												<td>2024-09-01</td>
 												<td style="text-align: center;">미정</td>
-												<td style="text-align: center;">관리</td>
+												<td style="text-align: center;">
+													<button class="btn btn-info" onclick="event.stopPropagation();">관리</button>
+												</td>
 											</tr>
-											<tr>
-												<td><input type="checkbox"></td>
+											<tr onclick="toggleCheckbox(this)">
+												<td><input type="checkbox" onclick="event.stopPropagation();"></td>
 												<td>A0132</td>
 												<td>SM-12345</td>
 												<td>로봇 청소기</td>
@@ -283,10 +293,12 @@
 												<td style="text-align: center;">12</td>
 												<td>2024-09-01</td>
 												<td style="text-align: center;">미정</td>
-												<td style="text-align: center;">관리</td>
+												<td style="text-align: center;">
+													<button class="btn btn-info" onclick="event.stopPropagation();">관리</button>
+												</td>
 											</tr>
-											<tr>
-												<td><input type="checkbox"></td>
+											<tr onclick="toggleCheckbox(this)">
+												<td><input type="checkbox" onclick="event.stopPropagation();"></td>
 												<td>A0132</td>
 												<td>SM-12345</td>
 												<td>로봇 청소기</td>
@@ -295,10 +307,12 @@
 												<td style="text-align: center;">12</td>
 												<td>2024-09-01</td>
 												<td style="text-align: center;">미정</td>
-												<td style="text-align: center;">관리</td>
+												<td style="text-align: center;">
+													<button class="btn btn-info" onclick="event.stopPropagation();">관리</button>
+												</td>
 											</tr>
-											<tr>
-												<td><input type="checkbox"></td>
+											<tr onclick="toggleCheckbox(this)">
+												<td><input type="checkbox" onclick="event.stopPropagation();"></td>
 												<td>A0132</td>
 												<td>SM-12345</td>
 												<td>로봇 청소기</td>
@@ -307,10 +321,12 @@
 												<td style="text-align: center;">12</td>
 												<td>2024-09-01</td>
 												<td style="text-align: center;">미정</td>
-												<td style="text-align: center;">관리</td>
+												<td style="text-align: center;">
+													<button class="btn btn-info" onclick="event.stopPropagation();">관리</button>
+												</td>
 											</tr>
-											<tr>
-												<td><input type="checkbox"></td>
+											<tr onclick="toggleCheckbox(this)">
+												<td><input type="checkbox" onclick="event.stopPropagation();"></td>
 												<td>A0132</td>
 												<td>SM-12345</td>
 												<td>로봇 청소기</td>
@@ -319,7 +335,9 @@
 												<td style="text-align: center;">12</td>
 												<td>2024-09-01</td>
 												<td style="text-align: center;">미정</td>
-												<td style="text-align: center;">관리</td>
+												<td style="text-align: center;">
+													<button class="btn btn-info" onclick="event.stopPropagation();">관리</button>
+												</td>
 											</tr>
 										</tbody>
 									</table>
@@ -352,6 +370,7 @@
 	<script src="/resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
 	<script src="/resources/assets/vendor/chartist/js/chartist.min.js"></script>
 	<script src="/resources/assets/scripts/klorofil-common.js"></script>
+	<script src="/resources/js/inventory/inventory_list.js"></script>
 </body>
 
 </html>

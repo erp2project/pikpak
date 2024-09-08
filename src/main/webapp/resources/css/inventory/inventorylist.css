@@ -1,4 +1,24 @@
 @charset "EUC-KR";
+/* 목차 표시 기본적인 얇은 밑줄 설정 */
+.title-with-underline {
+    position: relative;
+    border-bottom: 1px solid black; /* 전체 길이 얇은 밑줄 */
+    padding-bottom: 5px;
+    display: inline-block;
+    width: 100%; /* 얇은 밑줄이 전체 길이로 적용되도록 */
+}
+
+/* 텍스트 밑에 굵은 밑줄 추가 */
+.title-with-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -3px; /* 얇은 줄과 살짝 겹치도록 위치 설정 */
+    width: 60px; /* 굵은 선의 길이 */
+    height: 4px; /* 굵은 선의 두께 */
+    background-color: black; /* 굵은 선 색상 */
+}
+
 /* 테이블을 감싸는 컨테이너에 스크롤을 적용 */
 .table-scrollable {
     max-height: 400px; /* 테이블 높이를 고정 */

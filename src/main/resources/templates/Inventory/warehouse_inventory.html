@@ -182,76 +182,117 @@
         <div class="rack-label">랙 번호</div>
     </div>
 
-		    <!-- 오른쪽 섹션 (랙 상태) -->
-		    <div class="right-section">
-		        <div class="level" data-level="4L">
-		            <div class="rack">1P</div>
-		            <div class="rack">2P</div>
-		            <div class="rack">3P</div>
-		        </div>
-		        <div class="level" data-level="3L">
-		            <div class="rack">1P</div>
-		            <div class="rack">2P</div>
-		            <div class="rack">3P</div>
-		        </div>
-		        <div class="level" data-level="2L">
-		            <div class="rack">1P</div>
-		            <div class="rack">2P</div>
-		            <div class="rack">3P</div>
-		        </div>
-		        <div class="level" data-level="1L">
-		            <div class="rack">1P</div>
-		            <div class="rack">2P</div>
-		            <div class="rack">3P</div>
-		        </div>
-		    </div>
+			<!-- 오른쪽 섹션 (열 번호) -->
+			<div class="right-section">
+			    <div class="level" data-level="4L">
+			        <div class="rack" data-id="1P">1P</div>
+			        <div class="rack" data-id="2P">2P</div>
+			        <div class="rack" data-id="3P">3P</div>
+			    </div>
+			    <div class="level" data-level="3L">
+			        <div class="rack" data-id="1P">1P</div>
+			        <div class="rack" data-id="2P">2P</div>
+			        <div class="rack" data-id="3P">3P</div>
+			    </div>
+			    <div class="level" data-level="2L">
+			        <div class="rack" data-id="1P">1P</div>
+			        <div class="rack" data-id="2P">2P</div>
+			        <div class="rack" data-id="3P">3P</div>
+			    </div>
+			    <div class="level" data-level="1L">
+			        <div class="rack" data-id="1P">1P</div>
+			        <div class="rack" data-id="2P">2P</div>
+			        <div class="rack" data-id="3P">3P</div>
+			    </div>
+			</div>
 		    
-		    <!-- 오른쪽 리스트 및 정보 -->
-		    <div class="right-info-container"> 
-		       	<!-- 재고 리스트 섹션 -->
-		        <div class="info-section">
-		            <div class="rack-info">
-		                <p id="rack-info-text">선택된 구역 · 랙 번호 · 랙 상태의 재고 리스트</p>
-		                <table>
-		                    <thead>
-		                        <tr>
-		                            <th>상품 코드</th>
-		                            <th>위치 코드</th>
-		                            <th>상품명</th>
-		                            <th>상품 수량</th>
-		                        </tr>
-		                    </thead>
-		                    <tbody id="inventory-list">
-		                        <!-- 재고 리스트가 표시될 영역 -->
-		                    </tbody>
-		                </table>
-		            </div>
-		        </div>
-		        
-		        <!-- 선택된 구역 정보 추가 -->
-		        <div class="selected-zone-info">
-		            <h4>선택 파트(1P) 구역 정보</h4>
-		            <table>
-		                <tr>
-		                    <th>담당자명</th>
-		                    <td id="manager-name">-</td>
-		                    <th>연락처</th>
-		                    <td id="contact-info">-</td>
-		                </tr>
-		                <tr>
-		                    <th>구역 상태</th>
-		                    <td id="zone-status">-</td>
-		                    <th>구역별 총 수량</th>
-		                    <td id="total-items">-</td>
-		                </tr>
-		                <tr>
-		                    <th>점검 히스토리</th>
-		                    <td colspan="3" id="check-history">-</td>
-		                </tr>
-		            </table>
-		        </div>
+			<!-- 오른쪽 리스트 및 정보 -->
+			<div class="right-info-container"> 
+			    <!-- 재고 리스트 섹션 -->
+			    <div class="info-section">
+			        <div class="rack-info">
+			            <p id="rack-info-text">선택된 구역 · 랙 번호 · 랙 상태의 재고 리스트</p>
+			            <div class="table2">
+			                <table border="1">
+			                    <thead>
+			                        <tr>
+			                            <th>상품 코드</th>
+			                            <th>위치 코드</th>
+			                            <th>상품명</th>
+			                            <th>상품 수량</th>
+			                        </tr>
+			                    </thead>
+								<tbody>
+								    <tr>
+								        <td>PRD001</td>
+								        <td>A1</td>
+								        <td>상품명01</td>
+								        <td>100</td>
+								    </tr>
+								    <tr>
+								        <td>PRD002</td>
+								        <td>A2</td>
+								        <td>상품명02</td>
+								        <td>200</td>
+								    </tr>
+								    <tr>
+								        <td>PRD003</td>
+								        <td>A3</td>
+								        <td>상품명03</td>
+								        <td>150</td>
+								    </tr>
+								    <tr>
+								        <td>PRD004</td>
+								        <td>A4</td>
+								        <td>상품명04</td>
+								        <td>75</td>
+								    </tr>
+								    <tr>
+								        <td>PRD005</td>
+								        <td>B1</td>
+								        <td>상품명05</td>
+								        <td>50</td>
+								    </tr>
+								    <tr>
+								        <td>PRD006</td>
+								        <td>B2</td>
+								        <td>상품명06</td>
+								        <td>120</td>
+								    </tr>
+								    <tr>
+								        <td>PRD007</td>
+								        <td>B3</td>
+								        <td>상품명07</td>
+								        <td>90</td>
+								    </tr>
+								    <tr>
+								        <td>PRD008</td>
+								        <td>B4</td>
+								        <td>상품명08</td>
+								        <td>60</td>
+								    </tr>
+								    <tr>
+								        <td>PRD009</td>
+								        <td>C1</td>
+								        <td>상품명09</td>
+								        <td>180</td>
+								    </tr>
+								    <tr>
+								        <td>PRD010</td>
+								        <td>C2</td>
+								        <td>상품명10</td>
+								        <td>250</td>
+								    </tr>
+								</tbody>
+
+			                </table>
+			            </div>
+			        </div>
+			    </div>
+			</div>
 		    </div>
 		</div>
+		
 		<div class="clearfix"></div>
 		<footer>
 			<div class="container-fluid">
