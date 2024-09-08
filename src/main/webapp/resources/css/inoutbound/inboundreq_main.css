@@ -1,5 +1,6 @@
 @charset "UTF-8";
 
+/* 메뉴 */
 .menu {
     height: 30px;
     border-bottom: 1px solid black;
@@ -19,7 +20,7 @@
     background: black;
     position: absolute;
     left: 0;
-    bottom: -5px;
+    bottom: -5px; /* 밑줄 위치를 더 아래로 조정 */
     /*transition: width 0.3s ease;*/
 }
 
@@ -31,37 +32,81 @@
     width: 100%;
 }
 
-.table-fixed {
-    width: 100%;
-    table-layout: fixed; /* 열 너비 고정 */
+/*조회 결과 테이블*/
+.panel .panel-body {
+    padding-bottom: 0px !important; 
+	
+ }
+ 
+.panel .panel-thead{
+	width:99%;
+} 
+
+ .table {
+    margin-bottom: 0 !important;
 }
 
-.table-fixed thead {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    background-color: rgb(130, 210, 213); /* 헤더의 배경색 고정 */
+/* 버튼 관련 */
+.btn-outline-danger {
+  color: #dc3545;
+  border-color: #dc3545;
 }
 
-.table-fixed tbody {
-    display: block;
-    max-height: 400px;
-    overflow-y: auto;
+.btn-outline-danger:hover {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
 }
 
-.table-fixed th, .table-fixed td {
-    white-space: nowrap;
-    text-align: center;
-    padding: 8px;
-    border-bottom: 1px solid #ccc; /* 열 사이 구분 */
+.btn-outline-danger:focus, .btn-outline-danger.focus {
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.5);
 }
 
-/* 첫 번째 열(checkbox) 너비를 넉넉히 설정 */
-.table-fixed th:nth-child(1), .table-fixed td:nth-child(1) {
-    width: 40px;
+.btn-outline-danger.disabled, .btn-outline-danger:disabled {
+  color: #dc3545;
+  background-color: transparent;
 }
 
-/* 나머지 열들의 너비를 유동적으로 설정 */
-.table-fixed th, .table-fixed td {
-    width: auto;
+.btn-outline-danger:not(:disabled):not(.disabled):active, .btn-outline-danger:not(:disabled):not(.disabled).active,
+.show > .btn-outline-danger.dropdown-toggle {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-outline-danger:not(:disabled):not(.disabled):active:focus, .btn-outline-danger:not(:disabled):not(.disabled).active:focus,
+.show > .btn-outline-danger.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.5);
+}
+
+.btn-outline-dark {
+  color: #343a40;
+  border-color: #343a40;
+}
+
+.btn-outline-dark:hover {
+  color: #fff;
+  background-color: #343a40;
+  border-color: #343a40;
+}
+
+.btn-outline-dark:focus, .btn-outline-dark.focus {
+  box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.5);
+}
+
+.btn-outline-dark.disabled, .btn-outline-dark:disabled {
+  color: #343a40;
+  background-color: transparent;
+}
+
+.btn-outline-dark:not(:disabled):not(.disabled):active, .btn-outline-dark:not(:disabled):not(.disabled).active,
+.show > .btn-outline-dark.dropdown-toggle {
+  color: #fff;
+  background-color: #343a40;
+  border-color: #343a40;
+}
+
+.btn-outline-dark:not(:disabled):not(.disabled):active:focus, .btn-outline-dark:not(:disabled):not(.disabled).active:focus,
+.show > .btn-outline-dark.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.5);
 }

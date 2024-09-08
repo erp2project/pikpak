@@ -20,7 +20,8 @@
 <link rel="stylesheet" href="../resources/assets/css/demo.css">
 <link rel="stylesheet"
 	href="../resources/css/inoutbound/inboundreq_main.css">
-<link rel="stylesheet" href="../resources/css/inoutbound/pd_search.css">
+	<link rel="stylesheet"
+	href="../resources/css/inoutbound/pd_search.css">
 <!-- GOOGLE FONTS -->
 <link
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700"
@@ -36,6 +37,8 @@
 <body>
 	<!-- WRAPPER -->
 	<div id="wrapper">
+		<!-- 최상단 -->
+		<div id="wrapper">
 		<!-- 최상단 -->
 		<nav class="navbar navbar-default navbar-fixed-top">
 			<div class="brand" style="height: 30px;">
@@ -66,13 +69,13 @@
 		
 		<!-- MAIN -->
 		<!--  <section th:replace="~{inoutbound/inboundreq_main :: main_inoutmenu}"></section> -->
-		<section th:replace="~{inoutbound/inboundreq_main :: main_inboundreq}"></section>
-		<!-- MAIN 끝-->
+		<section th:replace="~{inoutbound/recvenroll_main :: main_recvenroll}"></section>
 		
 		<!-- 모달 -->
 		<section th:replace="~{inoutbound/product_search :: product_search_popup}"></section>
 		<section th:replace="~{inoutbound/company_search :: company_search_popup}"></section> 
-		<section th:replace="~{inoutbound/add_inboundreq_popup :: add_inreq_popup}"></section>
+		<!-- MAIN 끝-->
+		
 		</div>
 		<div class="clearfix"></div>
 		
@@ -89,7 +92,9 @@
 	<script
 		src="../resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
 	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
-	<script src="../resources/assets/scripts/klorofil-common.js"></script>
+	<script src="../resources/assets/scripts/klorofil-common.js"></script>	
+
+</body>
 <script>
 $(document).ready(function() {
     // 상품코드/상품명 모달 검색 버튼 클릭 시
@@ -102,14 +107,8 @@ $(document).ready(function() {
     $("#cp_search").on("click", function() {
         $("#companyModal").modal('show');
     });
- 	
- 	//등록버튼 클릭 시
-    $("#add_inreq").on("click", function() {
-        $("#inreqModal").modal('show');
-    });
 });
-</script>	
-
+</script>
  <script type="module">
     import {page_move} from "../resources/js/inoutbound/inboundreq_main.js?v=2";
 	//입고요청 이동
@@ -128,5 +127,4 @@ $(document).ready(function() {
 	});
 
     </script>
-</body>
 </html>
