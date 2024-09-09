@@ -1,11 +1,24 @@
 package kr.co.pikpak.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import kr.co.pikpak.dto.WarehouseInventory_dto;
+import kr.co.pikpak.service.WarehouseInventoryService;
 @Controller
 public class InventoryPageController {
+	@Autowired
+	private WarehouseInventoryService wis;
+	
+	//재고 리스트 출력
 	@GetMapping("/inventorylist")
-	public String loginPage() {
+	public String loginPage(Model m) {
+		List<WarehouseInventory_dto> all = wis.getAllinventory();
+		m.addAttribute("all",all);
 		return "/Inventory/inventorylist";
 	}
 	@GetMapping("/warehouse_inventory")
