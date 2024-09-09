@@ -43,7 +43,7 @@
 .warehouse-container {
     display: flex;
     justify-content: space-between;
-    padding: 20px;
+    padding: 50px;
     background-color: #f5f5fa;
 }
 
@@ -57,6 +57,9 @@
     font-weight: bold; /* 강조 효과를 추가하려면 사용 */
     margin-bottom: 10px; /* 제목과 테이블 사이 간격 조정 */
     margin-top: 30px;
+}
+.left-section, .rack-numbers, .right-section, .right-info-container {
+    margin: 0 10px; /* 섹션 간 간격 조정 */
 }
 
 /* 테이블과 버튼을 가까이 두기 */
@@ -78,6 +81,11 @@
     width: 100%;
     table-layout: fixed; /* 테이블의 고정된 레이아웃 */
 }
+        table {
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+        }
 
 .table thead {
     position: sticky; /* 테이블 헤더를 고정 */
@@ -107,12 +115,8 @@
 }
 
 .table2{
-	border-collapse: collapse;
-    width: 100%;
-    table-layout: fixed; /* 테이블의 고정된 레이아웃 */	
-    max-height: 150px; /* 테이블 최대 높이 설정 */
+    max-height: 300px; /* 테이블 최대 높이 설정 */
     overflow-y: auto;  /* 스크롤 가능하게 설정 */
-    margin-bottom: 10px; /* 테이블과 버튼 사이 간격 */	
 }
 
 .table2 thead {
@@ -151,12 +155,12 @@
 
 /* 오른쪽 섹션을 수직으로 나열하여 위아래로 배치 */
 .right-section {
+    flex: 1.2;
     display: flex;
-    flex-direction: column; /* 수직 배치 */
-    justify-content: space-between; /* 영역 사이에 공간 분배 */
-    width: 50%;
-    margin-right: 20px;
-    height: 100%; /* 부모 컨테이너 안에서 전체 높이를 차지하도록 설정 */
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: space-evenly;
 }
 
 /* .info-section과 .selected-zone-info가 반반 나뉘도록 설정 */
@@ -267,7 +271,7 @@
     cursor: pointer;
     font-size: 18px;
     width: 50px;  /* 네모 버튼 크기 */
-    height: 50px; /* 네모 버튼 크기 */
+    height: 100px; /* 네모 버튼 크기 */
     text-align: center;
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -295,9 +299,8 @@
 /* 랙 상태 (P1, P2, P3 등) */
 .level {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     margin-bottom: 10px;
-    position: relative;
 }
 
 .level::after {
@@ -309,11 +312,14 @@
 
 /* 랙 버튼 스타일 */
 .rack {
+	border: 1px solid #ddd;
     background-color: #ccc;
     padding: 10px;
-    width: 30%;
+    width: 150px;
+    height: 70px;
+    line-height: 50px;
     text-align: center;
-    border-radius: 3px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
@@ -335,9 +341,13 @@
 
 /* 묶음 컨테이너 */
 .right-info-container {
+    flex: auto;
+    padding: 10px;
     display: flex;
-    flex-direction: column; /* 위아래 배치 */
-    height: 100%; /* 전체 높이 사용 */
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: column-reverse;
 }
 
 

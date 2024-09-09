@@ -4,7 +4,7 @@ const zoneData = {
         담당자: '홍길동',
         연락처: '010-1234-5678',
         마지막점검: '2024/08/08 23:50 ~ 00:00',
-        상태: '정상',
+        상태: '운영중',
         총수량: 200,
         히스토리: '2024/08/01 ~ 정상'
     },
@@ -12,7 +12,7 @@ const zoneData = {
         담당자: '이순신',
         연락처: '010-9876-5432',
         마지막점검: '2024/08/10 14:20 ~ 15:00',
-        상태: '정상',
+        상태: '운영중',
         총수량: 150,
         히스토리: '2024/08/05 ~ 정상'
     },
@@ -28,7 +28,7 @@ const zoneData = {
         담당자: '강감찬',
         연락처: '010-1234-6789',
         마지막점검: '2024/08/20 10:00 ~ 11:00',
-        상태: '정상',
+        상태: '운영중',
         총수량: 300,
         히스토리: '2024/08/15 ~ 정상'
     }
@@ -202,7 +202,6 @@ function updateRackInfo() {
     
     if (selectedZone && selectedRack && selectedRackStatus) {
         rackInfoText.textContent = `${selectedZone} 구역 · ${selectedRack} 번 랙의  ${selectedRackStatus}의 재고 리스트`;
-        console.log("다 선택함");
         // 샘플 데이터로 재고 리스트를 업데이트 (이 부분에 실제 데이터를 넣어야 함)
         inventoryList.innerHTML = `
             <tr>
@@ -214,7 +213,6 @@ function updateRackInfo() {
         `;
     } else {
         rackInfoText.textContent = '선택된 값이 없음';
-        inventoryList.innerHTML = ''; // 선택되지 않으면 리스트 초기화
     }
 }
 

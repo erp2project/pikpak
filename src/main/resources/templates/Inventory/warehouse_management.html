@@ -14,6 +14,7 @@
 	<link rel="stylesheet" href="/resources/assets/css/main.css">
 	<link rel="stylesheet" href="/resources/assets/css/demo.css">
 	<link rel="stylesheet" href="/resources/css/inventory/warehouse_inventory.css">
+	<link rel="stylesheet" href="/resources/css/inventory/warehouse_check_popup.css">
 	<!-- GOOGLE FONTS -->
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
 	<!-- ICONS -->
@@ -154,7 +155,7 @@
                                         <thead>
                                             <tr>
                                                 <th>창고 상태</th>
-                                                <th>마지막 점검 일자</th>
+                                                <th>점검 일자</th>
                                                 <th>담당자</th>
                                                 <th>상세</th>
                                             </tr>
@@ -187,7 +188,7 @@
                                         </tbody>
                                     </table>
                                   </div>  
-                                <button class="btn btn-secondary btn-right">점검 등록</button>
+                                <button class="btn btn-secondary btn-right" data-toggle="modal" data-target="#wareck_enroll_Modal">점검 등록</button>
                                 </div>
                                 <div class="warehouse-section">
                                     <h5>B 구역</h5>
@@ -196,7 +197,7 @@
                                         <thead>
                                             <tr>
                                                 <th>창고 상태</th>
-                                                <th>마지막 점검 일자</th>
+                                                <th>점검 일자</th>
                                                 <th>담당자</th>
                                                 <th>상세</th>
                                             </tr>
@@ -223,7 +224,7 @@
                                         </tbody>
                                     </table>
                                   </div>  
-                                <button class="btn btn-secondary btn-right">점검 등록</button>
+                                <button class="btn btn-secondary btn-right" data-toggle="modal" data-target="#wareck_enroll_Modal">점검 등록</button>
                                 </div>
                                 <div class="warehouse-section">
                                     <h5>C 구역</h5>
@@ -232,7 +233,7 @@
                                         <thead>
                                             <tr>
                                                 <th>창고 상태</th>
-                                                <th>마지막 점검 일자</th>
+                                                <th>점검 일자</th>
                                                 <th>담당자</th>
                                                 <th>상세</th>
                                             </tr>
@@ -259,7 +260,7 @@
                                         </tbody>
                                     </table>
                                   </div>  
-                                <button class="btn btn-secondary btn-right">점검 등록</button>
+                                <button class="btn btn-secondary btn-right" data-toggle="modal" data-target="#wareck_enroll_Modal">점검 등록</button>
                                 </div>
                                 <div class="warehouse-section">
                                     <h5>D 구역</h5>
@@ -268,7 +269,7 @@
                                         <thead>
                                             <tr>
                                                 <th>창고 상태</th>
-                                                <th>마지막 점검 일자</th>
+                                                <th>점검 일자</th>
                                                 <th>담당자</th>
                                                 <th>상세</th>
                                             </tr>
@@ -295,13 +296,15 @@
                                         </tbody>
                                     </table>
                                   </div>  
-                                <button class="btn btn-secondary btn-right">점검 등록</button>
+                                <button class="btn btn-secondary btn-right" data-toggle="modal" data-target="#wareck_enroll_Modal">점검 등록</button>
                                 </div>                                
                             </div>
 						</div>
 					</div>
 					
 			<!-- MAIN -->
+			</div>
+			<div th:replace="~{/inventory/warehouse_check_popup :: warehouse_check_popup}">
 			</div>
 		</div>
 		<div class="clearfix"></div>
