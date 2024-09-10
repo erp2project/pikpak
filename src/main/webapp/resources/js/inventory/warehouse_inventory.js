@@ -1,38 +1,4 @@
 // 각 구역의 정보 데이터
-const zoneData = {
-    A: {
-        담당자: '홍길동',
-        연락처: '010-1234-5678',
-        마지막점검: '2024/08/08 23:50 ~ 00:00',
-        상태: '운영중',
-        총수량: 200,
-        히스토리: '2024/08/01 ~ 정상'
-    },
-    B: {
-        담당자: '이순신',
-        연락처: '010-9876-5432',
-        마지막점검: '2024/08/10 14:20 ~ 15:00',
-        상태: '운영중',
-        총수량: 150,
-        히스토리: '2024/08/05 ~ 정상'
-    },
-    C: {
-        담당자: '김유신',
-        연락처: '010-4567-8910',
-        마지막점검: '2024/08/15 11:30 ~ 12:00',
-        상태: '점검 필요',
-        총수량: 100,
-        히스토리: '2024/08/07 ~ 문제 발생'
-    },
-    D: {
-        담당자: '강감찬',
-        연락처: '010-1234-6789',
-        마지막점검: '2024/08/20 10:00 ~ 11:00',
-        상태: '운영중',
-        총수량: 300,
-        히스토리: '2024/08/15 ~ 정상'
-    }
-};
 
 var selectedZone = null;
 var selectedRack = null;
@@ -84,37 +50,49 @@ function selectZone(zoneId) {
     });
     
     
-    // 정보 업데이트
-    const { 담당자, 연락처, 마지막점검, 상태, 총수량, 히스토리 } = zoneData[zoneId];
-    infoContainer.innerHTML = `
-        <div class="zone-info">
-            <p><strong>담당자:</strong> ${담당자}</p>
-            <p><strong>연락처:</strong> ${연락처}</p>
-            <p><strong>마지막 점검일시:</strong> ${마지막점검}</p>
-            <p><strong>상태:</strong> ${상태}</p>
-            <p><strong>총수량:</strong> ${총수량}</p>
-            <p><strong>히스토리:</strong> ${히스토리}</p>
-        </div>
-    `;
+    //ajax 로 데이터 가져옴
+    fetch('/getAreadata',{
+		method : 'POST',
+		headers : {
+			'content-type' : 'application/json'
+		},body : JSON.stringify({"area_cd" :zoneId})
+	})
+	.then(response => response.json())
+	.then(data =>{
+		const { manager_nm, manager_tel, lastcheck_start_dt, lastcheck_end_dt, area_st, capacity,available_space} = data;
+		infoContainer.innerHTML=`
+			<div class="zone-info">
+				<p><strong>담당자:</strong> ${manager_nm}</p>
+				<p><strong>연락처:</strong> ${manager_tel}</p>
+				<p><strong>마지막 점검일시:</strong><br> ${lastcheck_start_dt} ~ ${lastcheck_end_dt}</p>
+				<p><strong>상태:</strong> ${area_st}</p>
+				<p><strong>현재 재고 총 수량:</strong> ${available_space}</p>
+				<p><strong>총 가용수량:</strong> ${capacity}</p>
+			</div>	
+		`;
+		
+	    // 선택된 구역의 정보 컨테이너를 활성화 (슬라이드 효과)
+	    setTimeout(() => {
+	        infoContainer.classList.add('active');
+	    }, 100); // 약간의 딜레이를 줘서 더 부드럽게
+	    
+	    // 구역 선택 시 초기화
+	    selectedRack = null;
+	    selectedRackStatus = null;   
+	    
+	    // 모든 구역의 선택을 해제
+	    document.querySelectorAll('.zone').forEach(function(area) {
+	        area.classList.remove('selected');
+	    });     
+	    
+	    // 선택된 구역에 대한 정보 출력
+	   	document.getElementById('rack-info-text').textContent = `${selectedZone} 구역의 재고 리스트`;
+		
+		document.querySelector(`[data-id="${zoneId}"]`).classList.add('selected');
+	}).catch(error=>{
+		console.log(error);
+	});
 
-    // 선택된 구역의 정보 컨테이너를 활성화 (슬라이드 효과)
-    setTimeout(() => {
-        infoContainer.classList.add('active');
-    }, 100); // 약간의 딜레이를 줘서 더 부드럽게
-    
-    // 구역 선택 시 초기화
-    selectedRack = null;
-    selectedRackStatus = null;   
-    
-    // 모든 구역의 선택을 해제
-    document.querySelectorAll('.zone').forEach(function(area) {
-        area.classList.remove('selected');
-    });     
-    
-    // 선택된 구역에 대한 정보 출력
-   	document.getElementById('rack-info-text').textContent = `${selectedZone} 구역의 재고 리스트`;
-	
-	document.querySelector(`[data-id="${zoneId}"]`).classList.add('selected');
 }
 
 // 랙 선택 시 

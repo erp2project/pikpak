@@ -1,12 +1,17 @@
 package kr.co.pikpak.controller;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.pikpak.dto.WarehouseInspection_dto;
 import kr.co.pikpak.dto.WarehouseInventory_dto;
 import kr.co.pikpak.service.WarehouseInventoryService;
 @Controller
@@ -14,31 +19,50 @@ public class InventoryPageController {
 	@Autowired
 	private WarehouseInventoryService wis;
 	
-	//재고 리스트 출력
+	//재고 현황 페이지 - 재고 리스트 페이지 출력
 	@GetMapping("/inventorylist")
 	public String loginPage(Model m) {
 		List<WarehouseInventory_dto> all = wis.getAllinventory();
 		m.addAttribute("all",all);
 		return "/Inventory/inventorylist";
 	}
+	
+	//창고별 재고 현황 페이지 출력
 	@GetMapping("/warehouse_inventory")
 	public String warehouse_inventory() {
 		return "/Inventory/warehouse_inventory";
 	}
+	
+	//창고 관리 페이지 - 창고 점검 리스트 출력
 	@GetMapping("/warehouse_management")
-	public String warehouse_management() {
+	public String warehouse_management(Model m) {
+		List<WarehouseInspection_dto> all = wis.getCheckData();
+		Map<String, List<WarehouseInspection_dto>> area =
+				all.stream().collect(Collectors.groupingBy(WarehouseInspection_dto::getArea_cd));
+		m.addAttribute("area",area);
 		return "/Inventory/warehouse_management";
 	}
+	
 	@GetMapping("/inventory_popup")
 	public String inventory_popup() {
 		return "/Inventory/inventory_popup";
 	}
-	@GetMapping("/product_search") 		//재고 현황 페이지 - 상품 검색 팝업창
+	
+	//재고 현황 페이지 - 상품 검색 팝업창
+	@GetMapping("/product_search") 		
 	public String product_search() {
 		return "/Inventory/product_search";
 	}
-	@GetMapping("/corp_search")			//재고 현황 페이지 - 회사 검색 팝업창
+	
+	//재고 현황 페이지 - 회사 검색 팝업창
+	@GetMapping("/corp_search")			
 	public String corp_search () {
 		return "/Inventory/corp_search";
+	}
+	
+	//재고 창고 위치 관리 페이지
+	@GetMapping("/warehouse_location")
+	public String warehouse_location() {
+		return "/Inventory/warehouse_grid";
 	}
 }

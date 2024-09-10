@@ -1,0 +1,145 @@
+@charset "EUC-KR";
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+        }
+
+        h2 {
+            margin: 0px 0;
+            font-size: 24px;
+            text-align: center;
+        }
+        .wms-title {
+            margin: 20px 0;
+            font-size: 24px;
+            text-align: center;
+        }
+        .wms-rack-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 20px;
+            padding: 10px;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+
+        .wms-rack {
+           background-color: #f1f1f1;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .wms-rack-level {
+            display: flex;
+            justify-content: space-around;
+            margin: 10px 0;
+        }
+
+        .wms-part {
+            width: 75px;
+            height: 60px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 16px;
+            position: relative;
+        }
+
+.wms-part.has-stock {
+    background-color: #f44336; /* 빨간색 - 재고 있음 */
+}
+
+.wms-part.no-stock {
+    background-color: #4caf50; /* 초록색 - 재고 없음 */
+}
+
+.wms-part:hover {
+    background-color: #d3e0ea;
+}
+
+        /* Footer Style */
+        .wms-footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        
+        /* Popover 스타일 */
+        .wms-popover {
+            max-width: 200px;
+        }
+
+        .wms-popover-body {
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .wms-popover-header {
+            background-color: #f7f7f7;
+            font-weight: bold;
+            font-size: 16px;
+        } 
+/* 구역 선택 탭 스타일 */
+.nav-tabs {
+    border-bottom: 2px solid #ddd;
+    display: flex;
+    justify-content: center;
+	margin-bottom: 25px;
+    margin-top: -55px;
+}
+
+.nav-tabs .nav-item {
+    margin-bottom: -1px;
+}
+
+.nav-tabs .nav-link {
+    border: 1px solid transparent;
+    border-radius: 0.25rem 0.25rem 0 0;
+    color: #555;
+    font-size: 16px;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+    background-color: #f1f1f1;
+    margin: 0 5px;
+}
+
+.nav-tabs .nav-link:hover {
+    background-color: #e9ecef;
+    color: #000;
+}
+
+.nav-tabs .nav-link.active {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff #007bff #ddd;
+}
+
+.tab-content {
+    border: 1px solid #ddd;
+    border-top: none;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 0 0 0.25rem 0.25rem;
+}
+
+/* 탭 전환 시 부드러운 전환 */
+.tab-pane {
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.tab-pane.active {
+    opacity: 1;
+}           
