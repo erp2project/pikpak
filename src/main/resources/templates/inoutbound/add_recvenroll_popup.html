@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>입고요청 팝업</title>
+<title>가입고 등록 팝업</title>
 <!-- Bootstrap CSS -->
 <link
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
@@ -12,12 +12,12 @@
 </head>
 <body>
 	<!-- 모달 -->
-	<div class="modal fade" th:fragment="add_inreq_popup" id="inreqModal"
-		tabindex="-1" aria-labelledby="inreqModalLabel" insert>
+	<div class="modal fade" th:fragment="add_recvenroll_popup" id="recvModal"
+		tabindex="-1" aria-labelledby="recvModalLabel" insert>
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="inreqModalLabel">입고요청 등록</h5>
+					<h5 class="modal-title" id="recvModalLabel">입고 등록</h5>
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
@@ -46,11 +46,21 @@
 								</tr>
 								<tr>
 
-									<td style="width: 30%;">희망 납기일자</td>
-									<td><div style="display: flex; align-items: center;">
-											<input type="date" class="form-control" style="width: 40%;">&nbsp;&nbsp;
-											
-										</div></td>
+									<td style="width: 30%;">가입고 위치</td>
+									<td><select class="form-control"
+										style="width: 35%; float: left; margin-right: 5px;">
+											<option value="">위치 선택</option>
+
+									</select></td>
+								</tr>
+								<tr>
+
+									<td style="width: 30%;">입고 위치</td>
+									<td><select class="form-control"
+										style="width: 35%; float: left; margin-right: 5px;">
+											<option value="">위치 선택</option>
+
+									</select></td>
 								</tr>
 								<tr>
 									<td style="width: 30%;">관리자</td>
@@ -60,14 +70,6 @@
 
 									</select></td>
 								</tr>
-								<tr>
-									<td style="width: 30%;">추가 요청사항</td>
-									<td>
-									<textarea rows="3" cols="60"></textarea>
-									</td>
-								</tr>
-
-
 							</tbody>
 						</table>
 					</div>

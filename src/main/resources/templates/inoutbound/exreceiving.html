@@ -21,6 +21,7 @@
 <link rel="stylesheet"
 	href="../resources/css/inoutbound/inboundreq_main.css">
 <link rel="stylesheet" href="../resources/css/inoutbound/pd_search.css">
+<link href="../resources/css/inoutbound/add_popup.css" rel="stylesheet">
 <!-- GOOGLE FONTS -->
 <link
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700"
@@ -70,6 +71,7 @@
 		<!-- 모달 -->
 		<section th:replace="~{inoutbound/product_search :: product_search_popup}"></section>
 		<section th:replace="~{inoutbound/company_search :: company_search_popup}"></section> 
+		<section th:replace="~{inoutbound/add_exreceiving_popup :: add_exrecv_popup}"></section>
 		<!-- MAIN 끝-->
 
 	</div>
@@ -101,6 +103,11 @@ $(document).ready(function() {
  	//매입처 회사명 모달 검색 버튼 클릭 시 (새로 추가)
     $("#cp_search").on("click", function() {
         $("#companyModal").modal('show');
+    });
+ 	
+  	//등록버튼 클릭 시
+    $("#add_exrecv").on("click", function() {
+        $("#exrecvModal").modal('show');
     });
 });
 </script>
