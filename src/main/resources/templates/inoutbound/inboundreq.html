@@ -112,7 +112,9 @@ $(document).ready(function() {
 </script>	
 
  <script type="module">
-    import {page_move} from "../resources/js/inoutbound/inboundreq_main.js?v=2";
+    import {page_move, inboundreq_enroll} from "../resources/js/inoutbound/inboundreq_main.js?v=3";
+	
+	/* 메뉴 */
 	//입고요청 이동
 	document.querySelector("#go_inoutreq").addEventListener("click",function(){
 		new page_move().go_inboundreq();
@@ -128,6 +130,18 @@ $(document).ready(function() {
 		new page_move().go_recvenroll();
 	});
 
+	/* 등록 모달 */
+	//상품코드 값 초기화
+	document.querySelector("#pd").addEventListener("click",function(){
+		this.value = "";
+		frm_inreq_modal.product_nm.value = ""; // 상품명 초기화
+    	frm_inreq_modal.supplier_nm.value = ""; // 회사명 초기화
+	});
+
+	//상품코드에 따른 상품명, 회사명 자동 입력
+	document.querySelector("#pd").addEventListener("input",function(){
+		new inboundreq_enroll().insert_pdvalue();
+	});
     </script>
 </body>
 </html>

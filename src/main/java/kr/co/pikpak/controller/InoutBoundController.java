@@ -1,13 +1,35 @@
 package kr.co.pikpak.controller;
 
+import java.io.PrintWriter;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import kr.co.pikpak.dto.product_dto_lhwtemp;
+import kr.co.pikpak.service.InoutBoundService;
 
 @Controller
 public class InoutBoundController {
+	
+	PrintWriter pw = null;
+	
+	@Autowired
+	InoutBoundService ioservice;
+	
+	
+	//선택할 상품 리스트 가져오기 -> 입고요청 등록위함
+	
+	
+	
 	//입고요청 이동
 	@GetMapping("inoutbound/inboundreq")
-	public String inboundreq() {
+	public String inboundreq(Model m) {
+		//등록 모달에 상품리스트 출력
+		List<product_dto_lhwtemp> pdlist = ioservice.select_pdlist();
+		m.addAttribute("pdlist",pdlist);
 		return null;
 	}
 	

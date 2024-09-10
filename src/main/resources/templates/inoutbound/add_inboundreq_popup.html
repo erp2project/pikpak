@@ -24,60 +24,65 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<!-- 검색 바 -->
-					<div class="form-group">
-						<table class="table table-bordered" style="margin-top: 20px;">
-							<tbody>
-								<tr>
-									<td style="width: 30%;">상품코드</td>
-									<td><select class="form-control"
-										style="width: 35%; float: left; margin-right: 5px;">
-											<option value="">상품코드 선택</option>
+					<form id="frm_inreq_modal">
+						<!-- 검색 바 -->
+						<div class="form-group">
+							<table class="table table-bordered" style="margin-top: 20px;">
+								<tbody>
+									<tr>
+										<td style="width: 30%;">상품코드</td>
+										<td><input type="text" list="products" id="pd"
+											name="product_cd" placeholder="상품코드 선택"> <datalist
+												id="products">
 
-									</select></td>
-								</tr>
-								<tr>
-									<td style="width: 30%;">상품명</td>
-									<td><input type="text" readonly="readonly"></td>
-								</tr>
-								<tr>
-									<td style="width: 30%;">상품수량</td>
-									<td><input type="text"></td>
-								</tr>
-								<tr>
+												<option th:each="product : ${pdlist}"
+													th:value="${product.product_cd}"
+													th:text="${product.product_cd}"
+													th:data-product-name="${product.product_nm}" 
+                									th:data-supplier-name="${product.supplier_nm}"
+													></option>
 
-									<td style="width: 30%;">희망 납기일자</td>
-									<td><div style="display: flex; align-items: center;">
-											<input type="date" class="form-control" style="width: 40%;">&nbsp;&nbsp;
-											
-										</div></td>
-								</tr>
-								<tr>
-									<td style="width: 30%;">관리자</td>
-									<td><select class="form-control"
-										style="width: 35%; float: left; margin-right: 5px;">
-											<option value="">관리자 선택</option>
+											</datalist> 
+										</td>
+									</tr>
+									<tr>
+										<td style="width: 30%;">상품명</td>
+										<td><input type="text" readonly="readonly"
+											name="product_nm"></td>
+									</tr>
+									<tr>
+										<td style="width: 30%;">회사명</td>
+										<td><input type="text" readonly="readonly"
+											name="supplier_nm"></td>
+									</tr>
+									<tr>
+										<td style="width: 30%;">상품수량</td>
+										<td><input type="text" maxlength="3"></td>
+									</tr>
+									<tr>
 
-									</select></td>
-								</tr>
-								<tr>
-									<td style="width: 30%;">추가 요청사항</td>
-									<td>
-									<textarea rows="3" cols="60"></textarea>
-									</td>
-								</tr>
+										<td style="width: 30%;">희망 납기일자</td>
+										<td><div style="display: flex; align-items: center;">
+												<input type="date" class="form-control" style="width: 40%;">&nbsp;&nbsp;
+
+											</div></td>
+									</tr>
+									<tr>
+										<td style="width: 30%;">추가 요청사항</td>
+										<td><textarea rows="3" cols="60" maxlength="30" placeholder="30자까지 입력 가능합니다."></textarea></td>
+									</tr>
 
 
-							</tbody>
-						</table>
-					</div>
-					<nav style="text-align: center; padding:15px;">
-						<span>
-							<button type="button" class="btn btn-dark">등록</button> <!-- 왜 안되지 -->
-						</span>
-					
-					</nav>
-					
+								</tbody>
+							</table>
+						</div>
+						<nav style="text-align: center; padding: 15px;">
+							<span>
+								<button type="button" class="btn btn-dark">등록</button> <!-- 왜 안되지 -->
+							</span>
+
+						</nav>
+					</form>
 				</div>
 			</div>
 		</div>

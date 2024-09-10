@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.pikpak.repo.InoutBoundRepo">
+<select id="selectProduct" resultType="kr.co.pikpak.dto.product_dto_lhwtemp">
+select supplier_cd, supplier_nm, product_cd, product_nm from product order by product_idx desc
+</select>
+</mapper>
