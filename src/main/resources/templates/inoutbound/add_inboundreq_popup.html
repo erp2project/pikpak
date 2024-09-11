@@ -31,18 +31,28 @@
 								<tbody>
 									<tr>
 										<td style="width: 30%;">상품코드</td>
-										<td><input type="text" list="products" id="pd"
+										<td>
+											<!-- 상품코드 Select2 적용 --> 
+											<select class="form-control select2" id="pd" name="product_cd" style="width:100%">
+												<option value="">상품코드 선택</option>
+												<option th:each="product : ${pdlist}"
+													th:value="${product.product_cd}"
+													th:data-product-name="${product.product_nm}"
+													th:data-supplier-name="${product.supplier_nm}"
+													th:text="${product.product_cd}"></option>
+										</select> 
+										<!-- 
+										<input type="text" list="products" id="pd"
 											name="product_cd" placeholder="상품코드 선택"> <datalist
 												id="products">
-
 												<option th:each="product : ${pdlist}"
 													th:value="${product.product_cd}"
 													th:text="${product.product_cd}"
 													th:data-product-name="${product.product_nm}" 
                 									th:data-supplier-name="${product.supplier_nm}"
 													></option>
-
-											</datalist> 
+										</datalist> 
+										 -->
 										</td>
 									</tr>
 									<tr>
@@ -69,7 +79,8 @@
 									</tr>
 									<tr>
 										<td style="width: 30%;">추가 요청사항</td>
-										<td><textarea rows="3" cols="60" maxlength="30" placeholder="30자까지 입력 가능합니다."></textarea></td>
+										<td><textarea rows="3" cols="60" maxlength="30"
+												placeholder="30자까지 입력 가능합니다."></textarea></td>
 									</tr>
 
 
@@ -97,6 +108,5 @@
 		src="../resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
 	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
 	<script src="../resources/assets/scripts/klorofil-common.js"></script>
-
 </body>
 </html>
