@@ -151,6 +151,7 @@
 								</li>
 							</ul>
 						</div>   
+						<button class="btn btn-secondary btn-right" data-toggle="modal" data-target="#wareck_enroll_Modal">점검 등록</button>
                             <div class="warehouse-grid">
                                 <div class="warehouse-section">
                                     <h5>A 구역</h5>
@@ -165,6 +166,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+										    <tr th:if="${area.get('A')}==null">
+										        <td colspan="4" style="text-align: center;">등록된 기록이 없습니다</td>
+										    </tr>                                        	
                                             <tr th:each="item : ${area.get('A')}">
                                                 <td th:text="${item.statement}"></td>
                                                 <td th:text="${item.check_start_dt}"></td>
@@ -174,7 +178,6 @@
                                         </tbody>
                                     </table>
                                   </div>  
-                                <button class="btn btn-secondary btn-right" data-toggle="modal" data-target="#wareck_enroll_Modal">점검 등록</button>
                                 </div>
                                 <div class="warehouse-section">
                                     <h5>B 구역</h5>
@@ -189,6 +192,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+										    <tr th:if="${area.get('B')}==null">
+										        <td colspan="4" style="text-align: center;">등록된 기록이 없습니다</td>
+										    </tr>                                         
                                             <tr th:each="item : ${area.get('B')}">
                                                 <td th:text="${item.statement}"></td>
                                                 <td th:text="${item.check_start_dt}"></td>
@@ -198,7 +204,6 @@
                                         </tbody>
                                     </table>
                                   </div>  
-                                <button class="btn btn-secondary btn-right" data-toggle="modal" data-target="#wareck_enroll_Modal">점검 등록</button>
                                 </div>
                                 <div class="warehouse-section">
                                     <h5>C 구역</h5>
@@ -213,6 +218,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+										    <tr th:if="${area.get('C')}==null">
+										        <td colspan="4" style="text-align: center;">등록된 기록이 없습니다</td>
+										    </tr>                                         
                                             <tr th:each="item : ${area.get('C')}">
                                                 <td th:text="${item.statement}"></td>
                                                 <td th:text="${item.check_start_dt}"></td>
@@ -222,7 +230,6 @@
                                         </tbody>
                                     </table>
                                   </div>  
-                                <button class="btn btn-secondary btn-right" data-toggle="modal" data-target="#wareck_enroll_Modal">점검 등록</button>
                                 </div>
                                 <div class="warehouse-section">
                                     <h5>D 구역</h5>
@@ -237,6 +244,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+										    <tr th:if="${area.get('D')}==null">
+										        <td colspan="4" style="text-align: center;">등록된 기록이 없습니다</td>
+										    </tr> 
                                             <tr th:each="item : ${area.get('D')}">
                                                 <td th:text="${item.statement}"></td>
                                                 <td th:text="${item.check_start_dt}"></td>
@@ -246,7 +256,6 @@
                                         </tbody>
                                     </table>
                                   </div>  
-                                <button class="btn btn-secondary btn-right" data-toggle="modal" data-target="#wareck_enroll_Modal">점검 등록</button>
                                 </div>                                
                             </div>
 						</div>

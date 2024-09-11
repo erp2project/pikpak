@@ -28,6 +28,12 @@ public class WarehouseInventoryServiceImpl implements WarehouseInventoryService{
 		return wir.getAreaData(area_cd);
 	}
 	
+	@Override
+	public List<Map<String, Object>> getAreaStockData(String area_cd) {
+
+		return wir.getAreaStockData(area_cd);
+	}
+	
 	//재고 현황 페이지 
 	@Override
 	public List<WarehouseInventory_dto> getAllinventory() {

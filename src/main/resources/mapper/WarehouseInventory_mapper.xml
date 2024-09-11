@@ -8,9 +8,14 @@
 	
 	<!-- 창고별 재고 현황 페이지 - 구역 정보 출력 -->
 	<select id="getAreaData" resultType="Map">
-		SELECT manager_nm, manager_tel,lastcheck_start_dt,lastcheck_end_dt,area_st,capacity,available_space
+		SELECT manager_nm, manager_tel,lastcheck_start_dt,lastcheck_end_dt,area_st,full_capacity,available_space
 		FROM area_info_temporary
 		WHERE area_cd = #{area_cd}
+	</select>
+	
+	<!-- 창고별 재고 현황 페이지 - 구역 의 재고 정보 출력 -->
+	<select id="getAreaStockData" resultType="Map">
+		SELECT * FROM warehouse_temporary_by_mindiit WHERE location_cd LIKE CONCAT(#{zoneId}, '%');
 	</select>
 	
 	<!-- 창고 관리 페이지 - 구역 점검 리스트 출력 -->

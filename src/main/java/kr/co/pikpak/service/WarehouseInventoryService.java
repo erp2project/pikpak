@@ -8,6 +8,7 @@ import kr.co.pikpak.dto.WarehouseInventory_dto;
 
 public interface WarehouseInventoryService {
 	public Map<String, Object> getAreaData(String area_cd);
+	public List<Map<String, Object>> getAreaStockData(String area_cd);
 	public List<WarehouseInventory_dto> getAllinventory();
 	public List<WarehouseInspection_dto> getCheckData();
 }

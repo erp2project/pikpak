@@ -50,7 +50,7 @@ function selectZone(zoneId) {
     });
     
     
-    //ajax 로 데이터 가져옴
+    //ajax 로 구역 정보 + 그 구역의 재고 정보들 가져옴
     fetch('/getAreadata',{
 		method : 'POST',
 		headers : {
@@ -59,17 +59,40 @@ function selectZone(zoneId) {
 	})
 	.then(response => response.json())
 	.then(data =>{
-		const { manager_nm, manager_tel, lastcheck_start_dt, lastcheck_end_dt, area_st, capacity,available_space} = data;
+		const {getAreaData,getAreaStockData} = data;
+		
+		//구역정보 없데이트
+		const { manager_nm, manager_tel, lastcheck_start_dt, lastcheck_end_dt, area_st, full_capacity,available_space} = getAreaData;
 		infoContainer.innerHTML=`
 			<div class="zone-info">
 				<p><strong>담당자:</strong> ${manager_nm}</p>
 				<p><strong>연락처:</strong> ${manager_tel}</p>
-				<p><strong>마지막 점검일시:</strong><br> ${lastcheck_start_dt} ~ ${lastcheck_end_dt}</p>
+				<p><strong>마지막 점검일시:</strong><br> ${lastcheck_start_dt}<br> ~ ${lastcheck_end_dt}</p>
 				<p><strong>상태:</strong> ${area_st}</p>
-				<p><strong>현재 재고 총 수량:</strong> ${available_space}</p>
-				<p><strong>총 가용수량:</strong> ${capacity}</p>
+				<p><strong>가용 적재 용량:</strong> ${available_space}</p>
+				<p><strong>구역 전체 적재용량:</strong> ${full_capacity}</p>
 			</div>	
 		`;
+		
+		//재고 리스트 업데이트
+		const tablebody = document.querySelector('.table2 tbody');
+		tablebody.innerHTML = '';
+		
+        if (getAreaStockData.length > 0) {
+            getAreaStockData.forEach(item => {
+                const row = `<tr>
+                                <td>${item.product_cd}</td>
+                                <td>${item.location_cd}</td>
+                                <td>${item.product_nm}</td>
+                                <td>${item.product_qty}</td>
+                            </tr>`;
+                tablebody.innerHTML += row;
+            });
+        } else {
+            tablebody.innerHTML = '<tr><td colspan="4">등록된 재고가 없습니다.</td></tr>';
+        }		
+		
+		
 		
 	    // 선택된 구역의 정보 컨테이너를 활성화 (슬라이드 효과)
 	    setTimeout(() => {
