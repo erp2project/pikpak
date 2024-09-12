@@ -28,10 +28,24 @@ public class WarehouseInventoryServiceImpl implements WarehouseInventoryService{
 		return wir.getAreaData(area_cd);
 	}
 	
+	//창고별 재고 현황 페이지 - 구역의 재고 정보 출력
 	@Override
 	public List<Map<String, Object>> getAreaStockData(String area_cd) {
 
 		return wir.getAreaStockData(area_cd);
+	}
+	
+	//창고별 재고 현황 페이지 - 구역 + 랙의 재고 정보 출력
+	@Override
+	public List<Map<String, Object>> getAreaRackData(String Zone_Rack) {
+		
+		return wir.getAreaRackData(Zone_Rack);
+	}
+	
+	//창고별 재고 현황 페이지 - 구역 + 랙 + 단 + 열의 재고 정보 출력
+	@Override
+	public List<Map<String, Object>> getTotalLocationData(String total_location) {
+		return wir.getTotalLocationData(total_location);
 	}
 	
 	//재고 현황 페이지 

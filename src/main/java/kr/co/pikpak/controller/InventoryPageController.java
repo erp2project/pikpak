@@ -2,6 +2,7 @@ package kr.co.pikpak.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,20 @@ public class InventoryPageController {
 	//재고 현황 페이지 - 재고 리스트 페이지 출력
 	@GetMapping("/inventorylist")
 	public String loginPage(Model m) {
+		//최초 접속 시 재고 리스트 전체 출력
 		List<WarehouseInventory_dto> all = wis.getAllinventory();
+		
+		//상품코드 옵션 출력
+		Set<String> product_cd = all.stream().map(WarehouseInventory_dto::getProduct_cd).collect(Collectors.toSet());
+		//상품명 옵션 출력
+		Set<String> product_nm = all.stream().map(WarehouseInventory_dto::getProduct_nm).collect(Collectors.toSet());
+		//회사명 옵션 출력
+		Set<String> supplier_nm = all.stream().map(WarehouseInventory_dto::getSupplier_nm).collect(Collectors.toSet());
 		m.addAttribute("all",all);
+		m.addAttribute("product_cd",product_cd);
+		m.addAttribute("product_nm",product_nm);
+		m.addAttribute("supplier_nm",supplier_nm);
+		
 		return "/Inventory/inventorylist";
 	}
 	

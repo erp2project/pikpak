@@ -3,7 +3,7 @@
 <mapper namespace="kr.co.pikpak.mapper.WarehouseInventory_repository">
 	<!-- 재고 리스트 출력 -->
 	<select id="getAllinventory" resultType="kr.co.pikpak.dto.WarehouseInventory_dto">
-		select * from warehouse_temporary order by wh_warehouse_idx desc;
+		select * from warehouse_temporary_by_mindiit order by wh_warehouse_idx desc;
 	</select>
 	
 	<!-- 창고별 재고 현황 페이지 - 구역 정보 출력 -->
@@ -13,13 +13,23 @@
 		WHERE area_cd = #{area_cd}
 	</select>
 	
-	<!-- 창고별 재고 현황 페이지 - 구역 의 재고 정보 출력 -->
+	<!-- 창고별 재고 현황 페이지 - 구역 선택 시 재고 정보 출력 -->
 	<select id="getAreaStockData" resultType="Map">
 		SELECT * FROM warehouse_temporary_by_mindiit WHERE location_cd LIKE CONCAT(#{zoneId}, '%');
 	</select>
 	
+	<!-- 창고별 재고 현황 페이지 - 구역+랙을 선택 시 재고 정보 출력 -->
+	<select id="getAreaRackData" resultType="Map">
+		SELECT * FROM warehouse_temporary_by_mindiit WHERE location_cd LIKE CONCAT(#{Zone_Rack},'%');
+	</select>
+	
+	<!-- 창고별 재고 현황 페이지 - 구역+랙+단+열을 선택 시 재고 정보 출력 -->
+	<select id = "getTotalLocationData" resultType="Map">
+		SELECT * FROM warehouse_temporary_by_mindiit WHERE location_cd = #{total_location}
+	</select>
+	
 	<!-- 창고 관리 페이지 - 구역 점검 리스트 출력 -->
 	<select id="getCheckData" resultType="kr.co.pikpak.dto.WarehouseInspection_dto">
-		select * from area_check_temporary order by a_check_idx asc;
+		select * from area_check_temporary order by a_check_idx desc;
 	</select>
 </mapper>

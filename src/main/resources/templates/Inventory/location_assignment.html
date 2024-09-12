@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>위치 지정</title>
+</head>
+<body>
+<!-- 모달 창 (위치 지정) -->
+<div class="modal fade" th:fragment="location_assignment" id="locationModal" tabindex="-1" role="dialog" aria-labelledby="locationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="locationModalLabel">위치 지정</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- 회사 선택 -->
+                <form>
+                    <div class="form-group">
+                        <label for="company-select">회사 선택</label>
+                        <select class="form-control" id="company-select">
+                            <option>회사 A</option>
+                            <option>회사 B</option>
+                            <option>회사 C</option>
+                        </select>
+                    </div>
+
+                    <!-- 위치 선택 -->
+                    <div class="form-group">
+                        <label for="location-code">위치 코드</label>
+                        <input type="text" class="form-control" id="location-code" placeholder="위치 코드를 입력하세요">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary">위치 지정</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

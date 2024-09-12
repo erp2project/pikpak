@@ -91,47 +91,53 @@
             font-weight: bold;
             font-size: 16px;
         } 
-/* 구역 선택 탭 스타일 */
-.nav-tabs {
-    border-bottom: 2px solid #ddd;
-    display: flex;
-    justify-content: center;
-	margin-bottom: 25px;
-    margin-top: -55px;
-}
 
-.nav-tabs .nav-item {
-    margin-bottom: -1px;
-}
+/* 구역 탭 버튼 스타일 */
 
-.nav-tabs .nav-link {
-    border: 1px solid transparent;
-    border-radius: 0.25rem 0.25rem 0 0;
-    color: #555;
+
+.warehouse-tabs button {
+    color: rgb(128, 128, 128);
     font-size: 16px;
-    padding: 10px 20px;
-    transition: all 0.3s ease;
-    background-color: #f1f1f1;
-    margin: 0 5px;
+    padding: 10px 15px;
+    border: none;
+    background: none;
+    transition: color 0.3s ease-in-out;
+    margin-right: 10px;
 }
 
-.nav-tabs .nav-link:hover {
-    background-color: #e9ecef;
-    color: #000;
+.btn-location-assign {
+    margin-left: auto; /* 오른쪽 정렬 */
+    background-color: #007bff; /* 기본 부트스트랩 색상 */
 }
 
-.nav-tabs .nav-link.active {
-    color: #fff;
-    background-color: #007bff;
-    border-color: #007bff #007bff #ddd;
+/* 탭 버튼 활성화 스타일 */
+.warehouse-tabs button.active {
+    font-weight: bold;
+    color: #007bff; /* 파란색으로 활성화된 탭 표시 */
+    border-bottom: 2px solid #007bff;
 }
 
-.tab-content {
-    border: 1px solid #ddd;
-    border-top: none;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 0 0 0.25rem 0.25rem;
+/* 마우스 호버 시 탭 버튼 스타일 */
+.warehouse-tabs button:hover {
+    color: rgb(0, 128, 255); /* hover 색상 */
+    text-decoration: none;
+}
+
+/* 위치 지정 버튼 스타일 */
+.btn-primary {
+    padding: 8px 16px;
+    font-size: 16px;
+}
+
+/* 전체 div 스타일 */
+.warehouse-header {
+	display: flex;
+	flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    margin-top: -60px;
 }
 
 /* 탭 전환 시 부드러운 전환 */

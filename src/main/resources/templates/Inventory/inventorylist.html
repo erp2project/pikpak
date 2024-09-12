@@ -145,54 +145,96 @@
 								<span style="float: right; height: 40px;">
 								<button type="button" class="btn btn-success">초기화</button>
 								<button type="button" class="btn btn-danger">EXCEL</button>
-								<button type="button" class="btn btn-warning">조회</button>
+								<button type="submit" class="btn btn-warning">조회</button>
 								</span>
+								
+								<!-- 검색  -->
 								<p style="font-size: 12px; height: 25px; line-height: 30px;">※ 조회옵션</p>
+								<form id="searchForm">
 								<table class="table table-bordered">
 									<tbody>
 										<tr>
 											<td style="width: 10%; height: 34px; line-height: 34px;">구역 코드</td>
 											<td>
-											<select class="form-control">
+											<select class="form-control" name="area_cd">
 												<option value="">구역코드 선택</option>
+												<option value="A">A</option>
+												<option value="B">B</option>
+												<option value="C">C</option>
+												<option value="D">D</option>
 											</select>
 											</td>
 											<td style="height: 34px; line-height: 34px;">렉번호</td>
 											<td>
-											<select class="form-control" style="width: 100%;">
+											<select class="form-control" style="width: 100%;" name="rack_number">
 												<option value="">렉번호 선택</option>
+												<option value="01">01</option>
+												<option value="02">02</option>
+												<option value="03">03</option>
+												<option value="04">04</option>
+												<option value="05">05</option>
+												<option value="06">06</option>
+												<option value="07">07</option>
+												<option value="08">08</option>
 											</select>
 											</td>
 											<td style="width: 10%; height: 34px; line-height: 34px;">Level(단) / 열 번호</td>
 											<td>
-												<select class="form-control" style="width: 49%; float: left; margin-right: 5px;">
+												<select class="form-control" style="width: 49%; float: left; margin-right: 5px;" name="level">
 													<option value="">단번호 선택</option>
+													<option value="L1">1단(L)</option>
+													<option value="L2">2단(L)</option>
+													<option value="L3">3단(L)</option>
+													<option value="L4">4단(L)</option>
 												</select>
-												<select class="form-control" style="width: 49%; float: left;">
+												<select class="form-control" style="width: 49%; float: left;" name="part">
 													<option value="">열번호 선택</option>
+													<option value="P1">1열(P)</option>
+													<option value="P2">1열(P)</option>
+													<option value="P3">1열(P)</option>
 												</select>
 											</td>
 										</tr>
 										<tr>
+										<!-- 입고 날짜 -->
 											<td style="height: 34px; line-height: 34px;">입고 날짜</td>
 											<td style="display: flex; flex-direction: row; line-height: 34px;">
-											<input type="date" class="form-control" style="width: 45%;">&nbsp;&nbsp; ~ &nbsp;&nbsp;<input type="date" class="form-control" style="width: 45%;">
+												<input type="date" name="start_date" class="form-control" style="width: 45%;">&nbsp;&nbsp; ~ &nbsp;&nbsp;
+												<input type="date" name="end_date" class="form-control" style="width: 45%;">
 											</td>
+										<!-- 상품 코드 / 상품 명 선택-->	
+										
 											<td style="width: 10%; height: 34px; line-height: 34px;">상품코드 / 상품명</td>
 											<td style="display: flex; flex-direction: row; align-items: center; width: 100%;">
-												<input type="text" class="form-control" style="flex: 4; margin-right: 5px; min-width: 100px;">&nbsp;&nbsp;
-												<input type="text" class="form-control" style="flex: 4; margin-right: 5px; min-width: 100px;">&nbsp;&nbsp;
+												<!-- 상품 코드 -->
+												<select class="form-control" id="product_cd" onchange="fetchProductDataByCode(this.value)" style="flex: 4; margin-right: 5px; min-width: 100px;">
+													<option value="">상품코드 선택</option>
+													<option th:each="code : ${product_cd}" th:value="${code}" th:text="${code}"></option>
+												</select>
+												<!-- 상품명 -->
+												<select class="form-control" id="product_nm" onchange="fetchProductDataByName(this.value)" style="flex: 4; margin-right: 5px; min-width: 100px;">
+													<option value="">상품명 선택</option>
+													<option th:each="name : ${product_nm}" th:value="${name}" th:text="${name}"></option>
+												</select>
 												<span class="input-group-btn" style="flex: 2; min-width: 80px;"><button class="btn btn-primary" type="button" data-toggle="modal" data-target="#productModal">검 색</button></span>
 											</td>
+										<!-- 회사 선택 -->	
+										
 											<td style="width: 10%; height: 34px; line-height: 34px;">회사명</td>
 											<td style="display: flex; flex-direction: row; align-items: center; width: 100%;">
-												<input type="text" class="form-control" style="flex: 4; margin-right: 5px; min-width: 100px;">&nbsp;&nbsp;
-												<input type="text" class="form-control" style="flex: 4; margin-right: 5px; min-width: 100px;">&nbsp;&nbsp;
+												<!-- 회사명 -->
+												<select class="form-control" id="supplier_nm" onchange="fetchCompanyDataByName(this.value)" style="width: 100%;">
+													<option value="">회사명 선택</option>
+													<option th:each="name : ${supplier_nm}" th:value="${name}" th:text="${name}"></option>
+												</select>
 												<span class="input-group-btn" style="flex: 2; min-width: 80px;"><button class="btn btn-primary" type="button" data-toggle="modal" data-target="#corpModal">검 색</button></span>
 											</td>
 										</tr>
 									</tbody>
 								</table>
+								</form>
+								
+								<!-- 결과 출력 -->
 								<p style="font-size: 12px; height: 25px; line-height: 30px;">※ 조회결과</p>
 								<div class="panel-body" style="height: 400px; overflow-y: auto;">
 									<table class="table table-hover">

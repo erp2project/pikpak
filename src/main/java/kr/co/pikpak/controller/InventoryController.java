@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +18,38 @@ public class InventoryController {
 	@Autowired
 	private WarehouseInventory_repository wir;
 	
-	//창고별 재고 현황 페이지 - 구역 선택시 구역 정보 출력
+	//상품코드로 데이터 조회
+	@PostMapping("/getpdcode")
+	@ResponseBody
+	public Map<String, Object> getProductByCode(@RequestBody Map<String, String> request){
+		String product_cd = request.get("product_cd");
+		
+		return null;
+	}
+	
+	//상품 명으로 데이터 조회
+	@PostMapping("/getProductByName")
+	@ResponseBody
+	public Map<String, Object> getProductByName(@RequestBody Map<String, String> request){
+		String product_nm = request.get("product_nm");
+		
+		return null;
+	}	
+	
+	
+	//창고 위치 관리 - warehouse_grid.html
+	@PostMapping("/getZoneData")
+	@ResponseBody
+	public Map<String, Object> getZoneStockData(@RequestBody Map<String, String> request){
+		String area_cd = request.get("area_cd");
+		List<Map<String, Object>> getAreaStockData = wir.getAreaStockData(area_cd);
+		Map<String, Object> response = new HashMap<>();
+		response.put("getAreaStockData", getAreaStockData);
+		return response;
+	}
+	
+	
+	//창고별 재고 현황 페이지 - 구역 선택시 구역 정보 출력 (warehouse_inventory.html)
 	@PostMapping("/getAreadata")
 	@ResponseBody
 	public Map<String, Object> getareadata(@RequestBody Map<String, String> request) {
@@ -31,6 +63,31 @@ public class InventoryController {
 		response.put("getAreaData", getAreaData);
 		response.put("getAreaStockData", getAreaStockData);
 		
+		return response;
+	}
+	
+	//창고별 재고 현황 페이지 - 구역 선택시 구역+랙의 재고 정보 출력
+	@PostMapping("/getReckdata")
+	@ResponseBody
+	public Map<String, Object> getrackdata(@RequestBody Map<String, String> request){
+		String Zone_Rack = request.get("Zone_Rack");
+		List<Map<String, Object>> getAreaRackData = wir.getAreaRackData(Zone_Rack);
+		
+		Map<String, Object> response = new HashMap<>();
+		response.put("getAreaRackData", getAreaRackData);
+		
+		return response;
+	}
+	
+	//창고별 재고 현황 페이지 - 구역 선택시 구역+ 랙 + 단/열의 재고 정보 출력
+	@PostMapping("/getLPdata")
+	@ResponseBody
+	public Map<String, Object> gettotallocationdata(@RequestBody Map<String, String> request){
+		String total_location = request.get("total_location");
+		System.out.println(total_location);
+		List<Map<String, Object>> getTotalLocationData = wir.getTotalLocationData(total_location);
+		Map<String, Object> response = new HashMap<>();
+		response.put("getTotalLocationData", getTotalLocationData);
 		return response;
 	}
 }

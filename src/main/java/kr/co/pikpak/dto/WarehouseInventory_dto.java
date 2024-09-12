@@ -11,12 +11,12 @@ import lombok.Setter;
 @Repository("inventory_dto")
 public class WarehouseInventory_dto {
 	Integer wh_warehouse_idx ;
-	String area_cd;
 	String location_cd;
 	String location_sz;
 	String product_cd;
 	String product_nm;
 	String product_qty;
+	String supplier_nm;
 	String intransit_qty;
 	String allocated_qty;
 	String incoming_qty;
