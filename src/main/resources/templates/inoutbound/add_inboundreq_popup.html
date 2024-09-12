@@ -33,11 +33,12 @@
 										<td style="width: 30%;">상품코드</td>
 										<td>
 											<!-- 상품코드 Select2 적용 --> 
-											<select class="form-control select2" id="pd" name="product_cd" style="width:100%">
+											<select class="form-control select2" id="pd" name="product_cd" style="width:40%">
 												<option value="">상품코드 선택</option>
 												<option th:each="product : ${pdlist}"
 													th:value="${product.product_cd}"
 													th:data-product-name="${product.product_nm}"
+													th:data-supplier-code="${product.supplier_cd}"
 													th:data-supplier-name="${product.supplier_nm}"
 													th:text="${product.product_cd}"></option>
 										</select> 
@@ -63,24 +64,27 @@
 									<tr>
 										<td style="width: 30%;">회사명</td>
 										<td><input type="text" readonly="readonly"
-											name="supplier_nm"></td>
+											name="supplier_nm">
+											<input type="hidden" name="supplier_cd"></td>
 									</tr>
 									<tr>
 										<td style="width: 30%;">상품수량</td>
-										<td><input type="text" maxlength="3"></td>
+										<td><input type="text" maxlength="3" name="product_qty"></td>
 									</tr>
 									<tr>
 
 										<td style="width: 30%;">희망 납기일자</td>
 										<td><div style="display: flex; align-items: center;">
-												<input type="date" class="form-control" style="width: 40%;">&nbsp;&nbsp;
+												<input type="date" class="form-control" style="width: 40%;"
+												name="hope_dt">&nbsp;&nbsp;
 
 											</div></td>
 									</tr>
 									<tr>
 										<td style="width: 30%;">추가 요청사항</td>
 										<td><textarea rows="3" cols="60" maxlength="30"
-												placeholder="30자까지 입력 가능합니다."></textarea></td>
+												placeholder="30자까지 입력 가능합니다."
+												name="add_req"></textarea></td>
 									</tr>
 
 
@@ -89,7 +93,7 @@
 						</div>
 						<nav style="text-align: center; padding: 15px;">
 							<span>
-								<button type="button" class="btn btn-dark">등록</button> <!-- 왜 안되지 -->
+								<button type="button" class="btn btn-dark" id="req_enroll">등록</button> 
 							</span>
 
 						</nav>

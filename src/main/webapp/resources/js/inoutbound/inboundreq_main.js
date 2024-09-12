@@ -13,6 +13,7 @@ export class page_move {
 }
 
 export class inboundreq_enroll {
+	/* 아놔..이건 datalist쓸 때
 	//[[상품코드,상품명,회사명],[상품코드,상품명,회사명],[상품코드,상품명,회사명]...] 이차배열 리턴
 	product_info() {
 		this.options = document.querySelectorAll("#products option"); //옵션 태그의 데이터
@@ -54,6 +55,28 @@ export class inboundreq_enroll {
 				break;
 			}
 			this.w++;
+		}
+	}
+	*/
+	
+	//등록을 위해 값 날리기
+	submit_data(){
+		if(frm_inreq_modal.product_cd.value == ""){
+			alert('상품코드를 입력해주세요');	
+		}
+		else if(frm_inreq_modal.product_qty.value == ""){
+			alert('상품수량을 입력해주세요');
+		}
+		else if(isNaN(frm_inreq_modal.product_qty.value) == true){
+			alert('상품수량은 숫자로 입력해주세요');
+		}
+		else if(frm_inreq_modal.hope_dt.value == ""){
+			alert('희망 납기일자를 선택해주세요 ');
+		}
+		else{
+			frm_inreq_modal.method = "post";
+			frm_inreq_modal.action = "./inreq_enrollok";
+			frm_inreq_modal.submit();
 		}
 	}
 }
