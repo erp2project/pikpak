@@ -1,3 +1,57 @@
+export class inboundreq_list{
+	//전체 체크 누르고 끌 때
+	all_ckbox(){
+		this.all_ck_checked = document.getElementById("all_ck").checked;
+		for(this.f = 0; this.f < frm_inreq_list.each_ck.length; this.f++){
+			frm_inreq_list.each_ck[this.f].checked = this.all_ck_checked;
+		}
+		
+	}
+	
+	//개별 체크 누르고 끌 때
+	each_ckbox(){
+		this.ck_count = 0;
+		
+		for(this.f = 0; this.f < frm_inreq_list.each_ck.length; this.f++){
+			if(frm_inreq_list.each_ck[this.f].checked == true){
+				this.ck_count++;			
+			}
+			
+		}
+		
+		
+		if(this.ck_count == frm_inreq_list.each_ck.length){
+			document.getElementById("all_ck").checked = true;
+		}
+		else{
+			document.getElementById("all_ck").checked = false;
+		}
+		return this.ck_count;
+	}
+	
+	delete_data(){
+		if(this.each_ckbox() == 0){
+			alert('삭제할 데이터를 선택해주세요');
+		}
+		else if(confirm("정말로 삭제하시겠습니까?")){
+			this.idx_data = new Array();
+			
+			for(this.f = 0; this.f < frm_inreq_list.each_ck.length; this.f++){
+				if(frm_inreq_list.each_ck[this.f].checked == true){
+					this.idx_data.push(frm_inreq_list.each_ck[this.f].value);		
+				}
+			}
+			
+			frm_inreq_list.request_idx.value = this.idx_data.join(",");
+			
+			frm_inreq_list.method = "post";
+			frm_inreq_list.action = "./delete_inreqok";
+			frm_inreq_list.submit();
+		}
+	}
+}
+
+
 export class page_move {
 	go_inboundreq() {
 		location.href = "./inboundreq"

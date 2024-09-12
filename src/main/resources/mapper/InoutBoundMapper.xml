@@ -1,12 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.pikpak.repo.InoutBoundRepo">
+<!-- 입고요청의 회사명 모달 : 회사정보 가져오기 -->
+<select id="select_supplier" resultType="kr.co.pikpak.dto.supplier_info_dto_lhwtemp">
+select supplier_cd, supplier_nm from supplier_info order by supplier_idx desc
+</select>
+
+<!-- 입고요청 삭제하기 -->
+<delete id="delete_inreq">
+delete from input_request where FIND_IN_SET(request_idx,#{request_idx})
+</delete>
+
+<!-- 입고요청 리스트 불러오기 -->
+<select id="select_inreq" resultType="kr.co.pikpak.dto.input_request_dto">
+select * from input_request order by request_idx desc
+</select>
+
+<!-- 입고요청의 등록모달 : 상품정보 가져오기 -->
 <select id="selectProduct" resultType="kr.co.pikpak.dto.product_dto_lhwtemp">
 select supplier_cd, supplier_nm, product_cd, product_nm from product order by product_idx desc
 </select>
 
+<!-- 입고요청 등록하기 -->
 <insert id="input_req_insert">
 insert into input_request values ('0',#{request_cd},#{supplier_cd},#{supplier_nm},#{product_cd},#{product_nm},
 #{product_qty},#{operator_id},#{operator_nm},#{request_st},#{add_req},#{hope_dt},now(),#{update_dt})
 </insert>
+
+<!-- 데이터베이스 서버시간 가져오기 -->
+<select id="get_time" resultType="String">
+select date_format(now(), '%Y%m%d%H%i%s') as server_time
+</select>
 </mapper>

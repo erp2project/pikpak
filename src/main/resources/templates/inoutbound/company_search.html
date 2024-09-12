@@ -48,15 +48,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td style="text-align: center;">SM-12345</td>
-                                <td style="text-align: center;">삼성 갤럭시북</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td style="text-align: center;">SM-21215</td>
-                                <td style="text-align: center;">스타일러</td>
+                            <tr th:each="supplier : ${splist}">
+                                <td th:text="${sp_total - supplierStat.index}">1</td>
+                                <td style="text-align: center;"
+                                th:text="${supplier.supplier_cd}"></td>
+                                <td style="text-align: center;" 
+                                th:text="${supplier.supplier_nm}"></td>
                             </tr>
                         </tbody>
                     </table>

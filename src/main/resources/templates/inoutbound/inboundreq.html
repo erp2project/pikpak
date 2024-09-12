@@ -142,8 +142,26 @@ $(document).ready(function() {
 </script>	
 
  <script type="module">
-    import {page_move, inboundreq_enroll} from "../resources/js/inoutbound/inboundreq_main.js?v=3";
+    import {page_move, inboundreq_enroll, inboundreq_list} from "../resources/js/inoutbound/inboundreq_main.js?v=4";
 	
+	/* 입고 요청 조회 결과 리스트 */	
+	//전체 체크박스를 클릭했을 때
+	document.querySelector("#all_ck").addEventListener("click",function(){
+		new inboundreq_list().all_ckbox();
+	});
+
+	//개별 체크박스를 클릭했을 때
+	document.querySelectorAll('[name="each_ck"]').forEach(function(ck){
+		ck.addEventListener('click', function() {
+        	new inboundreq_list().each_ckbox();
+		});
+    });
+    
+	//삭제 버튼 클릭했을 때
+	document.querySelector("#del_inreq").addEventListener("click",function(){
+		new inboundreq_list().delete_data();
+	});
+
 	/* 메뉴 */
 	//입고요청 이동
 	document.querySelector("#go_inoutreq").addEventListener("click",function(){

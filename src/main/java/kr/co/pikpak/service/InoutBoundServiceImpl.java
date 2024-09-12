@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import kr.co.pikpak.dto.input_request_dto;
 import kr.co.pikpak.dto.product_dto_lhwtemp;
+import kr.co.pikpak.dto.supplier_info_dto_lhwtemp;
 import kr.co.pikpak.repo.InoutBoundRepo;
 
 @Service
@@ -15,9 +16,33 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	@Autowired
 	InoutBoundRepo iorepo;
 	
+	@Override
+	public List<supplier_info_dto_lhwtemp> select_supplier() {
+		List<supplier_info_dto_lhwtemp> sp_list = iorepo.select_supplier();
+		return sp_list;
+	}
+	
+	//입고요청 데이터 삭제
+	@Override
+	public int delete_inreq(String request_idx) {
+		int result = iorepo.delete_inreq(request_idx);
+		return result;
+	}
+	
+	//입고요청 데이터 리스트
+	@Override
+	public List<input_request_dto> select_inreq() {
+		List<input_request_dto> ir_list = iorepo.select_inreq();
+		return ir_list;
+	}
+	
 	//입고요청 데이터 등록
 	@Override
 	public int input_req_insert(input_request_dto dto) {
+		dto.setRequest_cd(this.make_inreqcode());
+		dto.setOperator_id("kim");
+		dto.setOperator_nm("김유신");
+		dto.setRequest_st("대기"); //dto에 값이 없으면 오류남
 		int result = iorepo.input_req_insert(dto);
 		return result;
 	}
@@ -30,7 +55,32 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 		return all;
 	}
 	
+	//데이터베이스 서버시간 불러오기
+	@Override
+	public String get_time() {
+		String time = iorepo.get_time();
+		return time;
+	}
+	
 	//입고요청 데이터 등록시 입고요청코드 랜덤생성
+	public String make_inreqcode() {
+		//서버 시간
+		String server_time = this.get_time();
+	
+		//랜덤숫자 4개 생성
+		int w = 0;
+		String randnum = "";
+		
+		while(w < 4) {
+			int pc = (int)(Math.ceil(Math.random()*10));
+			randnum += pc;
+			w++;
+		}
+		
+		String code = server_time + "-" + randnum;
+		
+		return code;
+	}
 	
 	//입고요청 데이터 등록시 사용자 정보 가져오기
 	

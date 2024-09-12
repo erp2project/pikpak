@@ -9,10 +9,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.ServletResponse;
 import kr.co.pikpak.dto.input_request_dto;
 import kr.co.pikpak.dto.product_dto_lhwtemp;
+import kr.co.pikpak.dto.supplier_info_dto_lhwtemp;
 import kr.co.pikpak.service.InoutBoundService;
 
 @Controller
@@ -23,6 +25,38 @@ public class InoutBoundController {
 	@Autowired
 	InoutBoundService ioservice;
 	
+	//입고요청 삭제
+	@PostMapping("inoutbound/delete_inreqok")
+	public String delete_inreqok(ServletResponse res,
+			@RequestParam(defaultValue = "", required = false) String each_ck[],
+			@RequestParam(defaultValue = "", required = false) String request_idx) {
+		res.setContentType("text/html;charset=utf-8");
+		String idx_datas[] = request_idx.split(",");
+		
+		if(idx_datas.length == each_ck.length) {
+			
+			try {
+				this.pw = res.getWriter();				
+				int result = ioservice.delete_inreq(request_idx);
+				if(result == idx_datas.length) {
+					this.pw.print("<script>"
+							+ "alert('정상적으로 삭제되었습니다.');"
+							+ "location.href = './inboundreq';"
+							+ "</script>");
+				}
+			}
+			catch(Exception e) {
+				this.pw.print("<script>"
+						+ "alert('데이터베이스 문제로 삭제되지 못하였습니다.');"
+						+ "location.href = './inboundreq';"
+						+ "</script>");
+			}
+			finally {
+				this.pw.close();
+			}
+		}
+		return null;
+	}
 	
 	//입고요청 등록
 	@PostMapping("inoutbound/inreq_enrollok")
@@ -34,11 +68,6 @@ public class InoutBoundController {
 		//안 넘어와도 되는 값(쿼리문 처리 or null값): request_idx, request_dt, update_dt
 		try {
 			this.pw = res.getWriter();
-			dto.setRequest_cd("03123123");
-			dto.setOperator_id("hong");
-			dto.setOperator_nm("홍길동");
-			dto.setRequest_st("대기"); //이걸 어디서 한담...default값이 있는데 걍 안되나, 일단 dto에 값이 없으면 오류남
-			
 			int result = ioservice.input_req_insert(dto);
 			
 			if(result > 0) {
@@ -67,6 +96,17 @@ public class InoutBoundController {
 		//등록 모달에 상품리스트 출력
 		List<product_dto_lhwtemp> pdlist = ioservice.select_pdlist();
 		m.addAttribute("pdlist",pdlist);
+		
+		//입고요청 리스트 출력
+		List<input_request_dto> ir_list = ioservice.select_inreq();
+		m.addAttribute("ir_list", ir_list);
+		
+		//매입처 모달에 회사 리스트 출력
+		List<supplier_info_dto_lhwtemp> splist = ioservice.select_supplier();
+		int sp_total = splist.size();
+		m.addAttribute("splist",splist);
+		m.addAttribute("sp_total", sp_total);
+		
 		return null;
 	}
 	
