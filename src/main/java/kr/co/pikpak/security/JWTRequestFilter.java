@@ -66,7 +66,7 @@ public class JWTRequestFilter extends OncePerRequestFilter{
 		else {	//request에 authorization 해더 없는 경우
 			//System.out.println("Bearer string not found, ignoring the header");
 		}
-		
+		/*
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			UserDetails userDetails = LoginService.loadUserByUsername(username);
 			
@@ -81,6 +81,7 @@ public class JWTRequestFilter extends OncePerRequestFilter{
 				System.out.println("test" + SecurityContextHolder.getContext());
             }
 		}
+		*/
 		filterChain.doFilter(req,res);
 	}
 }
