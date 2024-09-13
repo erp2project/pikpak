@@ -1,7 +1,9 @@
 package kr.co.pikpak.controller;
 
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.ServletResponse;
 import kr.co.pikpak.dto.input_request_dto;
@@ -24,6 +27,33 @@ public class InoutBoundController {
 	
 	@Autowired
 	InoutBoundService ioservice;
+	
+	//매입처 페이징
+	@GetMapping("/company_paging") //여기서는 그냥 그대로 경로 써주면 되는구나 ajax니까
+	@ResponseBody
+	public Map<String, Object> company_paging(ServletResponse res
+			,@RequestParam(defaultValue = "", required = false) int page) {
+		
+		int page_size = 10; //한 페이지당 보여줄 리스트 개수
+		int startpg = ((page - 1) * page_size) + 1;
+		
+		Map<String, Object> response = new HashMap<>();
+		
+		try {
+			List<supplier_info_dto_lhwtemp> splist_part = ioservice.select_supplier_limit(startpg, page_size);	
+			Integer sp_total = ioservice.select_supplier_total();
+			
+			response.put("splist_part", splist_part); //페이징 리스트
+			response.put("sp_total", sp_total); //총 리스트 개수
+			response.put("page_size", page_size); //페이징 사이즈
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+		
+		return response;
+	}
+	
 	
 	//입고요청 삭제
 	@PostMapping("inoutbound/delete_inreqok")
@@ -101,11 +131,13 @@ public class InoutBoundController {
 		List<input_request_dto> ir_list = ioservice.select_inreq();
 		m.addAttribute("ir_list", ir_list);
 		
+		/*
 		//매입처 모달에 회사 리스트 출력
 		List<supplier_info_dto_lhwtemp> splist = ioservice.select_supplier();
 		int sp_total = splist.size();
 		m.addAttribute("splist",splist);
 		m.addAttribute("sp_total", sp_total);
+		*/
 		
 		return null;
 	}

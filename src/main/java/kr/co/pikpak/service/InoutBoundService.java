@@ -23,5 +23,8 @@ public interface InoutBoundService {
 	public int delete_inreq(String request_idx);
 	
 	//매입처 회사명 검색 리스트
-	public List<supplier_info_dto_lhwtemp> select_supplier();
+	public Integer select_supplier_total();
+	
+	//매입처 페이징
+	public List<supplier_info_dto_lhwtemp> select_supplier_limit(Integer startpg, Integer page_size);
 }

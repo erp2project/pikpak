@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.pikpak.repo.InoutBoundRepo">
-<!-- 입고요청의 회사명 모달 : 회사정보 가져오기 -->
-<select id="select_supplier" resultType="kr.co.pikpak.dto.supplier_info_dto_lhwtemp">
-select supplier_cd, supplier_nm from supplier_info order by supplier_idx desc
+<!-- 입고요청의 회사명 모달 : 회사 리스트 페이징 -->
+<select id="select_supplier_limit" resultType="kr.co.pikpak.dto.supplier_info_dto_lhwtemp"  parameterType="Integer">
+select * from supplier_info order by supplier_idx desc limit #{startpg},#{page_size}
+</select>
+
+<!-- 입고요청의 회사명 모달 : 회사정보 개수 가져오기 -->
+<select id="select_supplier_total" resultType="Integer">
+select count(*) as total from supplier_info
 </select>
 
 <!-- 입고요청 삭제하기 -->

@@ -25,6 +25,9 @@ public interface InoutBoundRepo {
 	//입고요청 삭제
 	int delete_inreq(String request_idx);
 	
-	//매입처 회사명 리스트
-	List<supplier_info_dto_lhwtemp> select_supplier();
+	//매입처 회사명 리스트 개수
+	Integer select_supplier_total();
+	
+	//매입처 페이징
+	List<supplier_info_dto_lhwtemp> select_supplier_limit(Integer startpg, Integer page_size);
 }

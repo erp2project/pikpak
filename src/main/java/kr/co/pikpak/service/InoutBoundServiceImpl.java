@@ -16,10 +16,18 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	@Autowired
 	InoutBoundRepo iorepo;
 	
+	//매입처 페이징
 	@Override
-	public List<supplier_info_dto_lhwtemp> select_supplier() {
-		List<supplier_info_dto_lhwtemp> sp_list = iorepo.select_supplier();
-		return sp_list;
+	public List<supplier_info_dto_lhwtemp> select_supplier_limit(Integer startpg, Integer page_size) {
+		List<supplier_info_dto_lhwtemp> sp_list_part = iorepo.select_supplier_limit(startpg, page_size);
+		return sp_list_part;
+	}
+	
+	//매입처 개수
+	@Override
+	public Integer select_supplier_total() {
+		Integer total = iorepo.select_supplier_total();
+		return total;
 	}
 	
 	//입고요청 데이터 삭제
