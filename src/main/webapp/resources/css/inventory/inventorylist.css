@@ -52,3 +52,27 @@
     width: 100%;
     table-layout: fixed; /* 열 너비를 고정 */
 }
+
+        /* 팝업 창 내부 스타일링 */
+        .modal-body {
+            font-size: 14px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .form-control-sm {
+            width: 90%;
+        }
+        .form-inline input {
+            margin-right: 10px;
+        }
+        .form-check-inline {
+            margin-right: 20px;
+        }
+        .modal-footer button {
+            padding: 8px 20px;
+            border-radius: 20px;
+        }

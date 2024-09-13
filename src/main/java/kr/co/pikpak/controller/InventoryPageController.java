@@ -26,6 +26,9 @@ public class InventoryPageController {
 		//최초 접속 시 재고 리스트 전체 출력
 		List<WarehouseInventory_dto> all = wis.getAllinventory();
 		
+		//검색 옵션 - 회사코드 출력
+		List<Map<String, Object>> getAllsupplier_cd = wis.getAllsupplier_cd();
+		
 		//상품코드 옵션 출력
 		Set<String> product_cd = all.stream().map(WarehouseInventory_dto::getProduct_cd).collect(Collectors.toSet());
 		//상품명 옵션 출력
@@ -36,8 +39,16 @@ public class InventoryPageController {
 		m.addAttribute("product_cd",product_cd);
 		m.addAttribute("product_nm",product_nm);
 		m.addAttribute("supplier_nm",supplier_nm);
+		m.addAttribute("getAllsupplier_cd",getAllsupplier_cd);
 		
 		return "/Inventory/inventorylist";
+	}
+
+	//재고 현황 페이지 - 관리 버튼 팝업창
+	@GetMapping("/inventory_popup")
+	public String inventory_popup(@RequestParam("wh_warehouse_idx") String wh_warehouse_idx, Model m) {
+		System.out.println(wh_warehouse_idx);
+		return "/Inventory/inventory_popup";
 	}
 	
 	//창고별 재고 현황 페이지 출력
@@ -56,10 +67,6 @@ public class InventoryPageController {
 		return "/Inventory/warehouse_management";
 	}
 	
-	@GetMapping("/inventory_popup")
-	public String inventory_popup() {
-		return "/Inventory/inventory_popup";
-	}
 	
 	//재고 현황 페이지 - 상품 검색 팝업창
 	@GetMapping("/product_search") 		

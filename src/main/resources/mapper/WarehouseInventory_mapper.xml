@@ -6,6 +6,44 @@
 		select * from warehouse_temporary_by_mindiit order by wh_warehouse_idx desc;
 	</select>
 	
+	<!-- 재고 리스트 페이지 - 관리 버튼 클릭 시 idx 값으로 해당 재고 데이터 조회 -->
+	<select id="getDetailsByIdx" parameterType="Integer" resultType="kr.co.pikpak.dto.WarehouseInventory_dto">
+		SELECT * FROM warehouse_temporary_by_mindiit WHERE wh_warehouse_idx = #{wh_warehouse_idx}
+	</select>
+	
+	<!-- 재고 리스트 페이지 - 관리 버튼 팝업 / 추가 데이터 조회 (상품코드로 상품 테이블의 안전재고 조회) -->
+	<select id="getSafetyInventory_qty" parameterType="string" resultType="Integer">
+		SELECT * FROM product_by_mindiit WHERE product_cd = #{product_cd}
+	</select>
+	
+	
+	<!-- 재고 리스트 페이지 - 검색 옵션 회사코드 출력 -->
+	<select id="getAllsupplier_cd" resultType="Map">
+		SELECT supplier_cd FROM supplier_info
+	</select>
+	
+	<!-- 재고 리스트 페이지 - 상품코드로 검색 (상품코드로 상품 조회)-->
+	<select id="findByProduct_cd" parameterType="String" resultType="kr.co.pikpak.dto.WarehouseInventory_dto">
+		SELECT product_cd, product_nm FROM warehouse_temporary_by_mindiit
+		WHERE product_cd =#{product_cd}
+	</select>
+	
+	<!-- 재고 리스트 페이지 - 상품명으로검색  (상품명으로 상품 조회)-->
+	<select id="findByProduct_nm" parameterType="String" resultType="kr.co.pikpak.dto.WarehouseInventory_dto">
+		SELECT product_cd, product_nm FROM warehouse_temporary_by_mindiit
+		WHERE product_nm =#{product_nm}
+	</select>
+	
+	<!-- 재고 리스트 페이지 - 회사코드 선택 시 -->
+	<select id="findByCompany_cd" parameterType="String" resultType="Map">
+		SELECT supplier_nm FROM supplier_info WHERE supplier_cd =#{supplier_cd}
+	</select>
+	
+	<!-- 재고리스트 페이지 - 회사명으로 선택 -->
+	<select id="findByCompany_nm" parameterType="String" resultType="Map">
+		SELECT supplier_cd FROM supplier_info WHERE supplier_nm = #{supplier_nm}
+	</select>
+	
 	<!-- 창고별 재고 현황 페이지 - 구역 정보 출력 -->
 	<select id="getAreaData" resultType="Map">
 		SELECT manager_nm, manager_tel,lastcheck_start_dt,lastcheck_end_dt,area_st,full_capacity,available_space

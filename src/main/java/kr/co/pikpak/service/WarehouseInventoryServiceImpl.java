@@ -48,10 +48,59 @@ public class WarehouseInventoryServiceImpl implements WarehouseInventoryService{
 		return wir.getTotalLocationData(total_location);
 	}
 	
-	//재고 현황 페이지 
+	//재고 현황 페이지 - 재고 전체 리스트 출력
 	@Override
 	public List<WarehouseInventory_dto> getAllinventory() {
 		
 		return wir.getAllinventory();
 	}
+	//재고 현황 페이지 - 검색 옵션 / 전체 회사 코드 출력
+	@Override
+	public List<Map<String, Object>> getAllsupplier_cd() {
+		List<Map<String, Object>> result = wir.getAllsupplier_cd();
+		return result;
+	}
+	//재고 현황 페이지 - 관리 버튼 / idx 값으로 재고 데이터 조회
+	@Override
+	public WarehouseInventory_dto getDetailsByIdx(Integer wh_warehouse_idx) {
+	
+		return wir.getDetailsByIdx(wh_warehouse_idx);
+	}
+	//재고 현황 페이지 - 관리 버튼 팝업 / 상품코드로 상품테이블에서 안전재고 조회
+	@Override
+	public Integer getSafetyInventory_qty(String product_cd) {
+		
+		return wir.getSafetyInventory_qty(product_cd);
+	}
+	
+	
+	
+	
+	//재고 현황 페이지 검색 옵션 - 상품코드 선택 시  (상품코드로 상품 조회)
+	@Override
+	public WarehouseInventory_dto findByProduct_cd(String product_cd) {
+		
+		return wir.findByProduct_cd(product_cd);
+	}
+	
+	//재고 현황 페이지 검색 옵션 - 상품명 선택 시(상품명으로 상품 조회)
+	@Override
+	public WarehouseInventory_dto findByProduct_nm(String product_nm) {
+		
+		return wir.findByProduct_nm(product_nm);
+	}
+	
+	//재고 현황 페이지 검색 옵션 - 회사코드 선택시
+	@Override
+	public Map<String, Object> findByCompany_cd(String supplier_cd) {
+		
+		return wir.findByCompany_cd(supplier_cd);
+	}
+	//재고 현황 페이지 검색 옵션 - 회사명 선택 시
+	@Override
+	public Map<String, Object> findByCompany_nm(String supplier_nm) {
+		
+		return wir.findByCompany_nm(supplier_nm);
+	}
+
 }

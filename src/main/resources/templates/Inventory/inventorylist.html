@@ -197,13 +197,14 @@
 										</tr>
 										<tr>
 										<!-- 입고 날짜 -->
-											<td style="height: 34px; line-height: 34px;">입고 날짜</td>
-											<td style="display: flex; flex-direction: row; line-height: 34px;">
-												<input type="date" name="start_date" class="form-control" style="width: 45%;">&nbsp;&nbsp; ~ &nbsp;&nbsp;
-												<input type="date" name="end_date" class="form-control" style="width: 45%;">
-											</td>
+<!-- 											<td style="height: 34px; line-height: 34px;">입고 날짜</td> -->
+<!-- 											<td style="display: flex; flex-direction: row; line-height: 34px;"> -->
+<!-- 												<input type="date" name="start_date" class="form-control" style="width: 45%;">&nbsp;&nbsp; ~ &nbsp;&nbsp; -->
+<!-- 												<input type="date" name="end_date" class="form-control" style="width: 45%;"> -->
+<!-- 											</td> -->
 										<!-- 상품 코드 / 상품 명 선택-->	
-										
+											<td></td>
+											<td></td>
 											<td style="width: 10%; height: 34px; line-height: 34px;">상품코드 / 상품명</td>
 											<td style="display: flex; flex-direction: row; align-items: center; width: 100%;">
 												<!-- 상품 코드 -->
@@ -216,18 +217,21 @@
 													<option value="">상품명 선택</option>
 													<option th:each="name : ${product_nm}" th:value="${name}" th:text="${name}"></option>
 												</select>
-												<span class="input-group-btn" style="flex: 2; min-width: 80px;"><button class="btn btn-primary" type="button" data-toggle="modal" data-target="#productModal">검 색</button></span>
+												<!-- <span class="input-group-btn" style="flex: 2; min-width: 80px;"><button class="btn btn-primary" type="button" data-toggle="modal" data-target="#productModal">검 색</button></span> -->
 											</td>
 										<!-- 회사 선택 -->	
 										
 											<td style="width: 10%; height: 34px; line-height: 34px;">회사명</td>
 											<td style="display: flex; flex-direction: row; align-items: center; width: 100%;">
 												<!-- 회사명 -->
-												<select class="form-control" id="supplier_nm" onchange="fetchCompanyDataByName(this.value)" style="width: 100%;">
+												<select class="form-control" id="supplier_cd" onchange="fetchCompanyDataByCode(this.value)" style="width: 100%;">
+													<option value="">회사코드 선택</option>
+													<option th:each="Code : ${getAllsupplier_cd}" th:value="${Code.supplier_cd}" th:text="${Code.supplier_cd}"></option>
+												</select>
+												<select class="form-control" id="supplier_nm" onchange="fetchCompanyDataByName(this.value)"style="width: 100%;">
 													<option value="">회사명 선택</option>
 													<option th:each="name : ${supplier_nm}" th:value="${name}" th:text="${name}"></option>
 												</select>
-												<span class="input-group-btn" style="flex: 2; min-width: 80px;"><button class="btn btn-primary" type="button" data-toggle="modal" data-target="#corpModal">검 색</button></span>
 											</td>
 										</tr>
 									</tbody>
@@ -245,6 +249,7 @@
 												</th>
 												<th>위치 코드</th>
 												<th>상품 코드</th>
+												<th>회사명</th>
 												<th>상품명</th>
 												<th style="text-align: center;">안전 재고 수량</th>
 												<th style="text-align: center;">재고수량(단위)</th>
@@ -257,16 +262,21 @@
 										<tbody>
 											<tr onclick="toggleCheckbox(this)" th:each="info : ${all}">
 												<td><input type="checkbox" onclick="event.stopPropagation();"></td>
-												<td th:text="${info.location_cd}">A0132</td>
-												<td th:text="${info.product_cd}">SM-12345</td>
-												<td th:text="${info.product_nm}">로봇 청소기</td>
-												<td>안전 재고 수량</td>
+												<td th:text="${info.location_cd}"></td>
+												<td th:text="${info.product_cd}"></td>
+												<td th:text="${info.supplier_nm}"></td>
+												<td th:text="${info.product_nm}"></td>
+												<td></td>
 												<td th:text="${info.product_qty}">-</td>
-												<td style="text-align: center;">12</td>
-												<td>2024-09-01</td>
+												<td style="text-align: center;"></td>
+												<td></td>
 												<td style="text-align: center;">미정</td>
 												<td style="text-align: center;">
-													<button class="btn btn-info" onclick="event.stopPropagation();">관리</button>
+													<button class="btn btn-info"
+													 th:onclick="event.stopPropagation(); openModal([[${info.wh_warehouse_idx}]])"
+													
+													data-toggle="modal" 
+													data-target="#inventoryModal">관리</button>
 												</td>
 											</tr>
 										</tbody>
@@ -284,6 +294,7 @@
 		</div>
 		<div th:replace="~{/inventory/corp_search :: corp_search_popup}">
 		</div>
+		<div th:replace="~{/inventory/inventory_popup :: inventory_popup}"></div>
 		<div class="clearfix"></div>
 		<footer>
 			<div class="container-fluid">
