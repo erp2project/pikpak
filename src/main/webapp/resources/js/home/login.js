@@ -1,10 +1,12 @@
 const loginFormSend = () => {
 	let sendCondition = new loginDataTools().emptyCheck();
+	
 	if (sendCondition == "Y"){
 		loginForm.method = "POST";
 		loginForm.action = "/login/auth"
 		loginForm.submit();
 	}
+	
 }
 
 class loginDataTools{

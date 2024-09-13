@@ -7,6 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 import kr.co.pikpak.dto.LoginDTO;
 
 @Mapper
-public interface HomeRepo {
-	
+public interface LoginRepo {
+	List<LoginDTO> userDataById(String user_id);
 }
