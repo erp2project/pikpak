@@ -9,4 +9,16 @@ public class HomePageController {
 	public String loginPage() {
 		return "/home/login";
 	}
+	
+	@GetMapping("/template")
+	public String mainPage() {
+		return "/shared/template";
+	}
+	
+	@GetMapping("/og")
+	public String ogPage() {
+		return "/reference/index";
+	}
+	
+	
 }
