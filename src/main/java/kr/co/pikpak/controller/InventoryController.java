@@ -28,9 +28,11 @@ public class InventoryController {
 	public Map<String, Object> getInventoryDetails(@RequestParam("wh_warehouse_idx") Integer wh_warehouse_idx){
 		WarehouseInventory_dto getDetailsByIdx = wir.getDetailsByIdx(wh_warehouse_idx);
 		//상품코드 별도 추출 후 상품 테이블에서 상품정보 가져오기
+		System.out.println(getDetailsByIdx.getProduct_cd());
 		Integer getSafetyInventory_qty = wir.getSafetyInventory_qty(getDetailsByIdx.getProduct_cd());
 		Map<String, Object> result = new HashMap<>();
 		result.put("details",getDetailsByIdx);
+		System.out.println(getSafetyInventory_qty);
 		result.put("safety_inventory", getSafetyInventory_qty);
 		
 		return result;
@@ -42,7 +44,6 @@ public class InventoryController {
 	@ResponseBody
 	public Map<String, Object> getCompanyByCode(@RequestBody Map<String, String> request){
 		String supplier_cd = request.get("supplier_cd");
-		System.out.println(supplier_cd+"선택한 회사 코드");
 		Map<String, Object> getSupplier_nm = wir.findByCompany_cd(supplier_cd);
 		return getSupplier_nm;
 	}
@@ -52,7 +53,6 @@ public class InventoryController {
 	@ResponseBody
 	public Map<String, Object> getCompanyByName(@RequestBody Map<String, String> request){
 		String supplier_nm = request.get("supplier_nm");
-		System.out.println(supplier_nm+"선택한 회사명");
 		Map<String, Object> getSupplier_cd = wir.findByCompany_nm(supplier_nm);
 		return getSupplier_cd;
 	}
@@ -132,7 +132,6 @@ public class InventoryController {
 	@ResponseBody
 	public Map<String, Object> gettotallocationdata(@RequestBody Map<String, String> request){
 		String total_location = request.get("total_location");
-		System.out.println(total_location);
 		List<Map<String, Object>> getTotalLocationData = wir.getTotalLocationData(total_location);
 		Map<String, Object> response = new HashMap<>();
 		response.put("getTotalLocationData", getTotalLocationData);

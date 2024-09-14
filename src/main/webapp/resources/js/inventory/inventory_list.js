@@ -32,6 +32,8 @@ function openModal(wh_warehouse_idx){
 		
 		document.getElementById('safetyStock').value= safety_qty;	//안전 재고
 		
+		document.getElementById('notes').value = details.inventory_log;
+		
 	$('#inventoryModal').modal('show');		
 		
 	})
@@ -94,7 +96,6 @@ function fetchCompanyDataByCode(supplier_cd){
 	})
 	.then(response => response.json())
 	.then(data => {
-		console.log(data);
 		document.getElementById('supplier_nm').value=data.supplier_nm;
 	})
 	.catch(error => console.error('Error fetching product data:', error));
@@ -114,7 +115,6 @@ function fetchCompanyDataByName(supplier_nm){
 	})
 	.then(response => response.json())
 	.then (data => {
-		console.log(data);
 		document.getElementById('supplier_cd').value = data.supplier_cd;
 	})
 	.catch(error => console.error('Error fetching company data :',error));
