@@ -26,19 +26,19 @@ public class JWTRequestFilter extends OncePerRequestFilter{
 	private JWTUtility JWTUtil;
 	
 	@Autowired
-	private LoginService LoginService;
+	private CustomUserDetailsService userDetailsService;
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain)
 			throws ServletException, IOException {
-		String authorizationHeader = req.getHeader("Authorization");
+		String authHeader = req.getHeader("Authorization");
 		//final String authorizationHeader = req.getHeader("Cookie");
 		
-		if (authorizationHeader == null) {
+		if (authHeader == null) {
 			String accessToken = CookieUtility.getCookie(req, "accessToken");
 			if (accessToken != null) {
-				authorizationHeader = "Bearer " + accessToken;
-				res.setHeader("Authorization", authorizationHeader);
+				authHeader = "Bearer " + accessToken;
+				res.setHeader("Authorization", authHeader);
 			}
 		}
 		
@@ -46,15 +46,25 @@ public class JWTRequestFilter extends OncePerRequestFilter{
 		//System.out.println("Headertest : " + authorizationHeader);
 		
 		
-		String username = null;
-		String jwt = null;
+		String requestURI = req.getRequestURI();
 		
-		if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) { //request에 authorization header있는경우
-			jwt = authorizationHeader.substring(7);
+		if (requestURI.startsWith("/resources/") || requestURI.startsWith("/login")) {
+			filterChain.doFilter(req, res);
+			return;
+		}
+		
+
+		String userId = null;
+		String token = null;
+		
+		// Authorization 헤더가 존재하고 Bearer로 시작할 때
+		if (authHeader != null && authHeader.startsWith("Bearer ")) { //request에 authorization header있는경우
+			token = authHeader.substring(7);
 			
 			try {
-				username = JWTUtil.extractUsername(jwt);
+				userId = JWTUtil.extractUserId(token);
 				System.out.println("good");
+				System.out.println(userId);
             } catch (IllegalArgumentException e) {
             	System.out.println("Error occurred while retrieving Username from Token");
             } catch (ExpiredJwtException e) {
@@ -62,26 +72,35 @@ public class JWTRequestFilter extends OncePerRequestFilter{
             } catch (SignatureException e) {
             	System.out.println("Authentication Failed. Invalid username or password.");
             }
+			
+            // 유저 이름이 존재하고 현재 인증 정보가 없는 경우
+            if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            	CustomUserDetails userDetails = userDetailsService.loadUserByUsername(userId);
+                // 토큰이 만료되었을 때
+                if (JWTUtil.isTokenExpired(token)) {
+                	res.sendRedirect("/admin/login");
+                    return;
+                }
+                // 유효한 토큰일 경우
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                
+                
+                if (requestURI.equals("/login")) {
+                	res.sendRedirect("/admin/apply-list");
+                    return;
+                }
+            }			
+			
+            System.out.println("ttestetst : " + SecurityContextHolder.getContext().getAuthentication());
+			
 		}
 		else {	//request에 authorization 해더 없는 경우
-			//System.out.println("Bearer string not found, ignoring the header");
+			System.out.println(requestURI);
+			System.out.println("Bearer string not found, ignoring the header");
 		}
-		/*
-		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			UserDetails userDetails = LoginService.loadUserByUsername(username);
-			
-			if (JWTUtil.isTokenValid(jwt, userDetails)) {
-				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-						new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-				
-				usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
-				
-				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-				
-				System.out.println("test" + SecurityContextHolder.getContext());
-            }
-		}
-		*/
+
 		filterChain.doFilter(req,res);
 	}
 }

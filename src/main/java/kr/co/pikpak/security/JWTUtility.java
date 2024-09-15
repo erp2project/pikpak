@@ -1,7 +1,5 @@
 package kr.co.pikpak.security;
 
-
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -30,20 +28,32 @@ public class JWTUtility {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 	
-	public String generateToken(UserDetails userDetails) {
+	public String generateToken(CustomUserDetails userDetails) {
 		Map<String, Object> subject = new HashMap<>();
         Map<String, Object> claims = new HashMap<>();
         
-        //System.out.println(userDetails.getUsername());
-        //System.out.println(userDetails.getAuthorities());
-        
         subject.put("alg", "HS256");
         subject.put("typ", "JWT");
-        claims.put("uid", userDetails.getUsername());
-        claims.put("utype", userDetails.getAuthorities());
+        claims.put("uid", userDetails.getUserId());
+        claims.put("uname", userDetails.getUsername());
+        claims.put("utype", userDetails.getUserAuthority());
         
         return createToken(subject, claims);
     }
+	
+	public String generateOperatorToken(CustomUserDetails userDetails, String operatorLv) {
+		Map<String, Object> subject = new HashMap<>();
+        Map<String, Object> claims = new HashMap<>();
+        
+        subject.put("alg", "HS256");
+        subject.put("typ", "JWT");
+        claims.put("uid", userDetails.getUserId());
+        claims.put("uname", userDetails.getUsername());
+        claims.put("utype", userDetails.getUserAuthority());
+        claims.put("ulevel", operatorLv);
+        
+        return createToken(subject, claims);
+	}
     
     private String createToken(Map<String, Object> subject, Map<String, Object> claims) {
         return Jwts.builder()
@@ -56,12 +66,14 @@ public class JWTUtility {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        final String userId = extractUserId(token);
+        return (userId.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
     
-	public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+	public String extractUserId(String token) {
+		final Claims claims = extractAllClaims(token);
+		String result = (String) claims.get("uid");
+        return result;
     }
 
 	private Claims extractAllClaims(String token) {
@@ -78,7 +90,7 @@ public class JWTUtility {
         return claimsResolver.apply(claims);
     }
     
-    private boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
     

@@ -26,6 +26,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import kr.co.pikpak.dto.LoginDTO;
+import kr.co.pikpak.security.CustomUserDetails;
+import kr.co.pikpak.security.CustomUserDetailsService;
 import kr.co.pikpak.security.JWTUtility;
 import kr.co.pikpak.service.LoginService;
 
@@ -36,7 +38,7 @@ public class LoginController {
 	LoginDTO ldto;
 	
 	@Autowired
-	private LoginService LoginService;
+	private CustomUserDetailsService userDetailsService;
 	
 	@Autowired
 	private HttpSession session;
@@ -55,14 +57,25 @@ public class LoginController {
 			Authentication authenticate = authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(logindto.getUser_id(), logindto.getUser_pw())
 			);
-			SecurityContextHolder.getContext().setAuthentication(authenticate);
-			System.out.println("ctrl test : " + SecurityContextHolder.getContext());
+			//SecurityContextHolder.getContext().setAuthentication(authenticate);
 		} catch (BadCredentialsException e) {
 			throw new Exception("Incorrect username or password!!!", e);
 		}
 		
-		final UserDetails userDetails = LoginService.loadUserByUsername(logindto.getUser_id());
-		final String jwt = JWTUtil.generateToken(userDetails);
+		final CustomUserDetails userDetails = userDetailsService.loadUserByUsername(logindto.getUser_id());
+		String jwt = null;
+		
+		System.out.println(userDetails.getUserAuthority());
+		
+		if (userDetails.getUserAuthority().equals("operator")) {
+			String operatorLv = userDetailsService.operatorLvByUserId(logindto.getUser_id());
+			System.out.println("test1");
+			jwt = JWTUtil.generateOperatorToken(userDetails, operatorLv);
+		}
+		else {
+			System.out.println("test2");
+			jwt = JWTUtil.generateToken(userDetails);
+		}
 		
 		//System.out.println(jwt);
 		
