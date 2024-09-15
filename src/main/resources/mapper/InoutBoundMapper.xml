@@ -1,14 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.pikpak.repo.InoutBoundRepo">
-<!-- 입고요청의 회사명 모달 : 회사 리스트 페이징 -->
-<select id="select_supplier_limit" resultType="kr.co.pikpak.dto.supplier_info_dto_lhwtemp"  parameterType="Integer">
-select * from supplier_info order by supplier_idx desc limit #{startpg},#{page_size}
+
+<!-- 입고요청의 상품명 모달 : 상품 리스트 페이징 + 검색 -->
+<select id="select_product_limit" resultType="kr.co.pikpak.dto.product_dto_lhwtemp"  parameterType="Map">
+select * from product where product_cd like concat ('%',#{pd_cd},'%') and
+product_nm like concat ('%',#{pd_nm},'%') order by product_idx desc limit #{startpg},#{page_size}
 </select>
 
-<!-- 입고요청의 회사명 모달 : 회사정보 개수 가져오기 -->
+<!-- 입고요청의 상품명 모달 : 상품 리스트 개수 가져오기(검색 포함) -->
+<select id="select_product_total" resultType="Integer">
+select count(*) as total from product where product_cd like concat ('%',#{pd_cd},'%') and
+product_nm like concat ('%',#{pd_nm},'%')
+</select>
+
+
+<!-- 입고요청의 회사명 모달 : 회사 리스트 페이징 + 검색 -->
+<select id="select_supplier_limit" resultType="kr.co.pikpak.dto.supplier_info_dto_lhwtemp"  parameterType="Map">
+select * from supplier_info where supplier_cd like concat ('%',#{comp_cd},'%') and
+supplier_nm like concat ('%',#{comp_nm},'%') order by supplier_idx desc limit #{startpg},#{page_size}
+</select>
+
+
+<!-- 입고요청의 회사명 모달 : 회사정보 개수 가져오기(검색 포함)-->
 <select id="select_supplier_total" resultType="Integer">
-select count(*) as total from supplier_info
+select count(*) as total from supplier_info where supplier_cd like concat ('%',#{comp_cd},'%') and
+supplier_nm like concat ('%',#{comp_nm},'%')
 </select>
 
 <!-- 입고요청 삭제하기 -->
@@ -21,9 +38,10 @@ delete from input_request where FIND_IN_SET(request_idx,#{request_idx})
 select * from input_request order by request_idx desc
 </select>
 
-<!-- 입고요청의 등록모달 : 상품정보 가져오기 -->
-<select id="selectProduct" resultType="kr.co.pikpak.dto.product_dto_lhwtemp">
-select supplier_cd, supplier_nm, product_cd, product_nm from product order by product_idx desc
+<!-- 입고요청의 등록모달 : 상품정보 가져오기(join사용) -->
+<select id="select_product" resultType="Map">
+select a.supplier_cd, b.supplier_nm, a.product_cd, a.product_nm 
+from product as a join supplier_info as b where a.supplier_cd=b.supplier_cd
 </select>
 
 <!-- 입고요청 등록하기 -->

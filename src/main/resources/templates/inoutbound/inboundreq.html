@@ -104,6 +104,11 @@ $(document).ready(function() {
     // 상품코드/상품명 모달 검색 버튼 클릭 시
     $("#pd_search").on("click", function() {
         $("#productModal").modal('show');
+        
+     	// 모달이 열릴 때 첫 번째 페이지 로드
+        $('#productModal').on('shown.bs.modal', function() {
+            new product_search_modal().pd_paging(1);  // 페이지 1을 로드
+        });
     });
    
     
@@ -142,6 +147,7 @@ $(document).ready(function() {
 			var product_nm = selected_option.data('product-name');
 			var supplier_cd = selected_option.data('supplier-code');
 			var supplier_nm = selected_option.data('supplier-name');
+			//상품테이블에 업체명 없음 새로 view테이블 만들어서 가져와야함
 
 			$('input[name="product_nm"]').val(product_nm);
 			$('input[name="supplier_nm"]').val(supplier_nm);
@@ -151,9 +157,26 @@ $(document).ready(function() {
 </script>	
 
  <script type="module">
-    import {page_move, inboundreq_enroll, inboundreq_list, company_search_modal} from "../resources/js/inoutbound/inboundreq_main.js?v=5";
-	/* 매입처 모달 */	
+    import {page_move, inboundreq_enroll, inboundreq_list, company_search_modal, product_search_modal} from "../resources/js/inoutbound/inboundreq_main.js?v=6";
+	//리스트 옵션 조회 
+	document.querySelector("#list_search").addEventListener("click",function(){
+		new inboundreq_list().inreq_list_search();
+	});
+
+
+	/* 상품 찾기 모달 */
+	window.product_search_modal = product_search_modal; //jquery에서 사용할 수 있도록
+
+	document.querySelector("#mod_pd_search").addEventListener("click",function(){
+		new product_search_modal().pd_paging(1);
+	});
+
+	/* 매입처 찾기 모달 */	
 	window.company_search_modal = company_search_modal; //jquery에서 사용할 수 있도록
+
+	document.querySelector("#mod_cp_search").addEventListener("click",function(){
+		new company_search_modal().paging(1);
+	});
 
 	/*
 	document.querySelectorAll('.page-num').forEach(function(link) {

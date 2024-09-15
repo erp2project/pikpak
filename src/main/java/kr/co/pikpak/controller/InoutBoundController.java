@@ -8,9 +8,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -28,20 +30,73 @@ public class InoutBoundController {
 	@Autowired
 	InoutBoundService ioservice;
 	
-	//매입처 페이징
-	@GetMapping("/company_paging") //여기서는 그냥 그대로 경로 써주면 되는구나 ajax니까
+	//상품 칮기 페이징 + 검색
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@GetMapping("/product_paging")
 	@ResponseBody
-	public Map<String, Object> company_paging(ServletResponse res
-			,@RequestParam(defaultValue = "", required = false) int page) {
+	public Map<String, Object> product_paging(
+			@RequestParam(defaultValue = "", required = false) int page,
+			@RequestParam(defaultValue = "", required = false) String pd_nm,
+			@RequestParam(defaultValue = "", required = false) String pd_cd){
+		//System.out.println(page);
+		//System.out.println(pd_nm);
+		//System.out.println(pd_cd);
 		
 		int page_size = 10; //한 페이지당 보여줄 리스트 개수
-		int startpg = ((page - 1) * page_size) + 1;
+		int startpg = (page - 1) * page_size;
+		
+		Map<String, Object> product = new HashMap<>();
+		product.put("startpg", startpg); //시작 페이지
+		product.put("page_size", page_size); //보여줄 리스트 개수
+		product.put("pd_nm", pd_nm);
+		product.put("pd_cd", pd_cd);
 		
 		Map<String, Object> response = new HashMap<>();
 		
 		try {
-			List<supplier_info_dto_lhwtemp> splist_part = ioservice.select_supplier_limit(startpg, page_size);	
-			Integer sp_total = ioservice.select_supplier_total();
+			List<product_dto_lhwtemp> pdlist_part = ioservice.select_product_limit(product);
+			Integer pd_total = ioservice.select_product_total(pd_nm, pd_cd);
+			
+			response.put("pdlist_part", pdlist_part); //페이징 리스트
+			response.put("pd_total", pd_total); //총 리스트 개수
+			response.put("page_size", page_size); //페이징 사이즈
+		}
+		catch(Exception e) {	
+			System.out.println(e);
+		}
+		
+		
+		return response;
+	}
+	
+	
+	//매입처 페이징 + 검색
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@GetMapping("/company_paging") //여기서는 그냥 그대로 경로 써주면 되는구나 ajax니까
+	@ResponseBody
+	public Map<String, Object> company_paging(@RequestParam(defaultValue = "", required = false) int page,
+			@RequestParam(defaultValue = "", required = false) String comp_nm,
+			@RequestParam(defaultValue = "", required = false) String comp_cd) {
+		//System.out.println(page);
+		//System.out.println(comp_nm);
+		//System.out.println(comp_cd);
+		
+		int page_size = 7; //한 페이지당 보여줄 리스트 개수
+		int startpg = (page - 1) * page_size;
+		
+		Map<String, Object> supplier = new HashMap<>();
+		supplier.put("startpg", startpg);
+		supplier.put("page_size", page_size);
+		supplier.put("comp_nm",comp_nm);
+		supplier.put("comp_cd", comp_cd);
+		
+		Map<String, Object> response = new HashMap<>();
+		
+		try {
+			List<supplier_info_dto_lhwtemp> splist_part = 
+					ioservice.select_supplier_limit(supplier);
+			
+			Integer sp_total = ioservice.select_supplier_total(comp_nm, comp_cd);
 			
 			response.put("splist_part", splist_part); //페이징 리스트
 			response.put("sp_total", sp_total); //총 리스트 개수
@@ -120,11 +175,21 @@ public class InoutBoundController {
 		return null;
 	}
 	
+	//입고요청 리스트 검색
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@PostMapping("/inboundreq_search")
+	public String inboundreq_search(@RequestBody String data_arr) {
+		System.out.println(data_arr);
+		return null;
+	}
+	
+	
 	//입고요청 이동
 	@GetMapping("inoutbound/inboundreq")
 	public String inboundreq(Model m) {
 		//등록 모달에 상품리스트 출력
-		List<product_dto_lhwtemp> pdlist = ioservice.select_pdlist();
+		//List<product_dto_lhwtemp> pdlist = ioservice.select_pdlist();
+		List<Map<String, Object>> pdlist = ioservice.select_product();
 		m.addAttribute("pdlist",pdlist);
 		
 		//입고요청 리스트 출력

@@ -1,6 +1,7 @@
 package kr.co.pikpak.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,17 +17,39 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	@Autowired
 	InoutBoundRepo iorepo;
 	
+	//상품명 페이징 + 검색
+	@Override
+	public List<product_dto_lhwtemp> select_product_limit(Map<String, Object> product) {
+		List<product_dto_lhwtemp> pdlist_part = iorepo.select_product_limit(product);
+		return pdlist_part;
+	}
+	
+	//상품명 개수
+	@Override
+	public Integer select_product_total(String pd_nm, String pd_cd) {
+		Integer total = iorepo.select_product_total(pd_nm, pd_cd);
+		return total;
+	}
+	
+	
+	//매입처 페이징 + 검색
+	@Override
+	public List<supplier_info_dto_lhwtemp> select_supplier_limit(Map<String, Object> supplier) {
+		List<supplier_info_dto_lhwtemp> splist_part = iorepo.select_supplier_limit(supplier);
+		return splist_part;
+	}
+	/*
 	//매입처 페이징
 	@Override
 	public List<supplier_info_dto_lhwtemp> select_supplier_limit(Integer startpg, Integer page_size) {
 		List<supplier_info_dto_lhwtemp> sp_list_part = iorepo.select_supplier_limit(startpg, page_size);
 		return sp_list_part;
 	}
-	
+	*/
 	//매입처 개수
 	@Override
-	public Integer select_supplier_total() {
-		Integer total = iorepo.select_supplier_total();
+	public Integer select_supplier_total(String comp_nm, String comp_cd) {
+		Integer total = iorepo.select_supplier_total(comp_nm, comp_cd);
 		return total;
 	}
 	
@@ -58,9 +81,9 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 
 	//상품 정보 가져오기(select 옵션)
 	@Override
-	public List<product_dto_lhwtemp> select_pdlist() {
-		List<product_dto_lhwtemp> all = iorepo.selectProduct();
-		return all;
+	public List<Map<String, Object>> select_product() {
+		List<Map<String, Object>> select_pd = iorepo.select_product();
+		return select_pd;
 	}
 	
 	//데이터베이스 서버시간 불러오기
