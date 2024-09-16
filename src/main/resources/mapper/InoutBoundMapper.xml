@@ -28,6 +28,11 @@ select count(*) as total from supplier_info where supplier_cd like concat ('%',#
 supplier_nm like concat ('%',#{comp_nm},'%')
 </select>
 
+<!-- 입고요청 수정하기 -->
+<update id="update_inreq" parameterType="Map">
+update input_request set product_qty=#{product_qty}, add_req=#{add_req}, hope_dt=#{hope_dt}, update_nm=#{update_nm} where request_idx=#{request_idx}
+</update>
+
 <!-- 입고요청 삭제하기 -->
 <delete id="delete_inreq">
 delete from input_request where FIND_IN_SET(request_idx,#{request_idx})

@@ -42,4 +42,8 @@ public interface InoutBoundRepo {
 	
 	//상품명 페이징
 	List<product_dto_lhwtemp> select_product_limit(Map<String, Object> product);
+	
+	
+	//입고요청 리스트 수정
+	int update_inreq(Map<String, Object> inrequest);
 }

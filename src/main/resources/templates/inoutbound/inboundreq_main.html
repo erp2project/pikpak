@@ -106,16 +106,17 @@
 										<th style="text-align: center; width: 2%;"><input
 											type="checkbox" style="border: 1px solid #ccc;"
 											id="all_ck"></th>
-										<th style="text-align: center; width: 8%;">회사명</th>
-										<th style="text-align: center; width: 8%;">상품코드</th>
+										<th style="text-align: center; width: 6%;">회사명</th>
+										<th style="text-align: center; width: 7%;">상품코드</th>
 										<th style="text-align: center; width: 10%;">상품명</th>
-										<th style="text-align: center; width: 8%;">상품수량</th>
-										<th style="text-align: center; width: 18%;">추가 요청사항</th>
+										<th style="text-align: center; width: 7%;">상품수량</th>
+										<th style="text-align: center; width: 15%;">추가 요청사항</th>
 										<th style="text-align: center; width: 9%;">희망 납기일자</th>
 										<th style="text-align: center; width: 5%;">상태</th>
 										<th style="text-align: center; width: 9%;">등록일자</th>
 										<th style="text-align: center; width: 9%;">상태 변경일자</th>
-										<th style="text-align: center; width: 7%;">관리자</th>
+										<th style="text-align: center; width: 7%;">등록 관리자</th>
+										<th style="text-align: center; width: 7%;">수정 관리자</th>
 										<th style="text-align: center; width: 12%;">관리</th>
 									</tr>
 								</thead>
@@ -128,16 +129,16 @@
 										<td style="text-align: center; width: 2%;">
 										<input type="checkbox" name="each_ck" th:value="${inputreq.getRequest_idx()}">
 										</td>
-										<td style="text-align: center; width: 8%;"
+										<td style="text-align: center; width: 6%;"
 										th:text="${inputreq.getSupplier_nm()}"></td>
-										<td style="text-align: center; width: 8%;"
+										<td style="text-align: center; width: 7%;"
 										th:text="${inputreq.getProduct_cd()}"></td>
 										<td style="text-align: center; width: 10%;"
 										th:text="${inputreq.getProduct_nm()}"></td>
-										<td style="text-align: center; width: 8%;"
+										<td style="text-align: center; width: 7%;"
 										th:text="${inputreq.getProduct_qty()}">
 										EA</td>
-										<td style="text-align: center; width: 18%;"
+										<td style="text-align: center; width: 15%;"
 										th:text="${inputreq.getAdd_req()}"></td>
 										<td style="text-align: center; width: 9%;"
 										th:text="${inputreq.getHope_dt()}"></td>
@@ -146,13 +147,22 @@
 										<td style="text-align: center; width: 9%;"
 										th:text="${inputreq.getRequest_dt().substring(0,10)}"></td>
 										<td style="text-align: center; width: 9%;"
-										th:text="${inputreq.getUpdate_dt()}"></td>
+										th:text="${inputreq.getUpdate_dt() != null ? inputreq.getUpdate_dt().substring(0,10) : ''}"></td>
 										<td style="text-align: center; width: 7%;"
 										th:text="${inputreq.getOperator_nm()}"></td>
+										<td style="text-align: center; width: 7%;"
+										th:text="${inputreq.getUpdate_nm()}"></td>
 										<td style="text-align: center; width: 12%;">
-										<button class="btn btn-primary" 
+										<button class="btn btn-primary inreq_manage" 
+										th:data-product-cd="${inputreq.getProduct_cd()}"
+										th:data-product-nm="${inputreq.getProduct_nm()}"
+										th:data-supplier-nm="${inputreq.getSupplier_nm()}"
+										th:data-product-qty="${inputreq.getProduct_qty()}"
+										th:data-add-req="${inputreq.getAdd_req()}"
+										th:data-hope-dt="${inputreq.getHope_dt()}"
+										th:data-request-idx="${inputreq.getRequest_idx()}"
 										style="padding-right:10px; padding-left:10px;"
-										type="button" id="cp_search">관리</button>
+										type="button">관리</button>
 										</td>
 									</tr>
 									

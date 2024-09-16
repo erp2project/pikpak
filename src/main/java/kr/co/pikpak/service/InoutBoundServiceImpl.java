@@ -17,6 +17,13 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	@Autowired
 	InoutBoundRepo iorepo;
 	
+	//입고요청 수정
+	@Override
+	public int update_inreq(Map<String, Object> inrequest) {
+		int result = iorepo.update_inreq(inrequest);
+		return result;
+	}
+	
 	//상품명 페이징 + 검색
 	@Override
 	public List<product_dto_lhwtemp> select_product_limit(Map<String, Object> product) {

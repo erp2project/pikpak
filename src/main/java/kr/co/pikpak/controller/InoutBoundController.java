@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import jakarta.annotation.Resource;
 import jakarta.servlet.ServletResponse;
 import kr.co.pikpak.dto.input_request_dto;
 import kr.co.pikpak.dto.product_dto_lhwtemp;
@@ -29,6 +30,9 @@ public class InoutBoundController {
 	
 	@Autowired
 	InoutBoundService ioservice;
+	
+	@Resource(name="ir_dto")
+	input_request_dto irdto; 
 	
 	//상품 칮기 페이징 + 검색
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -143,6 +147,49 @@ public class InoutBoundController {
 		return null;
 	}
 	
+	//입고요청 수정
+	@PostMapping("inoutbound/inreq_modifyok")
+	public String inreq_modifyok(ServletResponse res,
+			@RequestParam(defaultValue = "", required = false) int product_qty,
+			@RequestParam(defaultValue = "", required = false) String add_req,
+			@RequestParam(defaultValue = "", required = false) String hope_dt,
+			@RequestParam(defaultValue = "", required = false) String request_idx) {
+		//System.out.println(product_qty);
+		//System.out.println(add_req);
+		//System.out.println(hope_dt);
+		//System.out.println(request_idx);
+		res.setContentType("text/html;charset=utf-8");
+		Map<String, Object> inrequest = new HashMap<>();
+		inrequest.put("product_qty", product_qty);
+		inrequest.put("add_req", add_req);
+		inrequest.put("hope_dt", hope_dt);
+		inrequest.put("update_nm", "강감찬"); //업데이트 등록자
+		inrequest.put("request_idx", request_idx);
+		try {
+			this.pw = res.getWriter();
+			int result = ioservice.update_inreq(inrequest);
+			if(result > 0) {
+				this.pw.print("<script>"
+						+ "alert('정상적으로 수정되었습니다.');"
+						+ "location.href='./inboundreq';"
+						+ "</script>");
+			}
+			
+		}
+		catch(Exception e) {
+			this.pw.print("<script>"
+					+ "alert('데이터베이스 문제로 수정되지 못하였습니다.');"
+					+ "location.href='./inboundreq';"
+					+ "</script>");
+		}
+		finally {
+			this.pw.close();
+		}
+		return null;
+	}
+	
+	
+	
 	//입고요청 등록
 	@PostMapping("inoutbound/inreq_enrollok")
 	public String inreq_enrollok(@ModelAttribute("ir") input_request_dto dto, ServletResponse res) {
@@ -218,6 +265,7 @@ public class InoutBoundController {
 	public String recvenroll() {
 		return null;
 	}
+	
 	
 	/*
 	// 상품코드/상품명 찾기 팝업

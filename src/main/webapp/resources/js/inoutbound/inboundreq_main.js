@@ -262,6 +262,20 @@ export class company_search_modal {
 
 
 export class inboundreq_list {
+	//관리 눌렀을 때
+	inreq_management(){
+		/*
+		const product_qty = frm_inreq_manage.product_qty.value;
+		const request_idx = frm_inreq_manage.request_idx.value;
+		const hope_dt = frm_inreq_manage.hope_dt.value;
+		const add_req = frm_inreq_manage.add_req.value;
+		*/
+		frm_inreq_manage.method = "post";
+		frm_inreq_manage.action = "./inreq_modifyok";
+		frm_inreq_manage.submit();
+	}
+	
+	
 	//검색 조회 눌렀을 때
 	inreq_list_search(){
 		
