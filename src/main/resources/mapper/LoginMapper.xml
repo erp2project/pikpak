@@ -4,4 +4,8 @@
 	<select id="userDataById" resultType="kr.co.pikpak.dto.LoginDTO">
 		select * from login_view where user_id=#{user_id}
 	</select>
+	
+	<select id="operatorLvById" resultType="String">
+		select operator_lv from operator_login where operator_id=#{user_id}
+	</select>
 </mapper>

@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -21,12 +22,11 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import kr.co.pikpak.device.SHA256Encoder;
-import kr.co.pikpak.device.UserType;
 import kr.co.pikpak.service.LoginService;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class JWTSecurityConfig {
 	@Autowired
 	private JWTUtility JWTUtil;
 	
@@ -39,38 +39,31 @@ public class SecurityConfig {
 	@Autowired
 	private SHA256Encoder Encoder;
 	
-	
-	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.cors(cors-> cors.disable())
-				.csrf(csrf -> csrf.disable())
-				//.headers(header -> header.frameOptions(frame -> frame.disable()))
-				.authorizeHttpRequests(
-						(auth) -> auth
-						/*
-						.requestMatchers("/login", "/login/**").permitAll()
-						.requestMatchers("/logout", "/logout/**").permitAll()
-						.requestMatchers("/resources/**").permitAll()
-						.requestMatchers("/favicon.ico").permitAll()
-						*/
-						.requestMatchers("/home").hasAnyAuthority(UserType.OPERATOR.toString(),UserType.SUPPLIER.toString(),UserType.VENDOR.toString())
-						.requestMatchers("/post/**").hasAuthority(UserType.SUPPLIER.toString())
-						.requestMatchers("/admin","/admin/**").hasAuthority("operator")
-						.anyRequest().permitAll())
-				/*
-				.formLogin(
-						(formLogin) -> formLogin.loginPage("/login")
-						.usernameParameter("user_id")
-						.passwordParameter("user_pw")
-						.loginProcessingUrl("/login/auth")
-						.defaultSuccessUrl("/home", true)
-						.failureHandler(null))
-				*/
-				.authenticationProvider(authenticationProvider())
-				//.addFilterBefore(JWTRequestFilter, UsernamePasswordAuthenticationFilter.class)
-				.addFilterBefore(JWTRequestFilter, BasicAuthenticationFilter.class)
-				.logout((logoutConfig) -> logoutConfig.logoutSuccessUrl("/logout/end"));
+		http
+			.cors(cors-> cors.disable())
+			.csrf(csrf -> csrf.disable())
+			.authorizeHttpRequests(
+					(auth) -> auth
+					/*
+					.requestMatchers("/login", "/login/**").permitAll()
+					.requestMatchers("/logout", "/logout/**").permitAll()
+					.requestMatchers("/resources/**").permitAll()
+					.requestMatchers("/favicon.ico").permitAll()
+					*/
+					.requestMatchers("/home").hasAnyAuthority("operator", "supplier", "vendor")
+					.requestMatchers("/post/**").hasAuthority("supplier")
+					.requestMatchers("/admin","/admin/**").hasAuthority("operator")
+					//.requestMatchers("/test").has
+					.anyRequest().permitAll())
+			.formLogin(auth -> auth.disable())
+			.httpBasic(auth -> auth.disable())
+			.authenticationProvider(authenticationProvider())
+			//.addFilterBefore(JWTRequestFilter, UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(JWTRequestFilter, BasicAuthenticationFilter.class)
+			.logout((logoutConfig) -> logoutConfig.logoutSuccessUrl("/logout/end")
+		);
 
 		return http.build();
 	}
@@ -89,6 +82,10 @@ public class SecurityConfig {
 		return config.getAuthenticationManager();
 	}
 	
+	@Bean
+	public UserDetailsService userDetailsService() {
+		return new CustomUserDetailsService();
+	}
 	/*
 	@Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
