@@ -69,11 +69,11 @@ public class LoginController {
 		
 		if (userDetails.getUserAuthority().equals("operator")) {
 			String operatorLv = userDetailsService.operatorLvByUserId(logindto.getUser_id());
-			System.out.println("test1");
+			//System.out.println("test1");
 			jwt = JWTUtil.generateOperatorToken(userDetails, operatorLv);
 		}
 		else {
-			System.out.println("test2");
+			//System.out.println("test2");
 			jwt = JWTUtil.generateToken(userDetails);
 		}
 		

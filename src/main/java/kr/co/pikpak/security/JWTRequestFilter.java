@@ -63,14 +63,14 @@ public class JWTRequestFilter extends OncePerRequestFilter{
 			
 			try {
 				userId = JWTUtil.extractUserId(token);
-				System.out.println("good");
+				//System.out.println("good");
 				System.out.println(userId);
             } catch (IllegalArgumentException e) {
             	System.out.println("Error occurred while retrieving Username from Token");
             } catch (ExpiredJwtException e) {
-            	System.out.println("The token has expired");
+            	//System.out.println("The token has expired");
             } catch (SignatureException e) {
-            	System.out.println("Authentication Failed. Invalid username or password.");
+            	//System.out.println("Authentication Failed. Invalid username or password.");
             }
 			
             // 유저 이름이 존재하고 현재 인증 정보가 없는 경우
@@ -93,7 +93,7 @@ public class JWTRequestFilter extends OncePerRequestFilter{
                 }
             }			
 			
-            System.out.println("ttestetst : " + SecurityContextHolder.getContext().getAuthentication());
+            //System.out.println("ttestetst : " + SecurityContextHolder.getContext().getAuthentication());
 			
 		}
 		else {	//request에 authorization 해더 없는 경우
