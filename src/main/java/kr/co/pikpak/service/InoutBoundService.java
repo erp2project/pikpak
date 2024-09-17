@@ -41,4 +41,7 @@ public interface InoutBoundService {
 	
 	//입고요청 리스트 수정
 	public int update_inreq(Map<String, Object> inrequest);
+	
+	//입고요청 리스트 조회
+	public List<input_request_dto> select_inreq_search(Map<String, Object> data_arr);
 }

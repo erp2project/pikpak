@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.pikpak.repo.DeliveryRepo">
+
+<!-- 납품등록 현황 -->
+<select id="select_deliver_enroll" resultType="kr.co.pikpak.dto.deliver_enroll_dto">
+select * from deliver_enroll order by deliver_idx desc
+</select>
+
+<!-- 납품등록 -->
+<insert id="insert_deliver_enroll">
+insert into deliver_enroll values ('0',#{request_cd},#{supplier_cd},#{deliver_cd},#{product_cd},#{product_nm},
+#{deliver_qty},#{deliver_st},#{make_dt},#{expect_dt},#{deliver_size},#{deliver_area},#{deliver_nm},#{update_nm},
+now(),#{update_dt})
+</insert>
+
+<!-- 입고요청 현황 (뷰테이블에서 불러온 것) -->
+<select id="select_inreq_deliv" resultType="kr.co.pikpak.dto.input_request_state_dto">
+select * from input_request_state where supplier_cd=#{supplier_cd} order by request_idx desc
+</select>
+
+<!-- 입고요청 현황 (기본테이블에서 불러온 것)
+<select id="select_inreq_deliv" resultType="kr.co.pikpak.dto.input_request_dto">
+select * from input_request where supplier_cd=#{supplier_cd} order by request_idx desc
+</select>
+-->
+</mapper>

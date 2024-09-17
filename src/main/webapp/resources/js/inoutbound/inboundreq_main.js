@@ -1,4 +1,5 @@
 export class product_search_modal {
+	//회사명 찾기와 상품명 찾기가 같은 html파일에서 로드되고 있기 때문에, 함수 호출이 다르더라도 id가 충돌나면 둘다 실행되어서 버그 오짐
 	pd_paging(pagenum){
 		// 페이지 그룹 계산
 		const group_size = 5;
@@ -17,13 +18,13 @@ export class product_search_modal {
 		})
 		.then(function(result_res) {
 				var page_ea = Math.ceil(result_res.pd_total / result_res.page_size); // 페이지 개수 계산
-				var pagination = document.querySelector("#page_ul");
+				var pagination = document.querySelector("#page_ul_pd");
 
 				
 				if (result_res.pd_total != 0) {
 
 					// 기존 페이지 번호 비우기 (이전과 다음 버튼은 남기고 페이지 번호만 제거)
-					document.querySelectorAll('#page_ul .page-num').forEach(function(item) {
+					document.querySelectorAll('#page_ul_pd .page-num').forEach(function(item) {
 						item.remove();
 					});
 
@@ -40,16 +41,16 @@ export class product_search_modal {
 							li.classList.add('active'); // 현재 페이지에 active 클래스 추가
 						}
 
-						pagination.insertBefore(li, document.getElementById('next'));
+						pagination.insertBefore(li, document.getElementById('next_pd'));
 
 					}
 
-					document.getElementById('prev').replaceWith(document.getElementById('prev').cloneNode(true));
-					document.getElementById('next').replaceWith(document.getElementById('next').cloneNode(true));
+					document.getElementById('prev_pd').replaceWith(document.getElementById('prev_pd').cloneNode(true));
+					document.getElementById('next_pd').replaceWith(document.getElementById('next_pd').cloneNode(true));
 
 
 					// Previous 버튼 이벤트 설정
-					document.getElementById('prev').addEventListener('click', function() {
+					document.getElementById('prev_pd').addEventListener('click', function() {
 						if (pagenum > 1) {
 							const prev_group_las = start_page - 1;
 							new product_search_modal().pd_paging(Math.max(prev_group_las - group_size + 1, 1));
@@ -57,7 +58,7 @@ export class product_search_modal {
 					});
 
 					// Next 버튼 이벤트 설정
-					document.getElementById('next').addEventListener('click', function() {
+					document.getElementById('next_pd').addEventListener('click', function() {
 						if (pagenum < page_ea) {
 							const next_group_first = start_page + group_size;
 							new product_search_modal().pd_paging(Math.min(next_group_first, page_ea));
@@ -66,7 +67,7 @@ export class product_search_modal {
 
 
 					// 이벤트 위임을 사용하여 클릭 이벤트를 처리
-					document.querySelector('#page_ul').addEventListener('click', function(event) {
+					document.querySelector('#page_ul_pd').addEventListener('click', function(event) {
 						// 페이지 번호가 클릭된 경우만 처리 (클래스가 'page-num'인 경우)
 						if (event.target.classList.contains('page-num')) {
 							var pagenum = event.target.getAttribute('data-page');
@@ -108,7 +109,7 @@ export class product_search_modal {
 					tableBody.appendChild(tr);
 
 					// 기존 페이지 번호 비우기 (이전과 다음 버튼은 남기고 페이지 번호만 제거)
-					document.querySelectorAll('#page_ul .page-num').forEach(function(item) {
+					document.querySelectorAll('#page_ul_pd .page-num').forEach(function(item) {
 						item.remove();
 					});
 
@@ -117,7 +118,7 @@ export class product_search_modal {
 					li.classList.add('page-item', 'page-link', 'page-num', 'active');
 
 					li.innerHTML = `<a class="page-link">1</a>`;
-					pagination.insertBefore(li, document.getElementById('next'));
+					pagination.insertBefore(li, document.getElementById('next_pd'));
 				}
 				
 			})
@@ -148,42 +149,41 @@ export class company_search_modal {
 				return result_data.json();
 			})
 			.then(function(result_res) {
-
 				var page_ea = Math.ceil(result_res.sp_total / result_res.page_size); // 페이지 개수 계산
-				var pagination = document.querySelector("#page_ul");
+				var pagination = document.querySelector("#page_ul_cp");
 
 				if (result_res.sp_total != 0) {
-
 					// 기존 페이지 번호 비우기 (이전과 다음 버튼은 남기고 페이지 번호만 제거)
-					document.querySelectorAll('#page_ul .page-num').forEach(function(item) {
+					document.querySelectorAll('#page_ul_cp .page-num').forEach(function(item) {
 						item.remove();
 					});
 
 
 					// 페이지 번호 생성 (5개 단위로 제한)
 					for (var i = start_page; i < start_page + group_size && i <= page_ea; i++) {
+						
 						var li = document.createElement('li');
 						li.classList.add('page-item', 'page-link', 'page-num');
 
 						li.innerHTML = `<a class="page-link page-num" href="javascript:void(0)" data-page="${i}">${i}</a>`;
-
+						
 						//선택된 데이터에 active추가
 						if (i == pagenum) {
 							li.classList.add('active'); // 현재 페이지에 active 클래스 추가
 						}
 
-						pagination.insertBefore(li, document.getElementById('next'));
+						pagination.insertBefore(li, document.getElementById('next_cp'));
 
 					}
 
 
 					/* 이걸 이벤트들보다 먼저 실행시켜야 작동하네...*/
-					document.getElementById('prev').replaceWith(document.getElementById('prev').cloneNode(true));
-					document.getElementById('next').replaceWith(document.getElementById('next').cloneNode(true));
+					document.getElementById('prev_cp').replaceWith(document.getElementById('prev_cp').cloneNode(true));
+					document.getElementById('next_cp').replaceWith(document.getElementById('next_cp').cloneNode(true));
 
 
 					// Previous 버튼 이벤트 설정
-					document.getElementById('prev').addEventListener('click', function() {
+					document.getElementById('prev_cp').addEventListener('click', function() {
 						if (pagenum > 1) {
 							const prev_group_las = start_page - 1;
 							new company_search_modal().paging(Math.max(prev_group_las - group_size + 1, 1));
@@ -191,7 +191,7 @@ export class company_search_modal {
 					});
 
 					// Next 버튼 이벤트 설정
-					document.getElementById('next').addEventListener('click', function() {
+					document.getElementById('next_cp').addEventListener('click', function() {
 						if (pagenum < page_ea) {
 							const next_group_first = start_page + group_size;
 							new company_search_modal().paging(Math.min(next_group_first, page_ea));
@@ -200,7 +200,7 @@ export class company_search_modal {
 
 
 					// 이벤트 위임을 사용하여 클릭 이벤트를 처리
-					document.querySelector('#page_ul').addEventListener('click', function(event) {
+					document.querySelector('#page_ul_cp').addEventListener('click', function(event) {
 						// 페이지 번호가 클릭된 경우만 처리 (클래스가 'page-num'인 경우)
 						if (event.target.classList.contains('page-num')) {
 							var pagenum = event.target.getAttribute('data-page');
@@ -242,7 +242,7 @@ export class company_search_modal {
 					tableBody.appendChild(tr);
 
 					// 기존 페이지 번호 비우기 (이전과 다음 버튼은 남기고 페이지 번호만 제거)
-					document.querySelectorAll('#page_ul .page-num').forEach(function(item) {
+					document.querySelectorAll('#page_ul_cp .page-num').forEach(function(item) {
 						item.remove();
 					});
 
@@ -251,7 +251,7 @@ export class company_search_modal {
 					li.classList.add('page-item', 'page-link', 'page-num', 'active');
 
 					li.innerHTML = `<a class="page-link">1</a>`;
-					pagination.insertBefore(li, document.getElementById('next'));
+					pagination.insertBefore(li, document.getElementById('next_cp'));
 				}
 			})
 			.catch(function(error) {
@@ -289,16 +289,18 @@ export class inboundreq_list {
 		if(start_date > end_date){
 			alert('정상적인 일자를 입력해주세요');
 		}
+		else if((start_date != "" && end_date == "") || (start_date == "" && end_date != "")){
+			alert('입고요청일자로 검색 시 모두 입력되어야합니다.');
+		}
 		else{
-			/*
+			
 			var data = {
 				"start_date" : start_date,
 				"end_date" : end_date, 
-				"search_cp_cd" : search_cp_cd, 
-				"search_pd_cd" : search_pd_cd, 
-				"search_state" : search_state, 
-				"search_operator" : search_operator, 
-				
+				"supplier_cd" : search_cp_cd, 
+				"product_cd" : search_pd_cd, 
+				"request_st" : search_state, 
+				"operator_nm" : search_operator
 			};
 			
 			this.search_data = JSON.stringify(data);
@@ -310,16 +312,50 @@ export class inboundreq_list {
 				body : this.search_data
 			})
 			.then(function(result_data){
-				return result_data.text();
+				return result_data.json();
 			})
 			.then(function(result_res){
-				console.log(result_res);
+				const tbody = document.querySelector("#ir_tbody");
+				
+				tbody.innerHTML = '';
+				
+				result_res.forEach(function(inputreq) {
+        			const list = `<tr>
+        			 <td style="text-align: center; width: 2%;"><input type="checkbox" name="each_ck" value="${inputreq.request_idx}"></td>
+            		<td style="text-align: center; width: 6%;">${inputreq.supplier_nm}</td>
+            		<td style="text-align: center; width: 7%;">${inputreq.product_cd}</td>
+            		<td style="text-align: center; width: 10%;">${inputreq.product_nm}</td>
+            		<td style="text-align: center; width: 7%;">${inputreq.product_qty} EA</td>
+            		<td style="text-align: center; width: 15%;">${inputreq.add_req}</td>
+            		<td style="text-align: center; width: 9%;">${inputreq.hope_dt}</td>
+            		<td style="text-align: center; width: 5%;">${inputreq.request_st}</td>
+            		<td style="text-align: center; width: 9%;">${inputreq.request_dt.substring(0,10)}</td>
+										
+					<td style="text-align: center; width: 9%;">${(inputreq.update_dt != null) ? inputreq.update_dt.substring(0,10) : ''}</td>
+										
+					<td style="text-align: center; width: 7%;">${inputreq.operator_nm}</td>
+            		<td style="text-align: center; width: 7%;">${(inputreq.update_nm == null) ? '' : inputreq.update_nm}</td>
+            		<td style="text-align: center; width: 12%;">
+            		<button class="btn btn-primary inreq_manage"
+            		data-product-cd="${inputreq.product_cd}"
+					data-product-nm="${inputreq.product_nm}"
+					data-supplier-nm="${inputreq.supplier_nm}"
+					data-product-qty="${inputreq.product_qty}"
+					data-add-req="${inputreq.add_req}"
+					data-hope-dt="${inputreq.hope_dt}"
+					data-request-idx="${inputreq.request_idx}">관리</button>
+            		</td>
+					</tr>`;
+        			
+        			tbody.innerHTML += list;
+    			});
+				
+				
 			})
 			.catch(function(error){
 				console.log(error);
 			});
 			
-			*/
 		}
 		
 	}
@@ -382,10 +418,6 @@ export class inboundreq_list {
 export class page_move {
 	go_inboundreq() {
 		location.href = "./inboundreq"
-	}
-
-	go_exreceiving() {
-		location.href = "./exreceiving"
 	}
 
 	go_recvenroll() {

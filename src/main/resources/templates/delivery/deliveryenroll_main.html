@@ -21,8 +21,8 @@
 					<div class="panel-body">
 						<p class="menu"
 							style="border-bottom: 1px solid black; height: 30px;">
-							<span class="menu-item active" id="go_delenroll">납품등록</span> <span
-								class="menu-item" id="go_del">납품현황?</span>
+							<span class="menu-item" id="go_reqstate">입고요청현황</span> <span
+								class="menu-item active" id="go_delenroll">납품등록현황</span>
 						</p>
 						<span style="float: right; height: 40px;">
 							<button type="button" class="btn btn-success">초기화</button>
@@ -57,9 +57,7 @@
 										style="width: 35%; float: left; margin-right: 5px;">
 											<option value="">상태 선택</option>
 											<option value="대기">대기</option>
-											<option value="등록">등록</option>
-											<option value="반송">반송</option>
-											
+											<option value="배송">배송</option>
 									</select></td>
 									
 								</tr>
@@ -88,7 +86,6 @@
 						<div class="panel-body panel-thead">
 						<span style="float: right; height: 40px; margin-top:20px;">
 							<button type="button" class="btn btn-outline-danger">삭제</button>
-							<button type="button" class="btn btn-outline-dark" id="add_delvery">+</button>
 						</span>	
 							<table class="table">
 								<thead style="background-color: rgb(130, 210, 213);">
@@ -97,7 +94,7 @@
 											type="checkbox" style="border: 1px solid #ccc;"></th>
 										<th style="text-align: center; width: 8%;">상품코드</th>
 										<th style="text-align: center; width: 14%;">상품명</th>
-										<th style="text-align: center; width: 8%;">상품수량</th>
+										<th style="text-align: center; width: 8%;">납품수량</th>
 										<th style="text-align: center; width: 9%;">가입고 위치</th>
 										<th style="text-align: center; width: 9%;">등록 일자</th>
 										<th style="text-align: center; width: 7%;">상태</th>
@@ -113,19 +110,28 @@
 						<div class="panel-body" style="height: 400px; overflow-y: auto;">
 							<table class="table table-hover">
 								<tbody>
-									<tr>
+									<tr th:each="delist : ${deliver_list}">
 										<td style="text-align: center; width: 3%;"><input
 											type="checkbox"></td>
 										
-										<td style="text-align: center; width: 8%;">SM-12345</td>
-										<td style="text-align: center; width: 14%;">로봇 청소기</td>
-										<td style="text-align: center; width: 8%;">5EA</td>
-										<td style="text-align: center; width: 9%;">A0132</td>
-										<td style="text-align: center; width: 9%;">2024-09-15</td>
-										<td style="text-align: center; width: 7%;">대기</td>
-										<td style="text-align: center; width: 13%;">2024-09-01</td>
-										<td style="text-align: center; width: 7%;">홍길동</td>
-										<td style="text-align: center; width: 15%;">홍길동</td>
+										<td style="text-align: center; width: 8%;"
+										th:text="${delist.getProduct_cd()}"></td>
+										<td style="text-align: center; width: 14%;"
+										th:text="${delist.getProduct_nm()}"></td>
+										<td style="text-align: center; width: 8%;"
+										th:text="${delist.getDeliver_qty()}">EA</td>
+										<td style="text-align: center; width: 9%;"
+										th:text="${delist.getDeliver_area()}"></td>
+										<td style="text-align: center; width: 9%;"
+										th:text="${delist.getDeliver_dt().substring(0,10)}"></td>
+										<td style="text-align: center; width: 7%;"
+										th:text="${delist.getDeliver_st()}"></td>
+										<td style="text-align: center; width: 13%;"
+										th:text="${delist.getUpdate_dt()}"></td>
+										<td style="text-align: center; width: 7%;"
+										th:text="${delist.getDeliver_nm()}"></td>
+										<td style="text-align: center; width: 15%;"
+										th:text="${delist.getUpdate_nm()}"></td>
 										<td style="text-align: center; width: 12%;">
 										<button class="btn btn-primary" 
 										style="padding-right:10px; padding-left:10px;"

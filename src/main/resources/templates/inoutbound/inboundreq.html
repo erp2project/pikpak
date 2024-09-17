@@ -137,6 +137,33 @@
 					 */
 
 					//관리 버튼 클릭시
+					// 문서 전체에 대해 이벤트 위임 설정
+					$(document).on("click", ".inreq_manage", function(event) {
+						event.preventDefault();  // 기본 동작 중단
+    					//console.log("외않되");
+						
+						var product_cd = $(this).data("product-cd");
+    					var product_nm = $(this).data("product-nm");
+    					var supplier_nm = $(this).data("supplier-nm");
+    					var product_qty = $(this).data("product-qty");
+    					var add_req = $(this).data("add-req");
+    					var hope_dt = $(this).data("hope-dt");
+    					var request_idx = $(this).data("request-idx");
+
+    					// 입력 필드에 값 설정
+    					$("#product_cd_input").val(product_cd);
+    					$("#product_nm_input").val(product_nm);
+    					$("#supplier_nm_input").val(supplier_nm);
+    					$("#product_qty_input").val(product_qty);
+    					$("#add_req_input").val(add_req);
+    					$("#hope_dt_input").val(hope_dt);
+    					$("#request_idx_input").val(request_idx);
+
+    					// 모달 보여주기
+    					$("#inreqManageModal").modal('show');
+    					
+					});
+					/*
 					// jQuery를 사용한 이벤트 핸들링
 					$(".inreq_manage").on("click",function() {
 						var product_cd = $(this).data("product-cd"); // 버튼에서 data-request-idx 값을 가져옴
@@ -160,7 +187,8 @@
 					    // 모달 보여주기
 					    $("#inreqManageModal").modal('show');
 					});
-
+					*/
+					
 					//등록버튼 클릭 시
 					$("#add_inreq").on("click", function() {
 						$("#inreqModal").modal('show');
@@ -193,6 +221,11 @@
 	<script type="module">
     import {page_move, inboundreq_enroll, inboundreq_list, company_search_modal, product_search_modal} from "../resources/js/inoutbound/inboundreq_main.js?v=6";
 	
+	//리스트 조회 초기화
+	document.querySelector("#list_reset").addEventListener("click",function(){
+		location.reload();
+	});
+
 	//리스트 관리 모달 수정 버튼
 	document.querySelector("#req_modify").addEventListener("click",function(){
 		new inboundreq_list().inreq_management();
@@ -249,11 +282,6 @@
 	//입고요청 이동
 	document.querySelector("#go_inoutreq").addEventListener("click",function(){
 		new page_move().go_inboundreq();
-	});
-	
-	//가입고 등록 이동
-	document.querySelector("#go_exrecv").addEventListener("click",function(){
-		new page_move().go_exreceiving();
 	});
 	
 	//입고 등록 이동

@@ -17,6 +17,23 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	@Autowired
 	InoutBoundRepo iorepo;
 	
+	//입고요청 조회
+	@Override
+	public List<input_request_dto> select_inreq_search(Map<String, Object> data_arr) {
+		if((data_arr.get("start_date") != "") && (data_arr.get("end_date") != "")) {
+			String startdt = (String) data_arr.get("start_date");
+			startdt += " 00:00:00";
+			data_arr.put("start_date", startdt); 
+			
+			String enddt = (String) data_arr.get("end_date");
+			enddt += " 23:59:59";
+			data_arr.put("end_date", enddt);
+		}
+		
+		List<input_request_dto> ir_search = iorepo.select_inreq_search(data_arr);
+		return ir_search;
+	}
+	
 	//입고요청 수정
 	@Override
 	public int update_inreq(Map<String, Object> inrequest) {

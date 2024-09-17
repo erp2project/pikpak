@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -222,18 +224,31 @@ public class InoutBoundController {
 		return null;
 	}
 	
+	
 	//입고요청 리스트 검색
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@PostMapping("/inboundreq_search")
-	public String inboundreq_search(@RequestBody String data_arr) {
-		System.out.println(data_arr);
-		return null;
+	public  ResponseEntity<List<input_request_dto>> inboundreq_search(@RequestBody Map<String, Object> data_arr){
+		List<input_request_dto> ir_search = null;
+		try {
+	    	//System.out.println(data_arr);
+	    	ir_search = ioservice.select_inreq_search(data_arr);
+	        return ResponseEntity.ok(ir_search);
+	    	
+	    } 
+	    catch (Exception e) {
+	        System.out.println(e);
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	    }
+		
 	}
+	
 	
 	
 	//입고요청 이동
 	@GetMapping("inoutbound/inboundreq")
 	public String inboundreq(Model m) {
+		
 		//등록 모달에 상품리스트 출력
 		//List<product_dto_lhwtemp> pdlist = ioservice.select_pdlist();
 		List<Map<String, Object>> pdlist = ioservice.select_product();
@@ -241,7 +256,7 @@ public class InoutBoundController {
 		
 		//입고요청 리스트 출력
 		List<input_request_dto> ir_list = ioservice.select_inreq();
-		m.addAttribute("ir_list", ir_list);
+		m.addAttribute("ir_list", ir_list);			
 		
 		/*
 		//매입처 모달에 회사 리스트 출력
@@ -253,13 +268,7 @@ public class InoutBoundController {
 		
 		return null;
 	}
-	
-	//가입고 등록 이동
-	@GetMapping("inoutbound/exreceiving")
-	public String exreceiving() {
-		return null;
-	}
-	
+
 	//입고 등록 이동
 	@GetMapping("inoutbound/recvenroll")
 	public String recvenroll() {

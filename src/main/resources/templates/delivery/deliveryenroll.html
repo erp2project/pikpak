@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ko">
 <head>
-<title>PikPak-납품등록</title>
+<title>PikPak-납품관리</title>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport"
@@ -67,9 +67,8 @@
 		<!-- MAIN -->
 		<section
 			th:replace="~{delivery/deliveryenroll_main :: main_deliveryenroll}"></section>
-			
-		<!-- 모달 
-		<section th:replace="~{inoutbound/product_search :: product_search_popup}"></section>
+		<!-- 모달 -->	
+		<!-- 
 		<section th:replace="~{inoutbound/company_search :: company_search_popup}"></section> 
 		<section th:replace="~{inoutbound/add_exreceiving_popup :: add_exrecv_popup}"></section>
 		-->
@@ -92,12 +91,17 @@
 	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
 	<script src="../resources/assets/scripts/klorofil-common.js"></script>
 
+
 </body>
 <script type="module">
-import {delivery_page_move} from "../resources/js/delivery/deliveryenroll_main.js?v=1";
+import {delivery_page_move} from "../resources/js/deliver/deliveryenroll_main.js?v=2";
 
 document.querySelector("#go_delenroll").addEventListener("click",function(){
 		new delivery_page_move().go_delivery_enroll();
+});
+
+document.querySelector("#go_reqstate").addEventListener("click",function(){
+		new delivery_page_move().go_inreq_state();
 });
 </script>
 </html>

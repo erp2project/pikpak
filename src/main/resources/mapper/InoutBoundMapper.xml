@@ -28,6 +28,26 @@ select count(*) as total from supplier_info where supplier_cd like concat ('%',#
 supplier_nm like concat ('%',#{comp_nm},'%')
 </select>
 
+<!-- 입고요청 리스트 조회 -->
+<select id="select_inreq_search" resultType="kr.co.pikpak.dto.input_request_dto" parameterType="Map">
+  select * from input_request where 1=1
+  <if test="supplier_cd != null and supplier_cd != ''">
+    and supplier_cd = #{supplier_cd}
+  </if>
+  <if test="product_cd != null and product_cd != ''">
+    and product_cd = #{product_cd}
+  </if>
+  <if test="request_st != null and request_st != ''">
+    and request_st = #{request_st}
+  </if>
+  <if test="operator_nm != null and operator_nm != ''">
+    and operator_nm = #{operator_nm}
+  </if>
+  <if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
+    and request_dt between #{start_date} and #{end_date}
+  </if>
+</select>
+
 <!-- 입고요청 수정하기 -->
 <update id="update_inreq" parameterType="Map">
 update input_request set product_qty=#{product_qty}, add_req=#{add_req}, hope_dt=#{hope_dt}, update_nm=#{update_nm} where request_idx=#{request_idx}
@@ -52,7 +72,7 @@ from product as a join supplier_info as b where a.supplier_cd=b.supplier_cd
 <!-- 입고요청 등록하기 -->
 <insert id="input_req_insert">
 insert into input_request values ('0',#{request_cd},#{supplier_cd},#{supplier_nm},#{product_cd},#{product_nm},
-#{product_qty},#{operator_id},#{operator_nm},#{request_st},#{add_req},#{hope_dt},now(),#{update_dt})
+#{product_qty},#{operator_id},#{operator_nm},#{request_st},#{add_req},#{hope_dt},now(),#{update_dt},#{update_nm})
 </insert>
 
 <!-- 데이터베이스 서버시간 가져오기 -->
