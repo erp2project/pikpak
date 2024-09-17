@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="/resources/css/home/vars.css?v=1">
 <link rel="stylesheet" href="/resources/css/home/login.css?v=1">
-<script src="/resources/js/home/login.js?v=1"></script>
+
 
 <title>회원 로그인</title>
 </head>
@@ -31,7 +31,7 @@
 			</div>
 			
 			<div class="button-area">
-				<input type="button" class="button" value="Sign In" onclick="loginFormSend()">
+				<input type="submit" class="button" value="Sign In" >
 			</div>
 			
 			<div class="link-area">
@@ -41,5 +41,7 @@
 	</form>
 	</div>
 
+	<div class="message-area" id="response"></div>
 </body>
+<script src="/resources/js/home/login.js?v=1"></script>
 </html>

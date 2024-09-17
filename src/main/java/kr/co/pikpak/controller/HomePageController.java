@@ -5,11 +5,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class HomePageController {
-	@GetMapping("/login")
-	public String loginPage() {
-		return "/home/login";
-	}
-	
 	@GetMapping("/template")
 	public String mainPage() {
 		return "/shared/template";

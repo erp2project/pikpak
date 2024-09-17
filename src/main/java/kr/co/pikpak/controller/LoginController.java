@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.annotation.Resource;
@@ -52,41 +53,41 @@ public class LoginController {
 	PrintWriter pw = null;
 	
 	@PostMapping("/login/auth")
-	public ResponseEntity<?> createAuthenticationToken(@ModelAttribute LoginDTO logindto, HttpServletResponse res) throws Exception {
+	public String createAuthenticationToken(LoginDTO logindto, HttpServletResponse res) throws Exception {
+		String responseText = "";
+		
 		try {
 			Authentication authenticate = authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(logindto.getUser_id(), logindto.getUser_pw())
 			);
 			//SecurityContextHolder.getContext().setAuthentication(authenticate);
+			
+			final CustomUserDetails userDetails = userDetailsService.loadUserByUsername(logindto.getUser_id());
+			String jwt = null;
+			
+			if (userDetails.getUserAuthority().equals("operator")) {
+				String operatorLv = userDetailsService.operatorLvByUserId(logindto.getUser_id());
+				jwt = JWTUtil.generateOperatorToken(userDetails, operatorLv);
+			}
+			else {
+				jwt = JWTUtil.generateToken(userDetails);
+			}
+			
+			
+			Cookie cookie = new Cookie("accessToken", jwt);
+			cookie.setMaxAge(60*60*24+7);
+			cookie.setHttpOnly(true);
+			cookie.setPath("/");
+			res.addCookie(cookie);
+			
+			responseText = "성공";
 		} catch (BadCredentialsException e) {
-			throw new Exception("Incorrect username or password!!!", e);
+			responseText = "회원정보가 일치하지 않습니다";
+		} catch (Exception e) {
+			responseText = "서버 문제로 로그인이 실패하였습니다. 관리자에게 문의하세요";
 		}
 		
-		final CustomUserDetails userDetails = userDetailsService.loadUserByUsername(logindto.getUser_id());
-		String jwt = null;
-		
-		System.out.println(userDetails.getUserAuthority());
-		
-		if (userDetails.getUserAuthority().equals("operator")) {
-			String operatorLv = userDetailsService.operatorLvByUserId(logindto.getUser_id());
-			//System.out.println("test1");
-			jwt = JWTUtil.generateOperatorToken(userDetails, operatorLv);
-		}
-		else {
-			//System.out.println("test2");
-			jwt = JWTUtil.generateToken(userDetails);
-		}
-		
-		//System.out.println(jwt);
-		
-		Cookie cookie = new Cookie("accessToken", jwt);
-		cookie.setMaxAge(60*60*24+7);
-		cookie.setHttpOnly(true);
-		cookie.setPath("/");
-		
-		res.addCookie(cookie);
-		
-		return ResponseEntity.ok(jwt);
+		return responseText;
 	}
 	
 	

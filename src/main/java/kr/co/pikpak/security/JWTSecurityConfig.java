@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
@@ -57,11 +58,19 @@ public class JWTSecurityConfig {
 					.requestMatchers("/admin","/admin/**").hasAuthority("operator")
 					//.requestMatchers("/test").has
 					.anyRequest().permitAll())
-			.formLogin(auth -> auth.disable())
+			//.formLogin(auth -> auth.disable())
+			
+			.formLogin(auth -> auth
+					.loginPage("/login")
+					.failureHandler(authenticationFailureHandler())
+					.permitAll()
+					)
+			
 			.httpBasic(auth -> auth.disable())
 			.authenticationProvider(authenticationProvider())
 			//.addFilterBefore(JWTRequestFilter, UsernamePasswordAuthenticationFilter.class)
 			.addFilterBefore(JWTRequestFilter, BasicAuthenticationFilter.class)
+			//.exceptionHandling(event -> event.)
 			.logout((logoutConfig) -> logoutConfig.logoutSuccessUrl("/logout/end")
 		);
 
@@ -94,6 +103,11 @@ public class JWTSecurityConfig {
                 .build();
     }
     */
+	
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler() {
+        return new CustomAuthFailHandler();
+    }
 	
 	
 	
