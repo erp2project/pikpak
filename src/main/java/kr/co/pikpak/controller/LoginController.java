@@ -33,7 +33,6 @@ import kr.co.pikpak.security.JWTUtility;
 import kr.co.pikpak.service.LoginService;
 
 @RestController
-//@RequestMapping("/auth")
 public class LoginController {
 	@Resource(name="LoginDTO")
 	LoginDTO ldto;
@@ -52,35 +51,42 @@ public class LoginController {
 	
 	PrintWriter pw = null;
 	
+	// 회원 로그인 및 토큰 생성
 	@PostMapping("/login/auth")
 	public String createAuthenticationToken(LoginDTO logindto, HttpServletResponse res) throws Exception {
+		// Fetch API 결과 핸들링
 		String responseText = "";
 		
 		try {
+			// 회원 정보 확인
 			Authentication authenticate = authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(logindto.getUser_id(), logindto.getUser_pw())
 			);
 			//SecurityContextHolder.getContext().setAuthentication(authenticate);
 			
+			// 회원 DB 접속
 			final CustomUserDetails userDetails = userDetailsService.loadUserByUsername(logindto.getUser_id());
-			String jwt = null;
 			
+			// 생성할 JWT 토큰
+			String token = null;
+			
+			// 회원이 운영자 일경우 운영자 권한 레벨 까지 저장
 			if (userDetails.getUserAuthority().equals("operator")) {
 				String operatorLv = userDetailsService.operatorLvByUserId(logindto.getUser_id());
-				jwt = JWTUtil.generateOperatorToken(userDetails, operatorLv);
+				token = JWTUtil.generateOperatorToken(userDetails, operatorLv);
 			}
 			else {
-				jwt = JWTUtil.generateToken(userDetails);
+				token = JWTUtil.generateToken(userDetails);
 			}
 			
-			
-			Cookie cookie = new Cookie("accessToken", jwt);
+			// 클라이언트 사이드 토큰 저장 (Request 해더 미사용시 대신 사용)
+			Cookie cookie = new Cookie("accessToken", token);
 			cookie.setMaxAge(60*60*24+7);
 			cookie.setHttpOnly(true);
 			cookie.setPath("/");
 			res.addCookie(cookie);
 			
-			responseText = "성공";
+			responseText = "ok";
 		} catch (BadCredentialsException e) {
 			responseText = "회원정보가 일치하지 않습니다";
 		} catch (Exception e) {

@@ -5,27 +5,8 @@ document.getElementById("loginForm").addEventListener("submit",
 		let sendCondition = new loginDataTools().emptyCheck();
 		
 		if (sendCondition == "Y"){
-			/*
-			loginForm.method = "POST";
-			loginForm.action = "/login/auth"
-			loginForm.submit();
-			*/
 			const data = event.target;
-			console.log(data);
 			const formData = new FormData(data);
-			//var objectNameList = ["user_id", "user_pw"];
-			/*
-			objectNameList.forEach((objectName) => {
-				formData.append(
-					objectName,
-					document.querySelector(`[name='${objectName}']`).value
-				)
-				console.log(document.querySelector(`[name='${objectName}']`).value)
-			})
-			*/
-			
-			console.log(formData);
-			
 			
 			fetch("/login/auth",{
 				method : "POST",
@@ -33,29 +14,28 @@ document.getElementById("loginForm").addEventListener("submit",
 			})
 			.then(response => {
 				if (response.ok) {
-					console.log("this??");
 					return response.text();
 				} else {
-					console.log("or this??");
 					throw new Error("알 수 없는 이유로 로그인에 실패하였습니다. 관리자에게 문의하세요.");
 				}
 			})
 			.then(result => {
 				if (result=="ok") {
-					location.href("/main");
+					alert("로그인 성공 하였습니다");
+					location.href="/home";
 				}
 				else{
 					document.getElementById("response").innerHTML = `<p>${result}</p>`;
 					document.getElementById("response").style.visibility = "visible";
+					document.getElementById("response").style.opacity = "1";
 				}
 			})
 			.catch(error => {
-				document.getElementById("response").innerHTML = `<p>${error}</p>`;
+				//document.getElementById("response").innerHTML = `<p>${error}</p>`;
+				document.getElementById("response").innerHTML = `<p>"알 수 없는 이유로 로그인에 실패하였습니다. 관리자에게 문의하세요"</p>`;
 				document.getElementById("response").style.visibility = "visible";
+				document.getElementById("response").style.opacity = "1";
 			});
-			
-			
-			
 		}
 	}
 );
