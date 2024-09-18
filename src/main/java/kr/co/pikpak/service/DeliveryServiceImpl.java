@@ -17,6 +17,13 @@ public class DeliveryServiceImpl implements DeliveryService{
 	@Autowired
 	DeliveryRepo delrepo;
 	
+	//납품등록 삭제
+	@Override
+	public int delete_deliver_enroll(String deliver_idx) {
+		int result = delrepo.delete_deliver_enroll(deliver_idx);
+		return result;
+	}
+	
 	//납품등록 현황
 	@Override
 	public List<deliver_enroll_dto> select_deliver_enroll() {
@@ -32,8 +39,7 @@ public class DeliveryServiceImpl implements DeliveryService{
 		dto.setSupplier_cd(supplier_cd); //업체코드
 		
 		//납품요청코드 랜덤생성
-		String deliver_cd = "3123193";
-		dto.setDeliver_cd(deliver_cd);
+		dto.setDeliver_cd(this.make_delienrollcode());
 		
 		dto.setDeliver_st("대기");
 		
@@ -53,4 +59,23 @@ public class DeliveryServiceImpl implements DeliveryService{
 		return ir_list;
 	}
 
+		//납품등록 데이터 등록시 납품등록코드 랜덤생성
+		public String make_delienrollcode() {
+			//서버 시간
+			//String server_time = this.get_time();
+		
+			//랜덤숫자 4개 생성
+			int w = 0;
+			String randnum = "";
+			
+			while(w < 4) {
+				int pc = (int)(Math.ceil(Math.random()*10));
+				randnum += pc;
+				w++;
+			}
+			
+			String code = "DE "+ "-" + randnum;
+			
+			return code;
+		}
 }

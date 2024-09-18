@@ -81,17 +81,18 @@
 							</tbody>
 						</table>
 						<!-- 검색 옵션 테이블 끝 -->
+						<form id="frm_delivery_list">
 						<p style="font-size: 12px; height: 25px; line-height: 30px;">※
 							조회결과</p>
 						<div class="panel-body panel-thead">
 						<span style="float: right; height: 40px; margin-top:20px;">
-							<button type="button" class="btn btn-outline-danger">삭제</button>
+							<button type="button" class="btn btn-outline-danger" id="delist_delete">삭제</button>
 						</span>	
 							<table class="table">
 								<thead style="background-color: rgb(130, 210, 213);">
 									<tr>
 										<th style="text-align: center; width: 3%;"><input
-											type="checkbox" style="border: 1px solid #ccc;"></th>
+											type="checkbox" id="del_all_ck" style="border: 1px solid #ccc;"></th>
 										<th style="text-align: center; width: 8%;">상품코드</th>
 										<th style="text-align: center; width: 14%;">상품명</th>
 										<th style="text-align: center; width: 8%;">납품수량</th>
@@ -112,8 +113,9 @@
 								<tbody>
 									<tr th:each="delist : ${deliver_list}">
 										<td style="text-align: center; width: 3%;"><input
-											type="checkbox"></td>
-										
+											type="checkbox" name="del_each_ck"
+											th:value="${delist.getDeliver_idx()}"></td>
+							
 										<td style="text-align: center; width: 8%;"
 										th:text="${delist.getProduct_cd()}"></td>
 										<td style="text-align: center; width: 14%;"
@@ -143,6 +145,8 @@
 								</tbody>
 							</table>
 						</div>
+						<input type="hidden" name="deliver_idx">
+						</form>
 					</div>
 					<!-- panel body , 이 안에 두개의 테이블이 같이 들어감-->
 				</div>

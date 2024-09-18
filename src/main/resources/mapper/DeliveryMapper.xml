@@ -2,6 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.pikpak.repo.DeliveryRepo">
 
+<!-- 납품등록 삭제하기 -->
+<delete id="delete_deliver_enroll">
+delete from deliver_enroll where FIND_IN_SET(deliver_idx,#{deliver_idx})
+</delete>
+
 <!-- 납품등록 현황 -->
 <select id="select_deliver_enroll" resultType="kr.co.pikpak.dto.deliver_enroll_dto">
 select * from deliver_enroll order by deliver_idx desc

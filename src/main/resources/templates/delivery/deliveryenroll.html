@@ -94,8 +94,28 @@
 
 </body>
 <script type="module">
-import {delivery_page_move} from "../resources/js/deliver/deliveryenroll_main.js?v=2";
+import {delivery_page_move, delivery_list} from "../resources/js/deliver/deliveryenroll_main.js?v=3";
 
+/* 납품등록 삭제 */
+//전체 체크박스
+document.querySelector("#del_all_ck").addEventListener("click",function(){
+		new delivery_list().deli_all_ckbox();
+});
+
+//개별 체크박스
+document.querySelectorAll('[name="del_each_ck"]').forEach(function(ck){
+		ck.addEventListener('click', function() {
+        	new delivery_list().deli_each_ckbox();
+		});
+});
+
+//삭제 버튼 클릭시
+document.querySelector("#delist_delete").addEventListener("click",function(){
+		new delivery_list().delete_delivery();
+});
+
+
+/* 페이지 이동 */
 document.querySelector("#go_delenroll").addEventListener("click",function(){
 		new delivery_page_move().go_delivery_enroll();
 });

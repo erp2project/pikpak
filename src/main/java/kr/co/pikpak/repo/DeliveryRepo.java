@@ -18,4 +18,7 @@ public interface DeliveryRepo {
 	
 	//납품등록 현황
 	List<deliver_enroll_dto> select_deliver_enroll();
+	
+	//납품등록 삭제
+	int delete_deliver_enroll(String deliver_idx);
 }

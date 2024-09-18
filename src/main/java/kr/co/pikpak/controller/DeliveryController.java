@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.ServletResponse;
 import kr.co.pikpak.dto.deliver_enroll_dto;
@@ -23,6 +24,42 @@ public class DeliveryController {
 	
 	@Autowired
 	DeliveryService delservice;
+	
+	//납품등록 삭제
+	@PostMapping("/delivery/delete_deliveryok")
+	public String delete_deliveryok(ServletResponse res,
+			@RequestParam(defaultValue = "", required = false) String del_each_ck[],
+			@RequestParam(defaultValue = "", required = false) String deliver_idx) {
+		res.setContentType("text/html;charset=utf-8");
+		try {
+			this.pw = res.getWriter();
+			//System.out.println(del_each_ck.length);
+			//System.out.println(deliver_idx);
+			String idx_data[] = deliver_idx.split(",");
+			if(idx_data.length == del_each_ck.length) {
+				int result = delservice.delete_deliver_enroll(deliver_idx);
+				
+				if(result > 0) {
+					this.pw.print("<script>"
+							+ "alert('정상적으로 삭제되었습니다.');"
+							+ "location.href='./deliveryenroll';"
+							+ "</script>");
+				}
+			}	
+		}
+		catch(Exception e) {
+			this.pw.print("<script>"
+					+ "alert('데이터베이스 문제로 삭제되지 못하였습니다.');"
+					+ "location.href='./deliveryenroll';"
+					+ "</script>");
+		}
+		finally {
+			this.pw.close();
+		}
+		return null;
+	}
+	
+	
 	
 	//납품등록
 	@PostMapping("/delivery/delivery_enrollok")

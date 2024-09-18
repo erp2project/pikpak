@@ -132,7 +132,7 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 			w++;
 		}
 		
-		String code = server_time + "-" + randnum;
+		String code = "IR "+ server_time + "-" + randnum;
 		
 		return code;
 	}
