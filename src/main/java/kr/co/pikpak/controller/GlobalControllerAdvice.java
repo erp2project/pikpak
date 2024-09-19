@@ -19,7 +19,7 @@ public class GlobalControllerAdvice {
 	private CustomUserDetailsService userDetailsService;
 	
 	@ModelAttribute("activeUserName")
-	public String getNameFromToken(HttpServletRequest req) {
+	public String getNameFromContext() {
 		String result = "";
 		result = userDetailsService.userNameFromContext();	
 		
@@ -38,5 +38,14 @@ public class GlobalControllerAdvice {
 		}
 		*/
 		return result;
+	};
+	
+	@ModelAttribute("activeUserType")
+	public String getTypeFromContext() {
+		String result = "";
+		result = userDetailsService.userTypeFromContext();
+		return result;
 	}
+	
+	
 }

@@ -57,7 +57,8 @@ public class JWTSecurityConfig {
 					.requestMatchers("/favicon.ico").permitAll()
 					*/
 					.requestMatchers("/home").authenticated()
-					.requestMatchers("/post/**").hasAuthority("supplier")
+					.requestMatchers("/supplier/**").hasAuthority("supplier")
+					.requestMatchers("/vendor/**").hasAuthority("vendor")
 					.requestMatchers("/admin","/admin/**").hasAuthority("operator")
 					//.requestMatchers("/test").has
 					.anyRequest().permitAll())

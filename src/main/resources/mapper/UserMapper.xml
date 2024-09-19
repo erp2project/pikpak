@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.pikpak.repo.UserRepo">
+	<!-- 회원 리스트 출력 -->
+	<select id="userListFromView" resultType="kr.co.pikpak.dto.LoginDTO">
+		select * from login_view order by user_type asc
+	</select>
+</mapper>

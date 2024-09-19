@@ -7,5 +7,5 @@ import lombok.Data;
 @Data
 @Repository("LoginDTO")
 public class LoginDTO {
-	String user_id, user_nm, user_pw, user_tel, user_mail, user_type;
+	String user_id, user_nm, user_pw, user_tel, user_mail, user_type, user_company;
 }

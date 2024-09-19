@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>회원 등록 팝업</title>
+<link
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	rel="stylesheet">
+</head>
+<body>
+	<!-- 모달 -->
+	<section th:fragment="add_user_popup">
+	<div class="modal fade" id="inreqModal" tabindex="-1" aria-labelledby="addUserModalLabel" insert>
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header" style="display: flex; flex-direction: row;">
+					<h5 class="modal-title" id="addUserModalLabel" style="width:100%;">회원 등록</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form id="addUserForm">
+						<!-- 검색 바 -->
+						<div class="form-group">
+							<table class="table table-bordered" style="margin-top: 20px;">
+								<tbody>
+									<tr>
+										<td style="width: 30%;">사용자 유형</td>
+										<td>
+											<select class="form-control select2" name="user_type" style="width:40%" onchange="checkUserType()">
+													<option value="">유형 선택</option>
+													<option value="admin">관리자</option>
+													<option value="operator">운영</option>
+													<option value="supplier">공급</option>
+													<option value="vendor">판매</option>
+											</select> 
+										</td>
+									</tr>
+									<tr>
+										<td style="width: 30%;">아이디</td>
+										<td style="display:flex; flex-direction: row;">
+											<input type="text" class="form-control" style="width: 70%;" name="user_id">&nbsp;&nbsp;
+											<button type="button" class="btn btn-default btn-sm">중복 확인</button>
+										</td>
+									</tr>
+									<tr>
+										<td style="width: 30%;">이름</td>
+										<td>
+											<input type="text" class="form-control" name="user_name">
+											<input type="hidden" name="supplier_cd">
+										</td>
+									</tr>
+									<tr>
+										<td style="width: 30%;">비밀번호</td>
+										<td style="display:flex; flex-direction: row;">
+											<div style="width:40%;">
+												<input type="text" class="form-control" name="user_pw">
+											</div>
+											<div style="width:20%; align-content: center;">
+												비밀번호 확인
+											</div>
+											<div style="width:40%;">
+												<input type="text" class="form-control" name="pw_check">
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td style="width: 30%;">연락처</td>
+										<td>
+											<input type="text" class="form-control" name="user_tel">
+										</td>
+									</tr>
+									<tr>
+										<td style="width: 30%;">이메일</td>
+										<td>
+											<input type="text" class="form-control" name="user_mail">
+										</td>
+									</tr>
+									<tr>
+										<td style="width: 30%;">소속</td>
+										<td>
+											<input type="text" class="form-control" name="user_co">
+										</td>
+									</tr>
+									<tr>
+										<td style="width: 30%;">권한 등급</td>
+										<td>
+											<select class="form-control select2" name="user_lv" style="width:40%">
+													<option value="">등급 선택</option>
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+											</select> 
+										</td>
+									</tr>
+									
+								</tbody>
+							</table>
+						</div>
+						<nav style="text-align: center; padding: 15px;">
+							<span>
+								<button type="button" class="btn btn-dark" id="req_enroll">등록</button> 
+							</span>
+
+						</nav>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	</section>
+</body>
+</html>

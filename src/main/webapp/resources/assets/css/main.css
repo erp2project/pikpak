@@ -843,6 +843,10 @@ ul.list-justify>li span {
 	border-color: #3ca512;
 }
 
+.btn-dark {
+	
+}
+
 .btn.disabled, .btn[disabled], fieldset[disabled] .btn {
 	opacity: 0.4;
 	filter: alpha(opacity = 40);
