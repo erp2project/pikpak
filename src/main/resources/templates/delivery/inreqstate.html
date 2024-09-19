@@ -75,7 +75,7 @@
 		<section th:replace="~{inoutbound/add_exreceiving_popup :: add_exrecv_popup}"></section>
 		-->
 		<!-- MAIN 끝-->
-
+	
 	</div>
 	<div class="clearfix"></div>
 	<!-- footer 시작 -->
@@ -129,11 +129,23 @@ $(document).ready(
 </script>
 </body>
 <script type="module">
-import {delivery_page_move, delivery_modal} from "../resources/js/deliver/deliveryenroll_main.js?v=4";
+import {delivery_page_move, delivery_modal, delivery_list, inreq_list} from "../resources/js/deliver/deliveryenroll_main.js?v=5";
 /* 페이지 처음 로드 */
 document.addEventListener('DOMContentLoaded', function() {
     new delivery_modal().delivery_load();
 });
+
+/* 거절 버튼 클릭 시 */
+document.querySelectorAll('.inreq_reject').forEach(function(button) {
+    button.addEventListener('click', function(event) {
+		var product_qty = this.dataset.productQty;
+		var remain_qty = this.dataset.remainQty;
+		var request_st = this.dataset.requestSt;
+		var request_idx = this.dataset.requestIdx;
+		new inreq_list().reject_list(request_idx, product_qty, remain_qty, request_st);
+	});
+});
+
 
 /*납품 등록 모달*/
 document.querySelector("#del_enroll").addEventListener("click",function(){

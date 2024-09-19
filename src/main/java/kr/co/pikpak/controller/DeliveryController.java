@@ -2,17 +2,21 @@ package kr.co.pikpak.controller;
 
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.ServletResponse;
 import kr.co.pikpak.dto.deliver_enroll_dto;
+import kr.co.pikpak.dto.ex_receiving_dto;
 import kr.co.pikpak.dto.input_request_dto;
 import kr.co.pikpak.dto.input_request_state_dto;
 import kr.co.pikpak.service.DeliveryService;
@@ -24,6 +28,47 @@ public class DeliveryController {
 	
 	@Autowired
 	DeliveryService delservice;
+	
+	
+	//납품등록에서 배송 버튼 클릭 시 가입고 등록
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@PostMapping("/insert_exreceiving")
+	public String insert_exreceiving(ServletResponse res,
+			@RequestBody ex_receiving_dto dto) {
+		//넘어오는 값 : request_cd, deliver_cd, supplier_cd, product_cd, exreceiving_qty, exreceiving_size, exreceiving_area, make_dt
+		//만들어야하는 값 : exreceiving_cd, exreceiving_st, exreceiving_nm, lot_no
+		//DB에서 들어가는 값 or null 값 : exreceiving_idx, exreceiving_dt, update_dt, update_nm
+		try {
+			
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+		
+		return null;
+	}
+	
+	
+	//입고요청 거절
+	@PostMapping("/reject_deliverylist")
+	public String reject_deliverylist(ServletResponse res, 
+			@RequestParam(defaultValue = "", required = false) String request_idx) {
+		try {
+			this.pw = res.getWriter();
+			int result = delservice.update_inreq_reject(request_idx);
+			if(result > 0) {
+				this.pw.print("ok");
+			}
+		} 
+		catch (Exception e) {
+			this.pw.print("error");
+		}
+		finally {
+			this.pw.close();
+		}
+		return null;
+	}
+	
 	
 	//납품등록 삭제
 	@PostMapping("/delivery/delete_deliveryok")
@@ -76,7 +121,7 @@ public class DeliveryController {
 			if(result > 0) {
 				this.pw.print("<script>"
 						+ "alert('정상적으로 등록되었습니다');"
-						+ "location.href='./inreqstate';"
+						+ "location.href='./deliveryenroll';"
 						+ "</script>");
 			}
 			

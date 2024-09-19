@@ -22,6 +22,9 @@
 	href="../resources/css/inoutbound/inboundreq_main.css">
 <link rel="stylesheet" href="../resources/css/inoutbound/pd_search.css">
 <link href="../resources/css/inoutbound/add_popup.css" rel="stylesheet">
+<!-- deliver_main 툴팁 위한 css -->
+<link href="../resources/css/delivery/deliveryenroll_main.css" rel="stylesheet">
+
 <!-- GOOGLE FONTS -->
 <link
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700"
@@ -68,8 +71,8 @@
 		<section
 			th:replace="~{delivery/deliveryenroll_main :: main_deliveryenroll}"></section>
 		<!-- 모달 -->	
-		<!-- 
-		<section th:replace="~{inoutbound/company_search :: company_search_popup}"></section> 
+		<!--
+		<section th:replace="~{delivery/deliver_manage_popup :: deliver_mng_popup}"></section> 
 		<section th:replace="~{inoutbound/add_exreceiving_popup :: add_exrecv_popup}"></section>
 		-->
 		<!-- MAIN 끝-->
@@ -91,10 +94,27 @@
 	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
 	<script src="../resources/assets/scripts/klorofil-common.js"></script>
 
-
 </body>
 <script type="module">
 import {delivery_page_move, delivery_list} from "../resources/js/deliver/deliveryenroll_main.js?v=3";
+/* 납품등록 배송 버튼 */
+document.querySelectorAll(".deliver_manage").forEach(function(button){
+	button.addEventListener('click', function() {
+         let deliveryData = {
+            requestCd: button.getAttribute('data-request-cd'),
+            deliverCd: button.getAttribute('data-deliver-cd'),
+            supplierCd: button.getAttribute('data-supplier-cd'),
+            productCd: button.getAttribute('data-product-cd'),
+            deliverQty: button.getAttribute('data-deliver-qty'),
+            deliverSize: button.getAttribute('data-deliver-size'),
+            deliverArea: button.getAttribute('data-deliver-area'),
+            makeDt: button.getAttribute('data-make-dt'),
+            deliverSt: button.getAttribute('data-deliver-st')
+        };
+
+		new delivery_list().decide_delivery(deliveryData);
+	});
+});
 
 /* 납품등록 삭제 */
 //전체 체크박스

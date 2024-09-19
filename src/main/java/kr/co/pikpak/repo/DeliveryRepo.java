@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.pikpak.dto.deliver_enroll_dto;
+import kr.co.pikpak.dto.ex_receiving_dto;
 import kr.co.pikpak.dto.input_request_dto;
 import kr.co.pikpak.dto.input_request_state_dto;
 
@@ -21,4 +22,10 @@ public interface DeliveryRepo {
 	
 	//납품등록 삭제
 	int delete_deliver_enroll(String deliver_idx);
+	
+	//입고요청 거절 시 상태변화
+	int update_inreq_reject(String request_idx);
+	
+	//배송 확정시 가입고 등록
+	int insert_ex_receiving(ex_receiving_dto dto);
 }

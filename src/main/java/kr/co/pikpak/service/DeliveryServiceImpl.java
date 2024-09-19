@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.annotation.Resource;
 import kr.co.pikpak.dto.deliver_enroll_dto;
+import kr.co.pikpak.dto.ex_receiving_dto;
 import kr.co.pikpak.dto.input_request_dto;
 import kr.co.pikpak.dto.input_request_state_dto;
 import kr.co.pikpak.repo.DeliveryRepo;
@@ -16,6 +17,30 @@ public class DeliveryServiceImpl implements DeliveryService{
 	
 	@Autowired
 	DeliveryRepo delrepo;
+	
+	//가입고 등록
+	@Override
+	public int insert_ex_receiving(ex_receiving_dto dto) {
+		//등록일자에 따라 뒤에 001,002붙이기 + 오전...오후..?
+		/*
+		//등록일자 정리
+		//
+		//로트번호 생성
+		String lot_no = dto.getProduct_cd() + "-" + dto.getMake_dt().replaceAll("-", "") + "-" + dto.getExreceiving_dt().replaceAll("-", null) 
+		*/
+		
+		int result = delrepo.insert_ex_receiving(dto);
+		return result;
+	}
+	
+	
+	//입고요청 거절
+	@Override
+	public int update_inreq_reject(String request_idx) {
+		int result = delrepo.update_inreq_reject(request_idx);
+		return result;
+	}
+	
 	
 	//납품등록 삭제
 	@Override
@@ -59,23 +84,44 @@ public class DeliveryServiceImpl implements DeliveryService{
 		return ir_list;
 	}
 
-		//납품등록 데이터 등록시 납품등록코드 랜덤생성
-		public String make_delienrollcode() {
-			//서버 시간
-			//String server_time = this.get_time();
+	//납품등록 데이터 등록시 납품등록코드 랜덤생성
+	public String make_delienrollcode() {
+	//서버 시간
+	//String server_time = this.get_time();
 		
-			//랜덤숫자 4개 생성
-			int w = 0;
-			String randnum = "";
+	//랜덤숫자 4개 생성
+	int w = 0;
+	String randnum = "";
 			
-			while(w < 4) {
-				int pc = (int)(Math.ceil(Math.random()*10));
-				randnum += pc;
-				w++;
-			}
+	while(w < 4) {
+		int pc = (int)(Math.ceil(Math.random()*10));
+		randnum += pc;
+		w++;
+	}
 			
-			String code = "DE "+ "-" + randnum;
+	String code = "DE "+ "-" + randnum;
 			
-			return code;
+	return code;
+	}
+	
+	//가입고 등록시 가입고코드 랜덤생성
+	public String make_exreceiving_code() {
+		//서버 시간
+		//String server_time = this.get_time();
+			
+		//랜덤숫자 4개 생성
+		int w = 0;
+		String randnum = "";
+				
+		while(w < 4) {
+			int pc = (int)(Math.ceil(Math.random()*10));
+			randnum += pc;
+			w++;
 		}
+				
+		String code = "ER "+ "-" + randnum;
+				
+		return code;
+	}
+	
 }

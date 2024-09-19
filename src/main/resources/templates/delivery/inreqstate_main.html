@@ -125,8 +125,15 @@
 										th:data-add-req="${inputreq.getAdd_req()}"
 										th:data-hope-dt="${inputreq.getHope_dt()}"
 										th:data-request-cd="${inputreq.getRequest_cd()}"
-										style="padding-right:10px; padding-left:10px;"
+										style="padding-right:5px; padding-left:5px; width:40%;"
 										type="button">납품</button>
+										<button class="btn btn-danger inreq_reject" 
+										style="padding-right:5px; padding-left:5px; width:40%;"
+										th:data-product-qty="${inputreq.getTotal_requested_qty()}"
+										th:data-remain-qty="${inputreq.getRemaining_qty()}"
+										th:data-request-st="${inputreq.getRequest_st()}"
+										th:data-request-idx="${inputreq.getRequest_idx()}"
+										type="button">거절</button>
 										</td>
 									</tr>
 								</tbody>
