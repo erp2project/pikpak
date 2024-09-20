@@ -13,9 +13,17 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private UserRepo ur;
 	
+	// 회원 정보 리스트출력
 	@Override
 	public List<LoginDTO> userListFromView() {
 		List<LoginDTO> result = ur.userListFromView();
+		return result;
+	}
+	
+	// 아이디 조회
+	@Override
+	public int ctnFromView(String userId) {
+		int result = ur.ctnFromView(userId);
 		return result;
 	}
 }

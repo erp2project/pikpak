@@ -5,4 +5,10 @@
 	<select id="userListFromView" resultType="kr.co.pikpak.dto.LoginDTO">
 		select * from login_view order by user_type asc
 	</select>
+	
+	
+	<!-- 회원 아이디 조회 -->
+	<select id="ctnFromView" resultType="Integer">
+		select count(*) as ctn from login_view where user_id = #{userId}
+	</select>
 </mapper>

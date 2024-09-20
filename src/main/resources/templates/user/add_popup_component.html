@@ -10,7 +10,7 @@
 <body>
 	<!-- 모달 -->
 	<section th:fragment="add_user_popup">
-	<div class="modal fade" id="inreqModal" tabindex="-1" aria-labelledby="addUserModalLabel" insert>
+	<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" insert>
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header" style="display: flex; flex-direction: row;">
@@ -27,7 +27,7 @@
 							<table class="table table-bordered" style="margin-top: 20px;">
 								<tbody>
 									<tr>
-										<td style="width: 30%;">사용자 유형</td>
+										<td class="form-title-custom custom-width-20">사용자 유형</td>
 										<td>
 											<select class="form-control select2" name="user_type" style="width:40%" onchange="checkUserType()">
 													<option value="">유형 선택</option>
@@ -39,53 +39,77 @@
 										</td>
 									</tr>
 									<tr>
-										<td style="width: 30%;">아이디</td>
+										<td class="form-title-custom">아이디</td>
 										<td style="display:flex; flex-direction: row;">
-											<input type="text" class="form-control" style="width: 70%;" name="user_id">&nbsp;&nbsp;
-											<button type="button" class="btn btn-default btn-sm">중복 확인</button>
+											<input type="text" class="form-control dark-border custom-width-40" id="user_id" name="user_id">&nbsp;&nbsp;
+											<button type="button" class="btn btn-default btn-sm" onclick="checkUserId()">중복 확인</button>
+											<div class="custom-center-all custom-width-40">
+												<span id="id-check-response" class="response-text"></span>
+											</div>
 										</td>
 									</tr>
 									<tr>
-										<td style="width: 30%;">이름</td>
+										<td class="form-title-custom">이름</td>
 										<td>
-											<input type="text" class="form-control" name="user_name">
+											<input type="text" class="form-control dark-border custom-width-40" name="user_name">
 											<input type="hidden" name="supplier_cd">
 										</td>
 									</tr>
 									<tr>
-										<td style="width: 30%;">비밀번호</td>
+										<td class="form-title-custom">비밀번호</td>
 										<td style="display:flex; flex-direction: row;">
-											<div style="width:40%;">
-												<input type="text" class="form-control" name="user_pw">
-											</div>
-											<div style="width:20%; align-content: center;">
+											<input type="text" class="form-control dark-border custom-width-40" name="user_pw">
+											<div style="width:20%; align-content: center; text-align: center;">
 												비밀번호 확인
 											</div>
-											<div style="width:40%;">
-												<input type="text" class="form-control" name="pw_check">
-											</div>
+											<input type="text" class="form-control dark-border custom-width-40" name="pw_check">
 										</td>
 									</tr>
 									<tr>
-										<td style="width: 30%;">연락처</td>
+										<td class="form-title-custom">연락처</td>
 										<td>
-											<input type="text" class="form-control" name="user_tel">
+											<input type="text" 
+												class="form-control dark-border  custom-width-40" 
+												name="user_tel" 
+												oninput="this.value = this.value.replace(/[^0-9]/g,'')">
 										</td>
 									</tr>
 									<tr>
-										<td style="width: 30%;">이메일</td>
+										<td class="form-title-custom">이메일</td>
 										<td>
-											<input type="text" class="form-control" name="user_mail">
+											<input type="text" class="form-control dark-border  custom-width-40" name="user_mail">
 										</td>
 									</tr>
 									<tr>
-										<td style="width: 30%;">소속</td>
+										<td class="form-title-custom">소속</td>
 										<td>
-											<input type="text" class="form-control" name="user_co">
+											<!-- 상품코드 Select2 적용 --> <!-- Map도 받아지네 -->
+											<select class="form-control select2 dark-border" name="user_co" style="width:40%;">
+												<option value="">회사 선택</option>
+												<option
+													th:value="'중앙 IT'"
+													th:data-company-name="'중앙 IT'"
+													th:text="'중앙 IT TEST'"></option>
+												<option
+													th:value="'중앙 IT2'"
+													th:data-company-name="'중앙 IT2'"
+													th:text="'중앙 IT2 TEST2'"></option>
+											</select> 
+											<!-- 
+											<select class="form-control select2" id="pd" name="product_cd" style="width:40%">
+												<option value="">상품코드 선택</option>
+												<option th:each="product : ${pdlist}"
+													th:value="${product.product_cd}"
+													th:data-product-name="${product.product_nm}"
+													th:data-supplier-code="${product.supplier_cd}"
+													th:data-supplier-name="${product.supplier_nm}"
+													th:text="${product.product_cd}"></option>
+											</select> 
+											 -->
 										</td>
 									</tr>
-									<tr>
-										<td style="width: 30%;">권한 등급</td>
+									<tr class="visibility-hide" id="user_lv_row">
+										<td class="form-title-custom">권한 등급</td>
 										<td>
 											<select class="form-control select2" name="user_lv" style="width:40%">
 													<option value="">등급 선택</option>
@@ -101,9 +125,8 @@
 						</div>
 						<nav style="text-align: center; padding: 15px;">
 							<span>
-								<button type="button" class="btn btn-dark" id="req_enroll">등록</button> 
+								<button type="button" class="btn btn-dark" id="req_enroll" onclick="sendAddUserForm()">등록</button> 
 							</span>
-
 						</nav>
 					</form>
 				</div>
@@ -112,4 +135,5 @@
 	</div>
 	</section>
 </body>
+
 </html>

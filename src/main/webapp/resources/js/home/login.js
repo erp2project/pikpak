@@ -7,6 +7,7 @@ document.getElementById("loginForm").addEventListener("submit",
 		if (sendCondition == "Y"){
 			const data = event.target;
 			const formData = new FormData(data);
+			var responseArea = document.getElementById("response");
 			
 			fetch("/login/auth",{
 				method : "POST",
@@ -25,16 +26,16 @@ document.getElementById("loginForm").addEventListener("submit",
 					location.href="/home";
 				}
 				else{
-					document.getElementById("response").innerHTML = `<p>${result}</p>`;
-					document.getElementById("response").style.visibility = "visible";
-					document.getElementById("response").style.opacity = "1";
+					responseArea.innerHTML = `<p>${result}</p>`;
+					responseArea.style.visibility = "visible";
+					responseArea.style.opacity = "1";
 				}
 			})
 			.catch(error => {
 				//document.getElementById("response").innerHTML = `<p>${error}</p>`;
-				document.getElementById("response").innerHTML = `<p>"알 수 없는 이유로 로그인에 실패하였습니다. 관리자에게 문의하세요"</p>`;
-				document.getElementById("response").style.visibility = "visible";
-				document.getElementById("response").style.opacity = "1";
+				responseArea.innerHTML = `<p>"알 수 없는 이유로 로그인에 실패하였습니다. 관리자에게 문의하세요"</p>`;
+				responseArea.style.visibility = "visible";
+				responseArea.style.opacity = "1";
 			});
 		}
 	}

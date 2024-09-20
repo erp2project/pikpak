@@ -5,12 +5,21 @@
     font-size: 14px;
 }
 
+.form-title-custom {
+	align-content: center; 
+	text-align: right;
+}
+
 .form-group {
     margin-bottom: 15px;
 }
 
 .form-group label {
     font-weight: bold;
+}
+
+.dark-border {
+	border: 1px solid grey;
 }
 
 .form-control-sm {
@@ -66,4 +75,40 @@
 .btn-dark:not(:disabled):not(.disabled):active:focus, .btn-dark:not(:disabled):not(.disabled).active:focus,
 .show > .btn-dark.dropdown-toggle:focus {
   box-shadow: 0 0 0 0.2rem rgba(82, 88, 93, 0.5);
+}
+
+/* Custom Classes */
+.visibility-hide {
+	visibility: collapse;
+}
+
+.response-text{
+	color: red;
+	opacity: 0;
+	transition: opacity 100ms linear;
+}
+
+.custom-center-all {
+	align-content: center; 
+	text-align: center;
+}
+
+.custom-width-100 {
+	width: 100%;
+}
+
+.custom-width-50 {
+	width: 50%;
+}
+
+.custom-width-40 {
+	width: 40%;
+}
+
+.custom-width-30 {
+	width: 30%;
+}
+
+.custom-width-20 {
+	width: 20%;
 }
