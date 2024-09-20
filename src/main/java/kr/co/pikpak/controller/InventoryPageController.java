@@ -82,7 +82,8 @@ public class InventoryPageController {
 	
 	//재고 창고 위치 관리 페이지
 	@GetMapping("/warehouse_location")
-	public String warehouse_location() {
+	public String warehouse_location(Model m) {
+		
 		return "/Inventory/warehouse_grid";
 	}
 }

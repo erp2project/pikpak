@@ -36,5 +36,8 @@ public interface WarehouseInventoryService {
 	//재고 리스트 출력 페이지 - 관리 버튼 팝업 / 상품코드로 상품테이블에서 안전재고 조회
 	public Integer getSafetyInventory_qty(String product_cd);
 	
+	//재고 리스트 출력 페이지 - 조회
+	public List<WarehouseInventory_dto> searchInventory(String area_cd,String rack_number,String level,String part,String product_cd,String product_nm,String supplier_nm);
+	
 	public List<WarehouseInspection_dto> getCheckData();
 }

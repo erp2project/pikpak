@@ -53,16 +53,34 @@
             position: relative;
         }
 
-.wms-part.has-stock {
-    background-color: #f44336; /* 빨간색 - 재고 있음 */
+/* 공간 없음 */
+.wms-rack .wms-rack-level .wms-part.no-space {
+    background-color: #ff6b6b; /* 재고 있음 */
+    color: white;
+}
+/* 일부 공간 있음 */
+.wms-rack .wms-rack-level .wms-part.partial-space {
+     background-color: #2196f3;
+    color: white;
+}
+/* 지정된 회사 있지만 재고 없음 */
+.wms-rack .wms-rack-level .wms-part.assigned-no-stock{
+	background-color: #48d1cc;
+	color: white;
+}
+/* 회사 미지정 */
+.wms-rack .wms-rack-level .wms-part.no-stock{
+	background-color: #4caf50;
+	color: white;
 }
 
-.wms-part.no-stock {
-    background-color: #4caf50; /* 초록색 - 재고 없음 */
-}
+
+/*해당 위치가 배정되었으나, 재고가 없는 경우 - 노란색*/
+
 
 .wms-part:hover {
-    background-color: #d3e0ea;
+    background-color: #ced6e0; /* 밝은 그레이 */
+    color: #2f3542; /* 어두운 텍스트 */
 }
 
         /* Footer Style */

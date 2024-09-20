@@ -10,28 +10,56 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="locationModalLabel">위치 지정</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h4 class="modal-title" id="locationModalLabel">위치 지정</h4>
             </div>
             <div class="modal-body">
-                <!-- 회사 선택 -->
                 <form>
+                    <!-- 회사 선택 -->
                     <div class="form-group">
                         <label for="company-select">회사 선택</label>
                         <select class="form-control" id="company-select">
-                            <option>회사 A</option>
-                            <option>회사 B</option>
-                            <option>회사 C</option>
+                            <!-- 회사 리스트 동적으로 추가 -->
                         </select>
                     </div>
 
-                    <!-- 위치 선택 -->
+                    <!-- 구역 선택 -->
                     <div class="form-group">
-                        <label for="location-code">위치 코드</label>
-                        <input type="text" class="form-control" id="location-code" placeholder="위치 코드를 입력하세요">
+                        <label for="zone-select">구역 선택</label>
+                        <select class="form-control" id="zone-select">
+                            <option value="A">A 구역</option>
+                            <option value="B">B 구역</option>
+                            <option value="C">C 구역</option>
+                            <option value="D">D 구역</option>
+                        </select>
                     </div>
+                    <!-- 랙 선택 -->
+                    <div class="form-group">
+                        <label for="rack-select">랙 선택</label>
+                        <select class="form-control" id="rack-select">
+                            <option value="01">랙 01</option>
+                            <option value="02">랙 02</option>
+                            <option value="03">랙 03</option>
+                            <option value="04">랙 04</option>
+                            <option value="05">랙 05</option>
+                            <option value="06">랙 06</option>
+                            <option value="07">랙 07</option>
+                            <option value="08">랙 08</option>
+                        </select>
+                    </div>
+                    <!-- 레벨 선택 -->
+                    <div class="form-group">
+                        <label for="level-select">레벨(단) 지정</label>
+                        <select class="form-control" id="level-select">
+                            <!-- 동적으로 구역에 따른 위치 리스트 추가 -->
+                        </select>
+                    </div>
+                    <!-- 파트 선택 -->
+                    <div class="form-group">
+                        <label for="part-select">파트(열) 지정</label>
+                        <select class="form-control" id="part-select">
+                            <!-- 동적으로 구역에 따른 위치 리스트 추가 -->
+                        </select>
+                    </div>                    
                 </form>
             </div>
             <div class="modal-footer">

@@ -143,9 +143,9 @@
 							<p class="title-with-underline">재고현황</p>
 							<section>
 								<span style="float: right; height: 40px;">
-								<button type="button" class="btn btn-success">초기화</button>
+								<button type="button" class="btn btn-success"onclick="location.reload();" >초기화</button>
 								<button type="button" class="btn btn-danger">EXCEL</button>
-								<button type="submit" class="btn btn-warning">조회</button>
+								<button type="submit" class="btn btn-warning" id="searchButton">조회</button>
 								</span>
 								
 								<!-- 검색  -->
@@ -190,8 +190,8 @@
 												<select class="form-control" style="width: 49%; float: left;" name="part">
 													<option value="">열번호 선택</option>
 													<option value="P1">1열(P)</option>
-													<option value="P2">1열(P)</option>
-													<option value="P3">1열(P)</option>
+													<option value="P2">2열(P)</option>
+													<option value="P3">3열(P)</option>
 												</select>
 											</td>
 										</tr>
@@ -208,12 +208,12 @@
 											<td style="width: 10%; height: 34px; line-height: 34px;">상품코드 / 상품명</td>
 											<td style="display: flex; flex-direction: row; align-items: center; width: 100%;">
 												<!-- 상품 코드 -->
-												<select class="form-control" id="product_cd" onchange="fetchProductDataByCode(this.value)" style="flex: 4; margin-right: 5px; min-width: 100px;">
+												<select class="form-control" id="product_cd" name="product_cd" onchange="fetchProductDataByCode(this.value)" style="flex: 4; margin-right: 5px; min-width: 100px;">
 													<option value="">상품코드 선택</option>
 													<option th:each="code : ${product_cd}" th:value="${code}" th:text="${code}"></option>
 												</select>
 												<!-- 상품명 -->
-												<select class="form-control" id="product_nm" onchange="fetchProductDataByName(this.value)" style="flex: 4; margin-right: 5px; min-width: 100px;">
+												<select class="form-control" id="product_nm" name="product_nm" onchange="fetchProductDataByName(this.value)" style="flex: 4; margin-right: 5px; min-width: 100px;">
 													<option value="">상품명 선택</option>
 													<option th:each="name : ${product_nm}" th:value="${name}" th:text="${name}"></option>
 												</select>
@@ -224,11 +224,11 @@
 											<td style="width: 10%; height: 34px; line-height: 34px;">회사명</td>
 											<td style="display: flex; flex-direction: row; align-items: center; width: 100%;">
 												<!-- 회사명 -->
-												<select class="form-control" id="supplier_cd" onchange="fetchCompanyDataByCode(this.value)" style="width: 100%;">
+												<select class="form-control" id="supplier_cd" name="supplier_cd" onchange="fetchCompanyDataByCode(this.value)" style="width: 100%;">
 													<option value="">회사코드 선택</option>
 													<option th:each="Code : ${getAllsupplier_cd}" th:value="${Code.supplier_cd}" th:text="${Code.supplier_cd}"></option>
 												</select>
-												<select class="form-control" id="supplier_nm" onchange="fetchCompanyDataByName(this.value)"style="width: 100%;">
+												<select class="form-control" id="supplier_nm" name="supplier_nm" onchange="fetchCompanyDataByName(this.value)"style="width: 100%;">
 													<option value="">회사명 선택</option>
 													<option th:each="name : ${supplier_nm}" th:value="${name}" th:text="${name}"></option>
 												</select>
@@ -259,7 +259,7 @@
 												<th style="text-align: center;">관리</th>
 											</tr>
 										</thead>
-										<tbody>
+										<tbody id="results">
 											<tr onclick="toggleCheckbox(this)" th:each="info : ${all}">
 												<td><input type="checkbox" onclick="event.stopPropagation();"></td>
 												<td th:text="${info.location_cd}"></td>
@@ -274,7 +274,6 @@
 												<td style="text-align: center;">
 													<button class="btn btn-info"
 													 th:onclick="event.stopPropagation(); openModal([[${info.wh_warehouse_idx}]])"
-													
 													data-toggle="modal" 
 													data-target="#inventoryModal">관리</button>
 												</td>

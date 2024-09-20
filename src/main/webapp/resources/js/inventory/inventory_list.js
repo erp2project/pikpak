@@ -7,6 +7,79 @@ function toggleCheckbox(row) {
         checkbox.checked = !checkbox.checked;
     }
 }
+//조회 버튼 클릭 (form전송)
+document.getElementById('searchButton').addEventListener('click', function(){
+	event.preventDefault();
+	//폼데이터 가져오기
+	const form = document.getElementById('searchForm');
+	const formData = new FormData(form);
+	const searchData = {};
+	
+	//입력되지않은값 제외하고 searchParams에 추가
+	formData.forEach((value, key) => {
+		if(value){
+			searchData[key] = value;
+		}
+	});
+	console.log(searchData);
+	
+	fetch('/getSearchData',{
+		method : 'POST',
+		headers : {
+			'content-type' : 'application/json'
+		},
+		body : JSON.stringify(searchData)
+	})
+	.then(response => response.json())
+	.then(data => {
+		console.log(data);
+		renderSearchResults(data);
+		/*
+		if(data=='ok'){
+			alert('조회되었습니다.');
+			
+		}else{
+			alert('조회된 정보가 없습니다.')
+		}*/
+	})
+	.catch(error=> console.error('Error fetching inventory data:',error));
+})
+
+
+function renderSearchResults(data){
+	const resultsContainer = document.getElementById('results');
+	console.log(resultsContainer);
+	resultsContainer.innerHTML = '';
+	
+	if(data.length ==0){
+		const noResults = document.createElement('tr');
+		noResults.innerHTML = `<td colspan="7"> 검색 결과가 없습니다.</td>`;
+		resultsContainer.appendChild(noResults);
+		return;
+	}
+	
+	data.forEach(item => {
+		const row = document.createElement('tr');
+		row.innerHTML=`
+			<td>${item.location_cd}</td>
+			<td>${item.product_cd}</td>
+			<td>${item.supplier_nm}</td>
+			<td>${item.product_nm}</td>
+			<td>${item.product_qty}</td>
+			<td style="text-align: center;"></td>
+			<td></td>
+			<td style="text-align: center;">미정</td>
+			<td style="text-align: center;">
+			<button class="btn btn-info"
+			th:onclick="event.stopPropagation(); openModal([[${item.wh_warehouse_idx}]])"
+			data-toggle="modal" 
+			data-target="#inventoryModal">관리</button>
+			</td>
+		`;
+		resultsContainer.appendChild(row);
+	})
+}
+
 
 //관리 버튼 클릭 시 모달창 열림
 function openModal(wh_warehouse_idx){

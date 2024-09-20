@@ -164,7 +164,7 @@
 		        <button class="btn btn-primary" id="zone-d-tab" data-toggle="tab" onclick="loadZoneData('D')" aria-controls="zoneD" aria-selected="false">D 구역</button>
 		    </div>
 		    <div>
-		    	<button type="button" class="btn btn-primary btn-location-assign" data-toggle="modal" data-target="#locationModal" >위치 관리</button>
+		    	<button type="button" id="inspectionModal" class="btn btn-primary btn-location-assign" data-toggle="modal" data-target="#locationModal" >위치 관리</button>
 		    </div>	
 		</div>
 
@@ -175,144 +175,144 @@
 	        <div class="wms-rack" data-rack-number="01">
 	            <h4>랙 01</h4>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P1<br>상품명: 로봇 청소기<br>수량: 50">L4-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P2<br>상품명: 세탁기<br>수량: 30">L4-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P3<br>상품명: 에어컨<br>수량: 20">L4-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R01-L4-P1" data-toggle="popover" title="파트 정보"
+	                     >L4 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R01-L4-P2" data-toggle="popover" title="파트 정보"
+	                     >L4 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R01-L4-P3" data-toggle="popover" title="파트 정보"
+	                     >L4 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P1<br>상품명: 냉장고<br>수량: 15">L3-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P2<br>상품명: TV<br>수량: 60">L3-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P3<br>상품명: 선풍기<br>수량: 40">L3-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R01-L3-P1" data-toggle="popover" title="파트 정보"
+	                     >L3 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R01-L3-P2" data-toggle="popover" title="파트 정보"
+	                     >L3 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R01-L3-P3" data-toggle="popover" title="파트 정보"
+	                     >L3 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P1<br>상품명: 냉장고<br>수량: 15">L2-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P2<br>상품명: TV<br>수량: 60">L2-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P3<br>상품명: 선풍기<br>수량: 40">L2-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R01-L2-P1" data-toggle="popover" title="파트 정보"
+	                     >L2 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R01-L2-P2" data-toggle="popover" title="파트 정보"
+	                     >L2 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R01-L2-P3" data-toggle="popover" title="파트 정보"
+	                     >L2 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P1<br>상품명: 냉장고<br>수량: 15">L1-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P2<br>상품명: TV<br>수량: 60">L1-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P3<br>상품명: 선풍기<br>수량: 40">L1-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R01-L1-P1" data-toggle="popover" title="파트 정보"
+	                     >L1 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R01-L1-P2" data-toggle="popover" title="파트 정보"
+	                     >L1 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R01-L1-P3" data-toggle="popover" title="파트 정보"
+	                     >L1 - P3</div>
 	            </div>	            	            
 	        </div>
 	        <!-- 랙 02 -->
 	        <div class="wms-rack" data-rack-number="02">
 	            <h4>랙 02</h4>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P1<br>상품명: 로봇 청소기<br>수량: 50">L4-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P2<br>상품명: 세탁기<br>수량: 30">L4-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P3<br>상품명: 에어컨<br>수량: 20">L4-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R02-L4-P1" data-toggle="popover" title="파트 정보"
+	                     >L4 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R02-L4-P2" data-toggle="popover" title="파트 정보"
+	                     >L4 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R02-L4-P3" data-toggle="popover" title="파트 정보"
+	                     >L4 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P1<br>상품명: 냉장고<br>수량: 15">L3-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P2<br>상품명: TV<br>수량: 60">L3-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P3<br>상품명: 선풍기<br>수량: 40">L3-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R02-L3-P1" data-toggle="popover" title="파트 정보"
+	                     >L3 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R02-L3-P2" data-toggle="popover" title="파트 정보"
+	                     >L3 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R02-L3-P3" data-toggle="popover" title="파트 정보"
+	                     >L3 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P1<br>상품명: 냉장고<br>수량: 15">L2-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P2<br>상품명: TV<br>수량: 60">L2-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P3<br>상품명: 선풍기<br>수량: 40">L2-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R02-L2-P1" data-toggle="popover" title="파트 정보"
+	                     >L2 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R02-L2-P2" data-toggle="popover" title="파트 정보"
+	                     >L2 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R02-L2-P3" data-toggle="popover" title="파트 정보"
+	                     >L2 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P1<br>상품명: 냉장고<br>수량: 15">L1-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P2<br>상품명: TV<br>수량: 60">L1-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P3<br>상품명: 선풍기<br>수량: 40">L1-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R02-L1-P1" data-toggle="popover" title="파트 정보"
+	                     >L1 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R02-L1-P2" data-toggle="popover" title="파트 정보"
+	                     >L1 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R02-L1-P3" data-toggle="popover" title="파트 정보"
+	                     >L1 - P3</div>
 	            </div>	            	            
 	        </div>
 	        <!-- 랙 03 -->
 	        <div class="wms-rack" data-rack-number="03">
 	            <h4>랙 03</h4>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P1<br>상품명: 로봇 청소기<br>수량: 50">L4-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P2<br>상품명: 세탁기<br>수량: 30">L4-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P3<br>상품명: 에어컨<br>수량: 20">L4-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R03-L4-P1" data-toggle="popover" title="파트 정보"
+	                     >L4 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R03-L4-P2" data-toggle="popover" title="파트 정보"
+	                     >L4 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R03-L4-P3" data-toggle="popover" title="파트 정보"
+	                     >L4 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P1<br>상품명: 냉장고<br>수량: 15">L3-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P2<br>상품명: TV<br>수량: 60">L3-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P3<br>상품명: 선풍기<br>수량: 40">L3-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R03-L3-P1" data-toggle="popover" title="파트 정보"
+	                     >L3 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R03-L3-P2" data-toggle="popover" title="파트 정보"
+	                     >L3 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R03-L3-P3" data-toggle="popover" title="파트 정보"
+	                     >L3 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P1<br>상품명: 냉장고<br>수량: 15">L2-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P2<br>상품명: TV<br>수량: 60">L2-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P3<br>상품명: 선풍기<br>수량: 40">L2-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R03-L2-P1" data-toggle="popover" title="파트 정보"
+	                     >L2 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R03-L2-P2" data-toggle="popover" title="파트 정보"
+	                     >L2 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R03-L2-P3" data-toggle="popover" title="파트 정보"
+	                     >L2 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P1<br>상품명: 냉장고<br>수량: 15">L1-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P2<br>상품명: TV<br>수량: 60">L1-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P3<br>상품명: 선풍기<br>수량: 40">L1-P3</div>
-	            </div>	            	            
+	                <div class="wms-part" tabindex="0" data-location="R03-L1-P1" data-toggle="popover" title="파트 정보"
+	                     >L1 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R03-L1-P2" data-toggle="popover" title="파트 정보"
+	                     >L1 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R03-L1-P3" data-toggle="popover" title="파트 정보"
+	                     >L1 - P3</div>
+	            </div>            	            
 	        </div>
 	        <!-- 랙 04 -->
 	        <div class="wms-rack" data-rack-number="04">
 	            <h4>랙 04</h4>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P1<br>상품명: 로봇 청소기<br>수량: 50">L4-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P2<br>상품명: 세탁기<br>수량: 30">L4-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P3<br>상품명: 에어컨<br>수량: 20">L4-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R04-L4-P1" data-toggle="popover" title="파트 정보"
+	                     >L4 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R04-L4-P2" data-toggle="popover" title="파트 정보"
+	                     >L4 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R04-L4-P3" data-toggle="popover" title="파트 정보"
+	                     >L4 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P1<br>상품명: 냉장고<br>수량: 15">L3-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P2<br>상품명: TV<br>수량: 60">L3-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P3<br>상품명: 선풍기<br>수량: 40">L3-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R04-L3-P1" data-toggle="popover" title="파트 정보"
+	                     >L3 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R04-L3-P2" data-toggle="popover" title="파트 정보"
+	                     >L3 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R04-L3-P3" data-toggle="popover" title="파트 정보"
+	                     >L3 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P1<br>상품명: 냉장고<br>수량: 15">L2-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P2<br>상품명: TV<br>수량: 60">L2-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P3<br>상품명: 선풍기<br>수량: 40">L2-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R04-L2-P1" data-toggle="popover" title="파트 정보"
+	                     >L2 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R04-L2-P2" data-toggle="popover" title="파트 정보"
+	                     >L2 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R04-L2-P3" data-toggle="popover" title="파트 정보"
+	                     >L2 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P1<br>상품명: 냉장고<br>수량: 15">L1-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P2<br>상품명: TV<br>수량: 60">L1-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P3<br>상품명: 선풍기<br>수량: 40">L1-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R04-L1-P1" data-toggle="popover" title="파트 정보"
+	                     >L1 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R04-L1-P2" data-toggle="popover" title="파트 정보"
+	                     >L1 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R04-L1-P3" data-toggle="popover" title="파트 정보"
+	                     >L1 - P3</div>
 	            </div>	            	            
 	        </div>
 	    </div>
@@ -321,144 +321,144 @@
 	        <div class="wms-rack">
 	            <h4>랙 05</h4>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P1<br>상품명: 로봇 청소기<br>수량: 50">L4-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P2<br>상품명: 세탁기<br>수량: 30">L4-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P3<br>상품명: 에어컨<br>수량: 20">L4-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R05-L4-P1" data-toggle="popover" title="파트 정보"
+	                     >L4 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R05-L4-P2" data-toggle="popover" title="파트 정보"
+	                     >L4 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R05-L4-P3" data-toggle="popover" title="파트 정보"
+	                     >L4 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P1<br>상품명: 냉장고<br>수량: 15">L3-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P2<br>상품명: TV<br>수량: 60">L3-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P3<br>상품명: 선풍기<br>수량: 40">L3-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R05-L3-P1" data-toggle="popover" title="파트 정보"
+	                     >L3 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R05-L3-P2" data-toggle="popover" title="파트 정보"
+	                     >L3 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R05-L3-P3" data-toggle="popover" title="파트 정보"
+	                     >L3 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P1<br>상품명: 냉장고<br>수량: 15">L2-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P2<br>상품명: TV<br>수량: 60">L2-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P3<br>상품명: 선풍기<br>수량: 40">L2-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R05-L2-P1" data-toggle="popover" title="파트 정보"
+	                     >L2 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R05-L2-P2" data-toggle="popover" title="파트 정보"
+	                     >L2 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R05-L2-P3" data-toggle="popover" title="파트 정보"
+	                     >L2 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P1<br>상품명: 냉장고<br>수량: 15">L1-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P2<br>상품명: TV<br>수량: 60">L1-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P3<br>상품명: 선풍기<br>수량: 40">L1-P3</div>
-	            </div>	            	            
+	                <div class="wms-part" tabindex="0" data-location="R05-L1-P1" data-toggle="popover" title="파트 정보"
+	                     >L1 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R05-L1-P2" data-toggle="popover" title="파트 정보"
+	                     >L1 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R05-L1-P3" data-toggle="popover" title="파트 정보"
+	                     >L1 - P3</div>
+	            </div>            	            
 	        </div>
 	        <!-- 랙 06 -->
 	        <div class="wms-rack">
 	            <h4>랙 06</h4>
-	            <div class="wms-rack-level" data-rack-number="06">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P1<br>상품명: 로봇 청소기<br>수량: 50">L4-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P2<br>상품명: 세탁기<br>수량: 30">L4-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P3<br>상품명: 에어컨<br>수량: 20">L4-P3</div>
+	            <div class="wms-rack-level">
+	                <div class="wms-part" tabindex="0" data-location="R06-L4-P1" data-toggle="popover" title="파트 정보"
+	                     >L4 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R06-L4-P2" data-toggle="popover" title="파트 정보"
+	                     >L4 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R06-L4-P3" data-toggle="popover" title="파트 정보"
+	                     >L4 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P1<br>상품명: 냉장고<br>수량: 15">L3-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P2<br>상품명: TV<br>수량: 60">L3-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P3<br>상품명: 선풍기<br>수량: 40">L3-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R06-L3-P1" data-toggle="popover" title="파트 정보"
+	                     >L3 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R06-L3-P2" data-toggle="popover" title="파트 정보"
+	                     >L3 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R06-L3-P3" data-toggle="popover" title="파트 정보"
+	                     >L3 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P1<br>상품명: 냉장고<br>수량: 15">L2-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P2<br>상품명: TV<br>수량: 60">L2-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P3<br>상품명: 선풍기<br>수량: 40">L2-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R06-L2-P1" data-toggle="popover" title="파트 정보"
+	                     >L2 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R06-L2-P2" data-toggle="popover" title="파트 정보"
+	                     >L2 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R06-L2-P3" data-toggle="popover" title="파트 정보"
+	                     >L2 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P1<br>상품명: 냉장고<br>수량: 15">L1-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P2<br>상품명: TV<br>수량: 60">L1-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P3<br>상품명: 선풍기<br>수량: 40">L1-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R06-L1-P1" data-toggle="popover" title="파트 정보"
+	                     >L1 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R06-L1-P2" data-toggle="popover" title="파트 정보"
+	                     >L1 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R06-L1-P3" data-toggle="popover" title="파트 정보"
+	                     >L1 - P3</div>
 	            </div>		            	            
 	        </div>
 	        <!-- 랙 07 -->
 	        <div class="wms-rack" data-rack-number="07">
 	            <h4>랙 07</h4>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P1<br>상품명: 로봇 청소기<br>수량: 50">L4-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P2<br>상품명: 세탁기<br>수량: 30">L4-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P3<br>상품명: 에어컨<br>수량: 20">L4-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R07-L4-P1" data-toggle="popover" title="파트 정보"
+	                     >L4 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R07-L4-P2" data-toggle="popover" title="파트 정보"
+	                     >L4 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R07-L4-P3" data-toggle="popover" title="파트 정보"
+	                     >L4 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P1<br>상품명: 냉장고<br>수량: 15">L3-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P2<br>상품명: TV<br>수량: 60">L3-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P3<br>상품명: 선풍기<br>수량: 40">L3-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R07-L3-P1" data-toggle="popover" title="파트 정보"
+	                     >L3 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R07-L3-P2" data-toggle="popover" title="파트 정보"
+	                     >L3 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R07-L3-P3" data-toggle="popover" title="파트 정보"
+	                     >L3 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P1<br>상품명: 냉장고<br>수량: 15">L2-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P2<br>상품명: TV<br>수량: 60">L2-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P3<br>상품명: 선풍기<br>수량: 40">L2-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R07-L2-P1" data-toggle="popover" title="파트 정보"
+	                     >L2 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R07-L2-P2" data-toggle="popover" title="파트 정보"
+	                     >L2 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R07-L2-P3" data-toggle="popover" title="파트 정보"
+	                     >L2 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P1<br>상품명: 냉장고<br>수량: 15">L1-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P2<br>상품명: TV<br>수량: 60">L1-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P3<br>상품명: 선풍기<br>수량: 40">L1-P3</div>
-	            </div>		            	            
+	                <div class="wms-part" tabindex="0" data-location="R07-L1-P1" data-toggle="popover" title="파트 정보"
+	                     >L1 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R07-L1-P2" data-toggle="popover" title="파트 정보"
+	                     >L1 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R07-L1-P3" data-toggle="popover" title="파트 정보"
+	                     >L1 - P3</div>
+	            </div>	            	            
 	        </div>
 	        <!-- 랙 08 -->
 	        <div class="wms-rack" data-rack-number="08">
 	            <h4>랙 08</h4>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P1<br>상품명: 로봇 청소기<br>수량: 50">L4-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P2<br>상품명: 세탁기<br>수량: 30">L4-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L4-P3<br>상품명: 에어컨<br>수량: 20">L4-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R08-L4-P1" data-toggle="popover" title="파트 정보"
+	                     >L4 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R08-L4-P2" data-toggle="popover" title="파트 정보"
+	                     >L4 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R08-L4-P3" data-toggle="popover" title="파트 정보"
+	                     >L4 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P1<br>상품명: 냉장고<br>수량: 15">L3-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P2<br>상품명: TV<br>수량: 60">L3-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L3-P3<br>상품명: 선풍기<br>수량: 40">L3-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R08-L3-P1" data-toggle="popover" title="파트 정보"
+	                     >L3 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R08-L3-P2" data-toggle="popover" title="파트 정보"
+	                     >L3 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R08-L3-P3" data-toggle="popover" title="파트 정보"
+	                     >L3 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P1<br>상품명: 냉장고<br>수량: 15">L2-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P2<br>상품명: TV<br>수량: 60">L2-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L2-P3<br>상품명: 선풍기<br>수량: 40">L2-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R08-L2-P1" data-toggle="popover" title="파트 정보"
+	                     >L2 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R08-L2-P2" data-toggle="popover" title="파트 정보"
+	                     >L2 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R08-L2-P3" data-toggle="popover" title="파트 정보"
+	                     >L2 - P3</div>
 	            </div>
 	            <div class="wms-rack-level">
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P1<br>상품명: 냉장고<br>수량: 15">L1-P1</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P2<br>상품명: TV<br>수량: 60">L1-P2</div>
-	                <div class="wms-part" tabindex="0" data-toggle="popover" title="파트 정보"
-	                     data-content="위치: L1-P3<br>상품명: 선풍기<br>수량: 40">L1-P3</div>
+	                <div class="wms-part" tabindex="0" data-location="R08-L1-P1" data-toggle="popover" title="파트 정보"
+	                     >L1 - P1</div>
+	                <div class="wms-part" tabindex="0" data-location="R08-L1-P2" data-toggle="popover" title="파트 정보"
+	                     >L1 - P2</div>
+	                <div class="wms-part" tabindex="0" data-location="R08-L1-P3" data-toggle="popover" title="파트 정보"
+	                     >L1 - P3</div>
 	            </div>		            	            
 	        </div>	        
 	     </div>   	        
@@ -470,17 +470,16 @@
 			</div>
 		</footer>
 
+</body>
 <!-- Bootstrap JS and jQuery -->
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 	<!-- Javascript -->
 	<script src="/resources/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 	<script src="/resources/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
 	<script src="/resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 	<script src="/resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
 	<script src="/resources/assets/vendor/chartist/js/chartist.min.js"></script>
 	<script src="/resources/assets/scripts/klorofil-common.js"></script>	
-	<script src="/resources/js/inventory/warehouse_grid.js"></script>
-</body>
+	<script src="/resources/js/inventory/warehouse_grid.js?v=1"></script>
 </html>
 
