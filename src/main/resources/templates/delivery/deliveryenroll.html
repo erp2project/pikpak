@@ -97,6 +97,14 @@
 </body>
 <script type="module">
 import {delivery_page_move, delivery_list} from "../resources/js/deliver/deliveryenroll_main.js?v=3";
+
+/* 페이지 처음 로드 */
+document.addEventListener('DOMContentLoaded', function() {
+   new delivery_list().delivery_btn();
+});
+
+
+
 /* 납품등록 배송 버튼 */
 document.querySelectorAll(".deliver_manage").forEach(function(button){
 	button.addEventListener('click', function() {

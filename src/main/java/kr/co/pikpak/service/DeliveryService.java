@@ -25,4 +25,10 @@ public interface DeliveryService {
 	
 	//가입고 등록
 	public int insert_ex_receiving(ex_receiving_dto dto);
+	
+	//가입고 등록 전 로트번호 생성 위해
+	//public Integer find_exrecvdt(String exrecv_dt);
+	
+	//가입고 등록과 동시에 납품등록 상태변화
+	public int deliver_update_nm(String update_nm, String deliver_cd);
 }

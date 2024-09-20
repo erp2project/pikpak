@@ -28,4 +28,10 @@ public interface DeliveryRepo {
 	
 	//배송 확정시 가입고 등록
 	int insert_ex_receiving(ex_receiving_dto dto);
+	
+	//가입고 등록과 동시에 납품등록 상태와 업데이트 담당자 변경
+	int deliver_update_nm(String update_nm, String deliver_cd);
+	
+	//가입고 등록 하기전 등록일자 같은 거 찾기(로트번호 생성 위해)
+	//Integer find_exrecvdt(String exrecv_dt);
 }

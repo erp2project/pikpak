@@ -36,13 +36,21 @@ public class DeliveryController {
 	public String insert_exreceiving(ServletResponse res,
 			@RequestBody ex_receiving_dto dto) {
 		//넘어오는 값 : request_cd, deliver_cd, supplier_cd, product_cd, exreceiving_qty, exreceiving_size, exreceiving_area, make_dt
-		//만들어야하는 값 : exreceiving_cd, exreceiving_st, exreceiving_nm, lot_no
+		//만들어야하는 값 : exreceiving_cd, exreceiving_st, exreceiving_nm
 		//DB에서 들어가는 값 or null 값 : exreceiving_idx, exreceiving_dt, update_dt, update_nm
 		try {
-			
+			this.pw = res.getWriter();
+			int result = delservice.insert_ex_receiving(dto);
+			if(result > 0) {
+				this.pw.print("ok");
+			}
 		}
 		catch(Exception e) {
+			this.pw.print("error");
 			System.out.println(e);
+		}
+		finally {
+			this.pw.close();
 		}
 		
 		return null;
@@ -93,6 +101,7 @@ public class DeliveryController {
 			}	
 		}
 		catch(Exception e) {
+			System.out.println(e);
 			this.pw.print("<script>"
 					+ "alert('데이터베이스 문제로 삭제되지 못하였습니다.');"
 					+ "location.href='./deliveryenroll';"

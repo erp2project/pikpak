@@ -73,9 +73,10 @@
 		<section th:replace="~{inoutbound/recvenroll_main :: main_recvenroll}"></section>
 		
 		<!-- 모달 -->
-		<section th:replace="~{inoutbound/product_search :: product_search_popup}"></section>
+		<section th:replace="~{inoutbound/test_popup :: inventory_popup}"></section>
 		<section th:replace="~{inoutbound/company_search :: company_search_popup}"></section> 
-		<section th:replace="~{inoutbound/add_recvenroll_popup :: add_recvenroll_popup}"></section>
+		<section th:replace="~{inoutbound/decide_recvenroll_popup:: decide_recv_popup}"></section>
+		<section th:replace="~{inoutbound/decide_return_popup:: decide_rt_popup}"></section>
 		<!-- MAIN 끝-->
 		
 		</div>
@@ -99,6 +100,63 @@
 </body>
 <script>
 $(document).ready(function() {
+	
+	//반송 버튼 클릭시
+	$(document).on("click", ".decide_return", function(event) {
+		event.preventDefault();  // 기본 동작 중단
+		/*
+		var product_cd = $(this).data("product-cd");
+		var product_nm = $(this).data("product-nm");
+		var supplier_nm = $(this).data("supplier-nm");
+		var product_qty = $(this).data("product-qty");
+		var add_req = $(this).data("add-req");
+		var hope_dt = $(this).data("hope-dt");
+		var request_idx = $(this).data("request-idx");
+
+		// 입력 필드에 값 설정
+		$("#product_cd_input").val(product_cd);
+		$("#product_nm_input").val(product_nm);
+		$("#supplier_nm_input").val(supplier_nm);
+		$("#product_qty_input").val(product_qty);
+		$("#add_req_input").val(add_req);
+		$("#hope_dt_input").val(hope_dt);
+		$("#request_idx_input").val(request_idx);
+		*/
+		
+		// 모달 보여주기
+		$("#decideReturnModal").modal('show');
+		
+	});
+	
+	//입고 버튼 클릭시
+	// 문서 전체에 대해 이벤트 위임 설정
+	$(document).on("click", ".decide_inbound", function(event) {
+		event.preventDefault();  // 기본 동작 중단
+		/*
+		var product_cd = $(this).data("product-cd");
+		var product_nm = $(this).data("product-nm");
+		var supplier_nm = $(this).data("supplier-nm");
+		var product_qty = $(this).data("product-qty");
+		var add_req = $(this).data("add-req");
+		var hope_dt = $(this).data("hope-dt");
+		var request_idx = $(this).data("request-idx");
+
+		// 입력 필드에 값 설정
+		$("#product_cd_input").val(product_cd);
+		$("#product_nm_input").val(product_nm);
+		$("#supplier_nm_input").val(supplier_nm);
+		$("#product_qty_input").val(product_qty);
+		$("#add_req_input").val(add_req);
+		$("#hope_dt_input").val(hope_dt);
+		$("#request_idx_input").val(request_idx);
+		*/
+		
+		// 모달 보여주기
+		$("#decideRecvModal").modal('show');
+		
+	});
+	
+	
     // 상품코드/상품명 모달 검색 버튼 클릭 시
     $("#pd_search").on("click", function() {
         $("#productModal").modal('show');
@@ -107,7 +165,7 @@ $(document).ready(function() {
     
  	//매입처 회사명 모달 검색 버튼 클릭 시 (새로 추가)
     $("#cp_search").on("click", function() {
-        $("#companyModal").modal('show');
+        $("#inventoryModal").modal('show');
     });
  	
   //등록버튼 클릭 시

@@ -38,11 +38,23 @@ export class inreq_list{
 
 
 export class delivery_list{
+	//상태 가져와서 '배송' 이면 버튼 비활성화
+	delivery_btn(){
+		const current_st = document.querySelectorAll(".current_st"); //상태 컬럼
+		const deliver_manage = document.querySelectorAll(".deliver_manage"); //배송 버튼
+		
+		current_st.forEach(function(st, index) {	
+        	if (st.innerText == "배송") {  // 상태가 '배송'이면
+            	deliver_manage[index].disabled = true;  // 해당 인덱스의 배송 버튼 비활성화
+        	}
+        	
+    	});
+	}
+	
+	
+	
 	//납품등록 관리 버튼 클릭시
 	decide_delivery(deliveryData){
-	
-	//상태는 버튼 비활성화할 때나 필요
-		
 		this.exreceiving_data = {
 			"request_cd" : deliveryData.requestCd,
 			"deliver_cd" : deliveryData.deliverCd,
@@ -64,7 +76,14 @@ export class delivery_list{
 				return result_data.text();
 			})
 			.then(function(result_res){
-				console.log(result_res);
+				//console.log(result_res);
+				if(result_res == "ok"){
+					alert("배송 변경 완료되었습니다.");
+					location.reload();
+				}
+				else{
+					alert("데이터베이스 문제로 변경이 되지 못하였습니다.");
+				}
 			})
 			.catch(function(error){
 				console.log(error);

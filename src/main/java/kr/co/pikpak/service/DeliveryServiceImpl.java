@@ -18,19 +18,71 @@ public class DeliveryServiceImpl implements DeliveryService{
 	@Autowired
 	DeliveryRepo delrepo;
 	
+	/*
+	//가입고 로트번호 생성 위해
+	@Override
+	public Integer find_exrecvdt(String exrecv_dt) {
+		return null;
+	}
+	
+	//등록일자에 따라 뒤에 001,002붙이기 + 오전...오후..?
+		//등록일자 정리
+		String exrecv_dt_sub =  dto.getExreceiving_dt().substring(0, 10);
+		String exrecv_dt = exrecv_dt_sub.replaceAll("-", "");
+		
+		//로트번호 생성
+		String lot_no = dto.getProduct_cd() + "-M" + dto.getMake_dt().replaceAll("-", "") + "-E" + exrecv_dt;
+		
+		
+		dto.setLot_no(lot_no);
+		System.out.println("로트번호: " + lot_no);
+	*/
+	
+	//가입고 동시에 납품등록 업데이트
+	@Override
+	public int deliver_update_nm(String update_nm, String deliver_cd) {
+		int result = delrepo.deliver_update_nm(update_nm, deliver_cd);
+		return result;
+	}
+	
 	//가입고 등록
 	@Override
 	public int insert_ex_receiving(ex_receiving_dto dto) {
-		//등록일자에 따라 뒤에 001,002붙이기 + 오전...오후..?
-		/*
-		//등록일자 정리
-		//
-		//로트번호 생성
-		String lot_no = dto.getProduct_cd() + "-" + dto.getMake_dt().replaceAll("-", "") + "-" + dto.getExreceiving_dt().replaceAll("-", null) 
-		*/
+		//랜덤 고유번호 넣기
+		dto.setExreceiving_cd(this.make_exreceiving_code());
+		
+		//사용자 이름 세션에서 가져온다고 가정
+		String exrecv_name = "이순신";
+		dto.setExreceiving_nm(exrecv_name);
+		
+		//상태 기본 데이터
+		dto.setExreceiving_st("대기");
+		
+		int final_result = 0;
 		
 		int result = delrepo.insert_ex_receiving(dto);
-		return result;
+		
+		//가입고 insert 성공시
+		if(result > 0) {
+			try {
+				int update_delienroll = this.deliver_update_nm(exrecv_name, dto.getDeliver_cd());
+				//납품등록 업데이트도 성공시
+				
+				if(update_delienroll > 0) {
+					final_result = result; //성공
+				}
+				else {
+					final_result = -1; //업데이트 실패
+				}
+			}
+			catch(Exception e) {
+				System.out.println("납품등록 업데이트: " + e);
+			}
+		}
+		else {
+			final_result = -1; //등록 실패
+		}
+		return final_result;
 	}
 	
 	
@@ -94,7 +146,7 @@ public class DeliveryServiceImpl implements DeliveryService{
 	String randnum = "";
 			
 	while(w < 4) {
-		int pc = (int)(Math.ceil(Math.random()*10));
+		int pc = (int)(Math.ceil(Math.random()*9));
 		randnum += pc;
 		w++;
 	}
@@ -114,7 +166,7 @@ public class DeliveryServiceImpl implements DeliveryService{
 		String randnum = "";
 				
 		while(w < 4) {
-			int pc = (int)(Math.ceil(Math.random()*10));
+			int pc = (int)(Math.ceil(Math.random()*9));
 			randnum += pc;
 			w++;
 		}

@@ -127,7 +127,7 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 		String randnum = "";
 		
 		while(w < 4) {
-			int pc = (int)(Math.ceil(Math.random()*10));
+			int pc = (int)(Math.ceil(Math.random()*9));
 			randnum += pc;
 			w++;
 		}

@@ -102,7 +102,7 @@
 										<th style="text-align: center; width: 8%;">등록 일자</th>
 										<th style="text-align: center; width: 7%;">상태</th>
 										<th style="text-align: center; width: 10%;">업데이트 일자</th>
-										<th style="text-align: center; width: 7%;">관리자</th>
+										<th style="text-align: center; width: 7%;">등록 관리자</th>
 										<th style="text-align: center; width: 12%;">업데이트 관리자</th>
 										<th style="text-align: center; width: 12%;">관리</th>
 									</tr>
@@ -133,10 +133,10 @@
 										th:text="${delist.getMake_dt()}"></td>
 										<td style="text-align: center; width: 8%;"
 										th:text="${delist.getDeliver_dt().substring(0,10)}"></td>
-										<td style="text-align: center; width: 7%;"
+										<td style="text-align: center; width: 7%;" class="current_st"
 										th:text="${delist.getDeliver_st()}"></td>
 										<td style="text-align: center; width: 10%;"
-										th:text="${delist.getUpdate_dt()}"></td>
+										th:text="${delist.getUpdate_dt() != null ? delist.getUpdate_dt().substring(0,10) : ''}"></td>
 										<td style="text-align: center; width: 7%;"
 										th:text="${delist.getDeliver_nm()}"></td>
 										<td style="text-align: center; width: 12%;"
