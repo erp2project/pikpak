@@ -2,6 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.pikpak.repo.InoutBoundRepo">
 
+<!-- 주문현황 보여주기 -->
+<select id="select_order_enroll" resultType="kr.co.pikpak.dto.order_enroll_dto_lhwtemp">
+select * from order_enroll where process_st='승인' order by order_idx desc
+</select>
+
+
+<!--가입고 반송 등록 -->
+<insert id="insert_deliver_return">
+insert into deliver_return values ('0',#{deliver_cd},#{exreceiving_cd},#{d_return_cd}, #{d_return_qty}, #{d_return_type},#{d_return_dt},
+now(),#{operator_id})
+</insert>
+
+<!-- 가입고 테이블 select -->
+<select id="select_ex_receiving" resultType="kr.co.pikpak.dto.ex_receiving_joined_dto">
+select a.exreceiving_idx, a.deliver_cd, a.exreceiving_cd, b.supplier_cd, b.supplier_nm, a.product_cd, c.product_nm, a.exreceiving_qty,
+a.exreceiving_size, a.exreceiving_area, a.exreceiving_dt, a.exreceiving_st, a.update_id
+from ex_receiving as a join supplier_info as b join product as c where a.supplier_cd=b.supplier_cd
+and a.product_cd=c.product_cd order by a.exreceiving_idx desc
+</select>
+
+
 <!-- 입고요청의 상품명 모달 : 상품 리스트 페이징 + 검색 -->
 <select id="select_product_limit" resultType="kr.co.pikpak.dto.product_dto_lhwtemp"  parameterType="Map">
 select * from product where product_cd like concat ('%',#{pd_cd},'%') and
@@ -28,29 +49,51 @@ select count(*) as total from supplier_info where supplier_cd like concat ('%',#
 supplier_nm like concat ('%',#{comp_nm},'%')
 </select>
 
+<!-- operator_id로 operator_nm 검색 (모든 리스트 출력용) -->
+<select id="search_one_id" resultType="String">
+select operator_nm from login_operator where operator_id=#{operator_id};
+</select>
+
+<!-- operator_nm으로 operaotr_id 검색(조회용) -->
+<select id="search_operator_nm" resultType="String">
+select operator_id, operator_nm from login_operator where operator_nm=#{operator_nm};
+</select>
+
 <!-- 입고요청 리스트 조회 -->
 <select id="select_inreq_search" resultType="kr.co.pikpak.dto.input_request_dto" parameterType="Map">
-  select * from input_request where 1=1
+   SELECT
+    a.*,
+    b.operator_nm AS operator_nm,
+    c.operator_nm AS update_nm
+  FROM
+    input_request a
+    LEFT JOIN login_operator b ON a.operator_id = b.operator_id
+    LEFT JOIN login_operator c ON a.update_id = c.operator_id
+  WHERE 1=1
   <if test="supplier_cd != null and supplier_cd != ''">
-    and supplier_cd = #{supplier_cd}
+    AND a.supplier_cd = #{supplier_cd}
   </if>
   <if test="product_cd != null and product_cd != ''">
-    and product_cd = #{product_cd}
+    AND a.product_cd = #{product_cd}
   </if>
   <if test="request_st != null and request_st != ''">
-    and request_st = #{request_st}
+    AND a.request_st = #{request_st}
   </if>
-  <if test="operator_nm != null and operator_nm != ''">
-    and operator_nm = #{operator_nm}
+  <if test="operator_id_list != null and operator_id_list.size() > 0">
+    AND a.operator_id IN 
+    <foreach item="id" collection="operator_id_list" open="(" separator="," close=")">
+      #{id}
+    </foreach>
   </if>
   <if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
-    and request_dt between #{start_date} and #{end_date}
+    AND a.request_dt BETWEEN #{start_date} AND #{end_date}
   </if>
+  ORDER BY a.request_idx DESC
 </select>
 
 <!-- 입고요청 수정하기 -->
 <update id="update_inreq" parameterType="Map">
-update input_request set product_qty=#{product_qty}, add_req=#{add_req}, hope_dt=#{hope_dt}, update_nm=#{update_nm} where request_idx=#{request_idx}
+update input_request set product_qty=#{product_qty}, add_req=#{add_req}, hope_dt=#{hope_dt}, update_id=#{update_id} where request_idx=#{request_idx}
 </update>
 
 <!-- 입고요청 삭제하기 -->
@@ -60,7 +103,18 @@ delete from input_request where FIND_IN_SET(request_idx,#{request_idx})
 
 <!-- 입고요청 리스트 불러오기 -->
 <select id="select_inreq" resultType="kr.co.pikpak.dto.input_request_dto">
-select * from input_request order by request_idx desc
+SELECT 
+    a.*,
+    b.operator_nm AS operator_nm,
+    c.operator_nm AS update_nm
+FROM 
+    input_request AS a
+JOIN 
+    login_operator AS b ON a.operator_id = b.operator_id
+LEFT JOIN 
+    login_operator AS c ON a.update_id = c.operator_id
+ORDER BY 
+    a.request_idx DESC
 </select>
 
 <!-- 입고요청의 등록모달 : 상품정보 가져오기(join사용) -->
@@ -72,7 +126,7 @@ from product as a join supplier_info as b where a.supplier_cd=b.supplier_cd
 <!-- 입고요청 등록하기 -->
 <insert id="input_req_insert">
 insert into input_request values ('0',#{request_cd},#{supplier_cd},#{supplier_nm},#{product_cd},#{product_nm},
-#{product_qty},#{operator_id},#{operator_nm},#{request_st},#{add_req},#{hope_dt},now(),#{update_dt},#{update_nm})
+#{product_qty},#{operator_id},#{request_st},#{add_req},#{hope_dt},now(),#{update_dt},#{update_id})
 </insert>
 
 <!-- 데이터베이스 서버시간 가져오기 -->

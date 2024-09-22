@@ -1,8 +1,10 @@
 package kr.co.pikpak.service;
 
 import java.util.List;
+import java.util.Map;
 
 import kr.co.pikpak.dto.deliver_enroll_dto;
+import kr.co.pikpak.dto.deliver_return_joined_dto;
 import kr.co.pikpak.dto.ex_receiving_dto;
 import kr.co.pikpak.dto.input_request_dto;
 import kr.co.pikpak.dto.input_request_state_dto;
@@ -31,4 +33,13 @@ public interface DeliveryService {
 	
 	//가입고 등록과 동시에 납품등록 상태변화
 	public int deliver_update_nm(String update_nm, String deliver_cd);
+	
+	//납품등록 모두 완료
+	public List<String> select_delivered_finish();
+	
+	//입고요청 '완료' 변경
+	public int update_finished_inreq(String request_cd);
+	
+	//반송현황
+	public List<deliver_return_joined_dto> select_return_joined(String supplier_cd);
 }

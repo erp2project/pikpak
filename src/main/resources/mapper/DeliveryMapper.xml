@@ -2,6 +2,51 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.pikpak.repo.DeliveryRepo">
 
+<!-- 납품반송현황 join해서 가져오기 -->
+<select id="select_return_joined" resultType="kr.co.pikpak.dto.deliver_return_joined_dto">
+SELECT 
+    a.d_return_idx,
+    b.deliver_cd, 
+    b.supplier_cd, 
+    b.product_cd, 
+    c.product_nm, 
+    b.exreceiving_qty, 
+    a.d_return_qty, 
+    a.d_return_type, 
+    b.exreceiving_dt,
+    a.d_return_dt 
+FROM 
+    deliver_return AS a 
+JOIN 
+    ex_receiving AS b ON a.exreceiving_cd = b.exreceiving_cd 
+JOIN 
+    product AS c ON b.product_cd = c.product_cd 
+JOIN 
+    supplier_info AS d ON b.supplier_cd = d.supplier_cd 
+WHERE 
+    b.supplier_cd = #{supplier_cd} 
+ORDER BY 
+    a.d_return_idx DESC;
+</select>
+
+
+<!-- 납품 모두 완료된 입고요청 상태 '완료'변경 -->
+<update id="update_finished_inreq">
+update input_request set request_st='완료' where request_cd=#{request_cd}
+</update>
+
+<!-- 입고요청에 대한 납품이 배송까지 완료된 사항에 대해 request_cd 가져오기 -->
+<select id="select_delivered_finish" resultType="String">
+    SELECT 
+        a.request_cd
+    FROM input_request_state AS a
+    JOIN deliver_enroll AS b ON a.request_cd = b.request_cd
+    WHERE a.remaining_qty <![CDATA[<=]]> 0
+    GROUP BY a.request_cd
+    HAVING MIN(b.deliver_st) = '배송' AND MAX(b.deliver_st) = '배송'
+</select>
+
+
 <!-- 가입고 insert하기 전 로트번호 등록일자 같은 데이터 있는지 확인
 <select id="find_exrecvdt" resultType="Integer">
 select count(*) as lot_ea from ex_receiving where lot_no like concat ('%',#{exrecv_dt},'%')
@@ -10,13 +55,13 @@ select count(*) as lot_ea from ex_receiving where lot_no like concat ('%',#{exre
  
  <!-- 가입고 등록과 동시에 현재 배송누른 담당자 업데이트를 납품등록에 함 -->
  <update id="deliver_update_nm">
- update deliver_enroll set deliver_st='배송', update_nm=#{update_nm} where deliver_cd=#{deliver_cd}
+ update deliver_enroll set deliver_st='배송', update_id=#{update_id} where deliver_cd=#{deliver_cd}
  </update>
  
 <!-- 배송 확정 시 가입고 등록 -->
 <insert id="insert_ex_receiving">
 insert into ex_receiving values ('0',#{request_cd},#{deliver_cd},#{supplier_cd},#{exreceiving_cd},#{product_cd},
-#{exreceiving_qty},#{exreceiving_st},#{exreceiving_area},#{exreceiving_size},#{make_dt},now(),#{exreceiving_nm},#{update_dt},#{update_nm}) 
+#{exreceiving_qty},#{exreceiving_st},#{exreceiving_area},#{exreceiving_size},#{make_dt},now(),#{exreceiving_nm},#{update_dt}) 
 </insert>
 
 <!-- 입고요청 거절 시 상태변경 -->
@@ -38,8 +83,8 @@ select * from deliver_enroll order by deliver_idx desc
 <!-- 납품등록 -->
 <insert id="insert_deliver_enroll">
 insert into deliver_enroll values ('0',#{request_cd},#{supplier_cd},#{deliver_cd},#{product_cd},#{product_nm},
-#{deliver_qty},#{deliver_st},#{make_dt},#{expect_dt},#{deliver_size},#{deliver_area},#{deliver_nm},#{update_nm},
-now(),#{update_dt})
+#{deliver_qty},#{deliver_st},#{make_dt},#{expect_dt},#{deliver_size},#{deliver_area},#{operator_id},
+#{update_id},now(),#{update_dt})
 </insert>
 
 <!-- 입고요청 현황 (뷰테이블에서 불러온 것) -->

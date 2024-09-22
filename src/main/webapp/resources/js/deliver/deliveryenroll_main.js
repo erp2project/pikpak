@@ -4,7 +4,7 @@ export class inreq_list{
 		this.idx = "request_idx=" + inreq_idx;
 		
 		if(product_qty != remain_qty){
-			alert("'진행' 상태의 요청은 거절하실 수 없습니다.");
+			alert("'대기' 상태의 요청만 거절 가능합니다.");
 		}
 		else if(request_st == "거절"){
 			alert('이미 거절된 요청입니다.');
@@ -50,8 +50,6 @@ export class delivery_list{
         	
     	});
 	}
-	
-	
 	
 	//납품등록 관리 버튼 클릭시
 	decide_delivery(deliveryData){
@@ -195,6 +193,10 @@ export class delivery_modal{
 }
 
 export class delivery_page_move {
+	go_delivery_return() {
+		location.href = "./returnstate";
+	}
+	
 	go_delivery_enroll() {
 		location.href = "./deliveryenroll";
 	}

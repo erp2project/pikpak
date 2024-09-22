@@ -6,7 +6,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.co.pikpak.dto.deliver_return_dto;
+import kr.co.pikpak.dto.ex_receiving_dto;
+import kr.co.pikpak.dto.ex_receiving_joined_dto;
 import kr.co.pikpak.dto.input_request_dto;
+import kr.co.pikpak.dto.order_enroll_dto_lhwtemp;
 import kr.co.pikpak.dto.product_dto_lhwtemp;
 import kr.co.pikpak.dto.supplier_info_dto_lhwtemp;
 import kr.co.pikpak.repo.InoutBoundRepo;
@@ -16,6 +20,38 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	
 	@Autowired
 	InoutBoundRepo iorepo;
+	
+	//출고등록에서 주문현황 보여주기
+	@Override
+	public List<order_enroll_dto_lhwtemp> select_order_enroll() {
+		List<order_enroll_dto_lhwtemp> orderlist = iorepo.select_order_enroll();
+		return orderlist;
+	}
+	
+	//가입고 반송
+	@Override
+	public int insert_deliver_return(deliver_return_dto dto) {
+		//고유번호 랜덤 생성
+		dto.setD_return_cd(this.make_returncode());
+		
+		//사용자 세션
+		dto.setOperator_id("kang");
+		
+		//여기서 상태업데이트도 해야해(가입고 테이블 리스트) => 이건 트리거 걸겠음 그냥
+		
+		int result = iorepo.insert_deliver_return(dto);
+		return result;
+	}
+	
+	
+	
+	//가입고 리스트
+	@Override
+	public List<ex_receiving_joined_dto> select_ex_receiving() {
+		List<ex_receiving_joined_dto> exrecv_list = iorepo.select_ex_receiving();
+		return exrecv_list;
+	}
+	
 	
 	//입고요청 조회
 	@Override
@@ -95,8 +131,8 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	@Override
 	public int input_req_insert(input_request_dto dto) {
 		dto.setRequest_cd(this.make_inreqcode());
-		dto.setOperator_id("kim");
-		dto.setOperator_nm("김유신");
+		dto.setOperator_id("kang1234");
+		
 		dto.setRequest_st("대기"); //dto에 값이 없으면 오류남
 		int result = iorepo.input_req_insert(dto);
 		return result;
@@ -115,6 +151,20 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	public String get_time() {
 		String time = iorepo.get_time();
 		return time;
+	}
+	
+	//운영자 이름 검색하기 => 조회용
+	@Override
+	public List<String> search_operator_nm(String operator_nm) {
+		List<String> op_id = iorepo.search_operator_nm(operator_nm);
+		return op_id;
+	}
+	
+	//운영자 이름 검색하기 => 출력용
+	@Override
+	public String search_one_id(String operator_id) {
+		String op_name = iorepo.search_one_id(operator_id);
+		return op_name;
 	}
 	
 	//입고요청 데이터 등록시 입고요청코드 랜덤생성
@@ -137,6 +187,26 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 		return code;
 	}
 	
-	//입고요청 데이터 등록시 사용자 정보 가져오기
+	//반송 데이터 등록시 입고요청코드 랜덤생성
+		public String make_returncode() {
+			//서버 시간
+			String server_time = this.get_time();
+		
+			//랜덤숫자 4개 생성
+			int w = 0;
+			String randnum = "";
+			
+			while(w < 4) {
+				int pc = (int)(Math.ceil(Math.random()*9));
+				randnum += pc;
+				w++;
+			}
+			
+			String code = "DR "+ server_time + "-" + randnum;
+			
+			return code;
+		}
+	
+	
 	
 }

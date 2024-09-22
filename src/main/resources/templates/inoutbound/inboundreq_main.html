@@ -79,7 +79,7 @@
 											<option value="승인">진행</option>
 											<option value="완료">완료</option>
 									</select></td>
-									<td style="width: 10%; height: 34px; line-height: 34px;">관리자</td>
+									<td style="width: 10%; height: 34px; line-height: 34px;">등록 관리자</td>
 									<td style="width: 15%; line-height: 34px;">
 										<div style="display: flex; align-items: center;">
 											<input type="text" class="form-control" style="width: 40%;" id="search_operator">
@@ -148,9 +148,9 @@
 										<td style="text-align: center; width: 9%;"
 										th:text="${inputreq.getUpdate_dt() != null ? inputreq.getUpdate_dt().substring(0,10) : ''}"></td>
 										<td style="text-align: center; width: 7%;"
-										th:text="${inputreq.getOperator_nm()}"></td>
+										th:text="${inputreq.getOperator_nm() + '(' + inputreq.getOperator_id() + ')'}"></td>
 										<td style="text-align: center; width: 7%;"
-										th:text="${inputreq.getUpdate_nm()}"></td>
+										th:text="${inputreq.getUpdate_id() != null ? inputreq.getUpdate_nm() + '(' + inputreq.getUpdate_id() + ')' : ''}"></td>
 										<td style="text-align: center; width: 12%;">
 										<button class="btn btn-primary inreq_manage" 
 										th:data-product-cd="${inputreq.getProduct_cd()}"

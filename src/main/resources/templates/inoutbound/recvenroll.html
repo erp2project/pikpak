@@ -104,24 +104,26 @@ $(document).ready(function() {
 	//반송 버튼 클릭시
 	$(document).on("click", ".decide_return", function(event) {
 		event.preventDefault();  // 기본 동작 중단
-		/*
+		
 		var product_cd = $(this).data("product-cd");
 		var product_nm = $(this).data("product-nm");
 		var supplier_nm = $(this).data("supplier-nm");
+		var supplier_cd = $(this).data("supplier-cd");
 		var product_qty = $(this).data("product-qty");
-		var add_req = $(this).data("add-req");
-		var hope_dt = $(this).data("hope-dt");
-		var request_idx = $(this).data("request-idx");
-
+		var exrecv_area = $(this).data("exrecv-area");
+		var exrecv_dt = $(this).data("exrecv-dt");
+		var deliver_cd = $(this).data("deliver-cd");
+		var exrecv_cd = $(this).data("exrecv-cd");
+		
 		// 입력 필드에 값 설정
-		$("#product_cd_input").val(product_cd);
-		$("#product_nm_input").val(product_nm);
-		$("#supplier_nm_input").val(supplier_nm);
-		$("#product_qty_input").val(product_qty);
-		$("#add_req_input").val(add_req);
-		$("#hope_dt_input").val(hope_dt);
-		$("#request_idx_input").val(request_idx);
-		*/
+		$("#product_cd_return").val(product_cd);
+		$("#product_nm_return").val(product_nm);
+		$("#supplier_nm_return").val(supplier_nm);
+		$("#product_qty_return").val(product_qty);
+		$("#exrecv_area_return").val(exrecv_area);
+		$("#exrecv_dt_return").val(exrecv_dt.substring(0,10));
+		$("#deliver_cd_return").val(deliver_cd);
+		$("#exrecv_cd_return").val(exrecv_cd);
 		
 		// 모달 보여주기
 		$("#decideReturnModal").modal('show');
@@ -132,24 +134,29 @@ $(document).ready(function() {
 	// 문서 전체에 대해 이벤트 위임 설정
 	$(document).on("click", ".decide_inbound", function(event) {
 		event.preventDefault();  // 기본 동작 중단
-		/*
+		
 		var product_cd = $(this).data("product-cd");
 		var product_nm = $(this).data("product-nm");
 		var supplier_nm = $(this).data("supplier-nm");
+		var supplier_cd = $(this).data("supplier-cd");
 		var product_qty = $(this).data("product-qty");
-		var add_req = $(this).data("add-req");
-		var hope_dt = $(this).data("hope-dt");
-		var request_idx = $(this).data("request-idx");
-
+		var exrecv_area = $(this).data("exrecv-area");
+		var exrecv_dt = $(this).data("exrecv-dt");
+		var deliver_cd = $(this).data("deliver-cd");
+		var exrecv_cd = $(this).data("exrecv-cd");
+		var exrecv_size = $(this).data("exrecv-size");
+		
 		// 입력 필드에 값 설정
-		$("#product_cd_input").val(product_cd);
-		$("#product_nm_input").val(product_nm);
-		$("#supplier_nm_input").val(supplier_nm);
-		$("#product_qty_input").val(product_qty);
-		$("#add_req_input").val(add_req);
-		$("#hope_dt_input").val(hope_dt);
-		$("#request_idx_input").val(request_idx);
-		*/
+		$("#product_cd_recv").val(product_cd);
+		$("#product_nm_recv").val(product_nm);
+		$("#supplier_cd_recv").val(supplier_cd);
+		$("#supplier_nm_recv").val(supplier_nm);
+		$("#product_qty_recv").val(product_qty);
+		$("#exrecv_area").val(exrecv_area);
+		$("#exrecv_dt").val(exrecv_dt.substring(0,10));
+		$("#deliver_cd_recv").val(deliver_cd);
+		$("#exrecv_cd").val(exrecv_cd);
+		$("#exrecv_size").val(exrecv_size);
 		
 		// 모달 보여주기
 		$("#decideRecvModal").modal('show');
@@ -175,7 +182,14 @@ $(document).ready(function() {
 });
 </script>
  <script type="module">
-    import {page_move} from "../resources/js/inoutbound/inboundreq_main.js?v=2";
+    import {page_move, receiving_enroll} from "../resources/js/inoutbound/inboundreq_main.js?v=3";
+	
+	//가입고 리스트 반송등록
+	document.querySelector("#return_enroll").addEventListener("click",function(){
+		new receiving_enroll().go_return_enroll();
+	});
+	
+
 	//입고요청 이동
 	document.querySelector("#go_inoutreq").addEventListener("click",function(){
 		new page_move().go_inboundreq();

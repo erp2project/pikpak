@@ -24,62 +24,78 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<form id="frm_inreq_modal">
+					<form id="frm_deliver_return">
 						<!-- 검색 바 -->
 						<div class="form-group">
+							<span>※가입고 정보</span>
 							<table class="table table-bordered" style="margin-top: 20px;">
 								<tbody>
 									<tr>
 										<td style="width: 30%;">상품코드</td>
 										<td>
 											<input type="text" readonly="readonly"
-											id="product_cd_input">
-										
+											id="product_cd_return">
+											<input type="hidden" id="deliver_cd_return" name="deliver_cd">
+											<input type="hidden" id="exrecv_cd_return" name="exreceiving_cd">
 										</td>
 									</tr>
 									<tr>
 										<td style="width: 30%;">상품명</td>
 										<td><input type="text" readonly="readonly"
-											id="product_nm_input"></td>
+											id="product_nm_return"></td>
 									</tr>
 									<tr>
 										<td style="width: 30%;">회사명</td>
 										<td><input type="text" readonly="readonly"
-											id="supplier_nm_input"></td>
+											id="supplier_nm_return"></td>
 									</tr>
 									<tr>
 										<td style="width: 30%;">상품수량</td>
 										<td><input type="text" maxlength="3" 
-										id="product_qty_input" readonly="readonly" name="product_qty">
-										<input type="hidden" name="request_idx" id="request_idx_input"></td>
+										id="product_qty_return" readonly="readonly" >
+										</td>
 									</tr>
 									<tr>
 										<td style="width: 30%;">가입고 위치</td>
 										<td><input type="text" maxlength="3" 
-										id="product_qty_input" readonly="readonly" name="product_qty">
-										<input type="hidden" name="request_idx" id="request_idx_input"></td>
+										id="exrecv_area_return" readonly="readonly" name="product_qty">
+										<input type="hidden"  id="request_idx_input"></td>
 									</tr>
 									<tr>
 										<td style="width: 30%;">가입고 일자</td>
 										<td><div style="display: flex; align-items: center;">
 												<input type="date" class="form-control" style="width: 40%;"
-												id="hope_dt_input" name="hope_dt" readonly="readonly">&nbsp;&nbsp;
+												id="exrecv_dt_return" readonly="readonly">&nbsp;&nbsp;
+										</div></td>
+									</tr>
+			
+								</tbody>
+							</table>
+							<div style="height: 1px; background-color: black; margin-top: 25px; margin-bottom: 20px;"></div> 
+							<span>※반송 등록</span>
+							<table class="table table-bordered" style="margin-top: 20px;">
+								<tbody>
+									<tr>
+										<td style="width: 30%;">반송 수량</td>
+										<td><input type="text" name="d_return_qty"></input></td>
+									</tr>
+									<tr>
+										<td style="width: 30%;">반송 일자</td>
+										<td><div style="display: flex; align-items: center;">
+												<input type="date" class="form-control" style="width: 40%;"
+												name="d_return_dt">&nbsp;&nbsp;
 										</div></td>
 									</tr>
 									<tr>
 										<td style="width: 30%;">반송 사유</td>
-										<td><textarea rows="3" cols="60" maxlength="30"
-												placeholder="30자까지 입력 가능합니다."
-												name="add_req"></textarea></td>
+										<td><textarea rows="3" cols="50" maxlength="255" name="d_return_type"></textarea></td>
 									</tr>
-
-
 								</tbody>
 							</table>
 						</div>
 						<nav style="text-align: center; padding: 15px;">
 							<span>
-								<button type="button" class="btn btn-dark" id="req_enroll">등록</button> 
+								<button type="button" class="btn btn-dark" id="return_enroll">등록</button> 
 							</span>
 
 						</nav>

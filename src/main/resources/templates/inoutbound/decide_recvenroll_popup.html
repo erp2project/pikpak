@@ -27,70 +27,78 @@
 					<form id="frm_decide_recv">
 						<!-- 검색 바 -->
 						<div class="form-group">
+							<span>※가입고 정보</span>
 							<table class="table table-bordered" style="margin-top: 20px;">
 								<tbody>
 									<tr>
 										<td style="width: 30%;">상품코드</td>
 										<td>
 											<input type="text" readonly="readonly"
-											id="product_cd_input">
-										
+											id="product_cd_recv" name="product_cd">
+											<input type="hidden" id="deliver_cd_recv" name="deliver_cd">
+											<input type="hidden" id="exrecv_cd" name="exreceiving_cd">
 										</td>
 									</tr>
 									<tr>
 										<td style="width: 30%;">상품명</td>
 										<td><input type="text" readonly="readonly"
-											id="product_nm_input"></td>
+											id="product_nm_recv" name="product_nm"></td>
 									</tr>
 									<tr>
 										<td style="width: 30%;">회사명</td>
 										<td><input type="text" readonly="readonly"
-											id="supplier_nm_input"></td>
+											id="supplier_nm_recv">
+											<input type="hidden" id="supplier_cd_recv" name="supplier_cd">	
+										</td>
 									</tr>
 									<tr>
 										<td style="width: 30%;">상품수량</td>
 										<td><input type="text" maxlength="3" 
-										id="product_qty_input" readonly="readonly" name="product_qty">
-										<input type="hidden" name="request_idx" id="request_idx_input"></td>
+										id="product_qty_recv" readonly="readonly" name="receiving_qty">
+										
 									</tr>
 									<tr>
 										<td style="width: 30%;">가입고 위치</td>
-										<td><input type="text" maxlength="3" 
-										id="product_qty_input" readonly="readonly" name="product_qty">
-										<input type="hidden" name="request_idx" id="request_idx_input"></td>
+										<td><input type="text"  
+										id="exrecv_area" readonly="readonly">		
 									</tr>
 									<tr>
 										<td style="width: 30%;">가입고 일자</td>
 										<td><div style="display: flex; align-items: center;">
 												<input type="date" class="form-control" style="width: 40%;"
-												id="hope_dt_input" name="hope_dt" readonly="readonly">&nbsp;&nbsp;
+												id="exrecv_dt">&nbsp;&nbsp;
 										</div></td>
 									</tr>
+
+								</tbody>
+							</table>
+							<div style="height: 1px; background-color: black; margin-top: 25px; margin-bottom: 20px;"></div> 
+							<span>※입고 등록</span>
+							<table class="table table-bordered" style="margin-top: 20px;">
+								<tbody>
 									<tr>
 										<td style="width: 30%;">입고 일자</td>
 										<td><div style="display: flex; align-items: center;">
 												<input type="date" class="form-control" style="width: 40%;"
-												id="hope_dt_input" name="hope_dt">&nbsp;&nbsp;
+												name="inventory_dt">&nbsp;&nbsp;
 										</div></td>
 									</tr>
 									<tr>
 									<td style="width: 30%;">입고 위치</td>
 									<td>
-									<select class="form-control"
+									<select class="form-control" id="exrecv_size" name="receiving_size"
 										style="width: 35%; float: left; margin-right: 5px;">
 											<option value="">크기 선택</option>
-											<option value="">1유형</option>
-											<option value="">2유형</option>
-											<option value="">3유형</option>
+											<option value="1유형">1유형</option>
+											<option value="2유형">2유형</option>
+											<option value="3유형">3유형</option>
 									</select>
-									<select class="form-control"
+									<select class="form-control" name="location_cd"
 										style="width: 35%; float: left; margin-right: 5px;">
 											<option value="">위치 선택</option>
 
 									</select></td>
 								</tr>
-									
-
 								</tbody>
 							</table>
 						</div>

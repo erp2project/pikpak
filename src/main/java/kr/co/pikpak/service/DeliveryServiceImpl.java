@@ -1,12 +1,14 @@
 package kr.co.pikpak.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.Resource;
 import kr.co.pikpak.dto.deliver_enroll_dto;
+import kr.co.pikpak.dto.deliver_return_joined_dto;
 import kr.co.pikpak.dto.ex_receiving_dto;
 import kr.co.pikpak.dto.input_request_dto;
 import kr.co.pikpak.dto.input_request_state_dto;
@@ -17,6 +19,27 @@ public class DeliveryServiceImpl implements DeliveryService{
 	
 	@Autowired
 	DeliveryRepo delrepo;
+	
+	//반송현황
+	@Override
+	public List<deliver_return_joined_dto> select_return_joined(String supplier_cd) {
+		List<deliver_return_joined_dto> d_return = delrepo.select_return_joined(supplier_cd);
+		return d_return;
+	}
+	
+	//입고요청 '완료' 변경
+	@Override
+	public int update_finished_inreq(String request_cd) {
+		int result = delrepo.update_finished_inreq(request_cd);
+		return result;
+	}
+	
+	//모든 납품등록 완료 request_cd
+	@Override
+	public List<String> select_delivered_finish() {
+		List<String> request_code = delrepo.select_delivered_finish();
+		return request_code;
+	}
 	
 	/*
 	//가입고 로트번호 생성 위해
@@ -52,8 +75,10 @@ public class DeliveryServiceImpl implements DeliveryService{
 		dto.setExreceiving_cd(this.make_exreceiving_code());
 		
 		//사용자 이름 세션에서 가져온다고 가정
-		String exrecv_name = "이순신";
-		dto.setExreceiving_nm(exrecv_name);
+		String operator_nm = "이순신";
+		String operator_id = "lee";
+		dto.setOperator_id(operator_id);
+		
 		
 		//상태 기본 데이터
 		dto.setExreceiving_st("대기");
@@ -65,7 +90,7 @@ public class DeliveryServiceImpl implements DeliveryService{
 		//가입고 insert 성공시
 		if(result > 0) {
 			try {
-				int update_delienroll = this.deliver_update_nm(exrecv_name, dto.getDeliver_cd());
+				int update_delienroll = this.deliver_update_nm(operator_nm, dto.getDeliver_cd());
 				//납품등록 업데이트도 성공시
 				
 				if(update_delienroll > 0) {
@@ -121,8 +146,10 @@ public class DeliveryServiceImpl implements DeliveryService{
 		dto.setDeliver_st("대기");
 		
 		//세션에서 현재 회원 정보를 가져왔다고 가정
-		String deliver_nm = "강감찬";
-		dto.setDeliver_nm(deliver_nm);
+		String operator_id = "kang";
+		
+		dto.setOperator_id(operator_id);
+	
 	
 		
 		int result = delrepo.insert_deliver_enroll(dto);

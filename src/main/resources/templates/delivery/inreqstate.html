@@ -153,6 +153,10 @@ document.querySelector("#del_enroll").addEventListener("click",function(){
 });
 
 /*메뉴이동*/
+document.querySelector("#go_delreturn").addEventListener("click",function(){
+		new delivery_page_move().go_delivery_return();
+});
+
 document.querySelector("#go_delenroll").addEventListener("click",function(){
 		new delivery_page_move().go_delivery_enroll();
 });

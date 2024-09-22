@@ -3,7 +3,11 @@ package kr.co.pikpak.service;
 import java.util.List;
 import java.util.Map;
 
+import kr.co.pikpak.dto.deliver_return_dto;
+import kr.co.pikpak.dto.ex_receiving_dto;
+import kr.co.pikpak.dto.ex_receiving_joined_dto;
 import kr.co.pikpak.dto.input_request_dto;
+import kr.co.pikpak.dto.order_enroll_dto_lhwtemp;
 import kr.co.pikpak.dto.product_dto_lhwtemp;
 import kr.co.pikpak.dto.supplier_info_dto_lhwtemp;
 
@@ -17,6 +21,12 @@ public interface InoutBoundService {
 	
 	//mysql 서버시간 불러오기
 	public String get_time();
+	
+	//운영자 조회용 아이디 검색하기
+	public List<String> search_operator_nm(String operator_nm);
+	
+	//운영자 출력용 이름검색하기
+	public String search_one_id(String operator_id);
 	
 	//입고요청 리스트
 	public List<input_request_dto> select_inreq();
@@ -44,4 +54,13 @@ public interface InoutBoundService {
 	
 	//입고요청 리스트 조회
 	public List<input_request_dto> select_inreq_search(Map<String, Object> data_arr);
+	
+	//가입고 리스트 select
+	public List<ex_receiving_joined_dto> select_ex_receiving();
+	
+	//가입고 반송
+	public int insert_deliver_return(deliver_return_dto dto);
+	
+	//주문현황 보여주기
+	public List<order_enroll_dto_lhwtemp> select_order_enroll();
 }

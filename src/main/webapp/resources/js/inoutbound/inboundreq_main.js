@@ -1,3 +1,24 @@
+export class receiving_enroll{
+	//반송 등록
+	go_return_enroll(){
+		if(frm_deliver_return.d_return_dt.value==""){
+			alert('반송 일자를 입력해주세요')
+		}
+		else if(frm_deliver_return.d_return_type.value == ""){
+			alert('반송 사유를 입력해주세요');
+		}	
+		else{
+			frm_deliver_return.method="post";
+			frm_deliver_return.action="./deliver_returnok";
+			frm_deliver_return.submit();
+		}
+	}
+	
+}
+
+
+
+
 export class product_search_modal {
 	//회사명 찾기와 상품명 찾기가 같은 html파일에서 로드되고 있기 때문에, 함수 호출이 다르더라도 id가 충돌나면 둘다 실행되어서 버그 오짐
 	pd_paging(pagenum){
@@ -304,7 +325,7 @@ export class inboundreq_list {
 			};
 			
 			this.search_data = JSON.stringify(data);
-			console.log(this.search_data);
+			//console.log(this.search_data);
 			
 			fetch("/inboundreq_search",{
 				method : "post",
@@ -315,6 +336,8 @@ export class inboundreq_list {
 				return result_data.json();
 			})
 			.then(function(result_res){
+				//console.log(result_res);
+				
 				const tbody = document.querySelector("#ir_tbody");
 				
 				tbody.innerHTML = '';
@@ -333,8 +356,8 @@ export class inboundreq_list {
 										
 					<td style="text-align: center; width: 9%;">${(inputreq.update_dt != null) ? inputreq.update_dt.substring(0,10) : ''}</td>
 										
-					<td style="text-align: center; width: 7%;">${inputreq.operator_nm}</td>
-            		<td style="text-align: center; width: 7%;">${(inputreq.update_nm == null) ? '' : inputreq.update_nm}</td>
+					<td style="text-align: center; width: 7%;">${inputreq.operator_nm + '(' + inputreq.operator_id + ')'}</td>
+            		<td style="text-align: center; width: 7%;">${inputreq.update_id != null ? inputreq.update_nm + '(' + inputreq.update_id + ')' : ''}</td>
             		<td style="text-align: center; width: 12%;">
             		<button class="btn btn-primary inreq_manage"
             		data-product-cd="${inputreq.product_cd}"
@@ -353,7 +376,8 @@ export class inboundreq_list {
 				
 			})
 			.catch(function(error){
-				console.log(error);
+				//console.log(error);
+				alert('데이터 조회에 문제가 발생하였습니다.');
 			});
 			
 		}

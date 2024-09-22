@@ -21,8 +21,9 @@
 					<div class="panel-body">
 						<p class="menu"
 							style="border-bottom: 1px solid black; height: 30px;">
-							<span class="menu-item active" id="go_reqstate">입고요청현황</span> <span
-								class="menu-item" id="go_delenroll">납품등록현황</span>
+							<span class="menu-item active" id="go_reqstate">입고요청현황</span> 
+							<span class="menu-item" id="go_delenroll">납품등록현황</span>
+							<span class="menu-item" id="go_delreturn">납품반송현황</span>
 						</p>
 						<span style="float: right; height: 40px;">
 							<button type="button" class="btn btn-success">초기화</button>
@@ -115,8 +116,8 @@
 										<td style="text-align: center; width: 11%;"
 										th:text="${inputreq.getRequest_dt().substring(0,10)}"></td>
 										<td style="text-align: center; width: 10%;"
-										th:text="${inputreq.getOperator_nm()}"></td>
-										
+										th:text="${inputreq.getOperator_nm() + '(' + inputreq.getOperator_id() + ')'}"></td>
+						
 										<td style="text-align: center; width: 10%;">
 										<button class="btn btn-primary inreq_delivery" 
 										th:data-product-cd="${inputreq.getProduct_cd()}"
@@ -124,7 +125,7 @@
 										th:data-product-qty="${inputreq.getTotal_requested_qty()}"
 										th:data-add-req="${inputreq.getAdd_req()}"
 										th:data-hope-dt="${inputreq.getHope_dt()}"
-										th:data-request-cd="${inputr eq.getRequest_cd()}"
+										th:data-request-cd="${inputreq.getRequest_cd()}"
 										style="padding-right:5px; padding-left:5px; width:40%;"
 										type="button">납품</button>
 										<button class="btn btn-danger inreq_reject" 

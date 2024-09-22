@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.ServletResponse;
 import kr.co.pikpak.dto.deliver_enroll_dto;
+import kr.co.pikpak.dto.deliver_return_joined_dto;
 import kr.co.pikpak.dto.ex_receiving_dto;
 import kr.co.pikpak.dto.input_request_dto;
 import kr.co.pikpak.dto.input_request_state_dto;
@@ -36,18 +37,28 @@ public class DeliveryController {
 	public String insert_exreceiving(ServletResponse res,
 			@RequestBody ex_receiving_dto dto) {
 		//넘어오는 값 : request_cd, deliver_cd, supplier_cd, product_cd, exreceiving_qty, exreceiving_size, exreceiving_area, make_dt
-		//만들어야하는 값 : exreceiving_cd, exreceiving_st, exreceiving_nm
-		//DB에서 들어가는 값 or null 값 : exreceiving_idx, exreceiving_dt, update_dt, update_nm
+		//만들어야하는 값 : exreceiving_cd, exreceiving_st, exreceiving_id , operator_id, operator_nm
+		//DB에서 들어가는 값 or null 값 : exreceiving_idx, exreceiving_dt, update_dt, update_id, update_nm 
 		try {
 			this.pw = res.getWriter();
 			int result = delservice.insert_ex_receiving(dto);
+			
 			if(result > 0) {
 				this.pw.print("ok");
+				
+				List<String> request_code = delservice.select_delivered_finish();
+				if(request_code.contains(dto.getRequest_cd())) {
+					String request_cd = dto.getRequest_cd();
+					System.out.println(request_cd);
+					int update = delservice.update_finished_inreq(request_cd);
+					//프론트로 넘겨서 사용자에게 해당 관련 요청사항이 완료되었다고 알려줄지 고민
+				}
 			}
+			
 		}
 		catch(Exception e) {
 			this.pw.print("error");
-			System.out.println(e);
+			e.printStackTrace();
 		}
 		finally {
 			this.pw.close();
@@ -57,7 +68,7 @@ public class DeliveryController {
 	}
 	
 	
-	//입고요청 거절
+	//입고요청 거절 => 세션가지고 와
 	@PostMapping("/reject_deliverylist")
 	public String reject_deliverylist(ServletResponse res, 
 			@RequestParam(defaultValue = "", required = false) String request_idx) {
@@ -78,7 +89,7 @@ public class DeliveryController {
 	}
 	
 	
-	//납품등록 삭제
+	//납품등록 삭제 => 세션가지고 와
 	@PostMapping("/delivery/delete_deliveryok")
 	public String delete_deliveryok(ServletResponse res,
 			@RequestParam(defaultValue = "", required = false) String del_each_ck[],
@@ -119,8 +130,8 @@ public class DeliveryController {
 	@PostMapping("/delivery/delivery_enrollok")
 	public String delivery_enrollok(ServletResponse res, @ModelAttribute("deliver") deliver_enroll_dto dto) {
 		//프론트에서 넘어오는 값 : request_cd, prodcut_cd, product_nm, deliver_qty, make_dt, expect_dt, deliver_size, deliver_area
-		//여기서 넣어야하는 값 : supplier_cd, deliver_cd, deliver_st, deliver_nm
-		//쿼리문에서 넣는 값 or null 값 : deliver_idx, deliver_dt, update_nm, update_dt
+		//여기서 넣어야하는 값 : supplier_cd, deliver_cd, deliver_st, operator_nm, operator_id
+		//쿼리문에서 넣는 값 or null 값 : deliver_idx, deliver_dt, update_id, update_nm, update_dt
 		res.setContentType("text/html;charset=utf-8");
 		
 		try {
@@ -150,7 +161,21 @@ public class DeliveryController {
 		return null;
 	}
 	
-	
+	//반송현황
+	@GetMapping("delivery/returnstate")
+	public String returnstate(Model m) {
+		//세션에서 회사 정보 가져왔다고 가정
+		String supplier_cd = "066570";
+		
+		try {
+			List<deliver_return_joined_dto> d_return = delservice.select_return_joined(supplier_cd);
+			m.addAttribute("d_return",d_return);
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+		return null;
+	}
 	
 	//입고요청현황
 	@GetMapping("/delivery/inreqstate")

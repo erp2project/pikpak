@@ -36,7 +36,7 @@
 						<table class="table table-bordered">
 							<tbody>
 								<tr>
-									<td style="width: 10%; height: 34px; line-height: 34px;">입고 일자</td>
+									<td style="width: 10%; height: 34px; line-height: 34px;">가입고 일자</td>
 									<td style="width: 20%; line-height: 34px;">
 										<div style="display: flex; align-items: center;">
 											<input type="date" class="form-control" style="width: 40%;">&nbsp;&nbsp;
@@ -83,14 +83,21 @@
 							<table class="table">
 								<thead style="background-color: rgb(130, 210, 213);">
 									<tr>
-										<th>NO.</th>
-										<th style="text-align: center; width: 14%;">회사명</th>
-										<th style="text-align: center; width: 15%;">상품코드</th>
-										<th style="text-align: center; width: 15%;">상품명</th>
-										<th style="text-align: center; width: 8%;">상품수량</th>
-										<th style="text-align: center; width: 12%;">가입고 위치</th>
-										<th style="text-align: center; width: 12%;">가입고 일자</th>
-										<th style="text-align: center; width: 7%;">상태</th>
+										<th style="text-align: center; width: 3%;">NO.</th>
+										<th style="text-align: center; width: 14%;"
+										>회사명</th>
+										<th style="text-align: center; width: 12%;"
+										>상품코드</th>
+										<th style="text-align: center; width: 15%;"
+										>상품명</th>
+										<th style="text-align: center; width: 8%;"
+										>상품수량</th>
+										<th style="text-align: center; width: 12%;"
+										>가입고 위치</th>
+										<th style="text-align: center; width: 12%;"
+										>가입고 일자</th>
+										<th style="text-align: center; width: 7%;"
+										>상태</th>
 										<th style="text-align: center; width: 22%;">관리</th>
 									</tr>
 						
@@ -100,21 +107,49 @@
 						<div class="panel-body" style="height: 400px; overflow-y: auto;">
 							<table class="table table-hover">
 								<tbody>
-									<tr>
-										<td>1</td>
-										<td style="text-align: center; width: 14%;">삼성전자</td>
-										<td style="text-align: center; width: 15%;">SM-12345</td>
-										<td style="text-align: center; width: 15%;">로봇 청소기</td>
-										<td style="text-align: center; width: 8%;">5</td>
-										<td style="text-align: center; width: 12%;">A0132</td>
-										<td style="text-align: center; width: 12%;">2024-09-15</td>
-										<td style="text-align: center; width: 7%;">대기</td>
+									<tr th:each="exrecv : ${exrecv_list}">
+										<td style="text-align: center; padding-right:25px; width: 3%;">1</td>
+										<td style="text-align: center; width: 14%;"
+										th:text="${exrecv.getSupplier_nm()}"></td>
+										<td style="text-align: center; width: 12%;"
+										th:text="${exrecv.getProduct_cd()}"></td>
+										<td style="text-align: center; width: 15%;"
+										th:text="${exrecv.getProduct_nm()}"></td>
+										<td style="text-align: center; width: 8%;"
+										th:text="${exrecv.getExreceiving_qty()}"></td>
+										<td style="text-align: center; width: 12%;"
+										th:text="${exrecv.getExreceiving_area()}"></td>
+										<td style="text-align: center; width: 12%;"
+										th:text="${exrecv.getExreceiving_dt().substring(0,10)}"></td>
+										<td style="text-align: center; width: 7%;"
+										th:text="${exrecv.getExreceiving_st()}"></td>
 										<td style="text-align: center; width: 22%;">
 										<button class="btn btn-primary decide_inbound" 
 										style="padding-right:5px; padding-left:5px; width:40%;"
-										type="button">입고</button>
+										type="button"
+										th:data-product-cd="${exrecv.getProduct_cd()}"
+										th:data-product-nm="${exrecv.getProduct_nm()}"
+										th:data-supplier-nm="${exrecv.getSupplier_nm()}"
+										th:data-product-qty="${exrecv.getExreceiving_qty()}"
+										th:data-exrecv-area="${exrecv.getExreceiving_area()}"
+										th:data-exrecv-dt="${exrecv.getExreceiving_dt()}"
+										th:data-deliver-cd="${exrecv.getDeliver_cd()}"
+										th:data-exrecv-cd="${exrecv.getExreceiving_cd()}"
+										th:data-supplier-cd="${exrecv.getSupplier_cd()}"
+										th:data-exrecv-size="${exrecv.getExreceiving_size()}"
+										>입고</button>
+										
 										<button class="btn btn-danger decide_return" 
 										style="padding-right:5px; padding-left:5px; width:40%;"
+										th:data-product-cd="${exrecv.getProduct_cd()}"
+										th:data-product-nm="${exrecv.getProduct_nm()}"
+										th:data-supplier-nm="${exrecv.getSupplier_nm()}"
+										th:data-product-qty="${exrecv.getExreceiving_qty()}"
+										th:data-exrecv-area="${exrecv.getExreceiving_area()}"
+										th:data-exrecv-dt="${exrecv.getExreceiving_dt()}"
+										th:data-deliver-cd="${exrecv.getDeliver_cd()}"
+										th:data-exrecv-cd="${exrecv.getExreceiving_cd()}"
+										th:data-supplier-cd="${exrecv.getSupplier_cd()}"
 										type="button">반송</button>
 										</td>
 									</tr>

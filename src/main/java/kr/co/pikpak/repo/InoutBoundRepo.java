@@ -5,7 +5,11 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import kr.co.pikpak.dto.deliver_return_dto;
+import kr.co.pikpak.dto.ex_receiving_dto;
+import kr.co.pikpak.dto.ex_receiving_joined_dto;
 import kr.co.pikpak.dto.input_request_dto;
+import kr.co.pikpak.dto.order_enroll_dto_lhwtemp;
 import kr.co.pikpak.dto.product_dto_lhwtemp;
 import kr.co.pikpak.dto.supplier_info_dto_lhwtemp;
 
@@ -13,6 +17,12 @@ import kr.co.pikpak.dto.supplier_info_dto_lhwtemp;
 public interface InoutBoundRepo {
 	//서버시간
 	String get_time();
+	
+	//운영자 이름으로 id검색(사용자 조회용)
+	List<String> search_operator_nm(String operator_nm);
+	
+	//운영자 id로 이름 검색(리스트 출력용)
+	String search_one_id(String operator_id);
 	
 	//상품정보
 	//List<product_dto_lhwtemp> selectProduct();
@@ -49,4 +59,13 @@ public interface InoutBoundRepo {
 	
 	//입고요청 리스트 조회
 	List<input_request_dto> select_inreq_search(Map<String, Object> data_arr);
+	
+	//가입고 테이블 select -> 입고등록 페이지
+	List<ex_receiving_joined_dto> select_ex_receiving();
+	
+	//가입고 반송등록
+	int insert_deliver_return(deliver_return_dto dto);
+	
+	//주문현황 확인
+	List<order_enroll_dto_lhwtemp> select_order_enroll();
 }

@@ -1,10 +1,12 @@
 package kr.co.pikpak.repo;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.pikpak.dto.deliver_enroll_dto;
+import kr.co.pikpak.dto.deliver_return_joined_dto;
 import kr.co.pikpak.dto.ex_receiving_dto;
 import kr.co.pikpak.dto.input_request_dto;
 import kr.co.pikpak.dto.input_request_state_dto;
@@ -34,4 +36,13 @@ public interface DeliveryRepo {
 	
 	//가입고 등록 하기전 등록일자 같은 거 찾기(로트번호 생성 위해)
 	//Integer find_exrecvdt(String exrecv_dt);
+	
+	//입고요청에 대한 모든 납품등록 완료된 request_cd
+	List<String> select_delivered_finish();
+	
+	//입고요청 완료로 변경
+	int update_finished_inreq(String request_cd);
+	
+	//반송 현황 select
+	List<deliver_return_joined_dto> select_return_joined(String supplier_cd);
 }

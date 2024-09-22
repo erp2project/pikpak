@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ko">
 <head>
-<title>PikPak-납품관리</title>
+<title>PikPak-출고관리</title>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport"
@@ -22,8 +22,11 @@
 	href="../resources/css/inoutbound/inboundreq_main.css">
 <link rel="stylesheet" href="../resources/css/inoutbound/pd_search.css">
 <link href="../resources/css/inoutbound/add_popup.css" rel="stylesheet">
-<!-- deliver_main 툴팁 위한 css -->
-<link href="../resources/css/delivery/deliveryenroll_main.css" rel="stylesheet">
+<!-- 팝업창 css도 여기로 -->
+<!-- Select2 CSS -->
+<link
+	href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+	rel="stylesheet" />
 
 <!-- GOOGLE FONTS -->
 <link
@@ -63,98 +66,55 @@
 			</div>
 		</nav>
 		<!-- 최상단 끝 -->
+
 		<!-- 왼쪽 SIDEBAR -->
-		
+
 		<!-- 왼쪽 SIDEBAR -->
 
 		<!-- MAIN -->
-		<section
-			th:replace="~{delivery/deliveryenroll_main :: main_deliveryenroll}"></section>
-		<!-- 모달 -->	
-		<!--
-		<section th:replace="~{delivery/deliver_manage_popup :: deliver_mng_popup}"></section> 
-		<section th:replace="~{inoutbound/add_exreceiving_popup :: add_exrecv_popup}"></section>
-		-->
+		<!--  <section th:replace="~{inoutbound/inboundreq_main :: main_inoutmenu}"></section> -->
+		<section th:replace="~{inoutbound/outstate_main :: main_outstate}"></section>
 		<!-- MAIN 끝-->
 
+		<!-- 모달 
+		<section
+			th:replace="~{inoutbound/product_search :: product_search_popup}"></section>
+		<section
+			th:replace="~{inoutbound/company_search :: company_search_popup}"></section>
+		<section
+			th:replace="~{inoutbound/add_inboundreq_popup :: add_inreq_popup}"></section>
+		<section
+			th:replace="~{inoutbound/inreq_manage_popup :: inreq_manage_popup}"></section>
+		-->
 	</div>
 	<div class="clearfix"></div>
+
 	<!-- footer 시작 -->
 	<footer> </footer>
 	<!-- footer 끝 -->
-
 	<!-- END WRAPPER -->
 	<!-- Javascript -->
 	<script src="../resources/assets/vendor/jquery/jquery.min.js"></script>
 	<script src="../resources/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+
 	<script
 		src="../resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 	<script
 		src="../resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
 	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
 	<script src="../resources/assets/scripts/klorofil-common.js"></script>
+	<!-- Select2 JavaScript -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
-</body>
-<script type="module">
-import {delivery_page_move, delivery_list} from "../resources/js/deliver/deliveryenroll_main.js?v=3";
-
-/* 페이지 처음 로드 */
-document.addEventListener('DOMContentLoaded', function() {
-   new delivery_list().delivery_btn();
-});
-
-
-
-/* 납품등록 배송 버튼 */
-document.querySelectorAll(".deliver_manage").forEach(function(button){
-	button.addEventListener('click', function() {
-         let deliveryData = {
-            requestCd: button.getAttribute('data-request-cd'),
-            deliverCd: button.getAttribute('data-deliver-cd'),
-            supplierCd: button.getAttribute('data-supplier-cd'),
-            productCd: button.getAttribute('data-product-cd'),
-            deliverQty: button.getAttribute('data-deliver-qty'),
-            deliverSize: button.getAttribute('data-deliver-size'),
-            deliverArea: button.getAttribute('data-deliver-area'),
-            makeDt: button.getAttribute('data-make-dt'),
-            deliverSt: button.getAttribute('data-deliver-st')
-        };
-
-		new delivery_list().decide_delivery(deliveryData);
-	});
-});
-
-/* 납품등록 삭제 */
-//전체 체크박스
-document.querySelector("#del_all_ck").addEventListener("click",function(){
-		new delivery_list().deli_all_ckbox();
-});
-
-//개별 체크박스
-document.querySelectorAll('[name="del_each_ck"]').forEach(function(ck){
-		ck.addEventListener('click', function() {
-        	new delivery_list().deli_each_ckbox();
+	<script>
+		$(document).ready(function() {
+			
 		});
-});
+	</script>
 
-//삭제 버튼 클릭시
-document.querySelector("#delist_delete").addEventListener("click",function(){
-		new delivery_list().delete_delivery();
-});
-
-
-/* 페이지 이동 */
-document.querySelector("#go_delreturn").addEventListener("click",function(){
-		new delivery_page_move().go_delivery_return();
-});
-
-
-document.querySelector("#go_delenroll").addEventListener("click",function(){
-		new delivery_page_move().go_delivery_enroll();
-});
-
-document.querySelector("#go_reqstate").addEventListener("click",function(){
-		new delivery_page_move().go_inreq_state();
-});
-</script>
+	<script type="module">
+   
+    </script>
+</body>
 </html>

@@ -1,5 +1,6 @@
 package kr.co.pikpak.controller;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +21,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.annotation.Resource;
 import jakarta.servlet.ServletResponse;
+import kr.co.pikpak.dto.deliver_return_dto;
+import kr.co.pikpak.dto.ex_receiving_dto;
+import kr.co.pikpak.dto.ex_receiving_joined_dto;
 import kr.co.pikpak.dto.input_request_dto;
+import kr.co.pikpak.dto.order_enroll_dto_lhwtemp;
 import kr.co.pikpak.dto.product_dto_lhwtemp;
 import kr.co.pikpak.dto.supplier_info_dto_lhwtemp;
 import kr.co.pikpak.service.InoutBoundService;
@@ -35,6 +40,40 @@ public class InoutBoundController {
 	
 	@Resource(name="ir_dto")
 	input_request_dto irdto; 
+	
+	//납품 반송
+	@PostMapping("/inoutbound/deliver_returnok")
+	public String deliver_returnok(ServletResponse res,
+			@ModelAttribute("deliver_return") deliver_return_dto dto) {
+		res.setContentType("text/html;charset=utf-8");
+		try {
+			//넘어오는 값 : deliver_cd, exreceiving_cd, d_return_type, d_return_dt
+			//만들어야하는 값 : d_return_cd, operator_id
+			//자동 들어가는 값 : d_return_idx,  d_enroll_dt
+			this.pw = res.getWriter();
+			int result = ioservice.insert_deliver_return(dto);
+			if(result > 0) {				
+				this.pw.print("<script>"
+						+ "alert('정상적으로 등록되었습니다.');"
+						+ "location.href='./recvenroll';"
+						+ "</script>");
+			}
+		} 
+		catch (Exception e) {
+			this.pw.print("<script>"
+					+ "alert('데이터베이스 문제로 등록되지 못하였습니다.');"
+					+ "location.href='./recvenroll';"
+					+ "</script>");
+			e.printStackTrace();
+		}
+		finally {
+			this.pw.close();
+		}
+		return null;
+	}
+	
+	
+	
 	
 	//상품 칮기 페이징 + 검색
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -156,16 +195,20 @@ public class InoutBoundController {
 			@RequestParam(defaultValue = "", required = false) String add_req,
 			@RequestParam(defaultValue = "", required = false) String hope_dt,
 			@RequestParam(defaultValue = "", required = false) String request_idx) {
-		//System.out.println(product_qty);
-		//System.out.println(add_req);
-		//System.out.println(hope_dt);
-		//System.out.println(request_idx);
+	
 		res.setContentType("text/html;charset=utf-8");
 		Map<String, Object> inrequest = new HashMap<>();
 		inrequest.put("product_qty", product_qty);
 		inrequest.put("add_req", add_req);
 		inrequest.put("hope_dt", hope_dt);
-		inrequest.put("update_nm", "강감찬"); //업데이트 등록자
+		
+		String update_id = "kim1234"; //세션에서 가지고 왔다고 가정
+		inrequest.put("update_id", "kim1234"); //업데이트 id
+		
+		String update_nm = ioservice.search_one_id(update_id);
+		//inrequest.put("update_nm", update_nm); //업데이트 등록자 => 직접 쿼리문으로 들고와야함
+		//이건...어떻
+		
 		inrequest.put("request_idx", request_idx);
 		try {
 			this.pw = res.getWriter();
@@ -183,6 +226,7 @@ public class InoutBoundController {
 					+ "alert('데이터베이스 문제로 수정되지 못하였습니다.');"
 					+ "location.href='./inboundreq';"
 					+ "</script>");
+			System.out.println(e);
 		}
 		finally {
 			this.pw.close();
@@ -231,7 +275,13 @@ public class InoutBoundController {
 	public  ResponseEntity<List<input_request_dto>> inboundreq_search(@RequestBody Map<String, Object> data_arr){
 		List<input_request_dto> ir_search = null;
 		try {
-	    	//System.out.println(data_arr);
+	    	String operator_nm = data_arr.get("operator_nm").toString();
+	    	//operator_nm을 operator_id로 가져오는 쿼리문을 작성하고 불러와야함
+	    	List<String> op_id = ioservice.search_operator_nm(operator_nm);
+			
+	    	// 조회된 operator_id 리스트를 data_arr에 추가
+	        data_arr.put("operator_id_list", op_id);
+	        
 	    	ir_search = ioservice.select_inreq_search(data_arr);
 	        return ResponseEntity.ok(ir_search);
 	    	
@@ -271,10 +321,21 @@ public class InoutBoundController {
 
 	//입고 등록 이동
 	@GetMapping("inoutbound/recvenroll")
-	public String recvenroll() {
+	public String recvenroll(Model m) {
+		//가입고 리스트 불러오기
+		List<ex_receiving_joined_dto> exrecv_list = ioservice.select_ex_receiving();
+		m.addAttribute("exrecv_list",exrecv_list);
+		
 		return null;
 	}
 	
+	//출고 등록 이동
+	@GetMapping("inoutbound/outenroll")
+	public String outenroll(Model m) {
+		List<order_enroll_dto_lhwtemp> orderlist = ioservice.select_order_enroll();
+		m.addAttribute("orderlist",orderlist);
+		return null;
+	}
 	
 	/*
 	// 상품코드/상품명 찾기 팝업
