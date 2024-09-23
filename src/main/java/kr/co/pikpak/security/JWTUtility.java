@@ -75,6 +75,18 @@ public class JWTUtility {
 		String result = (String) claims.get("uid");
         return result;
     }
+	
+	// 운영자 레벨 호출하는 메소드 추가?
+	public Map<String, String> extractUserData(String token){
+		Map<String,String> result = new HashMap<>();
+		final Claims claims = extractAllClaims(token);
+		result.put("uid", (String) claims.get("uid"));
+		result.put("uname", (String) claims.get("uname"));
+		result.put("utype", (String) claims.get("utype"));
+		result.put("ulevel", (String) claims.get("ulevel"));
+		
+		return result;
+	}
 
 	private Claims extractAllClaims(String token) {
 		return Jwts

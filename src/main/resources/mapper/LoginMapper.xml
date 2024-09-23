@@ -6,6 +6,6 @@
 	</select>
 	
 	<select id="operatorLvById" resultType="String">
-		select operator_lv from operator_login where operator_id=#{user_id}
+		select operator_lv from login_operator where operator_id=#{user_id}
 	</select>
 </mapper>

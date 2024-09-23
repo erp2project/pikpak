@@ -15,8 +15,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -52,22 +56,29 @@ public class JWTSecurityConfig {
 					.requestMatchers("/resources/**").permitAll()
 					.requestMatchers("/favicon.ico").permitAll()
 					*/
-					.requestMatchers("/home").hasAnyAuthority("operator", "supplier", "vendor")
-					.requestMatchers("/post/**").hasAuthority("supplier")
-					.requestMatchers("/admin","/admin/**").hasAuthority("operator")
+					.requestMatchers("/home").authenticated()
+					.requestMatchers("/supplier/**").hasAuthority("supplier")
+					.requestMatchers("/vendor/**").hasAuthority("vendor")
+					.requestMatchers("/admin/users","/admin/users/**","/admin/user/**","/admin/check/**").hasAuthority("admin")
+					//.requestMatchers("/admin","/admin/**").hasAuthority("admin")
 					//.requestMatchers("/test").has
 					.anyRequest().permitAll())
+			.exceptionHandling(auth -> auth.accessDeniedHandler(accessDeniedHandler()))
 			.formLogin(auth -> auth.disable())
+			/*
+			.formLogin(auth -> auth
+					.loginPage("/login")
+					.permitAll()
+					)
+			*/
 			.httpBasic(auth -> auth.disable())
 			.authenticationProvider(authenticationProvider())
 			//.addFilterBefore(JWTRequestFilter, UsernamePasswordAuthenticationFilter.class)
 			.addFilterBefore(JWTRequestFilter, BasicAuthenticationFilter.class)
-			.logout((logoutConfig) -> logoutConfig.logoutSuccessUrl("/logout/end")
-		);
+			.logout(config -> config.deleteCookies("accessToken").invalidateHttpSession(true).logoutSuccessUrl("/logout/end"));
 
 		return http.build();
 	}
-	
 
 	@Bean
 	public AuthenticationProvider authenticationProvider() {
@@ -86,16 +97,10 @@ public class JWTSecurityConfig {
 	public UserDetailsService userDetailsService() {
 		return new CustomUserDetailsService();
 	}
-	/*
+	
 	@Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .authenticationProvider(authenticationProvider())
-                .build();
-    }
-    */
+	public AccessDeniedHandler accessDeniedHandler() {
+		return new CustomAccessDeniedHandler();
+	}
 	
-	
-	
-
 }

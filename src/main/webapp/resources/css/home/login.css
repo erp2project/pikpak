@@ -168,3 +168,10 @@ body {
 .link:hover {
 	text-decoration: underline;
 }
+
+.message-area {
+	color: red;
+	visibility: hidden;
+  	opacity: 0;
+ 	transition: visibility 0ms, opacity 300ms linear;
+}
