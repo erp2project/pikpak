@@ -149,12 +149,12 @@ const sendAddUserForm = () => {
 					if (response.ok) {
 						return response.text();
 					} else {
-						throw new Error("알 수 없는 이유로 로그인에 실패하였습니다. 관리자에게 문의하세요.");
+						throw new Error("알 수 없는 이유로 등록 실패하였습니다. 관리자에게 문의하세요.");
 					}
 				})
 				.then(result => {
-					if (result == "ok") {
-						alert("정상저으로 등록되었습니다.");
+					if (result == "Y") {
+						alert("정상적으로 등록되었습니다.");
 						window.location.reload();
 					}
 					else {
@@ -246,7 +246,7 @@ class addUserDataTools {
 			responseArea.style.visibility = "visible";
 			responseArea.style.opacity = "1";
 		}
-		else if (checkedStatus2.value = "N") {
+		else if (checkedStatus2.value == "N") {
 			responseMsg = "연락처 중복 확인 해주세요";
 			responseArea.innerHTML = responseMsg;
 			responseArea.style.visibility = "visible";

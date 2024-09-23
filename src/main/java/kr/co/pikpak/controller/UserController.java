@@ -28,6 +28,7 @@ public class UserController {
 	@PostMapping("/admin/check/id")
 	public String checkUserId(@RequestParam(value="user_id", required = false) String userId) {
 		String responseText = "";
+		
 		try {
 			int userCount = us.ctnFromView(userId);
 			if (userCount == 0) {
@@ -46,10 +47,8 @@ public class UserController {
 	public String checkUserTel (
 			@RequestParam(value="user_tel", required = false) String userTel,
 			@RequestParam(value="user_type", required = false) String userType) {
-		
-		System.out.println(userTel);
-		System.out.println(userType);
 		String responseText = "";
+		
 		try {
 			int userCount = us.ctnFromViewFilterBy(userTel, userType);
 			//int userCount = 0;
@@ -72,7 +71,7 @@ public class UserController {
 		String encodedPw = stringEncoder.encode(userAddDto.getUser_pw());
 		userAddDto.setUser_pw(encodedPw);
 		
-		if(userAddDto.getUser_type().equals("operator") || userAddDto.getUser_type().equals("admin")) {
+		if (userAddDto.getUser_type().equals("operator") || userAddDto.getUser_type().equals("admin")) {
 			userAddDto.setTarget_table("login_operator");
 		}
 		else {
@@ -84,7 +83,34 @@ public class UserController {
 			responseText = "N";
 		}
 		else {
-			responseText = "ok";
+			responseText = "Y";
+		}
+		
+		return responseText;
+	}
+	
+	@PostMapping("admin/users/mod")
+	public String modUser(UserAddDTO userModDto) {
+		String responseText = "";
+		
+		if (userModDto.getUser_pw() != "") {
+			String encodedPw = stringEncoder.encode(userModDto.getUser_pw());
+			userModDto.setUser_pw(encodedPw);
+		}
+		
+		if (userModDto.getUser_type().equals("operator") || userModDto.getUser_type().equals("admin")) {
+			userModDto.setTarget_table("login_operator");
+		}
+		else {
+			userModDto.setTarget_table("login_trader");
+		}
+		
+		int updateResult = 0;
+		if (updateResult == 0) {
+			responseText = "N";
+		}
+		else {
+			responseText = "Y";
 		}
 		
 		return responseText;
