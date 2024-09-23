@@ -21,7 +21,7 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<form id="addUserForm">
+					<form id="modUserForm">
 						<!-- 검색 바 -->
 						<div class="form-group">
 							<table class="table table-bordered" style="margin-top: 20px;">
@@ -29,8 +29,9 @@
 										<tr>
 											<td class="form-title-custom custom-width-20">아이디</td>
 											<td class="custom-flex-row">
+											<input type="hidden" id="id-checked-status" value="Y">
 												<input type="text" 
-													class="form-control dark-border custom-width-40"
+													class="form-control dark-border custom-width-40" style="background-color: #DCDCDC;"
 													th:value="${userDetails.user_id}" name="user_id" id="user_id"
 													readonly="readonly" onchange="checkIdDuplicate()">
 												<div class="custom-center-all custom-width-50">
@@ -61,6 +62,7 @@
 										<tr>
 											<td class="form-title-custom">연락처</td>
 											<td  class="custom-flex-row">
+												<input type="hidden" id="tel-checked-status" value="Y">
 												<input type="text" 
 													class="form-control dark-border custom-width-40"
 													th:value="${userDetails.user_tel}" name="user_tel" id="user_tel"
