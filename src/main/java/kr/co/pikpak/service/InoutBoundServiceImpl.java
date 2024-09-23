@@ -28,6 +28,14 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 		return orderlist;
 	}
 	
+	
+	//가입고 반송 시 수량 업데이트
+	@Override
+	public int update_exrecv_return(String return_qty, String exreceiving_cd) {
+		int result = iorepo.update_exrecv_return(return_qty, exreceiving_cd);
+		return result;
+	}
+	
 	//가입고 반송
 	@Override
 	public int insert_deliver_return(deliver_return_dto dto) {
@@ -35,12 +43,24 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 		dto.setD_return_cd(this.make_returncode());
 		
 		//사용자 세션
-		dto.setOperator_id("kang");
+		dto.setOperator_id("ad_leehw_1234");
 		
-		//여기서 상태업데이트도 해야해(가입고 테이블 리스트) => 이건 트리거 걸겠음 그냥
+		//가입고 반품수량업데이트도 해야함
+		int final_result = 0;
 		
 		int result = iorepo.insert_deliver_return(dto);
-		return result;
+		
+		if(result > 0) { //반품 등록이 되면
+			
+			int update_return = this.update_exrecv_return(dto.getD_return_qty(), dto.getExreceiving_cd());
+			if(update_return > 0) {
+				final_result = update_return;
+			}
+			else {
+				final_result = -1;
+			}
+		}	
+		return final_result;
 	}
 	
 	
@@ -131,7 +151,7 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	@Override
 	public int input_req_insert(input_request_dto dto) {
 		dto.setRequest_cd(this.make_inreqcode());
-		dto.setOperator_id("kang1234");
+		dto.setOperator_id("ad_leehw_1234");
 		
 		dto.setRequest_st("대기"); //dto에 값이 없으면 오류남
 		int result = iorepo.input_req_insert(dto);

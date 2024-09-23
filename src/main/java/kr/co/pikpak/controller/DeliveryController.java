@@ -32,24 +32,30 @@ public class DeliveryController {
 	
 	
 	//납품등록에서 배송 버튼 클릭 시 가입고 등록
-	@CrossOrigin(origins = "*", allowedHeaders = "*")
-	@PostMapping("/insert_exreceiving")
+	@PostMapping("delivery/insert_exreceiving")
 	public String insert_exreceiving(ServletResponse res,
-			@RequestBody ex_receiving_dto dto) {
-		//넘어오는 값 : request_cd, deliver_cd, supplier_cd, product_cd, exreceiving_qty, exreceiving_size, exreceiving_area, make_dt
+			@ModelAttribute("exreceiving") ex_receiving_dto dto) {
+		//넘어오는 값 : request_cd, deliver_cd, supplier_cd, product_cd, exreceiving_qty, exreceiving_size, exreceiving_area, departure_dt(배송일시), make_dt
 		//만들어야하는 값 : exreceiving_cd, exreceiving_st, exreceiving_id , operator_id, operator_nm
-		//DB에서 들어가는 값 or null 값 : exreceiving_idx, exreceiving_dt, update_dt, update_id, update_nm 
+		//DB에서 들어가는 값 or null 값 : exreceiving_idx, update_dt, update_id, update_nm 
+		res.setContentType("text/html;charset=utf-8");
+		
 		try {
 			this.pw = res.getWriter();
 			int result = delservice.insert_ex_receiving(dto);
 			
 			if(result > 0) {
-				this.pw.print("ok");
+				this.pw.print("<script>"
+						+ "alert('정상적으로 등록되었습니다.');"
+						+ "location.href = './deliveryenroll';"
+						+ "</script>");
 				
 				List<String> request_code = delservice.select_delivered_finish();
+				
+				//배송일자 departure_dt를 가지고 와서 deliver_enroll에도 같이 업데이트 시키기
 				if(request_code.contains(dto.getRequest_cd())) {
 					String request_cd = dto.getRequest_cd();
-					System.out.println(request_cd);
+					
 					int update = delservice.update_finished_inreq(request_cd);
 					//프론트로 넘겨서 사용자에게 해당 관련 요청사항이 완료되었다고 알려줄지 고민
 				}
@@ -57,7 +63,10 @@ public class DeliveryController {
 			
 		}
 		catch(Exception e) {
-			this.pw.print("error");
+			this.pw.print("<script>"
+					+ "alert('데이터베이스 문제로 등록되지 못하였습니다.');"
+					+ "location.href = './deliveryenroll';"
+					+ "</script>");
 			e.printStackTrace();
 		}
 		finally {
@@ -147,7 +156,7 @@ public class DeliveryController {
 			
 		}
 		catch(Exception e) {
-			System.out.println(dto.getSupplier_cd());
+			e.printStackTrace();
 			System.out.println(e);
 			this.pw.print("<script>"
 					+ "alert('데이터베이스 문제로 등록되지 못하였습니다');"
@@ -165,7 +174,7 @@ public class DeliveryController {
 	@GetMapping("delivery/returnstate")
 	public String returnstate(Model m) {
 		//세션에서 회사 정보 가져왔다고 가정
-		String supplier_cd = "066570";
+		String supplier_cd = "C001";
 		
 		try {
 			List<deliver_return_joined_dto> d_return = delservice.select_return_joined(supplier_cd);
@@ -182,7 +191,7 @@ public class DeliveryController {
 	public String inreqstate(Model m) {
 		//세션에서 회사정보를 가져왔다고 가정 -> 지금은 supplier_cd 사용
 		//String supplier_nm = "LG전자";
-		String supplier_cd = "066570";
+		String supplier_cd = "C001";
 		try {
 			List<input_request_state_dto> ir_list = delservice.select_inreq_deliv(supplier_cd);
 			//System.out.println(ir_list.size());

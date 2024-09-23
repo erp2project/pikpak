@@ -64,15 +64,93 @@
 		</nav>
 		<!-- 최상단 끝 -->
 		<!-- 왼쪽 SIDEBAR -->
-		
+		<div id="sidebar-nav" class="sidebar">
+			<div class="sidebar-scroll">
+				<nav>
+					<ul class="nav">
+						<li>
+							<a href="#subPages" data-toggle="collapse" class="collapsed active">
+							<i class="lnr lnr-file-empty"></i> <span>기준정보 관리</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">거래처 관리</a></li>
+									<li><a href="" class="">품목 관리</a></li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<a href="#subPages2" data-toggle="collapse" class="collapsed">
+							<i class="lnr lnr-dice"></i> <span>주문 | 반품</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages2" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">주문 관리</a></li>
+									<li><a href="" class="">반품 관리</a></li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<a href="#subPages3" data-toggle="collapse" class="collapsed">
+							<i class="lnr lnr-inbox"></i> <span>재고</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages3" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">재고 현황</a></li>
+									<li><a href="" class="">창고 관리</a></li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<a href="#subPages4" data-toggle="collapse" class="collapsed">
+							<i class="lnr lnr-download"></i> <span>입고 | 출고</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages4" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">입고 관리</a></li>
+									<li><a href="" class="">출고 관리</a></li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<a href="#subPages5" data-toggle="collapse" class="collapsed">
+							<i class="lnr lnr-chart-bars"></i> <span>납품</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages5" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">납품 관리</a></li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<a href="#subPages6" data-toggle="collapse" class="collapsed">
+							<i class="lnr lnr-cog"></i> <span>사이트 설정</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages6" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">재고기록 관리</a></li>
+									<li><a href="" class="">인사 관리</a></li>
+								</ul>
+							</div>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
 		<!-- 왼쪽 SIDEBAR -->
 
 		<!-- MAIN -->
 		<section
 			th:replace="~{delivery/deliveryenroll_main :: main_deliveryenroll}"></section>
 		<!-- 모달 -->	
+		<section th:replace="~{delivery/decide_delivery_popup :: decide_deliver_popup}"></section> 
 		<!--
-		<section th:replace="~{delivery/deliver_manage_popup :: deliver_mng_popup}"></section> 
 		<section th:replace="~{inoutbound/add_exreceiving_popup :: add_exrecv_popup}"></section>
 		-->
 		<!-- MAIN 끝-->
@@ -93,10 +171,52 @@
 		src="../resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
 	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
 	<script src="../resources/assets/scripts/klorofil-common.js"></script>
+<script>
+$(document).ready(function() {
+	
+	//배송 버튼 클릭시
+	$(document).on("click", ".deliver_manage", function(event) {
+		event.preventDefault();  // 기본 동작 중단
+		
+		var deliver_cd = $(this).data("deliver-cd");
+		var product_cd = $(this).data("product-cd");
+		var product_nm = $(this).data("product-nm");
+		var product_qty = $(this).data("deliver-qty");
+		var make_dt = $(this).data("make-dt");
+		var deliver_dt = $(this).data("deliver-dt");
+		var deliver_area = $(this).data("deliver-area");
+		/* 여기서부터 hidden 값 */
+		var request_cd =  $(this).data("request-cd");
+		var supplier_cd  = $(this).data("supplier-cd");
+		var deliver_size = $(this).data("deliver-size");
+		
+		console.log(request_cd);
+		
+		// 입력 필드에 값 설정
+		$("#deliver_cd_deli").val(deliver_cd);
+		$("#product_cd_deli").val(product_cd);
+		$("#product_nm_deli").val(product_nm);
+		$("#product_qty_deli").val(product_qty);
+		$("#make_dt_deli").val(make_dt.substring(0,10));
+		$("#deliver_dt_deli").val(deliver_dt.substring(0,10));
+		$("#exreceiving_area_deli").val(deliver_area);
+		/* 여기서부터 hidden 값 */
+		$("#request_cd_deli").val(request_cd);
+		$("#supplier_cd_deli").val(supplier_cd);
+		$("#exreceiving_size_deli").val(deliver_size);
+		
+		
+		
+		// 모달 보여주기
+		$("#decidedeliModal").modal('show');
+		
+	});
 
+});
+</script>
 </body>
 <script type="module">
-import {delivery_page_move, delivery_list} from "../resources/js/deliver/deliveryenroll_main.js?v=3";
+import {delivery_page_move, delivery_list} from "../resources/js/deliver/deliveryenroll_main.js?v=4";
 
 /* 페이지 처음 로드 */
 document.addEventListener('DOMContentLoaded', function() {
@@ -104,25 +224,11 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-
-/* 납품등록 배송 버튼 */
-document.querySelectorAll(".deliver_manage").forEach(function(button){
-	button.addEventListener('click', function() {
-         let deliveryData = {
-            requestCd: button.getAttribute('data-request-cd'),
-            deliverCd: button.getAttribute('data-deliver-cd'),
-            supplierCd: button.getAttribute('data-supplier-cd'),
-            productCd: button.getAttribute('data-product-cd'),
-            deliverQty: button.getAttribute('data-deliver-qty'),
-            deliverSize: button.getAttribute('data-deliver-size'),
-            deliverArea: button.getAttribute('data-deliver-area'),
-            makeDt: button.getAttribute('data-make-dt'),
-            deliverSt: button.getAttribute('data-deliver-st')
-        };
-
-		new delivery_list().decide_delivery(deliveryData);
-	});
+//납품등록 배송 모달 등록 버튼
+document.querySelector("#decide_deli").addEventListener("click",function(){
+		new delivery_list().decide_delivery();
 });
+
 
 /* 납품등록 삭제 */
 //전체 체크박스

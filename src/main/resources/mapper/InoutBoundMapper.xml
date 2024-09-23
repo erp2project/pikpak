@@ -7,6 +7,11 @@
 select * from order_enroll where process_st='승인' order by order_idx desc
 </select>
 
+<!-- 반송 등록할 때 가입고 테이블 반송수량 업데이트 -->
+<update id="update_exrecv_return">
+update ex_receiving set return_qty=#{return_qty} where exreceiving_cd=#{exreceiving_cd}
+</update>
+
 
 <!--가입고 반송 등록 -->
 <insert id="insert_deliver_return">
@@ -17,7 +22,7 @@ now(),#{operator_id})
 <!-- 가입고 테이블 select -->
 <select id="select_ex_receiving" resultType="kr.co.pikpak.dto.ex_receiving_joined_dto">
 select a.exreceiving_idx, a.deliver_cd, a.exreceiving_cd, b.supplier_cd, b.supplier_nm, a.product_cd, c.product_nm, a.exreceiving_qty,
-a.exreceiving_size, a.exreceiving_area, a.exreceiving_dt, a.exreceiving_st, a.update_id
+a.return_qty, a.exreceiving_size, a.exreceiving_area, a.departure_dt, a.exreceiving_st, a.update_id
 from ex_receiving as a join supplier_info as b join product as c where a.supplier_cd=b.supplier_cd
 and a.product_cd=c.product_cd order by a.exreceiving_idx desc
 </select>

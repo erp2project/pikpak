@@ -13,7 +13,7 @@ SELECT
     b.exreceiving_qty, 
     a.d_return_qty, 
     a.d_return_type, 
-    b.exreceiving_dt,
+    b.departure_dt,
     a.d_return_dt 
 FROM 
     deliver_return AS a 
@@ -53,15 +53,15 @@ select count(*) as lot_ea from ex_receiving where lot_no like concat ('%',#{exre
 </select>
  -->
  
- <!-- 가입고 등록과 동시에 현재 배송누른 담당자 업데이트를 납품등록에 함 -->
+ <!-- 가입고 등록과 동시에 현재 배송누른 담당자 업데이트를 납품등록에 함 + 배송일자도 업데이트함-->
  <update id="deliver_update_nm">
- update deliver_enroll set deliver_st='배송', update_id=#{update_id} where deliver_cd=#{deliver_cd}
+ update deliver_enroll set deliver_st='배송', departure_dt=#{departure_dt}, update_id=#{update_id} where deliver_cd=#{deliver_cd}
  </update>
  
 <!-- 배송 확정 시 가입고 등록 -->
 <insert id="insert_ex_receiving">
 insert into ex_receiving values ('0',#{request_cd},#{deliver_cd},#{supplier_cd},#{exreceiving_cd},#{product_cd},
-#{exreceiving_qty},#{exreceiving_st},#{exreceiving_area},#{exreceiving_size},#{make_dt},now(),#{exreceiving_nm},#{update_dt}) 
+#{exreceiving_qty},#{return_qty},#{exreceiving_st},#{exreceiving_area},#{exreceiving_size},#{make_dt},#{departure_dt},#{operator_id},#{update_dt},#{update_id}) 
 </insert>
 
 <!-- 입고요청 거절 시 상태변경 -->
@@ -84,7 +84,7 @@ select * from deliver_enroll order by deliver_idx desc
 <insert id="insert_deliver_enroll">
 insert into deliver_enroll values ('0',#{request_cd},#{supplier_cd},#{deliver_cd},#{product_cd},#{product_nm},
 #{deliver_qty},#{deliver_st},#{make_dt},#{expect_dt},#{deliver_size},#{deliver_area},#{operator_id},
-#{update_id},now(),#{update_dt})
+#{update_id},now(),#{departure_dt})
 </insert>
 
 <!-- 입고요청 현황 (뷰테이블에서 불러온 것) -->

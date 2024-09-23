@@ -63,8 +63,8 @@ public class DeliveryServiceImpl implements DeliveryService{
 	
 	//가입고 동시에 납품등록 업데이트
 	@Override
-	public int deliver_update_nm(String update_nm, String deliver_cd) {
-		int result = delrepo.deliver_update_nm(update_nm, deliver_cd);
+	public int deliver_update_nm(String departure_dt, String update_id, String deliver_cd) {
+		int result = delrepo.deliver_update_nm(departure_dt, update_id, deliver_cd);
 		return result;
 	}
 	
@@ -75,10 +75,8 @@ public class DeliveryServiceImpl implements DeliveryService{
 		dto.setExreceiving_cd(this.make_exreceiving_code());
 		
 		//사용자 이름 세션에서 가져온다고 가정
-		String operator_nm = "이순신";
-		String operator_id = "lee";
+		String operator_id = "ad_leehw_1234"; //제조사 측 납품등록이자, 물류회사측 가입고 목록에 보일 것
 		dto.setOperator_id(operator_id);
-		
 		
 		//상태 기본 데이터
 		dto.setExreceiving_st("대기");
@@ -90,9 +88,11 @@ public class DeliveryServiceImpl implements DeliveryService{
 		//가입고 insert 성공시
 		if(result > 0) {
 			try {
-				int update_delienroll = this.deliver_update_nm(operator_nm, dto.getDeliver_cd());
-				//납품등록 업데이트도 성공시
 				
+				int update_delienroll = this.deliver_update_nm(dto.getDeparture_dt(), operator_id, dto.getDeliver_cd());
+				
+				
+				//납품등록 업데이트도 성공시
 				if(update_delienroll > 0) {
 					final_result = result; //성공
 				}
@@ -102,6 +102,7 @@ public class DeliveryServiceImpl implements DeliveryService{
 			}
 			catch(Exception e) {
 				System.out.println("납품등록 업데이트: " + e);
+				e.printStackTrace();
 			}
 		}
 		else {
@@ -137,7 +138,7 @@ public class DeliveryServiceImpl implements DeliveryService{
 	//납품등록
 	@Override
 	public int insert_deliver_enroll(deliver_enroll_dto dto) {
-		String supplier_cd = "066570";
+		String supplier_cd = "C001";
 		dto.setSupplier_cd(supplier_cd); //업체코드
 		
 		//납품요청코드 랜덤생성
@@ -146,7 +147,7 @@ public class DeliveryServiceImpl implements DeliveryService{
 		dto.setDeliver_st("대기");
 		
 		//세션에서 현재 회원 정보를 가져왔다고 가정
-		String operator_id = "kang";
+		String operator_id = "ad_leehw_1234";
 		
 		dto.setOperator_id(operator_id);
 	

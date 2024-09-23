@@ -61,6 +61,9 @@ public interface InoutBoundService {
 	//가입고 반송
 	public int insert_deliver_return(deliver_return_dto dto);
 	
+	//가입고 반송시 수량 업데이트
+	public int update_exrecv_return(String return_qty, String exreceiving_cd);
+	
 	//주문현황 보여주기
 	public List<order_enroll_dto_lhwtemp> select_order_enroll();
 }

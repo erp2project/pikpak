@@ -66,6 +66,10 @@ public interface InoutBoundRepo {
 	//가입고 반송등록
 	int insert_deliver_return(deliver_return_dto dto);
 	
+	//반송등록시 가입고 테이블 업데이트
+	int update_exrecv_return(String return_qty, String exreceiving_cd);
+	
 	//주문현황 확인
 	List<order_enroll_dto_lhwtemp> select_order_enroll();
+
 }

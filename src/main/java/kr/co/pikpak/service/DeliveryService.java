@@ -32,7 +32,7 @@ public interface DeliveryService {
 	//public Integer find_exrecvdt(String exrecv_dt);
 	
 	//가입고 등록과 동시에 납품등록 상태변화
-	public int deliver_update_nm(String update_nm, String deliver_cd);
+	public int deliver_update_nm(String departure_dt, String update_id, String deliver_cd);
 	
 	//납품등록 모두 완료
 	public List<String> select_delivered_finish();

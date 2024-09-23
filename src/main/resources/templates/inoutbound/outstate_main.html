@@ -37,7 +37,16 @@
 						<table class="table table-bordered">
 							<tbody>
 								<tr>
-									<td style="width: 10%; height: 34px; line-height: 34px;">입고요청일자</td>
+									<td style="width: 10%; height: 34px; line-height: 34px;">납기일자</td>
+									<td style="width: 20%; line-height: 34px;">
+										<div style="display: flex; align-items: center;">
+											<input type="date" class="form-control" style="width: 40%;"
+												id="start_date">&nbsp;&nbsp; ~ &nbsp;&nbsp; <input
+												type="date" class="form-control" style="width: 40%;"
+												id="end_date">
+										</div>
+									</td>
+									<td style="width: 10%; height: 34px; line-height: 34px;">출고예정일자</td>
 									<td style="width: 20%; line-height: 34px;">
 										<div style="display: flex; align-items: center;">
 											<input type="date" class="form-control" style="width: 40%;"
@@ -57,6 +66,8 @@
 											<button class="btn btn-primary" type="button" id="cp_search">검색</button>
 										</div>
 									</td>
+								</tr>
+								<tr>
 									<td style="width: 7%; height: 34px; line-height: 34px;">상품코드
 										/ 상품명</td>
 									<td style="width: 18%; line-height: 34px;">
@@ -68,18 +79,6 @@
 											<button class="btn btn-primary" type="button" id="pd_search">검색</button>
 										</div>
 									</td>
-								</tr>
-								<tr>
-									<td style="width: 10%; height: 34px; line-height: 34px;">상태</td>
-									<td style="width: 20%; line-height: 34px;"><select
-										id="search_state" class="form-control"
-										style="width: 35%; float: left; margin-right: 5px;">
-											<option value="">상태 선택</option>
-											<option value="대기">대기</option>
-											<option value="거절"></option>
-											<option value="승인">진행</option>
-											<option value="완료">완료</option>
-									</select></td>
 									<td style="width: 10%; height: 34px; line-height: 34px;">관리자</td>
 									<td style="width: 15%; line-height: 34px;">
 										<div style="display: flex; align-items: center;">
@@ -102,16 +101,18 @@
 									<thead style="background-color: rgb(130, 210, 213);">
 										<tr>
 											<th style="text-align: center; width: 4%;">NO.</th>
-											<th style="text-align: center; width: 10%;">주문번호</th>
-											<th style="text-align: center; width: 10%;">회사명</th>
-											<th style="text-align: center; width: 10%;">상품코드</th>
-											<th style="text-align: center; width: 15%;">상품명</th>
+											<th style="text-align: center; width: 9%;">주문번호</th>
+											<th style="text-align: center; width: 9%;">회사명</th>
+											<th style="text-align: center; width: 9%;">상품코드</th>
+											<th style="text-align: center; width: 14%;">상품명</th>
 											<th style="text-align: center; width: 8%;">상품수량</th>
-											<th style="text-align: center; width: 9%;">착수일자</th>
-											<th style="text-align: center; width: 9%;">납기일자</th>
-											<th style="text-align: center; width: 8%;">출고 등록일자</th>
-											<th style="text-align: center; width: 8%;">출고 관리자</th>
-											<th style="text-align: center; width: 9%;">등록</th>
+											<th style="text-align: center; width: 8%;">착수일자</th>
+											<th style="text-align: center; width: 8%;">납기일자</th>
+											<th style="text-align: center; width: 7%;">출고예정수량</th>
+											<th style="text-align: center; width: 7%;">가출고 위치</th>
+											<th style="text-align: center; width: 7%;">출고예정일자</th>
+											<th style="text-align: center; width: 5%;">승인 관리자</th>
+											<th style="text-align: center; width: 5%;">승인</th>
 										</tr>
 									</thead>
 								</table>

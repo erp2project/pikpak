@@ -44,7 +44,7 @@
 												style="width: 40%;">
 										</div>
 									</td>
-									<td style="width: 10%; height: 34px; line-height: 34px;">업데이트 일자</td>
+									<td style="width: 10%; height: 34px; line-height: 34px;">배송 일자</td>
 									<td style="width: 20%; line-height: 34px;">
 										<div style="display: flex; align-items: center;">
 											<input type="date" class="form-control" style="width: 40%;">&nbsp;&nbsp;
@@ -102,9 +102,9 @@
 										<th style="text-align: center; width: 8%;">제조 일자</th>
 										<th style="text-align: center; width: 8%;">등록 일자</th>
 										<th style="text-align: center; width: 7%;">상태</th>
-										<th style="text-align: center; width: 10%;">업데이트 일자</th>
+										<th style="text-align: center; width: 10%;">배송 일자</th>
 										<th style="text-align: center; width: 7%;">등록 관리자</th>
-										<th style="text-align: center; width: 12%;">업데이트 관리자</th>
+										<th style="text-align: center; width: 12%;">배송 관리자</th>
 										<th style="text-align: center; width: 12%;">관리</th>
 									</tr>
 						
@@ -114,8 +114,7 @@
 						<div class="panel-body" style="height: 400px; overflow-y: auto;">
 							<table class="table table-hover">
 								<tbody>
-									<tr th:each="delist : ${deliver_list}" class="tooltip-target" 
-									th:attr="data-tooltip='데이터 코드: ' + ${delist.getDeliver_cd()}">
+									<tr th:each="delist : ${deliver_list}">
 										<td style="text-align: center; width: 3%;"><input
 											type="checkbox" name="del_each_ck"
 											th:value="${delist.getDeliver_idx()}"></td>
@@ -137,7 +136,7 @@
 										<td style="text-align: center; width: 7%;" class="current_st"
 										th:text="${delist.getDeliver_st()}"></td>
 										<td style="text-align: center; width: 10%;"
-										th:text="${delist.getUpdate_dt() != null ? delist.getUpdate_dt().substring(0,10) : ''}"></td>
+										th:text="${delist.getDeparture_dt() != null ? delist.getDeparture_dt().substring(0,10) : ''}"></td>
 										<td style="text-align: center; width: 7%;"
 										th:text="${delist.getOperator_id()}"></td>
 										<td style="text-align: center; width: 12%;"
@@ -149,10 +148,12 @@
 										th:data-deliver-cd="${delist.getDeliver_cd()}"
 										th:data-supplier-cd="${delist.getSupplier_cd()}"
 										th:data-product-cd="${delist.getProduct_cd()}"
+										th:data-product-nm="${delist.getProduct_nm()}"
 										th:data-deliver-qty="${delist.getDeliver_qty()}"
 										th:data-deliver-size="${delist.getDeliver_size()}"
 										th:data-deliver-area="${delist.getDeliver_area()}"
 										th:data-make-dt="${delist.getMake_dt()}"
+										th:data-deliver-dt="${delist.getDeliver_dt()}"
 										th:data-deliver-st="${delist.getDeliver_st()}"
 										type="button">배송</button>
 										</td>

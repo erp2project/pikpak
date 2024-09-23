@@ -47,7 +47,7 @@ public class InoutBoundController {
 			@ModelAttribute("deliver_return") deliver_return_dto dto) {
 		res.setContentType("text/html;charset=utf-8");
 		try {
-			//넘어오는 값 : deliver_cd, exreceiving_cd, d_return_type, d_return_dt
+			//넘어오는 값 : deliver_cd, exreceiving_cd, d_return_type, d_return_dt, d_return_qty
 			//만들어야하는 값 : d_return_cd, operator_id
 			//자동 들어가는 값 : d_return_idx,  d_enroll_dt
 			this.pw = res.getWriter();
@@ -202,8 +202,8 @@ public class InoutBoundController {
 		inrequest.put("add_req", add_req);
 		inrequest.put("hope_dt", hope_dt);
 		
-		String update_id = "kim1234"; //세션에서 가지고 왔다고 가정
-		inrequest.put("update_id", "kim1234"); //업데이트 id
+		String update_id = "ad_leehw_1234"; //세션에서 가지고 왔다고 가정
+		inrequest.put("update_id", "ad_leehw_1234"); //업데이트 id
 		
 		String update_nm = ioservice.search_one_id(update_id);
 		//inrequest.put("update_nm", update_nm); //업데이트 등록자 => 직접 쿼리문으로 들고와야함
@@ -328,6 +328,14 @@ public class InoutBoundController {
 		
 		return null;
 	}
+	
+	//출고현황 이동
+	@GetMapping("inoutbound/outstate")
+	public String outstate(Model m) {
+		
+		return null;
+	}
+	
 	
 	//출고 등록 이동
 	@GetMapping("inoutbound/outenroll")
