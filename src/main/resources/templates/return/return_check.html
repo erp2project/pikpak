@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>반품 상세</title>
+
+<link rel="stylesheet" href="../resources/css/return/return_styles.css?v=2">
+<link rel="stylesheet" href="../resources/css/return/vars.css">
+
+</head>
+<body>
+<form id="return_ck_frm">
+<input type="hidden" name="return_idx" id="ck_return_idx" value="">
+</form>
+
+<div th:each="return_cklist : ${return_cklist}">
+<button class="openPopupBtn" th:data-index="${return_cklist.return_idx}">+</button>
+
+<!-- Popup Container -->
+<div class="popup-container">
+    <div class="popup">
+        <button class="close-btn">&times;</button>
+        <div class="popup-content">
+            <p class="popup-title">반품 상세</p>
+            <hr class="popup-divider">
+            <div class="order-container">
+		        <span style="font-size: 13px;">반품 상태 : <a th:text="${return_cklist.return_st}"></a></span>
+		        <span style="font-size: 13px;">반품 코드 : <a th:text="${return_cklist.return_cd}"></a></span>
+		    </div>
+            <!-- Box for content -->
+            <div class="popup-box">
+                <!-- 반품자 정보 Section -->
+                <h2 class="box-title">반품자 정보</h2>
+                <div class="box-content">
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="customerName">이름:</label>
+                            <a th:text="${return_cklist.user_nm}"></a>
+                        </div>
+                        <div class="input-group">
+                            <label for="customerId">아이디:</label>
+                            <a th:text="${return_cklist.return_id}"></a>
+                        </div>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="customerAffiliation">소속:</label>
+                            <a th:text="${return_cklist.user_company}"></a>
+                        </div>
+                        <div class="input-group">
+                            <label for="customerPhone">전화번호:</label>
+                            <a th:text="${return_cklist.user_tel}"></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 내용 Section -->
+                <h2 class="box-title">내용</h2>
+                <div class="box-content">
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="productCode">출고 코드:</label>
+                            <a th:text="${return_cklist.outgoing_cd}"></a>
+                        </div>
+                    </div>
+                    <div class="input-row">
+                    	<div class="input-group">
+                            <label for="productCode">상품 코드:</label>
+                            <a th:text="${return_cklist.product_cd}"></a>
+                        </div>
+	                    <div class="input-group">
+	                        <label for="productName">상품명:</label>
+	                        <a th:text="${return_cklist.product_nm}"></a>
+	                    </div>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="productManufacturer">제조사:</label>
+                            <a th:text="${return_cklist.supplier_nm}"></a>
+                        </div>
+                        <div class="input-group">
+                            <label for="outDate">출고날짜:</label>
+                            <a th:text="${return_cklist.outgoing_dt}"></a>
+                        </div>
+                    </div>
+                    
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="productWeight">주문 개수:</label>
+                            <a th:text="${return_cklist.product_qty}"></a>
+                        </div>
+                        <div class="input-group">
+                            <label for="productPrice">출고 가격:</label>
+                            <a th:text="${return_cklist.purchase_pr}"></a>
+                        </div>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="productQuantity">반품 개수:</label>
+                            <a th:text="${return_cklist.return_qty}"></a>
+                        </div>
+                        <div class="input-group">
+                            <label for="totalPrice">반품 가격:</label>
+                            <a th:text="${return_cklist.return_price}"></a>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="returnReason">반품 사유:</label>
+				            <a th:text="${return_cklist.return_type}"></a>
+                        </div>
+                    </div>
+                    <div class="input-row">
+                    	<div class="input-group-text">
+                    		<label for="approval_log">기타 사유: </label>
+                    		<div th:if="${return_cklist.return_type2 != ''}">
+                    		<a th:text="${return_cklist.return_type2}"></a>
+                    		</div>
+                    		<div th:if="${return_cklist.return_type2 == ''}">
+                    		없음
+                    		</div>
+                    	</div>
+                    </div>
+                    <div class="input-row">
+                    	<div class="input-group-text">
+                    		<label for="reprocess_log">비고란: </label>
+                    		<div th:if="${return_cklist.reprocess_log != ''}">
+                    		<a th:text="${return_cklist.reprocess_log}"></a>
+                    		</div>
+                    		<div th:if="${return_cklist.reprocess_log == '' || return_cklist.reprocess_log == null}">
+                    		없음
+                    		</div>
+                    	</div>
+                    </div>
+                    <div th:if="${return_cklist.return_st == '완료'}">
+                    <div class="input-row">
+                    	<div class="input-group-text">
+                    		<label for="processing_dt">완료일자: </label>
+                    		<a th:text="${return_cklist.processing_dt}"></a>
+                    	</div>
+                    </div>	
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 반품 상태가 대기 -->
+        <div th:if="${return_cklist.return_st == '대기'}">
+        <div class="button-group">
+        	<div class="button-1" th:data-index="${return_cklist.return_idx}">
+       			<div class="div">삭제</div>
+       		</div>
+	    	<div class="button-3">
+       			<div class="div">취소</div>
+       		</div>
+        </div>
+        </div>
+        <div th:if="${return_cklist.return_st != '대기'}">
+        <div class="button-group">
+	    	<div class="button-3">
+       			<div class="div">취소</div>
+       		</div>
+        </div>
+        </div>
+    </div>
+</div>
+</div> <!-- 반복문 끝 -->
+
+<script src="../resources/js/return/return_ck_script.js?v=1"></script>
+
+</body>
+</html>

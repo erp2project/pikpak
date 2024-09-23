@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.pikpak.repo.return_repo">
+
+<insert id="return_enroll">
+insert into return_request (return_cd, return_id, vendor_nm, return_st, outgoing_cd, product_cd, product_nm, return_qty, return_price, return_type, return_type2, requested_dt)
+values (#{return_cd}, #{return_id}, #{vendor_nm}, '대기', #{outgoing_cd}, #{product_cd}, #{product_nm}, #{return_qty}, #{return_price}, #{return_type}, #{return_type2}, now())
+</insert>
+
+<select id="outgoing_cd_search" resultType="kr.co.pikpak.dto.outgoing_cd_dto">
+select product_cd, product_nm, supplier_nm, outgoing_dt, product_qty, purchase_pr from outgoingcd_check_view where outgoing_cd=#{outgoing_cd}
+</select>
+
+<select id="return_list" resultType="kr.co.pikpak.dto.return_list_dto">
+select * from return_check_view where user_company=#{user_company} order by return_idx asc
+</select>
+
+<update id="return_approval">
+update return_request set return_st=#{return_dto.return_st},
+	<choose>
+		<when test="type == 1">
+			 reprocess_log=#{return_dto.reprocess_log}
+		</when>
+		<when test="type == 2">
+			 reprocess_wk=#{return_dto.reprocess_wk}, processing_dt=now()
+		</when>
+	</choose>
+ where return_cd=#{return_dto.return_cd}
+</update>
+
+<delete id="return_delete">
+delete from return_request where return_idx=#{return_idx}
+</delete>
+
+</mapper>
