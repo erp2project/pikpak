@@ -56,9 +56,9 @@ public class JWTSecurityConfig {
 					.requestMatchers("/resources/**").permitAll()
 					.requestMatchers("/favicon.ico").permitAll()
 					*/
-					.requestMatchers("/home").authenticated()
-					.requestMatchers("/supplier/**").hasAuthority("supplier")
-					.requestMatchers("/vendor/**").hasAuthority("vendor")
+					//.requestMatchers("/home").authenticated()
+					//.requestMatchers("/supplier/**").hasAuthority("supplier")
+					//.requestMatchers("/vendor/**").hasAuthority("vendor")
 					.requestMatchers("/admin/users","/admin/users/**","/admin/user/**","/admin/check/**").hasAuthority("admin")
 					//.requestMatchers("/admin","/admin/**").hasAuthority("admin")
 					//.requestMatchers("/test").has

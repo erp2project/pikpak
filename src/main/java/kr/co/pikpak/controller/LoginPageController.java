@@ -12,4 +12,9 @@ public class LoginPageController {
 	public String loginPage() {
 		return "/home/login";
 	}
+	
+	@GetMapping("/logout/end")
+	public String logoutPage() {
+		return "/home/logout";
+	}
 }

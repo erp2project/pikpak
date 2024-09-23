@@ -93,19 +93,29 @@ public class UserController {
 	public String modUser(UserAddDTO userModDto) {
 		String responseText = "";
 		
-		if (userModDto.getUser_pw() != "") {
+		if (!userModDto.getUser_pw().equals("")) {
 			String encodedPw = stringEncoder.encode(userModDto.getUser_pw());
 			userModDto.setUser_pw(encodedPw);
 		}
 		
 		if (userModDto.getUser_type().equals("operator") || userModDto.getUser_type().equals("admin")) {
 			userModDto.setTarget_table("login_operator");
+			userModDto.setTarget_id("operator_id");
+			userModDto.setTarget_pw("operator_pw");
+			userModDto.setTarget_tel("operator_tel");
+			userModDto.setTarget_mail("operator_mail");
+			userModDto.setTarget_lv("operator_lv");
+			
 		}
 		else {
 			userModDto.setTarget_table("login_trader");
+			userModDto.setTarget_id("trader_id");
+			userModDto.setTarget_pw("trader_pw");
+			userModDto.setTarget_tel("trader_tel");
+			userModDto.setTarget_mail("trader_mail");
 		}
 		
-		int updateResult = 0;
+		int updateResult = us.modUserInTable(userModDto);
 		if (updateResult == 0) {
 			responseText = "N";
 		}
