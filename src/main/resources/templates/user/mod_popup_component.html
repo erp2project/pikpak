@@ -29,7 +29,8 @@
 										<tr>
 											<td class="form-title-custom custom-width-20">아이디</td>
 											<td class="custom-flex-row">
-											<input type="hidden" id="id-checked-status" value="Y">
+												<input type="hidden" id="id-checked-status" value="Y">
+												<input type="hidden" name="old_user_id" th:value="${userDetails.user_id}">
 												<input type="text" 
 													class="form-control dark-border custom-width-40" style="background-color: #DCDCDC;"
 													th:value="${userDetails.user_id}" name="user_id" id="user_id"
@@ -91,19 +92,19 @@
 											<td class="form-title-custom">사용자 유형</td>
 											<td th:if="${userDetails.user_type=='admin'}">
 												관리자
-												<input type="hidden" id="user_type" value="admin">
+												<input type="hidden" id="user_type" name="user_type" value="admin">
 											</td>
 											<td th:if="${userDetails.user_type=='operator'}">
 												운영
-												<input type="hidden" id="user_type" value="operator">
+												<input type="hidden" id="user_type" name="user_type" value="operator">
 											</td>
 											<td th:if="${userDetails.user_type=='supplier'}">
 												공급
-												<input type="hidden" id="user_type" value="supplier">
+												<input type="hidden" id="user_type" name="user_type" value="supplier">
 											</td>
 											<td th:if="${userDetails.user_type=='vendor'}">
 												판매
-												<input type="hidden" id="user_type" value="vendor">
+												<input type="hidden" id="user_type" name="user_type" value="vendor">
 											</td>
 										</tr>
 										<tr th:if="${userDetails.user_lv!=''}">
