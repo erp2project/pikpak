@@ -53,7 +53,7 @@ public class LoginController {
 	
 	// 회원 로그인 및 토큰 생성
 	@PostMapping("/login/auth")
-	public String createAuthenticationToken(LoginDTO logindto, HttpServletResponse res) throws Exception {
+	public String createAuthenticationToken(LoginDTO logindto, HttpServletResponse res, HttpSession sess) throws Exception {
 		// Fetch API 결과 핸들링
 		String responseText = "";
 		
@@ -85,6 +85,11 @@ public class LoginController {
 			cookie.setHttpOnly(true);
 			cookie.setPath("/");
 			res.addCookie(cookie);
+			
+			// 세션에 아이디 정보 저장
+			sess.setAttribute("activeUserID", logindto.getUser_id());
+			sess.setMaxInactiveInterval(60*60*24+7);
+			
 			
 			responseText = "ok";
 		} catch (BadCredentialsException e) {

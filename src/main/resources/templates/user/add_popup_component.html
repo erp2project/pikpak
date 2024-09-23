@@ -29,7 +29,7 @@
 									<tr>
 										<td class="form-title-custom custom-width-20">사용자 유형</td>
 										<td>
-											<select class="form-control select2" name="user_type" style="width:40%" onchange="checkUserType()">
+											<select class="form-control select2" name="user_type" id="user_type" style="width:40%" onchange="checkUserType()">
 													<option value="">유형 선택</option>
 													<option value="admin">관리자</option>
 													<option value="operator">운영</option>
@@ -40,7 +40,8 @@
 									</tr>
 									<tr>
 										<td class="form-title-custom">아이디</td>
-										<td style="display:flex; flex-direction: row;">
+										<td class="custom-flex-row">
+											<input type="hidden" id="id-checked-status" value="N">
 											<input type="text" class="form-control dark-border custom-width-40" id="user_id" name="user_id">&nbsp;&nbsp;
 											<button type="button" class="btn btn-default btn-sm" onclick="checkUserId()">중복 확인</button>
 											<div class="custom-center-all custom-width-40">
@@ -51,27 +52,31 @@
 									<tr>
 										<td class="form-title-custom">이름</td>
 										<td>
-											<input type="text" class="form-control dark-border custom-width-40" name="user_name">
-											<input type="hidden" name="supplier_cd">
+											<input type="text" class="form-control dark-border custom-width-40" name="user_nm">
 										</td>
 									</tr>
 									<tr>
 										<td class="form-title-custom">비밀번호</td>
-										<td style="display:flex; flex-direction: row;">
-											<input type="text" class="form-control dark-border custom-width-40" name="user_pw">
+										<td class="custom-flex-row">
+											<input type="password" class="form-control dark-border custom-width-40" name="user_pw" onchange="checkPassword()">
 											<div style="width:20%; align-content: center; text-align: center;">
 												비밀번호 확인
 											</div>
-											<input type="text" class="form-control dark-border custom-width-40" name="pw_check">
+											<input type="password" class="form-control dark-border custom-width-40" name="pw_check" onchange="checkPassword()">
 										</td>
 									</tr>
 									<tr>
 										<td class="form-title-custom">연락처</td>
-										<td>
+										<td class="custom-flex-row">
+											<input type="hidden" id="tel-checked-status" value="N">
 											<input type="text" 
-												class="form-control dark-border  custom-width-40" 
-												name="user_tel" 
-												oninput="this.value = this.value.replace(/[^0-9]/g,'')">
+												class="form-control dark-border custom-width-40" 
+												name="user_tel" id="user_tel"
+												oninput="this.value = this.value.replace(/[^0-9]/g,'')">&nbsp;&nbsp;
+											<button type="button" class="btn btn-default btn-sm" onclick="checkUserTel()">중복 확인</button>
+											<div class="custom-center-all custom-width-40">
+												<span id="tel-check-response" class="response-text"></span>
+											</div>
 										</td>
 									</tr>
 									<tr>
@@ -86,14 +91,8 @@
 											<!-- 상품코드 Select2 적용 --> <!-- Map도 받아지네 -->
 											<select class="form-control select2 dark-border" name="user_co" style="width:40%;">
 												<option value="">회사 선택</option>
-												<option
-													th:value="'중앙 IT'"
-													th:data-company-name="'중앙 IT'"
-													th:text="'중앙 IT TEST'"></option>
-												<option
-													th:value="'중앙 IT2'"
-													th:data-company-name="'중앙 IT2'"
-													th:text="'중앙 IT2 TEST2'"></option>
+												<option value="PikPak">PikPak</option>
+												<option th:value="'중앙 IT'" th:text="'중앙 IT'"></option>
 											</select> 
 											<!-- 
 											<select class="form-control select2" id="pd" name="product_cd" style="width:40%">
@@ -123,9 +122,12 @@
 								</tbody>
 							</table>
 						</div>
+						<div class="custom-center-all custom-width-100">
+							<span id="send-check-response" class="response-text visibility-hide"></span>
+						</div>
 						<nav style="text-align: center; padding: 15px;">
 							<span>
-								<button type="button" class="btn btn-dark" id="req_enroll" onclick="sendAddUserForm()">등록</button> 
+								<button type="button" class="btn btn-dark" onclick="sendAddUserForm()">등록</button> 
 							</span>
 						</nav>
 					</form>

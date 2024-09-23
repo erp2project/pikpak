@@ -73,7 +73,7 @@ public class JWTRequestFilter extends OncePerRequestFilter{
             	CustomUserDetails userDetails = userDetailsService.loadUserByUsername(userId);
                 // 토큰이 만료되었을 때
                 if (JWTUtil.isTokenExpired(token)) {
-                	res.sendRedirect("/expired");
+                	res.sendRedirect("/auth/token-expired");
                     return;
                 }
                 // 유효한 토큰일 경우

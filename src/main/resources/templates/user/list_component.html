@@ -31,6 +31,7 @@
 										<td>
 										<select class="form-control">
 											<option value="">유형 선택</option>
+											<option value="admin">관리자</option>
 											<option value="operator">운영</option>
 											<option value="supplier">공급</option>
 											<option value="vendor">판매</option>
@@ -68,21 +69,17 @@
 								<table class="table table-hover">
 									<thead style="background-color: rgb(130, 210, 213);">
 										<tr>
-											<th style="width:30px;">
-											<input type="checkbox" style="border: 1px solid #ccc; ">
-											</th>
-											<th>아이디</th>
-											<th>이름</th>
-											<th>연락처</th>
-											<th>이메일</th>
-											<th>사용자 유형</th>
-											<th>소속</th>
-											<th style="text-align: center;">관리</th>
+											<th style="width:10%;">아이디</th>
+											<th style="width:10%;">이름</th>
+											<th style="width:10%;">연락처</th>
+											<th style="width:20%;">이메일</th>
+											<th style="width:10%;">사용자 유형</th>
+											<th style="width:30%;">소속</th>
+											<th style="width:10%; text-align: center;">상세보기</th>
 										</tr>
 									</thead>
 									<tbody>
 										<tr th:unless="${userListSize==0}" th:each="userData : ${userList}">
-											<td><input type="checkbox"></td>
 											<td th:text="${userData.user_id}"></td>
 											<td th:text="${userData.user_nm}"></td>
 											<td th:text="${userData.user_tel}"></td>
@@ -92,7 +89,9 @@
 											<td th:if="${userData.user_type=='supplier'}">공급</td>
 											<td th:if="${userData.user_type=='vendor'}">판매</td>
 											<td th:text="${userData.user_company}"></td>
-											<td style="text-align: center;">관리</td>
+											<td class="text-button">
+												<a th:href="@{'/admin/user/view/' + ${userData.user_id}}">상세</a>
+											</td>
 										</tr>
 										<tr th:if="${userListSize==0}">
 											<td colspan="10" style="text-align: center;">등록된 회원이 없습니다.</td>

@@ -40,6 +40,15 @@
 }
 
 /* 버튼 */
+.text-button {
+	text-align: center;
+}
+
+.text-button:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
 .btn-dark {
   color: #fff;
   background-color: #343a40;
@@ -88,6 +97,11 @@
 	transition: opacity 100ms linear;
 }
 
+.response-text-visible{
+	color: grey;
+	transition: opacity 100ms linear;
+}
+
 .custom-center-all {
 	align-content: center; 
 	text-align: center;
@@ -111,4 +125,9 @@
 
 .custom-width-20 {
 	width: 20%;
+}
+
+.custom-flex-row {
+	display:flex; 
+	flex-direction: row;
 }

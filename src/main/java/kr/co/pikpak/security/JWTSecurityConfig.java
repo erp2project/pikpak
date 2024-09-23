@@ -59,7 +59,8 @@ public class JWTSecurityConfig {
 					.requestMatchers("/home").authenticated()
 					.requestMatchers("/supplier/**").hasAuthority("supplier")
 					.requestMatchers("/vendor/**").hasAuthority("vendor")
-					.requestMatchers("/admin","/admin/**").hasAuthority("operator")
+					.requestMatchers("/admin/users","/admin/users/**","/admin/user/**","/admin/check/**").hasAuthority("admin")
+					//.requestMatchers("/admin","/admin/**").hasAuthority("admin")
 					//.requestMatchers("/test").has
 					.anyRequest().permitAll())
 			.exceptionHandling(auth -> auth.accessDeniedHandler(accessDeniedHandler()))
@@ -74,7 +75,7 @@ public class JWTSecurityConfig {
 			.authenticationProvider(authenticationProvider())
 			//.addFilterBefore(JWTRequestFilter, UsernamePasswordAuthenticationFilter.class)
 			.addFilterBefore(JWTRequestFilter, BasicAuthenticationFilter.class)
-			.logout(config -> config.deleteCookies("accessToken").logoutSuccessUrl("/logout/end"));
+			.logout(config -> config.deleteCookies("accessToken").invalidateHttpSession(true).logoutSuccessUrl("/logout/end"));
 
 		return http.build();
 	}
