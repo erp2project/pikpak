@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항 상세보기</title>
+
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- 부트스트랩 CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- CKEditor 5 CDN -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+
+    <!-- Popper.js & Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <style>
+        .notice-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-text-display {
+            padding: 0;
+            background-color: transparent;
+            border: none;
+            font-size: 1rem;
+            font-weight: normal;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .notice-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+        }
+        small {
+            font-size: 0.85em;
+            color: #6c757d;
+        }
+        .author-info {
+            display: flex;
+            align-items: center;
+        }
+        .author-details {
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+        }
+        .author-details .form-text-display {
+            margin-left: 5px;
+        }
+        .meta-info {
+            display: flex;
+            align-items: center;
+        }
+        .meta-info small {
+            margin-left: 10px;
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+
+<div class="notice-container" style="padding-top: 100px;">
+    <h2 class="mb-4">공지사항</h2>
+
+    <div class="form-group">
+        <div class="form-text-display" id="notice_sb"><span th:text="${notice.notice_sb}"></span></div>
+    </div>
+    
+    <div class="form-group author-info">
+      <div class="form-text-display">
+    	작성자: <span th:text="${notice.get('operator_nm')}"></span>
+	</div>
+        <div class="meta-info">
+            <small th:text="'작성일: ' + ${#dates.format(notice.created_dt, 'yyyy-MM-dd HH:mm')}"></small>
+            <small th:text="'조회수: ' + ${notice.view_count}" style="margin-left: 15px;"></small>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="form-group">
+        <div class="notice-content" id="notice_con">
+            <span th:utext="${notice.notice_con}"></span>  <!-- HTML 형식의 notice_con을 그대로 출력 -->
+        </div>
+    </div>
+	
+	<div class="notice-footer">
+		<button class="btn btn-secondary" id="updateBtn" th:data-nidx="${notice.get('nidx')}" 
+    th:if="${notice.get('operator_id')} == ${activeUserID}">
+    수정
+</button>
+
+		
+		<!-- 작성자 ID와 로그인 사용자 ID를 데이터 속성으로 숨김 -->
+		<input type="hidden" id="operatorID" value="${notice.get('operator_id')}" />
+		<input type="hidden" id="activeUserID" value="${activeUserID}" />
+	    <button class="btn btn-secondary" onclick="window.history.back()">목록으로 돌아가기</button>
+	</div>
+   
+    
+</div>
+</body>
+<script>
+   $(document).ready(function() {
+        $("#updateBtn").on("click", function() {
+            var nidx = $(this).data("nidx");  // 버튼에 저장된 nidx 값 가져오기
+            window.location = "/notice/update/" + nidx;  // 해당 nidx로 이동
+        });
+    });
+</script>
+</html>

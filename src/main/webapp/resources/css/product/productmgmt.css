@@ -1,0 +1,34 @@
+ .modal-body {
+        font-size: 12px; /* 원하는 폰트 크기로 변경 */
+        vertical-align: middle;	
+    }
+  .form-group {
+    margin-bottom: 5px; /* 원하는 간격으로 설정 */
+  }   
+  .list-sty{
+ font-size: 12px;
+  line-height: 15px; 
+  text-align: center;
+  background-color: rgb(130, 210, 213);
+  }
+
+  .table-hover td, .table-hover th {
+    height: 30px;
+      text-align: center; /* 셀 높이 설정 */
+  }
+
+    .list-sty2{
+    font-size: 13px;
+    
+  }  
+  .custom-input-style{
+    height: 30px;
+    font-size: 12px;
+  }
+    thead {
+    position: sticky;
+    top: 0;
+    background-color: white; /* 테이블 헤더를 스크롤 시 배경색 유지 */
+    z-index: 10; /* 다른 요소보다 위에 위치 */
+    
+}

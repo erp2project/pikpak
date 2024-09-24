@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.pikpak.mapper.StockLogRecordMapper">
+
+	<select id="selectList" resultType="HashMap">
+		SELECT
+			product_cd,
+			product_nm,
+			location_cd,
+			inventory_chg,
+			action_type,
+			log_dt,
+			operator_nm
+		FROM stock_log_record
+		ORDER BY log_dt DESC	
+	</select>
+	
+	<select id="selectLogSearch" resultType="hashmap">
+    SELECT
+        product_cd AS product_cd,
+        product_nm AS product_nm,
+        location_cd AS location_cd,
+        inventory_chg AS inventory_chg,
+        action_type AS action_type,
+        log_dt AS log_dt,
+        operator_nm AS operator_nm
+    FROM stock_log_record
+    WHERE 1=1
+    <!-- 날짜 필터 조건 (fromDate와 toDate가 있을 경우 적용) -->
+    <if test="fromDate != null and fromDate != '' and toDate != null and toDate != ''">
+        AND DATE(log_dt) BETWEEN #{fromDate} AND #{toDate}
+    </if>
+
+    <!-- 검색어 필터 조건 (searchKeyword가 있을 경우 적용) -->
+    <if test="searchKeyword != null and searchKeyword != ''">
+        <choose>
+            <!-- productType이 'product_nm'일 경우 -->
+            <when test="productType == 'product_nm'">
+                AND product_nm LIKE CONCAT('%', #{searchKeyword}, '%')
+            </when>
+            <!-- productType이 'operator_nm'일 경우 -->
+            <when test="productType == 'operator_nm'">
+                AND operator_nm LIKE CONCAT('%', #{searchKeyword}, '%')
+            </when>
+            <!-- productType이 없을 경우, 두 필드를 모두 검색 -->
+            <otherwise>
+                AND (product_nm LIKE CONCAT('%', #{searchKeyword}, '%')
+                     OR operator_nm LIKE CONCAT('%', #{searchKeyword}, '%'))
+            </otherwise>
+        </choose>
+    </if>
+
+    <!-- 필터가 없을 경우에도 전체 데이터를 가져오도록 설정 -->
+    ORDER BY log_dt DESC;
+</select>
+
+</mapper>
