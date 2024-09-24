@@ -11,6 +11,21 @@ public class HomePageController {
 	@GetMapping("/home")
 	public String homePage() {
 		return "/home/home";
+		//return "/notice/noticeTable";
 	}
 	
+	@GetMapping("/auth/access-denied")
+	public String accessDeniedPage() {
+		return "/home/access_denied";
+	}
+	
+	@GetMapping("/auth/auth-error")
+	public String loginErrorPage() {
+		return "/home/access_auth_error";
+	}
+	
+	@GetMapping("/auth/session-expired")
+	public String sessionExpiredPage() {
+		return "/home/access_session_expired";
+	}
 }

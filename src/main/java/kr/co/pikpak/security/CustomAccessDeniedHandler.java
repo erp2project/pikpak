@@ -17,12 +17,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler{
 	@Override
 	public void handle(HttpServletRequest req, HttpServletResponse res,
 			AccessDeniedException accessDeniedException) throws IOException, ServletException {
-		 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		 if (auth != null) {
-			 res.sendRedirect("/auth/access-error");
-		 }
-		 else {
-			 res.sendRedirect("/auth/login-error");	// 이거는 다른곳에서 핸들링 해야함
-		 }
+		 res.sendRedirect("/auth/access-denied");
 	}
 }

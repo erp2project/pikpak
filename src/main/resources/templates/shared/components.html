@@ -10,7 +10,7 @@
 	
 	<!-- TOP -->
 	<nav th:fragment="top" class="navbar navbar-default navbar-fixed-top">
-		<div class="container-fluid">
+		<div class="container-fluid custom-flex-row">
 			<a href="index.html" class="brand-custom">
 				<img src="/resources/assets/img/apple-icon.png" class="brand-logo">
 				<span class="brand-title">PikPak</span>
@@ -21,19 +21,36 @@
 					<i class="lnr lnr-arrow-left-circle"></i>
 				</button>
 			</div>
-
-			<div class="navbar-btn navbar-btn-right">
-				<span style="vertical-align: -3px;"> 
+			
+			<div class="custom-width-100"></div>
+			
+			<div th:replace="~{/shared/components.html :: timer}"></div>
+			
+			<div class="custom-flex-row-reverse custom-width-40">
+				<div class="custom-center-all">
+					<a class="btn btn-primary update-pro btn-sm" href="/logout"><span>로그아웃</span></a>
+				</div>
+				<div class="custom-center-all custom-hide custom-fixed-width-200"> 
 					<i class="lnr lnr-user"></i>
 					<span>
 						<span th:text="${activeUserName}"></span>님 환영합니다.
 					</span>
-				</span> 
-				<a class="btn btn-primary update-pro" href="/logout"><span>로그아웃</span></a>
+				</div> 
 			</div>
 		</div>
 	</nav>
 	<!-- TOP END -->
+	
+	<!-- TIMER -->
+	<div class="custom-fixed-width-300 custom-flex-row" th:fragment="timer">
+		<div class="custom-center-all custom-fixed-width-100" id="expiration_timer"></div>
+		<div class="custom-center-all">
+			<input type="button" class="btn btn-dark btn-sm" value="세션 연장" onclick="refreshSession()">
+		</div>
+		
+		<script src="/resources/js/shared/timer_component.js"></script>
+	</div>
+	<!-- TIMER END -->
 	
 	<!-- SIDEBAR -->
 	<div th:fragment="sidebar" id="sidebar-nav" class="sidebar">
@@ -133,6 +150,9 @@
 		</div>
 	</footer>
 	<!-- FOOTER END -->
+	
+	
+
 </body>
 
 </html>

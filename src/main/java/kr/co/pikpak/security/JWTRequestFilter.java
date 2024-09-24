@@ -31,6 +31,13 @@ public class JWTRequestFilter extends OncePerRequestFilter{
 	@Override
 	protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain)
 			throws ServletException, IOException {
+		// Do I need this?
+		String requestURI = req.getRequestURI();
+		if (requestURI.startsWith("/resources/") || requestURI.startsWith("/login") || requestURI.startsWith("/auth")) {
+			filterChain.doFilter(req, res);
+			return;
+		}
+		
 		// Request 헤더에 Authorization 있는 경우
 		String authHeader = req.getHeader("Authorization");
 		
@@ -42,14 +49,6 @@ public class JWTRequestFilter extends OncePerRequestFilter{
 				res.setHeader("Authorization", authHeader);
 			}
 		}
-		
-		String requestURI = req.getRequestURI();
-		
-		if (requestURI.startsWith("/resources/") || requestURI.startsWith("/login")) {
-			filterChain.doFilter(req, res);
-			return;
-		}
-		
 
 		String userId = null;
 		String token = null;
@@ -58,24 +57,18 @@ public class JWTRequestFilter extends OncePerRequestFilter{
 		if (authHeader != null && authHeader.startsWith("Bearer ")) { //request에 authorization header있는경우
 			token = authHeader.substring(7);
 			
-			try {
-				userId = JWTUtil.extractUserId(token);
-            } catch (IllegalArgumentException e) {
-            	//System.out.println("Error occurred while retrieving Username from Token");
+			// 세션 초과!
+            try {
+            	userId = JWTUtil.extractUserId(token);
             } catch (ExpiredJwtException e) {
-            	//System.out.println("The token has expired");
-            } catch (SignatureException e) {
-            	//System.out.println("Authentication Failed. Invalid username or password.");
+                req.setAttribute("expired", true);
             }
 			
             // 유저 이름이 존재하고 현재 인증 정보가 없는 경우
             if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             	CustomUserDetails userDetails = userDetailsService.loadUserByUsername(userId);
-                // 토큰이 만료되었을 때
-                if (JWTUtil.isTokenExpired(token)) {
-                	res.sendRedirect("/auth/token-expired");
-                    return;
-                }
+    				
+            	
                 // 유효한 토큰일 경우
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

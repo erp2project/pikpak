@@ -5,8 +5,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class CookieUtility {
+	public static void setCookie(HttpServletResponse res, String name, String item, String path) {
+		Cookie cookie = new Cookie(name, item);
+		cookie.setMaxAge(60*60*24+7);
+		cookie.setHttpOnly(true);
+		cookie.setPath(path);
+		res.addCookie(cookie);
+	}
+	
 	public static String getCookie(HttpServletRequest req, String name) {
-
         Cookie[] cookies = req.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
