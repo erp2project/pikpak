@@ -129,8 +129,8 @@ public class DeliveryServiceImpl implements DeliveryService{
 	
 	//납품등록 현황
 	@Override
-	public List<deliver_enroll_dto> select_deliver_enroll() {
-		List<deliver_enroll_dto> deliver_list = delrepo.select_deliver_enroll();
+	public List<deliver_enroll_dto> select_deliver_enroll(String supplier_cd) {
+		List<deliver_enroll_dto> deliver_list = delrepo.select_deliver_enroll(supplier_cd);
 		return deliver_list;
 	}
 	
@@ -138,8 +138,8 @@ public class DeliveryServiceImpl implements DeliveryService{
 	//납품등록
 	@Override
 	public int insert_deliver_enroll(deliver_enroll_dto dto) {
-		String supplier_cd = "C001";
-		dto.setSupplier_cd(supplier_cd); //업체코드
+		//String supplier_cd = "C001";
+		//dto.setSupplier_cd(supplier_cd); //업체코드
 		
 		//납품요청코드 랜덤생성
 		dto.setDeliver_cd(this.make_delienrollcode());

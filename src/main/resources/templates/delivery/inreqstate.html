@@ -179,7 +179,7 @@ $(document).ready(
 		$(document).on("click", ".inreq_delivery", function(event) {
 			event.preventDefault();  // 기본 동작 중단
 			
-			
+			var supplier_cd = $(this).data("supplier-cd");
 			var product_cd = $(this).data("product-cd");
 			var product_nm = $(this).data("product-nm");
 			var supplier_nm = $(this).data("supplier-nm");
@@ -196,6 +196,7 @@ $(document).ready(
 			$("#add_req_del").val(add_req);
 			$("#hope_dt_del").val(hope_dt);
 			$("#request_cd_del").val(request_cd);
+			$("#supplier_cd_del").val(supplier_cd);
 			
 			// 모달 보여주기
 			$("#deleverModal").modal('show');

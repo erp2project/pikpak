@@ -5,6 +5,9 @@ import lombok.Data;
 @Data
 public class receiving_dto {
 	int receiving_idx, receiving_qty;
-	String deliver_cd, exreceiving_cd, receiving_cd, lon_no, supplier_cd, product_cd, receving_size, location_cd;
-	String operator_id, inventory_dt, receiving_dt;
+	String deliver_cd, exreceiving_cd, receiving_cd, lot_no, supplier_cd, product_cd, product_nm, receving_size, location_cd;
+	String operator_id, inventory_dt, receiving_dt, receiving_log;
+	
+	//테이블에는 없음, 로트번호 만들기 위함
+	String make_dt;
 }

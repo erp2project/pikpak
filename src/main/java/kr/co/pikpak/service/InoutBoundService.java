@@ -9,7 +9,10 @@ import kr.co.pikpak.dto.ex_receiving_joined_dto;
 import kr.co.pikpak.dto.input_request_dto;
 import kr.co.pikpak.dto.order_enroll_dto_lhwtemp;
 import kr.co.pikpak.dto.product_dto_lhwtemp;
+import kr.co.pikpak.dto.receiving_dto;
 import kr.co.pikpak.dto.supplier_info_dto_lhwtemp;
+import kr.co.pikpak.dto.warehouse_dto_lhwtemp;
+import kr.co.pikpak.dto.warehouse_locations_dto_lhwtemp;
 
 public interface InoutBoundService {
 	//상품코드 관련 정보 가져오기
@@ -66,4 +69,22 @@ public interface InoutBoundService {
 	
 	//주문현황 보여주기
 	public List<order_enroll_dto_lhwtemp> select_order_enroll();
+	
+	//위치코드
+	public List<warehouse_locations_dto_lhwtemp> select_locations(String supplier_cd);
+	
+	//입고등록 (receiving 테이블)
+	public int insert_receiving(receiving_dto dto);
+	
+	//warehouse 데이터 확인
+	public List<String> check_warehouse(String location_cd, String product_cd);
+	
+	//warehouse insert
+	public int insert_warehouse(Map<String, Object> wh_dto);
+		
+	//warehouse update
+	public int update_wwarehouse(Map<String, Object> wh_update);
+		
+	//warehouse_locations update
+	public int update_warehouse_locations(String location_cd);
 }

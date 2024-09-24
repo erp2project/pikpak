@@ -37,6 +37,7 @@
 											id="product_cd_recv" name="product_cd">
 											<input type="hidden" id="deliver_cd_recv" name="deliver_cd">
 											<input type="hidden" id="exrecv_cd" name="exreceiving_cd">
+											<input type="hidden" id="make_dt_recv" name="make_dt">
 										</td>
 									</tr>
 									<tr>
@@ -54,8 +55,8 @@
 									<tr>
 										<td style="width: 30%;">상품수량</td>
 										<td><input type="text" maxlength="3" 
-										id="product_qty_recv" readonly="readonly" name="receiving_qty">
-										
+										id="product_qty_recv" readonly="readonly" name="total_qty">
+										<input type="hidden" id="return_qty" name="return_qty">
 									</tr>
 									<tr>
 										<td style="width: 30%;">가입고 위치</td>
@@ -66,7 +67,7 @@
 										<td style="width: 30%;">가입고 일자</td>
 										<td><div style="display: flex; align-items: center;">
 												<input type="date" class="form-control" style="width: 40%;"
-												id="exrecv_dt">&nbsp;&nbsp;
+												id="exrecv_dt" readonly="readonly">&nbsp;&nbsp;
 										</div></td>
 									</tr>
 
@@ -93,18 +94,24 @@
 											<option value="2유형">2유형</option>
 											<option value="3유형">3유형</option>
 									</select>
-									<select class="form-control" name="location_cd"
+									<select class="form-control" id="location_select" name="location_cd"
 										style="width: 35%; float: left; margin-right: 5px;">
 											<option value="">위치 선택</option>
 
-									</select></td>
+									</select>
+								</tr>
+								<tr>
+									<td style="width: 30%;">비고</td>
+									<td>
+									<textarea rows="2" cols="40" name="receiving_log"></textarea>		
+									</td>
 								</tr>
 								</tbody>
 							</table>
 						</div>
 						<nav style="text-align: center; padding: 15px;">
 							<span>
-								<button type="button" class="btn btn-dark" id="req_modify">등록</button> 
+								<button type="button" class="btn btn-dark" id="recv_enroll">등록</button> 
 							</span>
 
 						</nav>

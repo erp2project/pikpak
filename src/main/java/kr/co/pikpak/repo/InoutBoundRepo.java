@@ -11,7 +11,10 @@ import kr.co.pikpak.dto.ex_receiving_joined_dto;
 import kr.co.pikpak.dto.input_request_dto;
 import kr.co.pikpak.dto.order_enroll_dto_lhwtemp;
 import kr.co.pikpak.dto.product_dto_lhwtemp;
+import kr.co.pikpak.dto.receiving_dto;
 import kr.co.pikpak.dto.supplier_info_dto_lhwtemp;
+import kr.co.pikpak.dto.warehouse_dto_lhwtemp;
+import kr.co.pikpak.dto.warehouse_locations_dto_lhwtemp;
 
 @Mapper
 public interface InoutBoundRepo {
@@ -71,5 +74,22 @@ public interface InoutBoundRepo {
 	
 	//주문현황 확인
 	List<order_enroll_dto_lhwtemp> select_order_enroll();
-
+	
+	//위치코드 정보 가지고 오기
+	List<warehouse_locations_dto_lhwtemp> select_locations(String supplier_cd);
+	
+	//입고등록하기 receiving테이블
+	int insert_receiving(receiving_dto dto);
+	
+	//입고 관련하여 warehouse에 같은 데이터가 있는 지 확인
+	List<String> check_warehouse(String location_cd, String product_cd);
+	
+	//warehouse insert
+	int insert_warehouse(Map<String, Object> wh_dto);
+	
+	//warehouse update
+	int update_wwarehouse(Map<String, Object> wh_update);
+	
+	//warehouse_locations update
+	int update_warehouse_locations(String location_cd);
 }

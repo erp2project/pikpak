@@ -27,7 +27,9 @@ import kr.co.pikpak.dto.ex_receiving_joined_dto;
 import kr.co.pikpak.dto.input_request_dto;
 import kr.co.pikpak.dto.order_enroll_dto_lhwtemp;
 import kr.co.pikpak.dto.product_dto_lhwtemp;
+import kr.co.pikpak.dto.receiving_dto;
 import kr.co.pikpak.dto.supplier_info_dto_lhwtemp;
+import kr.co.pikpak.dto.warehouse_locations_dto_lhwtemp;
 import kr.co.pikpak.service.InoutBoundService;
 
 @Controller
@@ -40,6 +42,63 @@ public class InoutBoundController {
 	
 	@Resource(name="ir_dto")
 	input_request_dto irdto; 
+	
+	
+	//입고 등록
+	@PostMapping("inoutbound/inbound_enrollok")
+	public String inbound_enrollok(ServletResponse res, @ModelAttribute("receiving") receiving_dto dto,
+			@RequestParam(defaultValue = "", required = true) String total_qty,
+			@RequestParam(defaultValue = "", required = false) String return_qty) {
+		res.setContentType("text/html;charset=utf-8");
+		//넘어오는 값 : deliver_cd, exreceiving_cd, supplier_cd, proudct_cd, product_nm, receiving_qty, receiving_size, location_cd, inventory_dt, receiving_log
+		//만들어야하는 값 : receiving_cd, lot_no, operator_id
+		//자동으로 들어가는 값 : receiving_idx, receiving_dt
+		try {
+			this.pw = res.getWriter();
+			
+			//납품수량, 반품수량 계산
+			dto.setReceiving_qty(Integer.parseInt(total_qty) - Integer.parseInt(return_qty));
+			
+			/*int result = ioservice.insert_receiving(dto);
+			if(result > 0) {
+				this.pw.print("<script>"
+						+ "alert('정상적으로 등록 되었습니다.');"
+						+ "location.href = './recvenroll';"
+						+ "</script>");			
+				
+			}	
+			*/
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			this.pw.print("<script>"
+					+ "alert('데이터베이스 문제로 등록되지 못하였습니다.');"
+					+ "location.href = './recvenroll';"
+					+ "</script>");
+		}
+		finally {
+			this.pw.close();
+		}
+		return null;
+	}
+	
+	
+	//입고 모달 회사코드에 해당하는 위치코드 가져오기
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@GetMapping("/inventory_locations")
+	@ResponseBody
+	public ResponseEntity<?> inventory_locations(@RequestParam(defaultValue = "", required = true) String supplier_cd) {
+		try {
+			List<warehouse_locations_dto_lhwtemp> locations = ioservice.select_locations(supplier_cd);
+			 return ResponseEntity.ok(locations);  // JSON으로 변환되어 전송
+		} 
+		catch (Exception e) {
+			this.pw.print("error");
+			 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error");
+		}
+	}
+	
+	
 	
 	//납품 반송
 	@PostMapping("/inoutbound/deliver_returnok")
@@ -322,6 +381,9 @@ public class InoutBoundController {
 	//입고 등록 이동
 	@GetMapping("inoutbound/recvenroll")
 	public String recvenroll(Model m) {
+		//입고 모달에 위치코드 정보 불러오기
+		
+		
 		//가입고 리스트 불러오기
 		List<ex_receiving_joined_dto> exrecv_list = ioservice.select_ex_receiving();
 		m.addAttribute("exrecv_list",exrecv_list);

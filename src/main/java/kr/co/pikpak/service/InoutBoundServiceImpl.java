@@ -1,5 +1,6 @@
 package kr.co.pikpak.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +13,10 @@ import kr.co.pikpak.dto.ex_receiving_joined_dto;
 import kr.co.pikpak.dto.input_request_dto;
 import kr.co.pikpak.dto.order_enroll_dto_lhwtemp;
 import kr.co.pikpak.dto.product_dto_lhwtemp;
+import kr.co.pikpak.dto.receiving_dto;
 import kr.co.pikpak.dto.supplier_info_dto_lhwtemp;
+import kr.co.pikpak.dto.warehouse_dto_lhwtemp;
+import kr.co.pikpak.dto.warehouse_locations_dto_lhwtemp;
 import kr.co.pikpak.repo.InoutBoundRepo;
 
 @Service
@@ -20,6 +24,128 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	
 	@Autowired
 	InoutBoundRepo iorepo;
+	
+	//warehouse_locations update
+	@Override
+	public int update_warehouse_locations(String location_cd) {
+		int result = iorepo.update_warehouse_locations(location_cd);
+		return result;
+	}
+	
+	//warehouse update
+	@Override
+	public int update_wwarehouse(Map<String, Object> wh_update) {
+		int result = iorepo.update_wwarehouse(wh_update);
+		return result;
+	}
+	
+	//warehouse insert
+	@Override
+	public int insert_warehouse(Map<String, Object> wh_dto) {
+		int result = iorepo.insert_warehouse(wh_dto);
+		return result;
+	}
+	
+	//warehosue 데이터 확인
+	@Override
+	public List<String> check_warehouse(String location_cd, String product_cd) {
+		List<String> idx = iorepo.check_warehouse(location_cd, product_cd);
+		return idx;
+	}
+	
+	//입고등록 receiving
+	@Override
+	public int insert_receiving(receiving_dto dto) {
+		int final_result = 0;
+		
+		//lot_no 생성
+		/*
+		  상품코드 + 제조일자 + 입고일자 + (입고일자가 같은 경우 001,002)
+		  1. 현재 receiving 테이블에 같은 입고날자가 있는 지 없는지 확인
+		  
+		  2. 제조일자를 불러오기위해 
+		 */
+		String lot_no = this.make_lotno(dto.getProduct_cd(), dto.getMake_dt(), dto.getInventory_dt());
+		dto.setLot_no(lot_no);
+		
+		//세션에서 id가져왔다고 가정
+		String operator_id = "ad_leehw_1234";
+		dto.setOperator_id(operator_id);
+		
+		int result = iorepo.insert_receiving(dto);
+		if(result > 0) { //입고 먼저 하고
+			/* 
+			[warehouse_locations 테이블에서 업데이트]
+			해당 위치코드의 currunt_capacity 증가
+			*/
+		    int update_locations_result = this.update_warehouse_locations(dto.getLocation_cd());
+		    if(update_locations_result > 0) {
+		    	/*
+				[warehouse 테이블에서 업데이트]
+				1) 테이블 안에 해당 위치에 상품코드가 없으면 그대로 insert
+				2) 테이블 안에 해당 위치에 상품코드가 있으면 product_qty만 증가
+				*/
+		    	List<String> idx = this.check_warehouse(dto.getLocation_cd(), dto.getProduct_cd());
+				if (idx.size() > 0) {	// 테이블 안에 해당 위치에 상품코드가 있으면 product_qty만 증가
+					//update    
+					//Map 만들기
+					Map<String, Object> wh_update = new HashMap<String, Object>();
+					wh_update.put("additional_qty", dto.getReceiving_qty());				
+					wh_update.put("update_by", operator_id);
+					wh_update.put("inventory_log", dto.getReceiving_log());
+					wh_update.put("wh_warehouse_idx", idx.get(0));	
+					
+					int update_result = this.update_wwarehouse(wh_update);
+					
+					if(update_result > 0) {
+						final_result = 1;
+					}
+				} 
+				else {
+				   //insert
+					//Map 만들기
+					System.out.println(dto.getReceiving_qty());
+					
+					Map<String, Object> wh_dto = new HashMap<String, Object>();
+					wh_dto.put("location_cd", dto.getLocation_cd());
+					wh_dto.put("product_cd", dto.getProduct_cd());
+					wh_dto.put("product_nm", dto.getProduct_nm());
+					wh_dto.put("supplier_nm", "");
+					wh_dto.put("product_qty", dto.getReceiving_qty());
+					wh_dto.put("inventory_log", dto.getReceiving_log());
+					wh_dto.put("supplier_cd", dto.getReceiving_cd());
+					
+				    int insert_result = this.insert_warehouse(wh_dto);   
+				    
+				    if(insert_result > 0) {
+				    	final_result = 1;
+				    }	
+				}
+			}
+		    else {
+		    	System.out.println("위치코드 업데이트 실패");
+		    }
+		}
+		else {
+			final_result = -1;
+			System.out.println("입고 실패");
+		}
+		
+		/*	
+		3. stock_log_record
+		Trigger 걸어놓기
+		*/
+		
+		return final_result;
+	}
+	
+	
+	//위치코드 정보 가지고 오기
+	@Override
+	public List<warehouse_locations_dto_lhwtemp> select_locations(String supplier_cd) {
+		List<warehouse_locations_dto_lhwtemp> locations = iorepo.select_locations(supplier_cd);
+		return locations;
+	}
 	
 	//출고등록에서 주문현황 보여주기
 	@Override
@@ -208,24 +334,55 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	}
 	
 	//반송 데이터 등록시 입고요청코드 랜덤생성
-		public String make_returncode() {
+	public String make_returncode() {
+		//서버 시간
+		String server_time = this.get_time();
+		
+		//랜덤숫자 4개 생성
+		int w = 0;
+		String randnum = "";
+			
+		while(w < 4) {
+			int pc = (int)(Math.ceil(Math.random()*9));
+			randnum += pc;
+			w++;
+		}
+			
+		String code = "DR "+ server_time + "-" + randnum;
+			
+		return code;
+	}
+	
+	//입고 등록시 입고코드 랜덤생성
+		public String make_recvcode() {
 			//서버 시간
 			String server_time = this.get_time();
-		
+			
 			//랜덤숫자 4개 생성
 			int w = 0;
 			String randnum = "";
-			
+				
 			while(w < 4) {
 				int pc = (int)(Math.ceil(Math.random()*9));
 				randnum += pc;
 				w++;
 			}
-			
-			String code = "DR "+ server_time + "-" + randnum;
-			
+				
+			String code = "RE "+ "-" + randnum;
+				
 			return code;
 		}
+	
+	
+	//입고 시 로트번호 생성하기
+	public String make_lotno(String product_cd, String make_dt, String inventory_dt) {
+		String makedate = make_dt.replaceAll("-", "");
+		String ivdate = inventory_dt.replaceAll("-", "");
+		
+		String lot_no = product_cd + "-" + "M" + makedate + "-" + "R" + ivdate;
+		
+		return lot_no;
+	}
 	
 	
 	

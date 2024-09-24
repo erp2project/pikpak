@@ -138,8 +138,8 @@ public class DeliveryController {
 	//납품등록
 	@PostMapping("/delivery/delivery_enrollok")
 	public String delivery_enrollok(ServletResponse res, @ModelAttribute("deliver") deliver_enroll_dto dto) {
-		//프론트에서 넘어오는 값 : request_cd, prodcut_cd, product_nm, deliver_qty, make_dt, expect_dt, deliver_size, deliver_area
-		//여기서 넣어야하는 값 : supplier_cd, deliver_cd, deliver_st, operator_nm, operator_id
+		//프론트에서 넘어오는 값 : request_cd, prodcut_cd, product_nm, deliver_qty, make_dt, expect_dt, deliver_size, deliver_area,supplier_cd
+		//여기서 넣어야하는 값 : deliver_cd, deliver_st, operator_nm, operator_id
 		//쿼리문에서 넣는 값 or null 값 : deliver_idx, deliver_dt, update_id, update_nm, update_dt
 		res.setContentType("text/html;charset=utf-8");
 		
@@ -174,7 +174,7 @@ public class DeliveryController {
 	@GetMapping("delivery/returnstate")
 	public String returnstate(Model m) {
 		//세션에서 회사 정보 가져왔다고 가정
-		String supplier_cd = "C001";
+		String supplier_cd = "C009";
 		
 		try {
 			List<deliver_return_joined_dto> d_return = delservice.select_return_joined(supplier_cd);
@@ -191,7 +191,7 @@ public class DeliveryController {
 	public String inreqstate(Model m) {
 		//세션에서 회사정보를 가져왔다고 가정 -> 지금은 supplier_cd 사용
 		//String supplier_nm = "LG전자";
-		String supplier_cd = "C001";
+		String supplier_cd = "C009";
 		try {
 			List<input_request_state_dto> ir_list = delservice.select_inreq_deliv(supplier_cd);
 			//System.out.println(ir_list.size());
@@ -206,8 +206,11 @@ public class DeliveryController {
 	//납품 등록
 	@GetMapping("/delivery/deliveryenroll")
 	public String deliveryenroll(Model m) {
+		//여기도 세션에서 가지고 와야지
+		String supplier_cd = "C009";
 		try {
-			List<deliver_enroll_dto> deliver_list = delservice.select_deliver_enroll();
+			List<deliver_enroll_dto> deliver_list = delservice.select_deliver_enroll(supplier_cd);
+			System.out.println(deliver_list.get(0).getDeliver_cd());
 			//System.out.println(deliver_list.get(0).getProduct_nm());
 			m.addAttribute("deliver_list",deliver_list);
 		}

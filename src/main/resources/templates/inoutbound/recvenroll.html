@@ -215,14 +215,23 @@ $(document).ready(function() {
 		
 		var product_cd = $(this).data("product-cd");
 		var product_nm = $(this).data("product-nm");
-		var supplier_nm = $(this).data("supplier-nm");
-		var supplier_cd = $(this).data("supplier-cd");
+		var supplier_nm = $(this).data("supplier-nm");		
 		var product_qty = $(this).data("product-qty");
 		var exrecv_area = $(this).data("exrecv-area");
+		var exrecv_size = $(this).data("exrecv-size");
 		var exrecv_dt = $(this).data("exrecv-dt");
+		
+		/* hidden */
 		var deliver_cd = $(this).data("deliver-cd");
 		var exrecv_cd = $(this).data("exrecv-cd");
-		var exrecv_size = $(this).data("exrecv-size");
+		var supplier_cd = $(this).data("supplier-cd");
+		var return_qty = $(this).data("return-qty");
+		var make_dt = $(this).data("make-dt");
+		
+		if (parseInt(product_qty) == parseInt(return_qty)) {
+		   alert("모두 반송 처리된 데이터입니다.");
+		   return; // 반송 수량과 납품 수량이 같다면 모달을 띄우지 않음
+		}
 		
 		// 입력 필드에 값 설정
 		$("#product_cd_recv").val(product_cd);
@@ -235,6 +244,8 @@ $(document).ready(function() {
 		$("#deliver_cd_recv").val(deliver_cd);
 		$("#exrecv_cd").val(exrecv_cd);
 		$("#exrecv_size").val(exrecv_size);
+		$("#return_qty").val(return_qty);
+		$("#make_dt_recv").val(make_dt);
 		
 		// 모달 보여주기
 		$("#decideRecvModal").modal('show');
@@ -260,8 +271,20 @@ $(document).ready(function() {
 });
 </script>
  <script type="module">
-    import {page_move, receiving_enroll} from "../resources/js/inoutbound/inboundreq_main.js?v=3";
+    import {page_move, receiving_enroll} from "../resources/js/inoutbound/inboundreq_main.js?v=4";
 	
+    //가입고 리스트 입고등록시, 입고 등록버튼 decide_inbound	
+	document.querySelectorAll('.decide_inbound').forEach(function(button) {
+    	button.addEventListener('click', function(event) {
+			new receiving_enroll().bring_locations(button.dataset.supplierCd);
+		});
+	});
+
+	//가입고 리스트 입고등록하기 go_recv_enroll
+	document.querySelector("#recv_enroll").addEventListener("click",function(){
+		new receiving_enroll().go_recv_enroll();
+	});
+
 	//가입고 리스트 반송등록
 	document.querySelector("#return_enroll").addEventListener("click",function(){
 		new receiving_enroll().go_return_enroll();

@@ -1,19 +1,95 @@
-export class receiving_enroll{
+export class receiving_enroll {
+	//위치정보 가져오기 위한 ajax
+	bring_locations(sp_cd) {
+		if(frm_decide_recv.total_qty != frm_decide_recv.return_qty){
+		//supplier_cd에 대한 위치코드 긁어오기
+		fetch("/inventory_locations?supplier_cd=" + sp_cd, {
+			method: "get"
+		})
+			.then(function(result_data) {
+				return result_data.json();
+			})
+			.then(function(locations) {
+				var exrecv_size = document.getElementById('exrecv_size');
+				var location_select = document.getElementById("location_select");
+
+				function update_location_option() {
+					var selected_type = exrecv_size.value;
+					location_select.innerHTML = '<option value="">위치 선택</option>'; // 초기화
+
+					locations.forEach(function(location) {
+						var type_matches = false;
+						if (selected_type == '1유형' && location.location_cd.includes("L1")) {
+							type_matches = true;
+						} else if (selected_type == '2유형' && (location.location_cd.includes("L2") || location.location_cd.includes("L3"))) {
+							type_matches = true;
+						} else if (selected_type == '3유형' && location.location_cd.includes("L4")) {
+							type_matches = true;
+						}
+
+						if (type_matches) {
+							var option = document.createElement('option');
+							option.value = location.location_cd;
+							option.textContent = location.location_cd + " (" + location.current_capacity + "/" + location.max_capacity + ")";
+							location_select.appendChild(option);
+						}
+					});
+				}
+
+				exrecv_size.addEventListener('change', update_location_option);
+
+				// 모달이 열릴 때 초기 옵션을 설정
+				update_location_option();
+			})
+			.catch(function(error) {
+				console.log(error);
+			});
+			
+		}
+		
+			
+		
+	}
+
+
+
+	//입고 등록
+	go_recv_enroll() {
+		var location_select = document.getElementById("location_select");
+    	var selected_option = location_select.options[location_select.selectedIndex].text;
+    
+    	// 현재 용량과 최대 용량 추출
+    	var capacity_match = selected_option.match(/\((\d+)\/(\d+)\)$/);
+    	
+		if (frm_decide_recv.inventory_dt.value == "" || frm_decide_recv.location_cd.value == "") {
+			alert("입고일자 및 위치코드를 지정해주세요.");
+		}
+		else if( parseInt(capacity_match[1]) >= parseInt(capacity_match[2]) ){
+			alert("해당 위치는 사용하실 수 없습니다.");
+		}
+		else {
+			frm_decide_recv.method = "post";
+			frm_decide_recv.action = "./inbound_enrollok";
+			frm_decide_recv.submit();
+		}
+	}
+
+
 	//반송 등록
-	go_return_enroll(){
-		if(frm_deliver_return.d_return_dt.value==""){
+	go_return_enroll() {
+		if (frm_deliver_return.d_return_dt.value == "") {
 			alert('반송 일자를 입력해주세요')
 		}
-		else if(frm_deliver_return.d_return_type.value == ""){
+		else if (frm_deliver_return.d_return_type.value == "") {
 			alert('반송 사유를 입력해주세요');
-		}	
-		else{
-			frm_deliver_return.method="post";
-			frm_deliver_return.action="./deliver_returnok";
+		}
+		else {
+			frm_deliver_return.method = "post";
+			frm_deliver_return.action = "./deliver_returnok";
 			frm_deliver_return.submit();
 		}
 	}
-	
+
 }
 
 
@@ -21,7 +97,7 @@ export class receiving_enroll{
 
 export class product_search_modal {
 	//회사명 찾기와 상품명 찾기가 같은 html파일에서 로드되고 있기 때문에, 함수 호출이 다르더라도 id가 충돌나면 둘다 실행되어서 버그 오짐
-	pd_paging(pagenum){
+	pd_paging(pagenum) {
 		// 페이지 그룹 계산
 		const group_size = 5;
 		const current_group = Math.floor((pagenum - 1) / group_size); // 현재 페이지 그룹
@@ -29,19 +105,19 @@ export class product_search_modal {
 
 		const pd_nm = document.getElementById("pd_nm").value;
 		const pd_cd = document.getElementById("pd_cd").value;
-		
+
 		//ajax를 통해 해당 페이지의 데이터 리스트 가져오기
 		fetch('/product_paging?page=' + pagenum + '&pd_nm=' + pd_nm + '&pd_cd=' + pd_cd, {
 			method: 'get'
 		})
-		.then(function(result_data) {
-			return result_data.json();
-		})
-		.then(function(result_res) {
+			.then(function(result_data) {
+				return result_data.json();
+			})
+			.then(function(result_res) {
 				var page_ea = Math.ceil(result_res.pd_total / result_res.page_size); // 페이지 개수 계산
 				var pagination = document.querySelector("#page_ul_pd");
 
-				
+
 				if (result_res.pd_total != 0) {
 
 					// 기존 페이지 번호 비우기 (이전과 다음 버튼은 남기고 페이지 번호만 제거)
@@ -141,12 +217,12 @@ export class product_search_modal {
 					li.innerHTML = `<a class="page-link">1</a>`;
 					pagination.insertBefore(li, document.getElementById('next_pd'));
 				}
-				
+
 			})
 			.catch(function(error) {
 				console.log(error);
 			});
-			
+
 	}
 }
 
@@ -182,12 +258,12 @@ export class company_search_modal {
 
 					// 페이지 번호 생성 (5개 단위로 제한)
 					for (var i = start_page; i < start_page + group_size && i <= page_ea; i++) {
-						
+
 						var li = document.createElement('li');
 						li.classList.add('page-item', 'page-link', 'page-num');
 
 						li.innerHTML = `<a class="page-link page-num" href="javascript:void(0)" data-page="${i}">${i}</a>`;
-						
+
 						//선택된 데이터에 active추가
 						if (i == pagenum) {
 							li.classList.add('active'); // 현재 페이지에 active 클래스 추가
@@ -284,7 +360,7 @@ export class company_search_modal {
 
 export class inboundreq_list {
 	//관리 눌렀을 때
-	inreq_management(){
+	inreq_management() {
 		/*
 		const product_qty = frm_inreq_manage.product_qty.value;
 		const request_idx = frm_inreq_manage.request_idx.value;
@@ -295,55 +371,55 @@ export class inboundreq_list {
 		frm_inreq_manage.action = "./inreq_modifyok";
 		frm_inreq_manage.submit();
 	}
-	
-	
+
+
 	//검색 조회 눌렀을 때
-	inreq_list_search(){
-		
+	inreq_list_search() {
+
 		const start_date = document.getElementById("start_date").value;
 		const end_date = document.getElementById("end_date").value;
 		const search_cp_cd = document.getElementById("search_cp_cd").value;
 		const search_pd_cd = document.getElementById("search_pd_cd").value;
 		const search_state = document.getElementById("search_state").value;
 		const search_operator = document.getElementById("search_operator").value;
-		
-		if(start_date > end_date){
+
+		if (start_date > end_date) {
 			alert('정상적인 일자를 입력해주세요');
 		}
-		else if((start_date != "" && end_date == "") || (start_date == "" && end_date != "")){
+		else if ((start_date != "" && end_date == "") || (start_date == "" && end_date != "")) {
 			alert('입고요청일자로 검색 시 모두 입력되어야합니다.');
 		}
-		else{
-			
+		else {
+
 			var data = {
-				"start_date" : start_date,
-				"end_date" : end_date, 
-				"supplier_cd" : search_cp_cd, 
-				"product_cd" : search_pd_cd, 
-				"request_st" : search_state, 
-				"operator_nm" : search_operator
+				"start_date": start_date,
+				"end_date": end_date,
+				"supplier_cd": search_cp_cd,
+				"product_cd": search_pd_cd,
+				"request_st": search_state,
+				"operator_nm": search_operator
 			};
-			
+
 			this.search_data = JSON.stringify(data);
 			//console.log(this.search_data);
-			
-			fetch("/inboundreq_search",{
-				method : "post",
-				headers : {"Content-type":"application/json"},
-				body : this.search_data
+
+			fetch("/inboundreq_search", {
+				method: "post",
+				headers: { "Content-type": "application/json" },
+				body: this.search_data
 			})
-			.then(function(result_data){
-				return result_data.json();
-			})
-			.then(function(result_res){
-				//console.log(result_res);
-				
-				const tbody = document.querySelector("#ir_tbody");
-				
-				tbody.innerHTML = '';
-				
-				result_res.forEach(function(inputreq) {
-        			const list = `<tr>
+				.then(function(result_data) {
+					return result_data.json();
+				})
+				.then(function(result_res) {
+					//console.log(result_res);
+
+					const tbody = document.querySelector("#ir_tbody");
+
+					tbody.innerHTML = '';
+
+					result_res.forEach(function(inputreq) {
+						const list = `<tr>
         			 <td style="text-align: center; width: 2%;"><input type="checkbox" name="each_ck" value="${inputreq.request_idx}"></td>
             		<td style="text-align: center; width: 6%;">${inputreq.supplier_nm}</td>
             		<td style="text-align: center; width: 7%;">${inputreq.product_cd}</td>
@@ -352,9 +428,9 @@ export class inboundreq_list {
             		<td style="text-align: center; width: 15%;">${inputreq.add_req}</td>
             		<td style="text-align: center; width: 9%;">${inputreq.hope_dt}</td>
             		<td style="text-align: center; width: 5%;">${inputreq.request_st}</td>
-            		<td style="text-align: center; width: 9%;">${inputreq.request_dt.substring(0,10)}</td>
+            		<td style="text-align: center; width: 9%;">${inputreq.request_dt.substring(0, 10)}</td>
 										
-					<td style="text-align: center; width: 9%;">${(inputreq.update_dt != null) ? inputreq.update_dt.substring(0,10) : ''}</td>
+					<td style="text-align: center; width: 9%;">${(inputreq.update_dt != null) ? inputreq.update_dt.substring(0, 10) : ''}</td>
 										
 					<td style="text-align: center; width: 7%;">${inputreq.operator_nm + '(' + inputreq.operator_id + ')'}</td>
             		<td style="text-align: center; width: 7%;">${inputreq.update_id != null ? inputreq.update_nm + '(' + inputreq.update_id + ')' : ''}</td>
@@ -369,23 +445,23 @@ export class inboundreq_list {
 					data-request-idx="${inputreq.request_idx}">관리</button>
             		</td>
 					</tr>`;
-        			
-        			tbody.innerHTML += list;
-    			});
-				
-				
-			})
-			.catch(function(error){
-				//console.log(error);
-				alert('데이터 조회에 문제가 발생하였습니다.');
-			});
-			
+
+						tbody.innerHTML += list;
+					});
+
+
+				})
+				.catch(function(error) {
+					//console.log(error);
+					alert('데이터 조회에 문제가 발생하였습니다.');
+				});
+
 		}
-		
+
 	}
-	
-	
-	
+
+
+
 	//전체 체크 누르고 끌 때
 	all_ckbox() {
 		this.all_ck_checked = document.getElementById("all_ck").checked;
