@@ -1864,7 +1864,14 @@ if (typeof jQuery === 'undefined') {
 
       if (!data && /destroy|hide/.test(option)) return
       if (!data) $this.data('bs.popover', (data = new Popover(this, options)))
-      if (typeof option == 'string') data[option]()
+       if (typeof option == 'string') data[option]()
+        /*
+        if (typeof option == 'string') { data[option]()
+		 if(data[option]==null) {
+			data[option]()
+			}
+		}
+		*/
     })
   }
 

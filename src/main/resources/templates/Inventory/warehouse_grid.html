@@ -138,17 +138,17 @@
 							<p class="panel-subtitle">홈 > 재고 > <span style="color: black;">창고관리</span></p>
 						</div>
 						<div class="panel-body" >
-							<ul class = "panel_menu">
-								<li class="panel_menu-item active">
+							<p class = "menu" style="border-bottom: 1px solid black; height: 30px;">
+								<span class="menu-item active">
 									<a href="./warehouse_inventory" onclick="selectMenu(this, 'inventory')">창고별 재고 현황</a>
-								</li>
-								<li class="panel_menu-item">
-									<a href="./warehouse_location" onclick="selectMenu(this, 'location')">창고 위치 관리</a>
-								</li>								
-								<li class="panel_menu-item">
+								</span>
+								<span class="menu-item">
+									<a href="./warehouse_location" onclick="selectMenu(this, 'location')"class="active">창고 위치 관리</a>
+								</span>
+								<span class="menu-item">
 									<a href="./warehouse_management" onclick="selectMenu(this, 'warehouse')">창고 관리</a>
-								</li>
-							</ul>
+								</span>
+							</p>
 						</div>
 					</div>
 			<!-- MAIN -->
@@ -475,11 +475,11 @@
 	<!-- Javascript -->
 	<script src="/resources/assets/vendor/jquery/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-	<script src="/resources/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/resources/assets/vendor/bootstrap/js/bootstrap.js?v=1"></script>
 	<script src="/resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 	<script src="/resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
 	<script src="/resources/assets/vendor/chartist/js/chartist.min.js"></script>
 	<script src="/resources/assets/scripts/klorofil-common.js"></script>	
-	<script src="/resources/js/inventory/warehouse_grid.js?v=1"></script>
+	<script src="/resources/js/inventory/warehouse_grid.js?v=2"></script>
 </html>
 

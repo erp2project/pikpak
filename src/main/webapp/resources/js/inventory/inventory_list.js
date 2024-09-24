@@ -8,7 +8,7 @@ function toggleCheckbox(row) {
     }
 }
 //조회 버튼 클릭 (form전송)
-document.getElementById('searchButton').addEventListener('click', function(){
+document.getElementById('searchButton').addEventListener('click', function(event){
 	event.preventDefault();
 	//폼데이터 가져오기
 	const form = document.getElementById('searchForm');
@@ -21,7 +21,6 @@ document.getElementById('searchButton').addEventListener('click', function(){
 			searchData[key] = value;
 		}
 	});
-	console.log(searchData);
 	
 	fetch('/getSearchData',{
 		method : 'POST',

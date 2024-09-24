@@ -1,5 +1,4 @@
 var inventoryData = {};	//각 구역의 데이터를 저장
-
 $(document).ready(function () {
 	// 페이지 최초 출력시는 A구역으로 출력
 	loadZoneData('A');
@@ -7,57 +6,87 @@ $(document).ready(function () {
 	//모달창 출력
 	$('#inspectionModal').modal('hide');
 	
-	//이게 있어야 제대로 데이터가 출력 됨.
-    $('[data-toggle="popover"]').popover('dispose').popover({
-    	html: true,
-        trigger: 'focus',
-        placement: 'right'
-    });  
-    
-    //랙과 파트 클릭 시 해당 데이터로 팝오버 
-    $('.wms-part').on('click',function(event){
-		const partElement = event.currentTarget;
-		const level = 5-$(partElement).closest('.wms-rack-level').index();
-		const part = $(partElement).index() + 1;
-		const rackNumber = $(partElement).closest('.wms-rack').data('rack-number');
-		const zoneId = $('.btn.active').text().trim()[0]; //현재 선택된 구역의 id
-		//해당 구역에서 선택된 단과 열에 해당하는 데이터 찾음
-		const partData = findPartData(zoneId, rackNumber ,level, part);
-		//console.log(partData.location_cd);
-		
-		if(partData) {		
-			console.log(partData.location_cd);
-			const popoverContent = 
-			`위치 : ${partData.product_nm}<br>
-			상품명: ${partData.product_nm}<br>
-			수량 :${partData.product_qty}<br>
-			제조사 :${partData.supplier_nm}`;
+    // 위치 조회 버튼 클릭 이벤트
+    $('#check-location-btn').on('click', function() {
+        // 선택된 구역, 랙, 레벨, 파트 정보 가져오기
+        const zone = $('#zone-select').val();
+        const rack = $('#rack-select').val();
+        const level = $('#level-select').val();
+        const part = $('#part-select').val();
+        const locationCode = `${zone}${rack}${level}${part}`;
 
-			$(partElement).attr('data-content',popoverContent);
-			
-			$(partElement).popover({
-			    html: true,
-			    trigger: 'focus',
-			    placement: 'right',
-			    container: 'body'
-			}).popover('show');	//팝오버 표시
-		}else{
-			$(partElement).attr('data-content','해당 위치에 등록된 재고가 없습니다.');
-			$(partElement).popover('show');
-		}
-	});	
+        // 서버에 조회 요청 보내기 (AJAX)
+        $.ajax({
+            url: '/checkLocation',
+            method: 'POST',
+            data: JSON.stringify({ location_cd: locationCode }),
+            contentType: 'application/json',
+            success: function(response) {
+				console.log(response);
+                if (response.status === 'occupied') {
+                    // 이미 사용 중인 위치일 때
+                    alert('이미 사용 중인 위치입니다. 위치를 수정하거나 다른 위치를 선택하세요.');
+                    // 재고가 있는 경우 수정만 가능
+                    if (response.has_stock) {
+                        $('#assign-location-btn').text('위치 수정');
+                    } else {
+                        $('#assign-location-btn').text('위치 삭제 또는 이동');
+                    }
+                } else {
+                    // 사용 가능한 위치일 때
+                    alert('이 위치는 사용 가능합니다.');
+                    $('#assign-location-btn').text('위치 지정');
+                }
+            },
+            error: function() {
+                alert('위치 조회 중 오류가 발생했습니다.');
+            }
+        });
+    });
+
+    // 위치 지정 버튼 클릭 이벤트
+    $('#assign-location-btn').on('click', function() {
+		console.log('위치지정 버튼');
+        const zone = $('#zone-select').val();
+        const rack = $('#rack-select').val();
+        const level = $('#level-select').val();
+        const part = $('#part-select').val();
+        const companyId = $('#company-select').val();
+
+        const locationCode = `${zone}${rack}${level}${part}`;
+
+        // 위치 등록 요청 (AJAX)
+        $.ajax({
+            url: '/assignLocation',
+            method: 'POST',
+            data: JSON.stringify({
+                location_cd: locationCode,
+                supplier_cd: companyId
+            }),
+            contentType: 'application/json',
+            success: function(response) {
+                alert(response.message);
+                $('#locationModal').modal('hide'); // 모달 닫기
+                location.reload();
+            },
+            error: function() {
+                alert('위치 지정 중 오류가 발생했습니다.');
+            }
+        });
+    });	
 });
 
+// content 색 초기화
 function resetRackColors(){
 	const allRackParts = document.querySelectorAll('.wms-part');
 	allRackParts.forEach(part => {
-		part.classList.remove('has-stock','no-stock');
+		part.classList.remove('no-stock', 'assigned-no-stock', 'no-space', 'partial-space');
+        // 기존 popover가 존재하는지 확인 후 제거
 	});
 }
 
 //탭으로 선택한 구역의 재고 데이터를 저장시킴
 function loadZoneData(zoneId){
-	
     // 모든 구역 버튼에서 active 클래스를 제거하고, 선택한 구역 버튼에만 추가
     document.querySelectorAll('.btn').forEach(btn => {
         btn.classList.remove('active');
@@ -77,7 +106,7 @@ function loadZoneData(zoneId){
 	.then(response => response.json())
 	.then(data => {
 		inventoryData[zoneId] = data.getAreaStockData;	//구역 전체 데이터를 저장
-		
+		console.log(data.getAreaStockData);
 		//가져온 데이터를 기반으로 각 위치에 맞는 정보 설정
 		updateRackInfo(zoneId,inventoryData[zoneId]);
 		
@@ -88,7 +117,17 @@ function loadZoneData(zoneId){
 	});
 }
 
-function updateRackInfo(zoneId, zoneData) {
+// location_cd를 Rxx-Lx-Px 형식으로 변환하는 함수
+function convertLocationFormatForQuery(locationCd) {
+    const rackNumber = locationCd.slice(1, 3); // 랙 번호 (A01 -> 01)
+    const rackLevel = locationCd.slice(4, 5);  // 단 (L1 -> L1)
+    const rackPart = locationCd.slice(6);      // 열 (P1 -> P1)
+
+    return `R${rackNumber}-L${rackLevel}-P${rackPart}`; // Rxx-Lx-Px 형식 반환
+}   
+
+//팝오버 내용 적용
+function updateRackInfo(zoneId, zoneData) {    	
     // 위치별로 상품을 그룹화하기 위한 객체 생성
     const locationItemsMap = {};
     	
@@ -100,42 +139,85 @@ function updateRackInfo(zoneId, zoneData) {
         }
         locationItemsMap[locationKey].push(item);
     });   
-    
-    // location_cd를 Rxx-Lx-Px 형식으로 변환하는 함수
-    function convertLocationFormatForQuery(locationCd) {
-        const rackNumber = locationCd.slice(1, 3); // 랙 번호 (A01 -> 01)
-        const rackLevel = locationCd.slice(4, 5);  // 단 (L1 -> L1)
-        const rackPart = locationCd.slice(6);      // 열 (P1 -> P1)
 
-        return `R${rackNumber}-L${rackLevel}-P${rackPart}`; // Rxx-Lx-Px 형식 반환
-    }    
-    //각 위치에 대한 상품 정보 설정 및 popover 설정
-    Object.keys(locationItemsMap).forEach(locationKey => {
-		const formattedLocation = convertLocationFormatForQuery(locationKey);
-		const locationElement = 
-		document.querySelector(`[data-location='${formattedLocation}']`);
-		
-		if(locationElement){
-			let popoverContent = locationItemsMap[locationKey].map(item=>`
-                    <strong>상품명:</strong> ${item.product_nm}<br>
-                    <strong>수량:</strong> ${item.product_qty}<br>
-                    <strong>공급자:</strong> ${item.supplier_nm}<br>
-                `).join('<hr>');//구분선 추가
-                 
-                        
-            //popover 에 사용할 데이터 설정
+	// HTML 내 모든 data-location 요소에 대해 반복문 수행
+	document.querySelectorAll('[data-location]').forEach(locationElement => {
+	    const formattedLc = locationElement.getAttribute('data-location');
+	    const lc = zoneId+formattedLc.slice(1,3)+formattedLc.slice(4,6)+formattedLc.slice(7,9);
+	    // locationItemsMap에서 해당 위치에 대한 데이터를 가져옴
+	    const locationData = locationItemsMap[lc];
+	    let popoverContent;
+	
+	    if (locationData && locationData.length > 0) {
+			
+            const hasStock = locationData.some(item => item.product_qty > 0);
+            const assignedCompany = locationData[0].assigned_supplier_nm; // 할당된 회사 이름 가져오기			
+	        
+	        if(!hasStock && assignedCompany){
+		        // 재고 있을 경우 삭제 버튼 있음
+		        popoverContent = locationData.map(item => `
+		            <strong>상품명:</strong> ${item.product_nm|| '재고 없음'}<br>
+		            <strong>수량:</strong> ${item.product_qty|| '재고 없음'}<br>
+		            <strong>제조사:</strong> ${item.product_supplier_nm || '재고 없음'}<br>
+		            <strong>할당된 회사:</strong> ${item.assigned_supplier_nm || '없음'}<br>
+		            <button class="btn btn-danger btn-sm delete-location-btn" data-location="${lc}">위치 삭제</button>
+		        `).join('<hr>'); // 구분선 추가
+			}else{
+				//재고가 있는 경우 삭제 버튼 없음
+                popoverContent = locationData.map(item => `
+                    <strong>상품명:</strong> ${item.product_nm || '재고 없음'}<br>
+                    <strong>수량:</strong> ${item.product_qty || '재고 없음'}<br>
+                    <strong>제조사:</strong> ${item.product_supplier_nm || '재고 없음'}<br>
+                    <strong>할당된 회사:</strong> ${item.assigned_supplier_nm || '없음'}<br>
+                `).join('<hr>');				
+			}
+	    } else {
+	        // 데이터가 없을 경우 '데이터 없음' 메시지 설정
+	        popoverContent = '<strong>해당 위치에 데이터가 없습니다.</strong>';
+	    }
+		    //popover 에 사용할 데이터 설정
             locationElement.setAttribute('data-content',popoverContent);
-            
             // 새 popover 설정
             $(locationElement).popover({
                 html: true,
                 trigger: 'focus',
                 placement: 'right',
                 container: 'body'
-            });            
-		}
+            });                    
 	});
 }
+
+//위치 삭제 버튼
+document.addEventListener('click', function(event) {
+    // 클릭한 요소가 'delete-location-btn' 클래스가 있는지 확인
+    if (event.target.classList.contains('delete-location-btn')) {
+        const locationCd = event.target.getAttribute('data-location');
+        if (confirm('정말 이 위치를 삭제하시겠습니까?')) {
+            // AJAX 요청 보내기 (fetch 사용)
+            fetch('/deleteLocation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ location_cd: locationCd })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('위치가 삭제되었습니다.');
+                    window.location.reload(); // 페이지 새로고침
+                } else {
+                    alert('위치 삭제 중 오류가 발생했습니다.');
+                }
+            })
+            .catch(error => {
+                alert('위치 삭제 중 오류가 발생했습니다.');
+                console.error('Error:', error);
+            });
+        }
+    }
+});
+
 
 function convertLocationFormat(locationKey) {
     const rackNumber = locationKey.slice(1, 3); // 랙 번호 (01, 02, 03 등)
@@ -149,49 +231,35 @@ function convertLocationFormat(locationKey) {
 }
 
 function updateRackColors(zoneId){
-	console.log(zoneId+'색 구별 구역');
 	//inventoryData에 저장된 해당 구역 데이터를 가져옴
 	const zoneData = inventoryData[zoneId];
-    // 각 위치의 상품 수를 추적할 객체 생성
-    const locationCount = {};	
-    
-    //데이터를 순회하면서 각 위치별 상품 수를 누적
-    zoneData.forEach(item => {
-		const locationKey = item.location_cd;
-		if(!locationCount[locationKey]){
-			locationCount[locationKey]=0;//해당 위치가 처음 등장하면 0으로 초기화
-		}
-		locationCount[locationKey]++;	//해당 위치에 상품 추가
-	});
-	
+    	
     //모든 랙 위치 요소 초기화
      document.querySelectorAll('.wms-part').forEach(part => {
 	   const partLocation = part.getAttribute('data-location');
 	   const formattedLocation = partLocation.replace(/R(\d+)-L(\d+)-P(\d+)/, `${zoneId}$1L$2P$3`); // zoneId를 동적으로 삽입
-	   const rackLevel = partLocation.slice(5, 6);
-	   let maxCapacity;
-	    // 단에 따른 최대 수용량 설정
-	    if (rackLevel === '1') maxCapacity = 3;  // 1단 (대형)
-	    else if (rackLevel === '2' || rackLevel === '3') maxCapacity = 6;  // 2단, 3단 (중형)
-	    else if (rackLevel === '4') maxCapacity = 12; // 4단 (소형)
-		
-	    const currentCount = locationCount[formattedLocation]; // 해당 위치의 누적된 상품 수	   
-	    //이전 css 삭제
-	    part.classList.remove('no-stock', 'assigned-no-stock', 'no-space', 'partial-space');
-	    // 색상 설정 로직
-	    if (currentCount === undefined) {
-	        // 해당 위치에 상품 데이터가 없을 경우 초록색 (할당되지 않은 위치)
-	        part.classList.add('no-stock');
-	    } else if (currentCount === 0) {
-	        // 민트색 (할당된 위치, 재고 없음)
-	        part.classList.add('assigned-no-stock');
-	    } else if (currentCount >= maxCapacity) {
-	        // 빨간색 (공간 다 찬 상태)
-	        part.classList.add('no-space');
-	    } else {
-	        // 파란색 (일부 공간 남음)
-	        part.classList.add('partial-space');
-	    }	    
+	   
+	   const locationData = zoneData.find(item => item.location_cd === formattedLocation);
+        if (locationData) {
+            const maxCapacity = locationData.max_capacity;
+            //console.log(maxCapacity='최대 수용량');
+            const currentCapacity = locationData.current_capacity;
+			//console.log(currentCapacity+'현재 수용량');
+            // 색상 설정 로직
+            if (currentCapacity === 0) {
+                // 민트색 (할당된 위치, 재고 없음)
+                part.classList.add('assigned-no-stock');
+            } else if (currentCapacity == maxCapacity) {
+                // 빨간색 (공간 다 찬 상태)
+                part.classList.add('no-space');
+            } else {
+                // 파란색 (일부 공간 남음)
+                part.classList.add('partial-space');
+            }
+        } else {
+            // 해당 위치에 상품 데이터가 없을 경우 초록색 (할당되지 않은 위치)
+            part.classList.add('no-stock');
+        }	   
     });   
 }
 
@@ -209,4 +277,3 @@ function findPartData(zoneId,rackNumber,level,part){
 	//location_cd 가 정확히 일치하는 데이터를 찾음
 	return inventoryData[zoneId].find(item => item.location_cd == locationCode);
 }
-

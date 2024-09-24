@@ -1,13 +1,48 @@
 @charset "EUC-KR";
 /* 목차 표시 기본적인 얇은 밑줄 설정 */
-.title-with-underline {
+.menu {
+    height: 30px;
+    border-bottom: 1px solid black;
+}
+.menu-item {
+    padding: 7px;
+    cursor: pointer;
     position: relative;
-    border-bottom: 1px solid black; /* 전체 길이 얇은 밑줄 */
-    padding-bottom: 5px;
-    display: inline-block;
-    width: 100%; /* 얇은 밑줄이 전체 길이로 적용되도록 */
+}
+.menu-item a {
+    padding: 7px;
+    cursor: pointer;
+    position: relative;
+    color: black; /* 글자 색을 검정색으로 설정 */
+    text-decoration: none; /* 링크의 기본 밑줄 제거 */    
 }
 
+/* 기본 상태에서 밑줄은 보이지 않도록 설정 */
+.menu-item a::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 5px;
+    background: black;
+    position: absolute;
+    left: 0;
+    bottom: -5px; /* 밑줄 위치를 더 아래로 조정 */
+    /*transition: width 0.3s ease;*/
+}
+
+/* 선택된 항목에 더 진한 선 추가 */
+.menu-item a.active::after {
+    width: 100%; /* 클릭 시 밑줄이 전체 너비로 확장 */
+}
+
+.menu-item a:hover::after {
+    width: 100%; /* 마우스를 올렸을 때 밑줄 확장 */
+}
+
+/* 링크에 기본 밑줄 제거 */
+.menu-item a:hover {
+    text-decoration: none; /* 링크 특성의 밑줄 제거 */
+}
 /* 텍스트 밑에 굵은 밑줄 추가 */
 .title-with-underline::after {
     content: '';

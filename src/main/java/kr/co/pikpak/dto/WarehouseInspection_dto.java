@@ -13,6 +13,11 @@ public class WarehouseInspection_dto {
 	String area_cd;
 	String manager_nm;
 	String statement;
+	String temperature;
+	String humidity;
+	String type1_stock;
+	String type2_stock;
+	String type3_stock;
 	String check_log;
 	String check_start_dt;
 	String check_end_dt;

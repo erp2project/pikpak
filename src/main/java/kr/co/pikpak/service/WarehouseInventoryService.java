@@ -3,6 +3,7 @@ package kr.co.pikpak.service;
 import java.util.List;
 import java.util.Map;
 
+import kr.co.pikpak.dto.LocationDTO;
 import kr.co.pikpak.dto.WarehouseInspection_dto;
 import kr.co.pikpak.dto.WarehouseInventory_dto;
 
@@ -39,5 +40,28 @@ public interface WarehouseInventoryService {
 	//재고 리스트 출력 페이지 - 조회
 	public List<WarehouseInventory_dto> searchInventory(String area_cd,String rack_number,String level,String part,String product_cd,String product_nm,String supplier_nm);
 	
+	//창고 위치 관리 페이지 - 
+	public List<Map<String, Object>> getLocationWithStockData (String area_cd);
+	
+	//창고 위치 관리 페이지 - 창고 위치 조회
+	public LocationDTO findLocationByCode(String location_cd);
+	
+	//창고 위치 관리 페이지
+	public List<Map<String, String>> getAllSupplierInfo();
+	
+	//창고 위치 관리 페이지 - 위치 지정
+	int insertLocation(String location_cd, String supplier_cd,Integer max_capacity);	
+	
+	
+	//창고 관리 페이지 - 점검 등록/ 재고 수량 일치여부 확인
 	public List<WarehouseInspection_dto> getCheckData();
+	
+	//창고 관리 페이지 - 점검 등록/ 재고 수량 일치여부 확인
+	public List<Map<String, Object>> getStockDataByZone(String zoneId);
+	
+	//창고 관리 페이지 - 점검 등록
+	int insertCheckData2(Map<String, String> data);
+	
+	//창고 관리 페이지 - 상세 보기
+	public Map<String, Object> getCheckRecordDetailsByIdx(Integer a_check_idx);
 }

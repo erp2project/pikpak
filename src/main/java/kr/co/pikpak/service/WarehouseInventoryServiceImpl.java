@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.co.pikpak.dto.LocationDTO;
 import kr.co.pikpak.dto.WarehouseInspection_dto;
 import kr.co.pikpak.dto.WarehouseInventory_dto;
 import kr.co.pikpak.repo.WarehouseRepo;
@@ -110,4 +111,50 @@ public class WarehouseInventoryServiceImpl implements WarehouseInventoryService{
 		return wr.findByCompany_nm(supplier_nm);
 	}
 
+	
+	//창고 위치 관리 페이지
+	@Override
+	public List<Map<String, Object>> getLocationWithStockData(String area_cd) {
+		
+		return wr.getLocationWithStockData(area_cd);
+	}
+	
+	//창고 위치 관리 페이지 - 위치 정보 조회
+	@Override
+	public LocationDTO findLocationByCode(String location_cd) {
+		return wr.findLocationByCode(location_cd);
+	}
+	
+	//창고 위치 관리 페이지
+	@Override
+	public List<Map<String, String>> getAllSupplierInfo() {
+
+		return wr.getAllSupplierInfo();
+	}
+	
+	//창고 위치 관리 페이지 - 위치 지정
+	@Override
+	public int insertLocation(String location_cd, String supplier_cd,Integer max_capacity) {
+
+		return wr.insertLocation(location_cd, supplier_cd,max_capacity);
+	}
+	
+	
+	//창고 관리 페이지 - 점검 등록/ 재고 수량 일치여부 확인
+	@Override
+	public List<Map<String, Object>> getStockDataByZone(String zoneId) {
+		return wr.getStockDataByZone(zoneId);
+	}
+	
+	//창고 관리 페이지 - 점검 등록
+	@Override
+	public int insertCheckData2(Map<String, String> data) {
+
+		return wr.insertCheckData2(data);
+	}
+	//창고 관리 페이지 - 상세보기
+	@Override
+	public Map<String, Object> getCheckRecordDetailsByIdx(Integer a_check_idx) {
+		return wr.getCheckRecordDetailsByIdx(a_check_idx);
+	}
 }

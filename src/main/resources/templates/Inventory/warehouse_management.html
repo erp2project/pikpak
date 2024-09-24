@@ -139,17 +139,17 @@
 							<p class="panel-subtitle">홈 > 재고 > <span style="color: black;">창고관리</span></p>
 						</div>
 						<div class="panel-body" >
-							<ul class = "panel_menu">
-								<li class="panel_menu-item active">
+							<p class = "menu" style="border-bottom: 1px solid black; height: 30px;">
+								<span class="menu-item active">
 									<a href="./warehouse_inventory" onclick="selectMenu(this, 'inventory')">창고별 재고 현황</a>
-								</li>
-								<li class="panel_menu-item">
+								</span>
+								<span class="menu-item">
 									<a href="./warehouse_location" onclick="selectMenu(this, 'location')">창고 위치 관리</a>
-								</li>								
-								<li class="panel_menu-item">
-									<a href="./warehouse_management" onclick="selectMenu(this, 'warehouse')">창고 관리</a>
-								</li>
-							</ul>
+								</span>
+								<span class="menu-item">
+									<a href="./warehouse_management" onclick="selectMenu(this, 'warehouse')" class="active">창고 관리</a>
+								</span>
+							</p>
 						</div>   
 						<button class="btn btn-secondary btn-right" data-toggle="modal" data-target="#wareck_enroll_Modal">점검 등록</button>
                             <div class="warehouse-grid">
@@ -173,7 +173,7 @@
                                                 <td th:text="${item.statement}"></td>
                                                 <td th:text="${item.check_start_dt}"></td>
                                                 <td th:text="${item.manager_nm}"></td>
-                                                <td><a href="#">상세 보기</a></td>
+                                                <td><a href="#" class="view-details" data-toggle="modal" data-target="#wareck_details_Modal" th:attr="data-id=${item.a_check_idx}">상세 보기</a></td>
                                             </tr>						                                                                
                                         </tbody>
                                     </table>
@@ -199,7 +199,7 @@
                                                 <td th:text="${item.statement}"></td>
                                                 <td th:text="${item.check_start_dt}"></td>
                                                 <td th:text="${item.manager_nm}"></td>
-                                                <td><a href="#">상세 보기</a></td>
+                                                <td><a href="#"class="view-details" data-toggle="modal" data-target="#wareck_details_Modal" th:attr="data-id=${item.a_check_idx}">상세 보기</a></td>
                                             </tr>                                            
                                         </tbody>
                                     </table>
@@ -225,7 +225,7 @@
                                                 <td th:text="${item.statement}"></td>
                                                 <td th:text="${item.check_start_dt}"></td>
                                                 <td th:text="${item.manager_nm}"></td>
-                                                <td><a href="#">상세 보기</a></td>
+                                                <td><a href="#"class="view-details" data-toggle="modal" data-target="#wareck_details_Modal" th:attr="data-id=${item.a_check_idx}">상세 보기</a></td>
                                             </tr>                                           
                                         </tbody>
                                     </table>
@@ -251,7 +251,7 @@
                                                 <td th:text="${item.statement}"></td>
                                                 <td th:text="${item.check_start_dt}"></td>
                                                 <td th:text="${item.manager_nm}"></td>
-                                                <td><a href="#">상세 보기</a></td>
+                                                <td><a href="#" class="view-details" data-toggle="modal" data-target="#wareck_details_Modal" th:attr="data-id=${item.a_check_idx}">상세 보기</a></td>
                                             </tr>                                           
                                         </tbody>
                                     </table>
@@ -263,7 +263,8 @@
 					
 			<!-- MAIN -->
 			</div>
-			<div th:replace="~{/inventory/warehouse_check_popup :: warehouse_check_popup}">
+			<div th:replace="~{/inventory/warehouse_check_popup :: warehouse_check_popup}"></div>
+			<div th:replace="~{/inventory/warehouse_check_details :: warehouse_check_details}">
 			</div>
 		</div>
 		<div class="clearfix"></div>
@@ -277,12 +278,12 @@
 	<!-- END WRAPPER -->
 	<!-- Javascript -->
 	<script src="/resources/assets/vendor/jquery/jquery.min.js"></script>
-	<script src="/resources/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
 	<script src="/resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 	<script src="/resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="/resources/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
 	<script src="/resources/assets/vendor/chartist/js/chartist.min.js"></script>
 	<script src="/resources/assets/scripts/klorofil-common.js"></script>
-	<script src="/resources/js/inventory/warehouse_inventory.js?v=1"></script>
+	<script src="/resources/js/inventory/warehouse_management.js"></script>
 </body>
 
 </html>

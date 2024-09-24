@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import kr.co.pikpak.dto.LocationDTO;
 import kr.co.pikpak.dto.WarehouseInspection_dto;
 import kr.co.pikpak.dto.WarehouseInventory_dto;
 
@@ -56,10 +57,29 @@ public interface WarehouseRepo {
 	Map<String, Object> findByCompany_nm(String supplier_nm);
 	
 	
-	//창고 위치 관리 페이지 - 위치관리 버튼(회사 옵션)
+	//창고 위치 관리 페이지 - 
+	List<Map<String, Object>> getLocationWithStockData (String area_cd);
 	
+	//창고 위치 관리 페이지
+	LocationDTO findLocationByCode (String location_cd);
+	
+	//창고 위치 관리 페이지
+	List<Map<String, String>> getAllSupplierInfo();
+	
+	//창고 위치 관리 페이지 - 위치 지정
+	int insertLocation(String location_cd, String supplier_cd,Integer max_capacity);
 	
 	
 	//창고 관리 페이지 - 구역 점검 기록 리스트
 	List<WarehouseInspection_dto> getCheckData();
+	
+	//창고 관리 페이지 - 점검 등록/ 재고 수량 일치여부 확인
+	List<Map<String, Object>> getStockDataByZone(String zoneId);
+	
+	//창고 관리 페이지 - 점검 등록
+	int insertCheckData2(Map<String, String> data);
+
+	//창고 관리 페이지 - 상세 보기
+	Map<String, Object> getCheckRecordDetailsByIdx(Integer a_check_idx);
+	
 }

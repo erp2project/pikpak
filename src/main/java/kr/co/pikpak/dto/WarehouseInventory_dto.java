@@ -17,9 +17,6 @@ public class WarehouseInventory_dto {
 	String product_nm;
 	String product_qty;
 	String supplier_nm;
-	String intransit_qty;
-	String allocated_qty;
-	String incoming_qty;
 	String inventory_log;
 	String update_by;
 	String update_dt;
