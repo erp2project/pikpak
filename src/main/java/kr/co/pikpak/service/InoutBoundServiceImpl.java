@@ -60,13 +60,15 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 		
 		//lot_no 생성
 		/*
-		  상품코드 + 제조일자 + 입고일자 + (입고일자가 같은 경우 001,002)
-		  1. 현재 receiving 테이블에 같은 입고날자가 있는 지 없는지 확인
-		  
-		  2. 제조일자를 불러오기위해 
+		  상품코드 + 제조일자 + 입고일자 
 		 */
 		String lot_no = this.make_lotno(dto.getProduct_cd(), dto.getMake_dt(), dto.getInventory_dt());
 		dto.setLot_no(lot_no);
+		System.out.println(lot_no);
+		
+		//고유번호 넣기
+		dto.setReceiving_cd(this.make_recvcode());
+		
 		
 		//세션에서 id가져왔다고 가정
 		String operator_id = "ad_leehw_1234";
@@ -92,7 +94,6 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 					Map<String, Object> wh_update = new HashMap<String, Object>();
 					wh_update.put("additional_qty", dto.getReceiving_qty());				
 					wh_update.put("update_by", operator_id);
-					wh_update.put("inventory_log", dto.getReceiving_log());
 					wh_update.put("wh_warehouse_idx", idx.get(0));	
 					
 					int update_result = this.update_wwarehouse(wh_update);
@@ -110,10 +111,10 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 					wh_dto.put("location_cd", dto.getLocation_cd());
 					wh_dto.put("product_cd", dto.getProduct_cd());
 					wh_dto.put("product_nm", dto.getProduct_nm());
-					wh_dto.put("supplier_nm", "");
+					wh_dto.put("supplier_nm", dto.getSupplier_nm());
 					wh_dto.put("product_qty", dto.getReceiving_qty());
 					wh_dto.put("inventory_log", dto.getReceiving_log());
-					wh_dto.put("supplier_cd", dto.getReceiving_cd());
+					wh_dto.put("supplier_cd", dto.getSupplier_cd());
 					
 				    int insert_result = this.insert_warehouse(wh_dto);   
 				    

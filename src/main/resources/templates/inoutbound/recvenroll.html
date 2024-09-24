@@ -272,7 +272,12 @@ $(document).ready(function() {
 </script>
  <script type="module">
     import {page_move, receiving_enroll} from "../resources/js/inoutbound/inboundreq_main.js?v=4";
-	
+	/* 페이지 처음 로드 */
+	document.addEventListener('DOMContentLoaded', function() {
+		//'입고' 상태 변화된 리스트 버튼 비활성화
+		new receiving_enroll().no_button();
+	});	
+
     //가입고 리스트 입고등록시, 입고 등록버튼 decide_inbound	
 	document.querySelectorAll('.decide_inbound').forEach(function(button) {
     	button.addEventListener('click', function(event) {

@@ -59,7 +59,7 @@ public class InoutBoundController {
 			//납품수량, 반품수량 계산
 			dto.setReceiving_qty(Integer.parseInt(total_qty) - Integer.parseInt(return_qty));
 			
-			/*int result = ioservice.insert_receiving(dto);
+			int result = ioservice.insert_receiving(dto);
 			if(result > 0) {
 				this.pw.print("<script>"
 						+ "alert('정상적으로 등록 되었습니다.');"
@@ -67,7 +67,7 @@ public class InoutBoundController {
 						+ "</script>");			
 				
 			}	
-			*/
+			
 		}
 		catch(Exception e) {
 			e.printStackTrace();

@@ -51,7 +51,26 @@ export class receiving_enroll {
 		
 	}
 
+	no_button(){
+		 // 'recv_state_ck' 클래스를 가진 모든 td 요소를 가져옵니다.
+    	const state_cells = document.querySelectorAll('.recv_state_ck');
 
+    	// 각 상태 셀을 순회하면서 상태 확인
+    	state_cells.forEach(function(cell) {
+
+        // 상태가 '입고'인 경우
+        if (cell.innerText == '입고') {
+            const row = cell.closest('tr'); // 현재 셀의 행을 찾음
+            const inbound_button = row.querySelector('.decide_inbound'); // '입고' 버튼
+            const return_button = row.querySelector('.decide_return'); // '반송' 버튼
+
+            // 버튼들을 비활성화
+           	inbound_button.disabled = true;
+            return_button.disabled = true;
+        }
+
+    });
+	}
 
 	//입고 등록
 	go_recv_enroll() {
