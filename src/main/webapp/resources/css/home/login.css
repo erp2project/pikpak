@@ -14,20 +14,23 @@ menu, ol, ul {
 	padding: 0;
 }
 
-.page_display, .page_display * {
-	box-sizing: border-box;
+html {
+    height: 100%;
 }
-
-.page_display {
-	background: #ffffff;
+body {
+    min-height: 100%;
+    background: #ffffff;
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
 	align-items: center;
 	justify-content: center;
-	height: 1080px;
 	position: relative;
 	overflow: hidden;
+}
+
+.page_display, .page_display * {
+	box-sizing: border-box;
 }
 
 .form-log-in {
@@ -43,8 +46,8 @@ menu, ol, ul {
 	align-items: center;
 	justify-content: center;
 	flex-shrink: 0;
-	width: 500px;
-	height: 300px;
+	width: 550px;
+	height: 370px;
 	min-width: 320px;
 	position: relative;
 	overflow: hidden;
@@ -164,4 +167,11 @@ menu, ol, ul {
 }
 .link:hover {
 	text-decoration: underline;
+}
+
+.message-area {
+	color: red;
+	visibility: hidden;
+  	opacity: 0;
+ 	transition: visibility 0ms, opacity 300ms linear;
 }
