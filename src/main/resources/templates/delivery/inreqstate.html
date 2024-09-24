@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<title>PikPak-납품관리</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<!-- VENDOR CSS -->
+<link rel="stylesheet"
+	href="../resources/assets/vendor/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="../resources/assets/vendor/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="../resources/assets/vendor/linearicons/style.css">
+<link rel="stylesheet"
+	href="../resources/assets/vendor/chartist/css/chartist-custom.css">
+<!-- MAIN CSS -->
+<link rel="stylesheet" href="../resources/assets/css/main.css">
+<link rel="stylesheet" href="../resources/assets/css/demo.css">
+<link rel="stylesheet"
+	href="../resources/css/inoutbound/inboundreq_main.css">
+<link rel="stylesheet" href="../resources/css/inoutbound/pd_search.css">
+<link href="../resources/css/inoutbound/add_popup.css" rel="stylesheet">
+<!-- GOOGLE FONTS -->
+<link
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700"
+	rel="stylesheet">
+<!-- ICONS -->
+<link rel="apple-touch-icon" sizes="76x76"
+	href="assets/img/apple-icon.png">
+<link rel="icon" type="image/png" sizes="96x96"
+	href="assets/img/favicon.png">
+
+</head>
+
+<body>
+	<!-- WRAPPER -->
+	<div id="wrapper">
+		<!-- 최상단 -->
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="brand" style="height: 30px;">
+				<a href="index.html"> <span class="fa fa-paper-plane-o"
+					style="font-size: 23px; margin-right: 5px;"></span> <span
+					style="font-size: 23px;">PikPak</span>
+				</a>
+			</div>
+			<div class="container-fluid">
+				<div class="navbar-btn">
+					<button type="button" class="btn-toggle-fullwidth">
+						<i class="lnr lnr-arrow-left-circle"></i>
+					</button>
+				</div>
+
+				<div class="navbar-btn navbar-btn-right">
+					<span style="vertical-align: -3px;"> <i class="lnr lnr-user"></i>
+						<span>관리자님 환영합니다.</span>
+					</span> <a class="btn btn-success update-pro" href=""><span>로그아웃</span></a>
+				</div>
+			</div>
+		</nav>
+		<!-- 최상단 끝 -->
+		<!-- 왼쪽 SIDEBAR -->
+		<div id="sidebar-nav" class="sidebar">
+			<div class="sidebar-scroll">
+				<nav>
+					<ul class="nav">
+						<li>
+							<a href="#subPages" data-toggle="collapse" class="collapsed active">
+							<i class="lnr lnr-file-empty"></i> <span>기준정보 관리</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">거래처 관리</a></li>
+									<li><a href="" class="">품목 관리</a></li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<a href="#subPages2" data-toggle="collapse" class="collapsed">
+							<i class="lnr lnr-dice"></i> <span>주문 | 반품</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages2" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">주문 관리</a></li>
+									<li><a href="" class="">반품 관리</a></li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<a href="#subPages3" data-toggle="collapse" class="collapsed">
+							<i class="lnr lnr-inbox"></i> <span>재고</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages3" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">재고 현황</a></li>
+									<li><a href="" class="">창고 관리</a></li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<a href="#subPages4" data-toggle="collapse" class="collapsed">
+							<i class="lnr lnr-download"></i> <span>입고 | 출고</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages4" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">입고 관리</a></li>
+									<li><a href="" class="">출고 관리</a></li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<a href="#subPages5" data-toggle="collapse" class="collapsed">
+							<i class="lnr lnr-chart-bars"></i> <span>납품</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages5" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">납품 관리</a></li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<a href="#subPages6" data-toggle="collapse" class="collapsed">
+							<i class="lnr lnr-cog"></i> <span>사이트 설정</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages6" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">재고기록 관리</a></li>
+									<li><a href="" class="">인사 관리</a></li>
+								</ul>
+							</div>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+		<!-- 왼쪽 SIDEBAR -->
+
+		<!-- MAIN -->
+		<section
+			th:replace="~{delivery/inreqstate_main :: main_inreqstate}"></section>
+		<!-- 모달 -->
+		<section th:replace="~{delivery/add_deliveryenroll_popup :: add_delivery_popup}"></section>
+		<!-- 
+		<section th:replace="~{inoutbound/product_search :: product_search_popup}"></section>
+		<section th:replace="~{inoutbound/company_search :: company_search_popup}"></section> 
+		<section th:replace="~{inoutbound/add_exreceiving_popup :: add_exrecv_popup}"></section>
+		-->
+		<!-- MAIN 끝-->
+	
+	</div>
+	<div class="clearfix"></div>
+	<!-- footer 시작 -->
+	<footer> </footer>
+	<!-- footer 끝 -->
+
+	<!-- END WRAPPER -->
+	<!-- Javascript -->
+	<script src="../resources/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="../resources/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="../resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script
+		src="../resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
+	<script src="../resources/assets/scripts/klorofil-common.js"></script>
+<script>
+$(document).ready(
+	function() {			
+		//납품 버튼 클릭 시
+		//관리 버튼 클릭시
+		// 문서 전체에 대해 이벤트 위임 설정
+		$(document).on("click", ".inreq_delivery", function(event) {
+			event.preventDefault();  // 기본 동작 중단
+			
+			var supplier_cd = $(this).data("supplier-cd");
+			var product_cd = $(this).data("product-cd");
+			var product_nm = $(this).data("product-nm");
+			var supplier_nm = $(this).data("supplier-nm");
+			var product_qty = $(this).data("product-qty");
+			var add_req = $(this).data("add-req");
+			var hope_dt = $(this).data("hope-dt");
+			var request_cd = $(this).data("request-cd");
+
+			// 입력 필드에 값 설정
+			$("#product_cd_del").val(product_cd);
+			$("#product_nm_del").val(product_nm);
+			$("#supplier_nm_del").val(supplier_nm);
+			$("#product_qty_del").val(product_qty);
+			$("#add_req_del").val(add_req);
+			$("#hope_dt_del").val(hope_dt);
+			$("#request_cd_del").val(request_cd);
+			$("#supplier_cd_del").val(supplier_cd);
+			
+			// 모달 보여주기
+			$("#deleverModal").modal('show');
+			
+		});
+	}
+);
+					
+</script>
+</body>
+<script type="module">
+import {delivery_page_move, delivery_modal, delivery_list, inreq_list} from "../resources/js/deliver/deliveryenroll_main.js?v=5";
+/* 페이지 처음 로드 */
+document.addEventListener('DOMContentLoaded', function() {
+    new delivery_modal().delivery_load();
+});
+
+/* 거절 버튼 클릭 시 */
+document.querySelectorAll('.inreq_reject').forEach(function(button) {
+    button.addEventListener('click', function(event) {
+		var product_qty = this.dataset.productQty;
+		var remain_qty = this.dataset.remainQty;
+		var request_st = this.dataset.requestSt;
+		var request_idx = this.dataset.requestIdx;
+		new inreq_list().reject_list(request_idx, product_qty, remain_qty, request_st);
+	});
+});
+
+
+/*납품 등록 모달*/
+document.querySelector("#del_enroll").addEventListener("click",function(){
+		new delivery_modal().delvery_enroll();
+});
+
+/*메뉴이동*/
+document.querySelector("#go_delreturn").addEventListener("click",function(){
+		new delivery_page_move().go_delivery_return();
+});
+
+document.querySelector("#go_delenroll").addEventListener("click",function(){
+		new delivery_page_move().go_delivery_enroll();
+});
+
+document.querySelector("#go_reqstate").addEventListener("click",function(){
+		new delivery_page_move().go_inreq_state();
+});
+</script>
+</html>

@@ -38,12 +38,7 @@ const startTimer = (expiryTime) => {
             if (timer <= 0) {
                 clearInterval(interval);
                 expirationTimerArea.textContent = "시간 초과";
-                /*
-        		setTimeout(() => {
-				    location.href = "/auth/timer-expired";
-				}, 2000);
-                */
-			   
+                localStorage.clear();
                 return;
             }
 			const min = Math.floor((timer % (1000 * 60 * 60)) / (1000 * 60));
