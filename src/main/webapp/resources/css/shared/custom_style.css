@@ -111,6 +111,10 @@
 	width: 100%;
 }
 
+.custom-width-60 {
+	width: 60%;
+}
+
 .custom-width-50 {
 	width: 50%;
 }
@@ -127,7 +131,23 @@
 	width: 20%;
 }
 
+.custom-fixed-width-300 {
+	width: 300px;
+}
+
+.custom-fixed-width-200 {
+	width: 200px;
+}
+
+.custom-fixed-width-100 {
+	width: 100px;
+}
+
 .custom-flex-row {
 	display:flex; 
 	flex-direction: row;
+}
+.custom-flex-row-reverse {
+	display:flex; 
+	flex-direction: row-reverse;
 }

@@ -58,6 +58,10 @@ public class UserServiceImpl implements UserService{
 		return result;
 	}
 	
-
+	@Override
+	public int modUserInTable(UserAddDTO dto) {
+		int result = ur.modUserInTable(dto);
+		return result;
+	}
 	
 }

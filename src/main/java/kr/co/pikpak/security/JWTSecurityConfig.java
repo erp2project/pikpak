@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -56,15 +57,16 @@ public class JWTSecurityConfig {
 					.requestMatchers("/resources/**").permitAll()
 					.requestMatchers("/favicon.ico").permitAll()
 					*/
-					.requestMatchers("/home").authenticated()
-					.requestMatchers("/supplier/**").hasAuthority("supplier")
-					.requestMatchers("/vendor/**").hasAuthority("vendor")
+					//.requestMatchers("/home").authenticated()
+					//.requestMatchers("/supplier/**").hasAuthority("supplier")
+					//.requestMatchers("/vendor/**").hasAuthority("vendor")
 					.requestMatchers("/admin/users","/admin/users/**","/admin/user/**","/admin/check/**").hasAuthority("admin")
 					//.requestMatchers("/admin","/admin/**").hasAuthority("admin")
 					//.requestMatchers("/test").has
+					.requestMatchers("/auth/**").permitAll()
 					.anyRequest().permitAll())
-			.exceptionHandling(auth -> auth.accessDeniedHandler(accessDeniedHandler()))
-			.formLogin(auth -> auth.disable())
+			.exceptionHandling(auth -> auth.accessDeniedHandler(accessDeniedHandler()).authenticationEntryPoint(authEntryPoint()))
+			.formLogin(auth -> auth.loginPage("/login").permitAll())
 			/*
 			.formLogin(auth -> auth
 					.loginPage("/login")
@@ -101,6 +103,11 @@ public class JWTSecurityConfig {
 	@Bean
 	public AccessDeniedHandler accessDeniedHandler() {
 		return new CustomAccessDeniedHandler();
+	}
+	
+	@Bean
+	public AuthenticationEntryPoint authEntryPoint() {
+		return new CustomAuthenticationEntryPoint();
 	}
 	
 }

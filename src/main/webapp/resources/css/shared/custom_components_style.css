@@ -21,3 +21,9 @@
 	font-size: 23px;
 	text-align: center;
 }
+
+@media screen and (max-width: 1300px) {
+	.custom-hide {
+		display: none;
+	}
+}

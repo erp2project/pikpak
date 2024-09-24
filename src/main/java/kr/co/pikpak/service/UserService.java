@@ -29,5 +29,6 @@ public interface UserService {
 	// 회원 등급
 	String userLvFromOperator(String userId);
 	
-
+	// 회원 수정
+	int modUserInTable(UserAddDTO dto);
 }

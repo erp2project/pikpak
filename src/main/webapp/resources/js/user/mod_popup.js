@@ -122,19 +122,15 @@ const checkPassword = () => {
 }
 
 const sendModUserForm = () => {
-	console.log("test1");
 	let sendCondition1 = new modUserDataTools().checkEmpty();
 	if(sendCondition1 == "Y") {
 		
-		console.log("test2");
 		let sendCondition2 = new modUserDataTools().checkDuplicateStatus();
 		if(sendCondition2 == "Y") {
 			
-			console.log("test3");
 			let sendCondition3 = new modUserDataTools().checkPasswordMatch();
 			if (sendCondition3 == "Y") {
 				
-				console.log("test4");
 				let formData = new FormData(modUserForm);
 				let responseArea = document.getElementById("send-check-response");
 				
@@ -169,6 +165,8 @@ const sendModUserForm = () => {
 		}
 	}
 }
+
+
 
 class modUserDataTools {
 	checkEmpty(){

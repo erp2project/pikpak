@@ -45,5 +45,24 @@
 		select operator_lv from login_operator where operator_id = #{userId}
 	</select>
 	
+	<update id="modUserInTable" parameterType="kr.co.pikpak.dto.UserAddDTO">
+		update
+		${target_table}
+		set
+		${target_id} = #{user_id},
+		<if test="user_pw != ''">
+		${target_pw} = #{user_pw},
+		pw_change_yn = 'Y',
+		</if>
+		${target_tel} = #{user_tel},
+		${target_mail} = #{user_mail},
+		<if test="user_type == 'admin' or user_type == 'operator'">
+		${target_lv} = #{user_lv},
+		</if>
+		modified_dt = now()
+		where
+		${target_id} = #{old_user_id}
+	</update>
+	
 
 </mapper>
