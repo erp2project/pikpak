@@ -20,6 +20,9 @@ public interface return_service {
 	//반품 목록(전체)
 	public List<return_list_dto> return_list_all();
 	
+	//반품 목록(타입)
+	public List<return_list_dto> return_list_type(String return_st, String start_dt, String end_dt, String product_cd, int type, int notall, String user_company);
+	
 	//반품 승인
 	public int return_approval(return_dto return_dto, int type);
 	

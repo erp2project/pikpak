@@ -12,11 +12,11 @@ select product_cd, product_nm, supplier_nm, outgoing_dt, product_qty, purchase_p
 </select>
 
 <select id="return_list" resultType="kr.co.pikpak.dto.return_list_dto">
-select * from return_check_view where user_company=#{user_company} order by return_idx asc
+select * from return_check_view where user_company=#{user_company} order by return_idx desc
 </select>
 
 <select id="return_list_all" resultType="kr.co.pikpak.dto.return_list_dto">
-select * from return_check_view order by return_idx asc
+select * from return_check_view order by return_idx desc
 </select>
 
 <update id="return_approval">
@@ -36,4 +36,22 @@ update return_request set return_st=#{return_dto.return_st},
 delete from return_request where return_idx=#{return_idx}
 </delete>
 
+<select id="return_list_type" resultType="kr.co.pikpak.dto.return_list_dto">
+select * from return_check_view where return_st=#{return_st}
+	<choose>
+		<when test="type == 1">
+		and requested_dt between #{start_dt} and #{end_dt}
+		</when>
+		<when test="type == 2">
+		and product_cd=#{product_cd}
+		</when>
+		<when test="type == 3">
+		and requested_dt between #{start_dt} and #{end_dt} and product_cd=#{product_cd}
+		</when>
+		<when test="notall == 1">
+		and user_company=#{user_company}
+		</when>
+	</choose>
+order by return_idx desc
+</select>
 </mapper>

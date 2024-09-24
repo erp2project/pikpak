@@ -41,6 +41,14 @@ public class return_serviceImpl implements return_service{
 	}
 	
 	@Override
+	public List<return_list_dto> return_list_type(String return_st, String start_dt, String end_dt, String product_cd,
+		int type, int notall, String user_company) {
+		List<return_list_dto> typelist = return_repo.return_list_type(return_st, start_dt, end_dt, product_cd, type, notall, user_company);
+		
+		return typelist;
+	}
+	
+	@Override
 	public List<outgoing_cd_dto> outgoing_cd_search(String outgoing_cd) {
 		List<outgoing_cd_dto> list = return_repo.outgoing_cd_search(outgoing_cd);
 		

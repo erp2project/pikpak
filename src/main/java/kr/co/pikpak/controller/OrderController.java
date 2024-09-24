@@ -28,12 +28,13 @@ public class OrderController {
 	
 	PrintWriter pw = null;
 	
-	//특정 리스트 조회
-	@CrossOrigin(origins = "*")
-	@GetMapping("/order_listck")
-	public ResponseEntity<List<order_list_dto>> order_listck(@RequestParam String process_st,
+	//특정 리스트 조회(주문 승인)
+	@GetMapping("/order_aplistck")
+	public String order_aplistck(@RequestParam String process_st,
 			@RequestParam String start_dt, @RequestParam String end_dt,
-			@RequestParam String product_cd) {
+			@RequestParam String product_cd, Model m) {
+		String user_company = "all";
+		int notall = 0;
 		int type = 0;
 		if(!end_dt.equals("") && product_cd.equals("")) {
 			type = 1;
@@ -44,10 +45,33 @@ public class OrderController {
 		else if(!end_dt.equals("") && !product_cd.equals("")) {
 			type = 3;
 		}
-		System.out.println(type);
-		List<order_list_dto> order_cklist = order_service.order_list_type(process_st, start_dt, end_dt, product_cd, type);
+		List<order_list_dto> order_cklist = order_service.order_list_type(process_st, start_dt, end_dt, product_cd, type, notall, user_company);
+		m.addAttribute("order_aplist",order_cklist);
 		
-		return ResponseEntity.ok(order_cklist);
+		return "/order/order_aplist";
+	}
+	
+	//특정 리스트 조회
+	@GetMapping("/order_listck")
+	public String order_listck(@RequestParam String process_st,
+			@RequestParam String start_dt, @RequestParam String end_dt,
+			@RequestParam String product_cd, Model m) {
+		String user_company = "PikPak";
+		int notall = 1;
+		int type = 0;
+		if(!end_dt.equals("") && product_cd.equals("")) {
+			type = 1;
+		}
+		else if(end_dt.equals("") && !product_cd.equals("")) {
+			type = 2;
+		}
+		else if(!end_dt.equals("") && !product_cd.equals("")) {
+			type = 3;
+		}
+		List<order_list_dto> order_cklist = order_service.order_list_type(process_st, start_dt, end_dt, product_cd, type, notall, user_company);
+		m.addAttribute("order_cklist",order_cklist);
+		
+		return "/order/order_list";
 	}
 	
 	//주문 승인 리스트 페이지

@@ -25,6 +25,29 @@ public class ReturnController {
 	
 	PrintWriter pw = null;
 	
+	//특정 리스트 조회
+	@GetMapping("/return_listck")
+	public String return_listck(@RequestParam String return_st,
+			@RequestParam String start_dt, @RequestParam String end_dt,
+			@RequestParam String product_cd, Model m) {
+		String user_company = "PikPak";
+		int notall = 1;
+		int type = 0;
+		if(!end_dt.equals("") && product_cd.equals("")) {
+			type = 1;
+		}
+		else if(end_dt.equals("") && !product_cd.equals("")) {
+			type = 2;
+		}
+		else if(!end_dt.equals("") && !product_cd.equals("")) {
+			type = 3;
+		}
+		List<return_list_dto> return_cklist = return_service.return_list_type(return_st, start_dt, end_dt, product_cd, type, notall, user_company);
+		m.addAttribute("return_cklist",return_cklist);
+		
+		return "/return/return_list";
+	}
+	
 	//반품 승인 리스트 페이지
 	@GetMapping("/return_aplist")
 	public String return_aplist(Model m) {

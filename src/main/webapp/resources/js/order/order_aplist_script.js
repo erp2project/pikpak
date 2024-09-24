@@ -1,28 +1,28 @@
 document.addEventListener('DOMContentLoaded', function() {
-	var ol_reset_btn = document.getElementById('ol_reset_btn');
-	var ol_search_btn = document.getElementById('ol_search_btn');
-	var ol_start_dt = document.getElementById('ol_start_dt');
-	var ol_end_dt = document.getElementById('ol_end_dt');
-	var ol_product_cd = document.getElementById('ol_product_cd');
-	var ol_product_nm = document.getElementById('ol_product_nm');
+	var oal_reset_btn = document.getElementById('oal_reset_btn');
+	var oal_search_btn = document.getElementById('oal_search_btn');
+	var oal_start_dt = document.getElementById('oal_start_dt');
+	var oal_end_dt = document.getElementById('oal_end_dt');
+	var oal_product_cd = document.getElementById('oal_product_cd');
+	var oal_product_nm = document.getElementById('oal_product_nm');
 
 	//초기화 버튼
-	ol_reset_btn.addEventListener('click', function() {
-		location.href = '/order_list';
+	oal_reset_btn.addEventListener('click', function() {
+		location.href = '/order_aplist';
 	});
 
 	//조회 버튼
-	ol_search_btn.addEventListener('click', function() {
-		if(ol_start_dt.value == "" && ol_end_dt.value != ""){
+	oal_search_btn.addEventListener('click', function() {
+		if(oal_start_dt.value == "" && oal_end_dt.value != ""){
 			alert("날짜를 확인해 주세요.");
 		}
-		else if(ol_start_dt.value != "" && ol_end_dt.value == ""){
+		else if(oal_start_dt.value != "" && oal_end_dt.value == ""){
 			alert("날짜를 확인해 주세요.");
 		}
 		else{
-			ol_frm.method = "get";
-			ol_frm.action = "/order_listck";
-			ol_frm.submit();
+			oal_frm.method = "get";
+			oal_frm.action = "/order_aplistck";
+			oal_frm.submit();
 		}
 		
 		/*
@@ -80,12 +80,12 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 
 	//날짜
-	ol_start_dt.addEventListener('input', dateck)
-	ol_end_dt.addEventListener('input', dateck)
+	oal_start_dt.addEventListener('input', dateck)
+	oal_end_dt.addEventListener('input', dateck)
 
 	function dateck() {
-		if (ol_start_dt.value > ol_end_dt.value && ol_end_dt.value != "") {
-			ol_end_dt.value = "";
+		if (oal_start_dt.value > oal_end_dt.value && oal_end_dt.value != "") {
+			oal_end_dt.value = "";
 			alert("날짜를 확인해 주세요.");
 		}
 	}

@@ -76,11 +76,12 @@
 								</span>
 								<p style="font-size: 12px; height: 25px; line-height: 30px;">※
 									조회옵션</p>
+								<form id="ol_frm">
 								<table class="table table-bordered">
 									<tbody>
 										<tr>
 											<td style="height: 34px; line-height: 34px;">주문 상태</td>
-											<td><select class="form-control" id="ol_process_st">
+											<td><select class="form-control" id="ol_process_st" name="process_st">
 													<option value="대기">대기</option>
 													<option value="승인">승인</option>
 													<option value="거절">거절</option>
@@ -89,14 +90,14 @@
 											<td style="height: 34px; line-height: 34px;">주문 날짜</td>
 											<td
 												style="display: flex; flex-direction: row; line-height: 34px;">
-												<input type="date" class="form-control" style="width: 35%;" id="ol_start_dt">&nbsp;&nbsp;
+												<input type="date" class="form-control" style="width: 35%;" id="ol_start_dt" name="start_dt">&nbsp;&nbsp;
 												~ &nbsp;&nbsp;<input type="date" class="form-control"
-												style="width: 35%;" id="ol_end_dt">
+												style="width: 35%;" id="ol_end_dt" name="end_dt">
 											</td>
 											<td style="width: 10%; height: 34px; line-height: 34px;">상품코드 / 명</td>
 											<td
 												style="display: flex; flex-direction: row; line-height: 34px;">
-												<input type="text" class="form-control" style="width: 25%;" id="ol_product_cd">&nbsp;&nbsp;
+												<input type="text" class="form-control" style="width: 25%;" id="ol_product_cd" name="product_cd">&nbsp;&nbsp;
 												<input type="text" class="form-control" style="width: 25%;" id="ol_product_nm">&nbsp;&nbsp;
 												<span><button class="btn btn-primary" type="button">검
 														색</button></span>
@@ -104,12 +105,12 @@
 										</tr>
 									</tbody>
 								</table>
+								</form>
 								<div
 									style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
 									<p style="font-size: 12px; height: 25px; line-height: 30px;">※
 										조회결과</p>
 									<div style="display: flex;">
-										<button>삭제</button>
 										<nav th:replace="~{/order/order.html :: order}"></nav>
 									</div>
 								</div>
@@ -117,8 +118,6 @@
 									<table class="table table-hover">
 										<thead style="background-color: rgb(130, 210, 213);">
 											<tr>
-												<th><input type="checkbox"
-													style="border: 1px solid #ccc;"></th>
 												<th style="text-align: center;">NO.</th>
 												<th style="text-align: center;">주문 코드</th>
 												<th style="text-align: center;">상품 코드</th>
@@ -130,9 +129,8 @@
 												<th style="text-align: center;">관리</th>
 											</tr>
 										</thead>
-											<tbody id="order_tablebody" th:each="order_cklist : ${order_cklist}">
-												<tr>
-													<td><input type="checkbox"></td>
+											<tbody>
+												<tr th:each="order_cklist : ${order_cklist}">
 													<td style="text-align: center;">NO.</td>
 													<td style="text-align: center;"><a
 														th:text="${order_cklist.order_cd}"></a></td>
