@@ -8,20 +8,20 @@
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <!-- VENDOR CSS -->
 <link rel="stylesheet"
-	href="../resources/assets/vendor/bootstrap/css/bootstrap.min.css">
+	href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet"
-	href="../resources/assets/vendor/font-awesome/css/font-awesome.min.css">
+	href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet"
-	href="../resources/assets/vendor/linearicons/style.css">
+	href="/resources/assets/vendor/linearicons/style.css">
 <link rel="stylesheet"
-	href="../resources/assets/vendor/chartist/css/chartist-custom.css">
+	href="/resources/assets/vendor/chartist/css/chartist-custom.css">
 <!-- MAIN CSS -->
-<link rel="stylesheet" href="../resources/assets/css/main.css">
-<link rel="stylesheet" href="../resources/assets/css/demo.css">
+<link rel="stylesheet" href="/resources/assets/css/main.css">
+<link rel="stylesheet" href="/resources/assets/css/demo.css">
 <link rel="stylesheet"
-	href="../resources/css/inoutbound/inboundreq_main.css">
+	href="/resources/css/inoutbound/inboundreq_main.css">
 <link rel="stylesheet" href="../resources/css/inoutbound/pd_search.css">
-<link href="../resources/css/inoutbound/add_popup.css" rel="stylesheet">
+<link href="/resources/css/inoutbound/add_popup.css" rel="stylesheet">
 <!-- 팝업창 css도 여기로 -->
 <!-- Select2 CSS -->
 <link
@@ -34,9 +34,9 @@
 	rel="stylesheet">
 <!-- ICONS -->
 <link rel="apple-touch-icon" sizes="76x76"
-	href="assets/img/apple-icon.png">
+	href="/assets/img/apple-icon.png">
 <link rel="icon" type="image/png" sizes="96x96"
-	href="assets/img/favicon.png">
+	href="/assets/img/favicon.png">
 
 </head>
 
@@ -215,8 +215,44 @@
 	</script>
 
 	<script type="module">
-import {page_move_outbound} from "../resources/js/inoutbound/outbound_main.js?v=1";
-   /* 메뉴 */
+import {page_move_outbound, outbound_enroll} from "../resources/js/inoutbound/outbound_main.js?v=2";
+
+   /* 출고등록 모달 */
+	 // 출고수량 UI 추가 버튼
+    document.querySelector("#add_button").addEventListener('click', function() {
+          var location_select = document.getElementById('location_select');
+    var lot_select = document.getElementById('lot_select');
+    var qty_input = document.getElementById('qty_input');
+    
+    var location = location_select.value;
+    var lot_details = lot_select.options[lot_select.selectedIndex].text;
+    var quantity = qty_input.value;
+
+    var selectedOption = lot_select.options[lot_select.selectedIndex];
+    var whWarehouseIdx = selectedOption.getAttribute('data-wh_warehouse_idx');
+    var receivingCd = selectedOption.getAttribute('data-receiving_cd');
+
+    if (quantity > 0) {
+        new outbound_enroll().qty_ui(location, lot_details, quantity, whWarehouseIdx, receivingCd);
+        qty_input.value = ''; // 입력 필드 초기화
+    } else {
+        alert('유효한 출고 수량을 입력해주세요.');
+    }
+    });
+
+	//출고등록 버튼 눌렀을 시 출고수량 정보 가져오기
+	document.querySelectorAll('.outbound_enroll').forEach(function(button) {
+    	button.addEventListener('click', function(event) {
+			new outbound_enroll().qty_info(button.dataset.productCd);
+		});
+	});
+
+	//출고등록 모달에서 등록버튼 눌러서 백엔드 제출 
+	document.querySelector("#out_enroll").addEventListener("click",function(){
+		new outbound_enroll().go_out_enroll();
+	});
+
+	/* 메뉴 */
 	//출고현황 이동
 	document.querySelector("#go_outstate").addEventListener("click",function(){
 		new page_move().go_inboundreq();

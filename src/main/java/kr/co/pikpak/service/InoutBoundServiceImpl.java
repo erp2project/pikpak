@@ -12,6 +12,7 @@ import kr.co.pikpak.dto.ex_receiving_dto;
 import kr.co.pikpak.dto.ex_receiving_joined_dto;
 import kr.co.pikpak.dto.input_request_dto;
 import kr.co.pikpak.dto.order_enroll_dto_lhwtemp;
+import kr.co.pikpak.dto.outgoing_select_view_dto;
 import kr.co.pikpak.dto.product_dto_lhwtemp;
 import kr.co.pikpak.dto.receiving_dto;
 import kr.co.pikpak.dto.supplier_info_dto_lhwtemp;
@@ -24,6 +25,14 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	
 	@Autowired
 	InoutBoundRepo iorepo;
+	
+	//출고수량 등록
+	@Override
+	public List<outgoing_select_view_dto> select_stock(String product_cd) {
+		List<outgoing_select_view_dto> stock_info = iorepo.select_stock(product_cd);
+		return stock_info;
+	}
+	
 	
 	//warehouse_locations update
 	@Override
@@ -64,7 +73,6 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 		 */
 		String lot_no = this.make_lotno(dto.getProduct_cd(), dto.getMake_dt(), dto.getInventory_dt());
 		dto.setLot_no(lot_no);
-		System.out.println(lot_no);
 		
 		//고유번호 넣기
 		dto.setReceiving_cd(this.make_recvcode());

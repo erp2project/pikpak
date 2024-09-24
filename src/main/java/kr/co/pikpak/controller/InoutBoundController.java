@@ -26,6 +26,9 @@ import kr.co.pikpak.dto.ex_receiving_dto;
 import kr.co.pikpak.dto.ex_receiving_joined_dto;
 import kr.co.pikpak.dto.input_request_dto;
 import kr.co.pikpak.dto.order_enroll_dto_lhwtemp;
+import kr.co.pikpak.dto.outgoing_enroll_dto;
+import kr.co.pikpak.dto.outgoing_picking_dto;
+import kr.co.pikpak.dto.outgoing_select_view_dto;
 import kr.co.pikpak.dto.product_dto_lhwtemp;
 import kr.co.pikpak.dto.receiving_dto;
 import kr.co.pikpak.dto.supplier_info_dto_lhwtemp;
@@ -42,6 +45,45 @@ public class InoutBoundController {
 	
 	@Resource(name="ir_dto")
 	input_request_dto irdto; 
+	
+	//출고 등록
+	@PostMapping("/inoutbound/outgoing_enrollok")
+	public String outgoing_enrollok(ServletResponse res, 
+			@ModelAttribute("outenroll") outgoing_enroll_dto dto_enroll,
+			@RequestParam(defaultValue = "", required = true) String item_data) {
+		try {
+			System.out.println(dto_enroll.getOrder_cd());
+			
+			String ea[] = item_data.split(",");
+			String value[] = ea[0].split("&");
+			System.out.println(ea[0]);
+			System.out.println(value[0]);
+		}
+		catch(Exception e) {
+			
+		}
+		finally {
+			
+		}
+		return null;
+	}
+	
+	
+	
+	//출고등록 위치정보 가져오기
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@GetMapping("/outgoing_locations")
+	@ResponseBody
+	public ResponseEntity<?> outgoing_locations(
+			@RequestParam(defaultValue = "", required = true) String product_cd){
+		try {
+			List<outgoing_select_view_dto> stock_info = ioservice.select_stock(product_cd);
+			return ResponseEntity.ok(stock_info);  // JSON으로 변환되어 전송
+		}
+		catch(Exception e) {
+			 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error");
+		}
+	}
 	
 	
 	//입고 등록
@@ -93,7 +135,7 @@ public class InoutBoundController {
 			 return ResponseEntity.ok(locations);  // JSON으로 변환되어 전송
 		} 
 		catch (Exception e) {
-			this.pw.print("error");
+			
 			 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error");
 		}
 	}

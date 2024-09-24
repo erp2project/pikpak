@@ -10,6 +10,7 @@ import kr.co.pikpak.dto.ex_receiving_dto;
 import kr.co.pikpak.dto.ex_receiving_joined_dto;
 import kr.co.pikpak.dto.input_request_dto;
 import kr.co.pikpak.dto.order_enroll_dto_lhwtemp;
+import kr.co.pikpak.dto.outgoing_select_view_dto;
 import kr.co.pikpak.dto.product_dto_lhwtemp;
 import kr.co.pikpak.dto.receiving_dto;
 import kr.co.pikpak.dto.supplier_info_dto_lhwtemp;
@@ -92,4 +93,7 @@ public interface InoutBoundRepo {
 	
 	//warehouse_locations update
 	int update_warehouse_locations(String location_cd);
+	
+	//출고수량 지정을 위한 위치정보 끌고오기
+	List<outgoing_select_view_dto> select_stock(String product_cd);
 }

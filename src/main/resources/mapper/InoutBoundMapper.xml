@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.pikpak.repo.InoutBoundRepo">
+
+<!-- 출고 위치 선택을 위해 재고정보 끌고오기  -->
+<select id="select_stock" resultType="kr.co.pikpak.dto.outgoing_select_view_dto">
+select * from outgoing_select_view where product_cd=#{product_cd}
+</select>
+
+
 <!-- 입고와 동시에 warehouse_locations 업데이트 -->
 <update id="update_warehouse_locations">
 update warehouse_locations set current_capacity=current_capacity+1 where location_cd=#{location_cd}
@@ -13,8 +20,7 @@ update warehouse set product_qty = product_qty + #{additional_qty}, update_by=#{
 
 <!-- 입고와 동시에 warehouse insert -->
 <insert id="insert_warehouse" parameterType="Map">
-insert into warehouse values ('0',#{location_cd},#{product_cd},#{product_nm},#{supplier_nm},#{product_qty},#{intransit_qty},
-#{allocated_qty},#{incoming_qty},#{inventory_log},#{update_dt},#{update_by},#{supplier_cd})
+insert into warehouse values ('0',#{location_cd},#{product_cd},#{product_nm},#{supplier_nm},#{product_qty},#{intransit_qty},#{inventory_log},#{update_dt},#{update_by},#{supplier_cd})
 </insert>
 
 <!-- warehouse에 데이터가 있는 지 없는 지 확인 -->
