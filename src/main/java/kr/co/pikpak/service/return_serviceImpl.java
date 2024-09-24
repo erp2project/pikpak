@@ -35,6 +35,12 @@ public class return_serviceImpl implements return_service{
 	}
 	
 	@Override
+	public List<return_list_dto> return_list_all() {
+		List<return_list_dto> alllist = return_repo.return_list_all();
+		return alllist;
+	}
+	
+	@Override
 	public List<outgoing_cd_dto> outgoing_cd_search(String outgoing_cd) {
 		List<outgoing_cd_dto> list = return_repo.outgoing_cd_search(outgoing_cd);
 		

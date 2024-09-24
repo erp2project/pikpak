@@ -4,8 +4,10 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,34 +28,45 @@ public class OrderController {
 	
 	PrintWriter pw = null;
 	
-	@GetMapping("/test_index")
-	public String test_index() {
-		return "index";
+	//특정 리스트 조회
+	@CrossOrigin(origins = "*")
+	@GetMapping("/order_listck")
+	public ResponseEntity<List<order_list_dto>> order_listck(@RequestParam String process_st,
+			@RequestParam String start_dt, @RequestParam String end_dt,
+			@RequestParam String product_cd) {
+		int type = 0;
+		if(!end_dt.equals("") && product_cd.equals("")) {
+			type = 1;
+		}
+		else if(end_dt.equals("") && !product_cd.equals("")) {
+			type = 2;
+		}
+		else if(!end_dt.equals("") && !product_cd.equals("")) {
+			type = 3;
+		}
+		System.out.println(type);
+		List<order_list_dto> order_cklist = order_service.order_list_type(process_st, start_dt, end_dt, product_cd, type);
+		
+		return ResponseEntity.ok(order_cklist);
 	}
 	
-	@GetMapping("/order")
-	public String order() {
-		return "/order/order";
+	//주문 승인 리스트 페이지
+	@GetMapping("/order_aplist")
+	public String order_aplist(Model m) {
+		List<order_list_dto> order_alllist = order_service.order_list_all();
+		m.addAttribute("order_aplist",order_alllist);
+		
+		return "/order/order_aplist";
 	}
 	
-	//주문 상세 리스트 - 임시(아이디 값을 통해 회사명 받아온 후 동일 회사만)
-	@GetMapping("/order_check")
-	public String order_check(Model m) {
+	//주문 리스트 페이지 - 아이디 값에서 회사명 받아오기
+	@GetMapping("/order_list")
+	public String order_list(Model m) {
 		String user_company = "PikPak";
 		List<order_list_dto> order_cklist = order_service.order_list(user_company);
 		m.addAttribute("order_cklist",order_cklist);
 		
-		return "/order/order_check";
-	}
-	
-	//주문 승인 리스트 - 임시(전부 출력토록)
-	@GetMapping("/order_approval")
-	public String order_approval(Model m) {
-		String user_company = "PikPak";
-		List<order_list_dto> order_cklist = order_service.order_list(user_company);
-		m.addAttribute("order_aplist",order_cklist);
-		
-		return "/order/order_approval";
+		return "/order/order_list";
 	}
 	
 	//주문 승인
@@ -67,19 +80,19 @@ public class OrderController {
 			if(result > 0) {
 				this.pw.print("<script>"
 						+ "alert('주문 승인 정보가 변경되었습니다.');"
-						+ "location='/order_approval';"
+						+ "location='/order_aplist';"
 						+ "</script>");
 			}
 			else {
 				this.pw.print("<script>"
 						+ "alert('오류로 인하여 주문 승인 정보 변경을 실패하였습니다.');"
-						+ "location='/order_approval';"
+						+ "location='/order_aplist';"
 						+ "</script>");
 			}
 		}catch(Exception e) {
 			this.pw.print("<script>"
 					+ "alert('오류로 인하여 주문 승인 정보 변경을 실패하였습니다.');"
-					+ "location='/order_approval';"
+					+ "location='/order_aplist';"
 					+ "</script>");
 		}
 		finally {
@@ -100,19 +113,19 @@ public class OrderController {
 			if(result > 0) {
 				this.pw.print("<script>"
 						+ "alert('정상적으로 주문이 취소되었습니다.');"
-						+ "location='/order_check';"
+						+ "location='/order_list';"
 						+ "</script>");
 			}
 			else {
 				this.pw.print("<script>"
 						+ "alert('오류로 인하여 주문 취소를 실패하였습니다.');"
-						+ "location='/order_check';"
+						+ "location='/order_list';"
 						+ "</script>");
 			}
 		}catch(Exception e) {
 			this.pw.print("<script>"
 					+ "alert('오류로 인하여 주문 취소를 실패하였습니다.');"
-					+ "location='/order_check';"
+					+ "location='/order_list';"
 					+ "</script>");
 		}
 		finally {
@@ -133,19 +146,19 @@ public class OrderController {
 			if(result > 0) {
 				this.pw.print("<script>"
 						+ "alert('주문 수정이 완료되었습니다.');"
-						+ "location='/order_check';"
+						+ "location='/order_list';"
 						+ "</script>");
 			}
 			else {
 				this.pw.print("<script>"
 						+ "alert('수정된 부분이 존재하지 않습니다.');"
-						+ "location='/order_check';"
+						+ "location='/order_list';"
 						+ "</script>");
 			}
 		}catch(Exception e) {
 			this.pw.print("<script>"
 					+ "alert('오류로 인하여 주문 수정을 실패하였습니다.');"
-					+ "location='/order_check';"
+					+ "location='/order_list';"
 					+ "</script>");
 		}
 		finally {
@@ -197,19 +210,19 @@ public class OrderController {
 			if(result > 0) {
 				this.pw.print("<script>"
 						+ "alert('주문 등록이 완료되었습니다.');"
-						+ "location='/order';"
+						+ "location='/order_list';"
 						+ "</script>");
 			}
 			else {
 				this.pw.print("<script>"
 						+ "alert('오류로 인하여 주문 등록을 실패하였습니다.');"
-						+ "location='/order';"
+						+ "location='/order_list';"
 						+ "</script>");
 			}
 		}catch(Exception e) {
 			this.pw.print("<script>"
 					+ "alert('오류로 인하여 주문 등록을 실패하였습니다.');"
-					+ "location='/order';"
+					+ "location='/order_list';"
 					+ "</script>");
 		}
 		finally {

@@ -11,6 +11,10 @@ values (#{order_cd}, #{order_id}, #{vendor_nm}, '대기', #{order_qty}, #{order_
 select * from order_check_view where user_company=#{user_company} order by order_idx asc
 </select>
 
+<select id="order_list_all" resultType="kr.co.pikpak.dto.order_list_dto">
+select * from order_check_view order by order_idx asc
+</select>
+
 <select id="product_cd_search" resultType="kr.co.pikpak.dto.product_cd_dto">
 select product_nm, supplier_nm, product_sz, product_wt, purchase_pr from product where product_cd=#{product_cd}
 </select>
@@ -26,5 +30,21 @@ update order_enroll set process_st=#{process_st}, approval_log=#{approval_log}, 
 <delete id="order_delete">
 delete from order_enroll where order_idx=#{order_idx}
 </delete>
+
+<select id="order_list_type" resultType="kr.co.pikpak.dto.order_list_dto">
+select * from order_check_view where process_st=#{process_st} 
+	<choose>
+		<when test="type == 1">
+		and order_dt between #{start_dt} and #{end_dt}
+		</when>
+		<when test="type == 2">
+		and product_cd=#{product_cd}
+		</when>
+		<when test="type == 3">
+		and order_dt between #{start_dt} and #{end_dt} and product_cd=#{product_cd}
+		</when>
+	</choose>
+order by order_idx asc
+</select>
 
 </mapper>

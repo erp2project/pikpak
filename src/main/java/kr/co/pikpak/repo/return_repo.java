@@ -19,6 +19,9 @@ public interface return_repo {
 	//반품 목록
 	public List<return_list_dto> return_list(String user_company);
 	
+	//반품 목록(전체)
+	public List<return_list_dto> return_list_all();
+	
 	//반품 승인
 	public int return_approval(return_dto return_dto, int type);
 	

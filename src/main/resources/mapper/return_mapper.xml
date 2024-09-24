@@ -15,6 +15,10 @@ select product_cd, product_nm, supplier_nm, outgoing_dt, product_qty, purchase_p
 select * from return_check_view where user_company=#{user_company} order by return_idx asc
 </select>
 
+<select id="return_list_all" resultType="kr.co.pikpak.dto.return_list_dto">
+select * from return_check_view order by return_idx asc
+</select>
+
 <update id="return_approval">
 update return_request set return_st=#{return_dto.return_st},
 	<choose>

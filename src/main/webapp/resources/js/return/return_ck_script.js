@@ -45,7 +45,7 @@ document.querySelectorAll('.openPopupBtn').forEach(function(button){
 	var deleteButton = document.querySelector('.button-1[data-index="' + class_idx + '"]');
 	if (deleteButton) {
 		deleteButton.addEventListener('click', function() {
-			if(confirm("반품 취소(삭제) 후에는 복구가 불가능합니다. 반품 취소(삭제)를 진행하시겠습니까?")){
+			if(confirm("반품 취소 후에는 복구가 불가능합니다. 반품 취소를 진행하시겠습니까?")){
 				document.getElementById('ck_return_idx').value = class_idx;
 				return_ck_frm.action = "/return_delete";
 				return_ck_frm.method = "post";

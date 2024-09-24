@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
+	var today = new Date();
+    var formattoday = today.toISOString().split('T')[0];
+	
     var openPopupBtn = document.getElementById('openPopupBtn');
     var closePopupBtn = document.getElementById('closePopupBtn');
     var closePopupBtn2 = document.getElementById('closePopupBtn2');
@@ -32,6 +35,19 @@ document.addEventListener('DOMContentLoaded', function() {
             popupContainer.style.display = 'none';
         }
     });
+    
+    //착수일
+    startDate.value = formattoday;
+    
+    function startDateck(){
+		if(startDate.value < formattoday){
+			startDate.value = formattoday;
+			alert('착수일은 오늘 날짜('+ formattoday +')보다 이전일 수 없습니다.');
+		}
+	}
+	
+	startDate.addEventListener('input',startDateck);
+    
     
 	//상품코드 조회
 	product_cd_search.addEventListener('click',function(){

@@ -25,31 +25,25 @@ public class ReturnController {
 	
 	PrintWriter pw = null;
 	
-	@GetMapping("/return")
-	public String return_rq() {
-		return "/return/return";
-	}
+	//반품 승인 리스트 페이지
+	@GetMapping("/return_aplist")
+	public String return_aplist(Model m) {
+		List<return_list_dto> return_alllist = return_service.return_list_all();
+		m.addAttribute("return_cklist",return_alllist);
+		
+		return "/return/return_aplist";
+	}	
 	
-	//반품 상세 리스트 - 임시(아이디 값을 통해 회사명 받아온 후 동일 회사만)
-	@GetMapping("/return_check")
-	public String return_check(Model m) {
+	//반품 리스트 페이지 - 아이디 값에서 회사명 받아오기
+	@GetMapping("/return_list")
+	public String return_list(Model m) {
 		String user_company = "PikPak";
 		List<return_list_dto> return_cklist = return_service.return_list(user_company);
 		m.addAttribute("return_cklist",return_cklist);
 		
-		return "/return/return_check";
+		return "/return/return_list";
 	}
-	
-	//반품 승인 리스트 - 임시(전부 출력토록)
-	@GetMapping("/return_approval")
-	public String return_approval(Model m) {
-		String user_company = "PikPak";
-		List<return_list_dto> return_cklist = return_service.return_list(user_company);
-		m.addAttribute("return_cklist",return_cklist);
-		
-		return "/return/return_approval";
-	}
-	
+
 	//반품 승인
 	@PostMapping("/return_approval_change")
 	public String return_approval_change(@ModelAttribute return_dto retrun_dto,
@@ -73,19 +67,19 @@ public class ReturnController {
 			if(result > 0) {
 				this.pw.print("<script>"
 						+ "alert('반품 승인 정보가 변경되었습니다.');"
-						+ "location='/return_approval';"
+						+ "location='/return_aplist';"
 						+ "</script>");
 			}
 			else {
 				this.pw.print("<script>"
 						+ "alert('오류로 인하여 반품 승인 정보 변경을 실패하였습니다.');"
-						+ "location='/return_approval';"
+						+ "location='/return_aplist';"
 						+ "</script>");
 			}
 		}catch(Exception e) {
 			this.pw.print("<script>"
 					+ "alert('오류로 인하여 반품 승인 정보 변경을 실패하였습니다.');"
-					+ "location='/return_approval';"
+					+ "location='/return_aplist';"
 					+ "</script>");
 		}
 		finally {
@@ -106,19 +100,19 @@ public class ReturnController {
 			if(result > 0) {
 				this.pw.print("<script>"
 						+ "alert('정상적으로 반품 신청이 취소되었습니다.');"
-						+ "location='/return_check';"
+						+ "location='/return_list';"
 						+ "</script>");
 			}
 			else {
 				this.pw.print("<script>"
 						+ "alert('오류로 인하여 반품 신청 취소를 실패하였습니다.');"
-						+ "location='/return_check';"
+						+ "location='/return_list';"
 						+ "</script>");
 			}
 		}catch(Exception e) {
 			this.pw.print("<script>"
 					+ "alert('오류로 인하여 반품 신청 취소를 실패하였습니다.');"
-					+ "location='/return_check';"
+					+ "location='/return_list';"
 					+ "</script>");
 		}
 		finally {
@@ -173,19 +167,19 @@ public class ReturnController {
 			if(result > 0) {
 				this.pw.print("<script>"
 						+ "alert('반품 등록이 완료되었습니다.');"
-						+ "location='/return';"
+						+ "location='/return_list';"
 						+ "</script>");
 			}
 			else {
 				this.pw.print("<script>"
 						+ "alert('오류로 인하여 반품 등록을 실패하였습니다.');"
-						+ "location='/return';"
+						+ "location='/return_list';"
 						+ "</script>");
 			}
 		}catch(Exception e) {
 			this.pw.print("<script>"
 					+ "alert('오류로 인하여 반품 등록을 실패하였습니다.');"
-					+ "location='/return';"
+					+ "location='/return_list';"
 					+ "</script>");
 		}
 		finally {

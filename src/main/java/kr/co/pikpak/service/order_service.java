@@ -14,6 +14,12 @@ public interface order_service {
 	//주문 목록
 	public List<order_list_dto> order_list(String user_company);
 	
+	//주문 목록(전체)
+	public List<order_list_dto> order_list_all();
+	
+	//주문 목록(타입)
+	public List<order_list_dto> order_list_type(String process_st, String start_dt, String end_dt, String product_cd, int type);
+	
 	//상품 코드 조회
 	public List<product_cd_dto> product_cd_search(String product_cd);
 	

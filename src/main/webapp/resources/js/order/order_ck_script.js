@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
 
 	// 팝업 열기 버튼 클릭 시 팝업을 열기
-	document.querySelectorAll('.openPopupBtn').forEach(function(button) {
+	document.querySelectorAll('.openPopupBtn2').forEach(function(button) {
 		button.addEventListener('click', function() {
 
 			// 현재 버튼에 해당하는 팝업을 찾기
@@ -33,9 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			popupContainer.style.display = 'none';
 		});
 	});
-
-});
-
 
 // 각 상품코드 입력 필드를 가져오기
 document.querySelectorAll('.productCode').forEach(function(inputField) {
@@ -135,7 +132,7 @@ document.querySelectorAll('.productCode').forEach(function(inputField) {
 	var deleteButton = document.querySelector('.button-4[data-index="' + class_idx + '"]');
 	if (deleteButton) {
 		deleteButton.addEventListener('click', function() {
-			if(confirm("주문 취소(삭제) 후에는 복구가 불가능합니다. 주문 취소(삭제)를 진행하시겠습니까?")){
+			if(confirm("주문 취소 후에는 복구가 불가능합니다. 주문 취소를 진행하시겠습니까?")){
 				updateCKValues();
 				order_ck_frm.action = "/order_delete";
 				order_ck_frm.method = "post";
@@ -154,5 +151,8 @@ document.querySelectorAll('.productCode').forEach(function(inputField) {
 		document.getElementById('ck_start_dt').value = startDate.value;
 		document.getElementById('ck_due_dt').value = endDate.value;
 	}
+
+});
+
 
 });

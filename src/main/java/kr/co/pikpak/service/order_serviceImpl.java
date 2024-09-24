@@ -31,6 +31,18 @@ public class order_serviceImpl implements order_service{
 	}
 	
 	@Override
+	public List<order_list_dto> order_list_all() {
+		List<order_list_dto> alllist = order_repo.order_list_all();
+		return alllist;
+	}
+	
+	@Override
+	public List<order_list_dto> order_list_type(String process_st, String start_dt, String end_dt, String product_cd, int type) {
+		List<order_list_dto> typelist = order_repo.order_list_type(process_st, start_dt, end_dt, product_cd, type);
+		return typelist;
+	}
+	
+	@Override
 	public List<product_cd_dto> product_cd_search(String product_cd) {
 		List<product_cd_dto> product_list = order_repo.product_cd_search(product_cd);
 		
