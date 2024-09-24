@@ -46,8 +46,8 @@ body {
 	align-items: center;
 	justify-content: center;
 	flex-shrink: 0;
-	width: 500px;
-	height: 300px;
+	width: 550px;
+	height: 370px;
 	min-width: 320px;
 	position: relative;
 	overflow: hidden;
@@ -167,4 +167,11 @@ body {
 }
 .link:hover {
 	text-decoration: underline;
+}
+
+.message-area {
+	color: red;
+	visibility: hidden;
+  	opacity: 0;
+ 	transition: visibility 0ms, opacity 300ms linear;
 }

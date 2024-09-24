@@ -1,13 +1,49 @@
-const loginFormSend = () => {
-	let sendCondition = new loginDataTools().emptyCheck();
-	
-	if (sendCondition == "Y"){
-		loginForm.method = "POST";
-		loginForm.action = "/login/auth"
-		loginForm.submit();
+document.getElementById("loginForm").addEventListener("submit", 
+	(event) => {
+		event.preventDefault();
+		
+		let sendCondition = new loginDataTools().emptyCheck();
+		
+		if (sendCondition == "Y"){
+			const data = event.target;
+			const formData = new FormData(data);
+			var responseArea = document.getElementById("response");
+			
+			fetch("/login/auth",{
+				method : "POST",
+				body : formData
+			})
+			.then(response => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw new Error("알 수 없는 이유로 로그인에 실패하였습니다. 관리자에게 문의하세요.");
+				}
+			})
+			.then(result => {
+				const responseMsg = result.responseMsg;
+				const expiryTime = result.expiryTime;
+				
+				if (responseMsg=="Y") {
+					alert("로그인 성공 하였습니다");
+					localStorage.setItem("expiryTime",expiryTime);
+					location.href="/home";
+				}
+				else{
+					responseArea.innerHTML = `<p>${result}</p>`;
+					responseArea.style.visibility = "visible";
+					responseArea.style.opacity = "1";
+				}
+			})
+			.catch(error => {
+				//document.getElementById("response").innerHTML = `<p>${error}</p>`;
+				responseArea.innerHTML = `<p>"알 수 없는 이유로 로그인에 실패하였습니다. 관리자에게 문의하세요"</p>`;
+				responseArea.style.visibility = "visible";
+				responseArea.style.opacity = "1";
+			});
+		}
 	}
-	
-}
+);
 
 class loginDataTools{
 	emptyCheck(){
@@ -29,5 +65,4 @@ class loginDataTools{
 		
 		return returnCondition;
 	}
-	
 }

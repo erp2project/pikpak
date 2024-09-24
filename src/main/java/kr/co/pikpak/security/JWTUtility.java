@@ -22,6 +22,7 @@ public class JWTUtility {
 	private String secretKey = "f826e963aea8e14cec02b74f8cc67bb9830adaed1191c0f29a41c38bc558e217";
 	
 	private int jwtExpiration = 3600000;	//1 HR
+	//private int jwtExpiration = 30000;	//30 Sec
 
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
@@ -75,6 +76,24 @@ public class JWTUtility {
 		String result = (String) claims.get("uid");
         return result;
     }
+	
+	public String extractUserLv(String token) {
+		final Claims claims = extractAllClaims(token);
+		String result = (String) claims.get("ulevel");
+        return result;
+	}
+	
+	// 운영자 레벨 호출하는 메소드 추가?
+	public Map<String, String> extractUserData(String token){
+		Map<String,String> result = new HashMap<>();
+		final Claims claims = extractAllClaims(token);
+		result.put("uid", (String) claims.get("uid"));
+		result.put("uname", (String) claims.get("uname"));
+		result.put("utype", (String) claims.get("utype"));
+		result.put("ulevel", (String) claims.get("ulevel"));
+		
+		return result;
+	}
 
 	private Claims extractAllClaims(String token) {
 		return Jwts
@@ -94,7 +113,7 @@ public class JWTUtility {
         return extractExpiration(token).before(new Date());
     }
     
-    private Date extractExpiration(String token) {
+    public Date extractExpiration(String token) {
     	return extractClaim(token, Claims::getExpiration);
     }
 
