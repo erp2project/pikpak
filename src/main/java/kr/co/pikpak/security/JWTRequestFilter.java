@@ -26,62 +26,60 @@ public class JWTRequestFilter extends OncePerRequestFilter{
 	private JWTUtility JWTUtil;
 	
 	@Autowired
-	private LoginService LoginService;
+	private CustomUserDetailsService userDetailsService;
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain)
 			throws ServletException, IOException {
-		String authorizationHeader = req.getHeader("Authorization");
-		//final String authorizationHeader = req.getHeader("Cookie");
+		// Do I need this?
+		String requestURI = req.getRequestURI();
+		if (requestURI.startsWith("/resources/") || requestURI.startsWith("/login") || requestURI.startsWith("/auth")) {
+			filterChain.doFilter(req, res);
+			return;
+		}
 		
-		if (authorizationHeader == null) {
+		// Request 헤더에 Authorization 있는 경우
+		String authHeader = req.getHeader("Authorization");
+		
+		// Request 헤더에 Authorization 없는 경우 
+		if (authHeader == null) {
 			String accessToken = CookieUtility.getCookie(req, "accessToken");
 			if (accessToken != null) {
-				authorizationHeader = "Bearer " + accessToken;
-				res.setHeader("Authorization", authorizationHeader);
+				authHeader = "Bearer " + accessToken;
+				res.setHeader("Authorization", authHeader);
 			}
 		}
+
+		String userId = null;
+		String token = null;
 		
-		//System.out.println(req.getRequestURI());
-		//System.out.println("Headertest : " + authorizationHeader);
-		
-		
-		String username = null;
-		String jwt = null;
-		
-		if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) { //request에 authorization header있는경우
-			jwt = authorizationHeader.substring(7);
+		// Authorization 헤더가 존재하고 Bearer로 시작할 때
+		if (authHeader != null && authHeader.startsWith("Bearer ")) { //request에 authorization header있는경우
+			token = authHeader.substring(7);
 			
-			try {
-				username = JWTUtil.extractUsername(jwt);
-				System.out.println("good");
-            } catch (IllegalArgumentException e) {
-            	System.out.println("Error occurred while retrieving Username from Token");
+			// 세션 초과!
+            try {
+            	userId = JWTUtil.extractUserId(token);
             } catch (ExpiredJwtException e) {
-            	System.out.println("The token has expired");
-            } catch (SignatureException e) {
-            	System.out.println("Authentication Failed. Invalid username or password.");
+                req.setAttribute("expired", true);
             }
+			
+            // 유저 이름이 존재하고 현재 인증 정보가 없는 경우
+            if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            	CustomUserDetails userDetails = userDetailsService.loadUserByUsername(userId);
+    				
+            	
+                // 유효한 토큰일 경우
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+        		//System.out.println(SecurityContextHolder.getContext().getAuthentication());
+            }			
 		}
-		else {	//request에 authorization 해더 없는 경우
+		else {	// Request에 authorization 해더 없는 경우
 			//System.out.println("Bearer string not found, ignoring the header");
 		}
-		/*
-		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			UserDetails userDetails = LoginService.loadUserByUsername(username);
-			
-			if (JWTUtil.isTokenValid(jwt, userDetails)) {
-				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-						new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-				
-				usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
-				
-				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-				
-				System.out.println("test" + SecurityContextHolder.getContext());
-            }
-		}
-		*/
+
 		filterChain.doFilter(req,res);
 	}
 }

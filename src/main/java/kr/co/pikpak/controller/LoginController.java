@@ -1,7 +1,11 @@
 package kr.co.pikpak.controller;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +20,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.annotation.Resource;
@@ -25,18 +31,20 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import kr.co.pikpak.device.CookieUtility;
 import kr.co.pikpak.dto.LoginDTO;
+import kr.co.pikpak.security.CustomUserDetails;
+import kr.co.pikpak.security.CustomUserDetailsService;
 import kr.co.pikpak.security.JWTUtility;
 import kr.co.pikpak.service.LoginService;
 
 @RestController
-//@RequestMapping("/auth")
 public class LoginController {
 	@Resource(name="LoginDTO")
 	LoginDTO ldto;
 	
 	@Autowired
-	private LoginService LoginService;
+	private CustomUserDetailsService userDetailsService;
 	
 	@Autowired
 	private HttpSession session;
@@ -46,34 +54,107 @@ public class LoginController {
     
     @Autowired 
     private JWTUtility JWTUtil;
+    
 	
 	PrintWriter pw = null;
 	
+	// 회원 로그인 및 토큰 생성
 	@PostMapping("/login/auth")
-	public ResponseEntity<?> createAuthenticationToken(@ModelAttribute LoginDTO logindto, HttpServletResponse res) throws Exception {
+	public ResponseEntity<?> createAuthenticationToken(LoginDTO logindto, HttpServletResponse res, HttpSession sess) throws Exception {
+		// Fetch API 결과 핸들링
+		String responseMsg = "";
+		Date expiryDate = null;
+		
 		try {
+			// 회원 정보 확인
 			Authentication authenticate = authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(logindto.getUser_id(), logindto.getUser_pw())
 			);
-			SecurityContextHolder.getContext().setAuthentication(authenticate);
-			System.out.println("ctrl test : " + SecurityContextHolder.getContext());
+			//SecurityContextHolder.getContext().setAuthentication(authenticate);
+			
+			// 회원 DB 접속
+			final CustomUserDetails userDetails = userDetailsService.loadUserByUsername(logindto.getUser_id());
+			
+			// 생성할 JWT 토큰
+			String token = null;
+			
+			// 회원이 운영자 일경우 운영자 권한 레벨 까지 저장
+			if (userDetails.getUserAuthority().equals("operator") || userDetails.getUserAuthority().equals("admin")) {
+				String operatorLv = userDetailsService.operatorLvByUserId(logindto.getUser_id());
+				token = JWTUtil.generateOperatorToken(userDetails, operatorLv);
+			}
+			else {
+				token = JWTUtil.generateToken(userDetails);
+			}
+			
+			expiryDate = JWTUtil.extractExpiration(token);
+			
+			// 클라이언트 사이드 토큰 저장 (Request 해더 미사용시 대신 사용)
+			CookieUtility.setCookie(res, "accessToken", token, "/");
+			
+			// 세션에 아이디 정보 저장
+			sess.setAttribute("activeUserID", logindto.getUser_id());
+			sess.setMaxInactiveInterval(60*60*24+7);
+			
+			
+			responseMsg = "Y";
 		} catch (BadCredentialsException e) {
-			throw new Exception("Incorrect username or password!!!", e);
+			responseMsg = "회원정보가 일치하지 않습니다";
+		} catch (Exception e) {
+			responseMsg = "서버 문제로 로그인이 실패하였습니다. 관리자에게 문의하세요";
 		}
 		
-		final UserDetails userDetails = LoginService.loadUserByUsername(logindto.getUser_id());
-		final String jwt = JWTUtil.generateToken(userDetails);
+		Map<String, Object> authResponse = new HashMap<>();
+		authResponse.put("responseMsg", responseMsg);
+		authResponse.put("expiryTime", expiryDate.getTime());
 		
-		//System.out.println(jwt);
+		return ResponseEntity.ok(authResponse);
+	}
+	
+	// 이 경로는 따로 접속 차단 필수
+	@GetMapping("/login/refresh")
+	public ResponseEntity<?> refreshAuthenticationToken (HttpServletRequest req, HttpServletResponse res, HttpSession sess){
+		String responseMsg = "N";
+		String token = CookieUtility.getCookie(req, "accessToken");
+		String refreshToken = null;
+		Date expiryDate = null;
 		
-		Cookie cookie = new Cookie("accessToken", jwt);
-		cookie.setMaxAge(60*60*24+7);
-		cookie.setHttpOnly(true);
-		cookie.setPath("/");
+		if (token == null || JWTUtil.isTokenExpired(token)) {
+			responseMsg = "expired";
+			// or just redirect here
+		}
+		else {
+			try {
+				String activeUserId = JWTUtil.extractUserId(token);
+				final CustomUserDetails userDetails = userDetailsService.loadUserByUsername(activeUserId);
+				if (userDetails.getUserAuthority().equals("operator") || userDetails.getUserAuthority().equals("admin")) {
+					String operatorLv = JWTUtil.extractUserLv(token);
+					refreshToken = JWTUtil.generateOperatorToken(userDetails, operatorLv);
+				}
+				else {
+					refreshToken = JWTUtil.generateToken(userDetails);
+				}
+				
+				expiryDate = JWTUtil.extractExpiration(refreshToken);
+				
+				CookieUtility.setCookie(res, "accessToken", refreshToken, "/");
+				
+				sess.setAttribute("activeUserID", activeUserId);
+				sess.setMaxInactiveInterval(60*60*24+7);
+				
+				responseMsg = "Y";
+			} catch (Exception e) {
+				e.printStackTrace();
+				responseMsg = "invalid";
+			}
+			
+		}
 		
-		res.addCookie(cookie);
+		Map<String, Object> authResponse = new HashMap<>();
+		authResponse.put("responseMsg", responseMsg);
+		authResponse.put("expiryTime", expiryDate.getTime());
 		
-		return ResponseEntity.ok(jwt);
+		return ResponseEntity.ok(authResponse);
 	}
 	
 	
