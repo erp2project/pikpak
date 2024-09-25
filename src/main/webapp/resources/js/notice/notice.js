@@ -18,6 +18,13 @@ $(document).on("click", "#notice_list tbody tr td#viewpage", function() {
     var nidx = $(this).data('nidx');
     window.location.href = "/notice/" + nidx;  // 게시물 상세보기로 이동
 });
+$(document).on("mouseenter", "#notice_list tbody tr td#viewpage", function() {
+    $(this).css("cursor", "pointer");  // 커서를 손가락 모양으로 변경
+});
+
+$(document).on("mouseleave", "#notice_list tbody tr td#viewpage", function() {
+    $(this).css("cursor", "default");  // 원래 커서로 복원
+});
 
 function fn_noticeboardlist(page, size){
 	
