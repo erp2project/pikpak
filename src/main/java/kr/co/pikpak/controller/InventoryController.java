@@ -33,7 +33,6 @@ public class InventoryController {
 	@PostMapping("/insertInspectData")
 	@ResponseBody
 	public ResponseEntity<String> insertInspectData(@RequestParam Map<String, String> request){
-		System.out.println(request);
 		int result = wr.insertCheckData2(request);
 		if(result>0) {
 			return ResponseEntity.ok("정상적으로 등록 되었습니다.");
@@ -41,7 +40,6 @@ public class InventoryController {
 			return ResponseEntity.ok("오류가 발생하여 등록에 실패했습니다.");
 		}
 	}
-	
 	
 	//창고 점검 페이지 - 상세보기
 	@GetMapping("/getCheckRecordDetails/{a_check_idx}")
@@ -63,6 +61,26 @@ public class InventoryController {
 		List<Map<String, Object>> stockData = wr.getStockDataByZone(zoneId);
 		return ResponseEntity.ok(stockData);
 	}
+
+	
+	//창고 위치 관리 페이지 - 위치 삭제
+	@PostMapping("/deleteLocation")
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>>deleteLocation(@RequestBody Map<String, Object>data){
+		String location_cd = (String) data.get("location_cd");
+		int result = wr.deleteLocationByCode(location_cd);
+		Map<String, Object> response = new HashMap<>();
+		if(result>0) {
+			response.put("success", true);
+			response.put("message", "위치가 삭제되었습니다.");
+		}else {
+			response.put("success", false);
+			response.put("message", "위치삭제에 실해했습니다.");
+		}
+		return ResponseEntity.ok(response);
+	}
+	
+	
 	
 	//창고 위치 관리 페이지 - 위치 지정
 	@PostMapping("/assignLocation")
@@ -111,7 +129,6 @@ public class InventoryController {
 	@PostMapping("/getSearchData")
 	@ResponseBody
 	public List<WarehouseInventory_dto> searchInventory(@RequestBody Map<String,String> searchData ){
-		System.out.println(searchData);
 		String area_cd = searchData.get("area_cd");
 		String rack_number = searchData.get("rack_number");
 		String level = searchData.get("level");
@@ -192,8 +209,8 @@ public class InventoryController {
 	@ResponseBody
 	public Map<String, Object> getZoneData(@RequestBody Map<String, String> request){
 		String area_cd = request.get("area_cd");
-		System.out.println(area_cd);
 		List<Map<String, Object>> getAreaStockData = wr.getLocationWithStockData(area_cd);		
+		System.out.println(getAreaStockData.size());
 		Map<String, Object> response = new HashMap<>();
 		response.put("getAreaStockData", getAreaStockData);
 		return response;
@@ -209,7 +226,7 @@ public class InventoryController {
 		Map<String, Object> getAreaData = wr.getAreaData(area_cd);
 		//구역의 재고 정보
 		List<Map<String, Object>> getAreaStockData = wr.getAreaStockData(area_cd);
-		
+		System.out.println("창고별 재고 현황 페이지"+getAreaStockData.size());
 		Map<String, Object> response = new HashMap<>();
 		response.put("getAreaData", getAreaData);
 		response.put("getAreaStockData", getAreaStockData);

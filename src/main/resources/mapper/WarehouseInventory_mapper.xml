@@ -105,6 +105,12 @@
 	    ('0',#{location_cd},#{max_capacity},0,#{supplier_cd},NOW())		 
 	</insert>
 	
+	<!-- 창고 위치 관리 페이지 - 위치 삭제 -->
+	<delete id="deleteLocationByCode" parameterType="String">
+		DELETE FROM warehouse_locations WHERE location_cd = #{location_cd}
+	</delete>
+	
+	
 	<!-- 창고 위치 관리 페이지 - 위치관리 버튼(회사 옵션) -->
 	<select id="getAllSupplierInfo" resultType="Map">
 		SELECT supplier_nm,supplier_cd FROM supplier_info 
@@ -112,28 +118,26 @@
 	
 	<!-- 창고 위치 관리 페이지 -  -->
 	<select id="getLocationWithStockData" parameterType="String" resultType="Map">
-    SELECT 
-        wl.location_cd,
-        wl.supplier_cd,
-        si.supplier_nm AS assigned_supplier_nm,  -- 할당된 회사명 추가
-        wl.max_capacity,
-        wl.current_capacity,
-        wl.assigned_dt,
-        MAX(w.product_cd) AS product_cd,
-        MAX(w.product_nm) AS product_nm,
-        MAX(w.product_qty) AS product_qty,
-        MAX(w.supplier_nm) AS product_supplier_nm -- 재고에 있는 회사명
-    FROM 
-        warehouse_locations wl
-    LEFT JOIN 
-        warehouse w ON wl.location_cd = w.location_cd
-    LEFT JOIN 
-        supplier_info si ON wl.supplier_cd = si.supplier_cd  -- supplier_info 테이블과 조인
-    WHERE 
-        wl.location_cd LIKE CONCAT(#{area_cd}, '%')   -- 구역 코드로 필터링
-    GROUP BY 
-        wl.location_cd, wl.supplier_cd, wl.max_capacity, wl.current_capacity, wl.assigned_dt
-</select>
+	    SELECT 
+	        wl.location_cd,
+	        wl.supplier_cd,
+	        si.supplier_nm AS assigned_supplier_nm,  -- 할당된 회사명 추가
+	        wl.max_capacity,
+	        wl.current_capacity,
+	        wl.assigned_dt,
+	        w.product_cd,
+	        w.product_nm,
+	        w.product_qty,
+	        w.supplier_nm AS product_supplier_nm -- 재고에 있는 회사명
+	    FROM 
+	        warehouse_locations wl
+	    LEFT JOIN 
+	        warehouse w ON wl.location_cd = w.location_cd
+	    LEFT JOIN 
+	        supplier_info si ON wl.supplier_cd = si.supplier_cd  -- supplier_info 테이블과 조인
+	    WHERE 
+	        wl.location_cd LIKE CONCAT(#{area_cd}, '%')   -- 구역 코드로 필터링
+	</select>
 
 	<!-- 창고 위치 관리 페이지 - 위치 정보 조회 -->
     <select id="findLocationByCode" parameterType="string" resultType="kr.co.pikpak.dto.LocationDTO">

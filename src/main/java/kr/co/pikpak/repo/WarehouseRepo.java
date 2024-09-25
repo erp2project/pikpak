@@ -66,8 +66,12 @@ public interface WarehouseRepo {
 	//창고 위치 관리 페이지
 	List<Map<String, String>> getAllSupplierInfo();
 	
-	//창고 위치 관리 페이지 - 위치 지정
+	//창고 위치 관리 페이지 - 위치 등록
 	int insertLocation(String location_cd, String supplier_cd,Integer max_capacity);
+	
+	//창고 위치 관리 페이지 - 위치 삭제
+	int deleteLocationByCode(String location_cd);
+	
 	
 	
 	//창고 관리 페이지 - 구역 점검 기록 리스트

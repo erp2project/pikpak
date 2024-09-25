@@ -52,12 +52,15 @@ function selectZone(zoneId) {
         const { getAreaData, getAreaStockData } = data;
         const { manager_nm, manager_tel, lastcheck_start_dt, lastcheck_end_dt, area_st, full_capacity, available_space } = getAreaData;
         
+        const formattedStartDt = formatDateTime(lastcheck_start_dt);
+        const formattedEndDt = formatDateTime(lastcheck_end_dt);
+        
         // 구역 정보 업데이트
         infoContainer.innerHTML = `
             <div class="zone-info">
                 <p><strong>담당자:</strong> ${manager_nm}</p>
                 <p><strong>연락처:</strong> ${manager_tel}</p>
-                <p><strong>마지막 점검일시:</strong><br> ${lastcheck_start_dt}<br> ~ ${lastcheck_end_dt}</p>
+                <p><strong>마지막 점검일시:</strong><br> ${formattedStartDt}<br> ~ ${formattedEndDt}</p>
                 <p><strong>상태:</strong> ${area_st}</p>
                 <p><strong>가용 적재 용량:</strong> ${available_space}</p>
                 <p><strong>구역 전체 적재용량:</strong> ${full_capacity}</p>
@@ -79,6 +82,13 @@ function selectZone(zoneId) {
     })
     .catch(error => console.log(error));
 }
+
+//시간 커스텀
+function formatDateTime(dateTimeString){
+	const dateTime = dateTimeString.split('T');
+	return `${dateTime[0]} ${dateTime[1].substring(0,5)}`;
+}
+
 
 // 재고 리스트 업데이트 (중복 제거)
 function updateStockList(stockData) {

@@ -139,6 +139,16 @@ public class WarehouseInventoryServiceImpl implements WarehouseInventoryService{
 		return wr.insertLocation(location_cd, supplier_cd,max_capacity);
 	}
 	
+	//창고 위치 관리 페이지 - 위치 삭제
+	@Override
+	public int deleteLocationByCode(String location_cd) {
+		
+		return wr.deleteLocationByCode(location_cd);
+	}
+	
+	
+	
+	
 	
 	//창고 관리 페이지 - 점검 등록/ 재고 수량 일치여부 확인
 	@Override

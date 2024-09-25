@@ -75,8 +75,6 @@
 }
 
 
-/*해당 위치가 배정되었으나, 재고가 없는 경우 - 노란색*/
-
 
 .wms-part:hover {
     background-color: #ced6e0; /* 밝은 그레이 */
@@ -111,7 +109,6 @@
         } 
 
 /* 구역 탭 버튼 스타일 */
-
 
 .warehouse-tabs button {
     color: rgb(128, 128, 128);
@@ -167,3 +164,9 @@
 .tab-pane.active {
     opacity: 1;
 }           
+
+/* 팝오버 스타일*/
+.popover-content {
+    max-height: 200px; /* 원하는 높이로 설정 */
+    overflow-y: auto;  /* 세로 스크롤 추가 */
+}

@@ -52,6 +52,10 @@ public interface WarehouseInventoryService {
 	//창고 위치 관리 페이지 - 위치 지정
 	int insertLocation(String location_cd, String supplier_cd,Integer max_capacity);	
 	
+	//창고 위치 관리 페이지 - 위치 삭제
+	int deleteLocationByCode(String location_cd);	
+	
+	
 	
 	//창고 관리 페이지 - 점검 등록/ 재고 수량 일치여부 확인
 	public List<WarehouseInspection_dto> getCheckData();

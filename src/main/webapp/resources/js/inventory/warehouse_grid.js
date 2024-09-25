@@ -6,6 +6,14 @@ $(document).ready(function () {
 	//모달창 출력
 	$('#inspectionModal').modal('hide');
 	
+	//위치 지정 버튼 비활성화 (위치 조회 시에만 활성화)
+	$('#assign-location-btn').prop('disabled', true);
+	
+    // 회사 선택 시 hidden 필드 업데이트
+    $('#company-select').on('change', function() {
+        updateHiddenField(); // 선택된 회사 이름을 hidden 필드에 설정
+    });	
+	
     // 위치 조회 버튼 클릭 이벤트
     $('#check-location-btn').on('click', function() {
         // 선택된 구역, 랙, 레벨, 파트 정보 가져오기
@@ -13,6 +21,7 @@ $(document).ready(function () {
         const rack = $('#rack-select').val();
         const level = $('#level-select').val();
         const part = $('#part-select').val();
+        
         const locationCode = `${zone}${rack}${level}${part}`;
 
         // 서버에 조회 요청 보내기 (AJAX)
@@ -27,14 +36,11 @@ $(document).ready(function () {
                     // 이미 사용 중인 위치일 때
                     alert('이미 사용 중인 위치입니다. 위치를 수정하거나 다른 위치를 선택하세요.');
                     // 재고가 있는 경우 수정만 가능
-                    if (response.has_stock) {
-                        $('#assign-location-btn').text('위치 수정');
-                    } else {
-                        $('#assign-location-btn').text('위치 삭제 또는 이동');
-                    }
+					 $('#assign-location-btn').prop('disabled', true);
                 } else {
                     // 사용 가능한 위치일 때
                     alert('이 위치는 사용 가능합니다.');
+                    $('#assign-location-btn').prop('disabled', false);
                     $('#assign-location-btn').text('위치 지정');
                 }
             },
@@ -46,35 +52,49 @@ $(document).ready(function () {
 
     // 위치 지정 버튼 클릭 이벤트
     $('#assign-location-btn').on('click', function() {
-		console.log('위치지정 버튼');
         const zone = $('#zone-select').val();
         const rack = $('#rack-select').val();
         const level = $('#level-select').val();
         const part = $('#part-select').val();
         const companyId = $('#company-select').val();
+        const companyName = document.getElementById('company-select').options[document.getElementById('company-select').selectedIndex].text;
 
         const locationCode = `${zone}${rack}${level}${part}`;
-
-        // 위치 등록 요청 (AJAX)
-        $.ajax({
-            url: '/assignLocation',
-            method: 'POST',
-            data: JSON.stringify({
-                location_cd: locationCode,
-                supplier_cd: companyId
-            }),
-            contentType: 'application/json',
-            success: function(response) {
-                alert(response.message);
-                $('#locationModal').modal('hide'); // 모달 닫기
-                location.reload();
-            },
-            error: function() {
-                alert('위치 지정 중 오류가 발생했습니다.');
-            }
-        });
+		const confirmationMessage = `${companyName} 의 위치를 ${locationCode} 로 지정하시겠습니까?`;
+		if(confirm(confirmationMessage)){
+	        // 위치 등록 요청 (AJAX)
+	        $.ajax({
+	            url: '/assignLocation',
+	            method: 'POST',
+	            data: JSON.stringify({
+	                location_cd: locationCode,
+	                supplier_cd: companyId
+	            }),
+	            contentType: 'application/json',
+	            success: function(response) {
+	                alert(response.message);
+	                $('#locationModal').modal('hide'); // 모달 닫기
+	                location.reload();
+	            },
+	            error: function() {
+	                alert('위치 지정 중 오류가 발생했습니다.');
+	            }
+	        });
+		}else{
+			alert('위치 지정이 취소되었습니다.');
+		}
     });	
 });
+
+//위치 지정 Confirm 메세지 출력
+function updateHiddenField() {
+    // 선택된 회사 이름을 가져옴
+    const companySelect = document.getElementById('company-select');
+    const selectedOption = companySelect.options[companySelect.selectedIndex].text;
+    
+    // hidden 필드에 선택된 회사 이름을 설정
+    document.getElementById('company_nm_a').value = selectedOption;
+}
 
 // content 색 초기화
 function resetRackColors(){
@@ -106,7 +126,7 @@ function loadZoneData(zoneId){
 	.then(response => response.json())
 	.then(data => {
 		inventoryData[zoneId] = data.getAreaStockData;	//구역 전체 데이터를 저장
-		console.log(data.getAreaStockData);
+		console.log(data);
 		//가져온 데이터를 기반으로 각 위치에 맞는 정보 설정
 		updateRackInfo(zoneId,inventoryData[zoneId]);
 		
@@ -139,38 +159,50 @@ function updateRackInfo(zoneId, zoneData) {
         }
         locationItemsMap[locationKey].push(item);
     });   
-
 	// HTML 내 모든 data-location 요소에 대해 반복문 수행
 	document.querySelectorAll('[data-location]').forEach(locationElement => {
 	    const formattedLc = locationElement.getAttribute('data-location');
 	    const lc = zoneId+formattedLc.slice(1,3)+formattedLc.slice(4,6)+formattedLc.slice(7,9);
 	    // locationItemsMap에서 해당 위치에 대한 데이터를 가져옴
 	    const locationData = locationItemsMap[lc];
-	    let popoverContent;
+	    let popoverContent="";
+	    let assignedCompany =null;
 	
 	    if (locationData && locationData.length > 0) {
+			assignedCompany = locationData[0].assigned_supplier_nm;
 			
-            const hasStock = locationData.some(item => item.product_qty > 0);
-            const assignedCompany = locationData[0].assigned_supplier_nm; // 할당된 회사 이름 가져오기			
-	        
-	        if(!hasStock && assignedCompany){
-		        // 재고 있을 경우 삭제 버튼 있음
-		        popoverContent = locationData.map(item => `
-		            <strong>상품명:</strong> ${item.product_nm|| '재고 없음'}<br>
-		            <strong>수량:</strong> ${item.product_qty|| '재고 없음'}<br>
-		            <strong>제조사:</strong> ${item.product_supplier_nm || '재고 없음'}<br>
-		            <strong>할당된 회사:</strong> ${item.assigned_supplier_nm || '없음'}<br>
-		            <button class="btn btn-danger btn-sm delete-location-btn" data-location="${lc}">위치 삭제</button>
-		        `).join('<hr>'); // 구분선 추가
-			}else{
-				//재고가 있는 경우 삭제 버튼 없음
-                popoverContent = locationData.map(item => `
-                    <strong>상품명:</strong> ${item.product_nm || '재고 없음'}<br>
-                    <strong>수량:</strong> ${item.product_qty || '재고 없음'}<br>
-                    <strong>제조사:</strong> ${item.product_supplier_nm || '재고 없음'}<br>
-                    <strong>할당된 회사:</strong> ${item.assigned_supplier_nm || '없음'}<br>
-                `).join('<hr>');				
-			}
+            // 할당된 회사 정보 먼저 표시
+            if (assignedCompany) {
+                popoverContent += `
+                    <strong>위치 지정 회사:</strong> ${assignedCompany}<br><hr>
+                `;
+            }
+            			
+			locationData.forEach(item => {
+                const hasStock = item.product_qty > 0;
+                assignedCompany = item.assigned_supplier_nm;
+
+                popoverContent += `
+		            <div style="margin-bottom: 10px;">
+		                <strong>상품명:</strong> ${item.product_nm || '재고 없음'}<br>
+		                <strong>수량:</strong> ${item.product_qty || '재고 없음'}<br>
+		                <strong>제조사:</strong> ${item.product_supplier_nm || '재고 없음'}
+		            </div>
+		        `;
+
+                // 재고가 없고 할당된 회사가 있는 경우 삭제 버튼 추가
+                if (!hasStock && assignedCompany) {
+                    popoverContent += `
+                        <button class="btn btn-danger btn-sm delete-location-btn" data-location="${lc}" style="display: block; margin-top: 10px;">
+                            위치 삭제
+                        </button>
+                    `;
+                }
+                popoverContent += '<hr>'; // 각 항목 사이에 구분선 추가
+            });
+
+            // 마지막 구분선(<hr>) 제거
+            popoverContent = popoverContent.slice(0, -4);			
 	    } else {
 	        // 데이터가 없을 경우 '데이터 없음' 메시지 설정
 	        popoverContent = '<strong>해당 위치에 데이터가 없습니다.</strong>';
@@ -203,7 +235,7 @@ document.addEventListener('click', function(event) {
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
+                if (data.success==true) {
                     alert('위치가 삭제되었습니다.');
                     window.location.reload(); // 페이지 새로고침
                 } else {
@@ -250,6 +282,7 @@ function updateRackColors(zoneId){
                 // 민트색 (할당된 위치, 재고 없음)
                 part.classList.add('assigned-no-stock');
             } else if (currentCapacity == maxCapacity) {
+				console.log(locationData);
                 // 빨간색 (공간 다 찬 상태)
                 part.classList.add('no-space');
             } else {

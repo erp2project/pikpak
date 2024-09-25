@@ -8,7 +8,7 @@
 <body>
 
 <!-- 팝업 창 구조 -->
-<div class="modal fade"  id="wareck_details_Modal" th:fragment="warehouse_check_details" tabindex="-1" role="dialog" aria-labelledby="inspectionModalLabel2" aria-hidden="true">
+<div class="modal fade"  id="wareck_details_Modal" th:fragment="warehouse_check_details" tabindex="-1" role="dialog" aria-labelledby="inspectionModalLabel2">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <!-- 모달 헤더 -->
@@ -21,7 +21,6 @@
             <div class="modal-body">  
                 <!-- 기본 정보 입력 섹션 -->
                 <h4 class="mb-3 text-primary" style="margin-bottom: 20px;">기본 정보</h4>
-                <form>
                     <!-- 구역 입력 -->
                     <div class="form-group row">
                         <label class="col-md-4 font-weight-bold">구역 :</label>
@@ -59,7 +58,7 @@
                     <hr class="my-4" style="margin-bottom : 10px;">
 
                     <!-- 환경 정보 입력 섹션 -->
-                    <h4 class="mb-3 text-primary" style="margin-bottom: 20px;">환경 정보 입력</h4>
+                    <h4 class="mb-3 text-primary" style="margin-bottom: 20px;">환경 정보</h4>
                     <div class="form-group row">
                         <label class="col-md-4 font-weight-bold">온도 :</label>
                         <div class="col-md-8">
@@ -117,7 +116,6 @@
                             <textarea class="form-control" id="notesDetails" name="check_log" rows="4" placeholder="점검 중 특이사항 기록"></textarea>
                         </div>
                     </div>
-                </form>
             </div>
 
             <!-- 모달 푸터 -->

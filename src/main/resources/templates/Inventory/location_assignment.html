@@ -14,10 +14,11 @@
             </div>
             <div class="modal-body">
                 <form>
+                <input type="hidden" id="company_nm_a" name="company_nm_a">
                     <!-- 회사 선택 -->
                     <div class="form-group">
                         <label for="company-select">회사 선택</label>
-                        <select class="form-control" id="company-select">
+                        <select class="form-control" id="company-select"onchange="updateHiddenField()">
                             <option th:each="supplier : ${suppliers}"
                              		th:value="${supplier.supplier_cd}" 
                              		th:text="${supplier.supplier_nm}">

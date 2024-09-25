@@ -84,7 +84,6 @@ public class InventoryPageController {
 	@GetMapping("/warehouse_location")
 	public String warehouse_location(Model m) {
 		List<Map<String, String>> result = wis.getAllSupplierInfo();
-		System.out.println(result);
 		m.addAttribute("suppliers",result);
 		return "/Inventory/warehouse_grid";
 	}
