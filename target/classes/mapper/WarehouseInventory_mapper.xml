@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.pikpak.repo.WarehouseRepo">
+
+	<!-- 재고 리스트 출력 -->
+	<select id="getAllinventory" resultType="kr.co.pikpak.dto.WarehouseInventory_dto">
+		select * from warehouse order by location_cd asc;
+	</select>
+	
+	<!-- 재고 리스트 페이지 - 조회  -->
+	<select id="searchInventory" resultType="kr.co.pikpak.dto.WarehouseInventory_dto">
+		SELECT * FROM warehouse
+		<where>
+			<if test = "area_cd != null and area_cd !=''">
+				location_cd  LIKE CONCAT(#{area_cd},'%')
+			</if>
+			<if test="rack_number != null and rack_number !=''">
+				AND location_cd  LIKE CONCAT('%',#{rack_number},'%')
+			</if>
+			<if test="level != null and level !=''">
+				AND location_cd  LIKE CONCAT('%',#{level},'%')
+			</if>			
+			<if test="part != null and part !=''">
+				AND location_cd  LIKE CONCAT('%',#{part},'%')
+			</if>
+			<if test="product_cd != null and product_cd !=''">
+				AND product_cd = #{product_cd}
+			</if> 
+			<if test="product_nm != null and product_nm !=''">
+				AND product_nm = #{product_nm}
+			</if>		
+			<if test="supplier_nm != null and supplier_nm !=''">
+				AND supplier_nm = #{supplier_nm}
+			</if>	
+		</where>
+	</select>
+	
+	<!-- 재고 리스트 페이지 - 관리 버튼 클릭 시 idx 값으로 해당 재고 데이터 조회 -->
+	<select id="getDetailsByIdx" parameterType="Integer" resultType="kr.co.pikpak.dto.WarehouseInventory_dto">
+		SELECT * FROM warehouse WHERE wh_warehouse_idx = #{wh_warehouse_idx}
+	</select>
+	
+	<!-- 재고 리스트 페이지 - 관리 버튼 팝업 / 추가 데이터 조회 (상품코드로 상품 테이블의 안전재고 조회) -->
+	<select id="getSafetyInventory_qty" parameterType="String" resultType="Integer">
+		SELECT safetyinventory_qty FROM product WHERE product_cd = #{product_cd}
+	</select>
+	
+	
+	<!-- 재고 리스트 페이지 - 검색 옵션 회사코드 출력 -->
+	<select id="getAllsupplier_cd" resultType="Map">
+		SELECT supplier_cd FROM supplier_info
+	</select>
+	
+	<!-- 재고 리스트 페이지 - 상품코드로 검색 (상품코드로 상품 조회)-->
+	<select id="findByProduct_cd" parameterType="String" resultType="kr.co.pikpak.dto.WarehouseInventory_dto">
+		SELECT product_cd, product_nm FROM warehouse
+		WHERE product_cd =#{product_cd} LIMIT 1;
+	</select>
+	
+	<!-- 재고 리스트 페이지 - 상품명으로검색  (상품명으로 상품 조회)-->
+	<select id="findByProduct_nm" parameterType="String" resultType="kr.co.pikpak.dto.WarehouseInventory_dto">
+		SELECT product_cd, product_nm FROM warehouse
+		WHERE product_nm =#{product_nm} LIMIT 1;
+	</select>
+	
+	<!-- 재고 리스트 페이지 - 회사코드 선택 시 -->
+	<select id="findByCompany_cd" parameterType="String" resultType="Map">
+		SELECT supplier_nm FROM supplier_info WHERE supplier_cd =#{supplier_cd}
+	</select>
+	
+	<!-- 재고리스트 페이지 - 회사명으로 선택 -->
+	<select id="findByCompany_nm" parameterType="String" resultType="Map">
+		SELECT supplier_cd FROM supplier_info WHERE supplier_nm = #{supplier_nm}
+	</select>
+	
+	<!-- 창고별 재고 현황 페이지 - 구역 정보 출력 -->
+	<select id="getAreaData" resultType="Map">
+		SELECT manager_nm, manager_tel,lastcheck_start_dt,lastcheck_end_dt,area_st,full_capacity,available_space
+		FROM warehouse_area_info
+		WHERE area_cd = #{area_cd}
+	</select>
+	
+	<!-- 창고별 재고 현황 페이지 - 구역 선택 시 재고 정보 출력 -->
+	<select id="getAreaStockData" resultType="Map">
+		SELECT * FROM warehouse WHERE location_cd LIKE CONCAT(#{zoneId}, '%');
+	</select>
+	
+	<!-- 창고별 재고 현황 페이지 - 구역+랙을 선택 시 재고 정보 출력 -->
+	<select id="getAreaRackData" resultType="Map">
+		SELECT * FROM warehouse WHERE location_cd LIKE CONCAT(#{Zone_Rack},'%');
+	</select>
+	
+	<!-- 창고별 재고 현황 페이지 - 구역+랙+단+열을 선택 시 재고 정보 출력 -->
+	<select id = "getTotalLocationData" resultType="Map">
+		SELECT * FROM warehouse WHERE location_cd = #{total_location}
+	</select>
+	
+	
+	
+	
+	<!-- 창고 위치 관리 페이지 - 위치 지정 -->
+	<insert id="insertLocation" parameterType="Map">
+		INSERT INTO warehouse_locations
+	    VALUES 
+	    ('0',#{location_cd},#{max_capacity},0,#{supplier_cd},NOW())		 
+	</insert>
+	
+	<!-- 창고 위치 관리 페이지 - 위치 삭제 -->
+	<delete id="deleteLocationByCode" parameterType="String">
+		DELETE FROM warehouse_locations WHERE location_cd = #{location_cd}
+	</delete>
+	
+	
+	<!-- 창고 위치 관리 페이지 - 위치관리 버튼(회사 옵션) -->
+	<select id="getAllSupplierInfo" resultType="Map">
+		SELECT supplier_nm,supplier_cd FROM supplier_info 
+	</select>
+	
+	<!-- 창고 위치 관리 페이지 -  -->
+	<select id="getLocationWithStockData" parameterType="String" resultType="Map">
+	    SELECT 
+	        wl.location_cd,
+	        wl.supplier_cd,
+	        si.supplier_nm AS assigned_supplier_nm,  -- 할당된 회사명 추가
+	        wl.max_capacity,
+	        wl.current_capacity,
+	        wl.assigned_dt,
+	        w.product_cd,
+	        w.product_nm,
+	        w.product_qty,
+	        w.supplier_nm AS product_supplier_nm -- 재고에 있는 회사명
+	    FROM 
+	        warehouse_locations wl
+	    LEFT JOIN 
+	        warehouse w ON wl.location_cd = w.location_cd
+	    LEFT JOIN 
+	        supplier_info si ON wl.supplier_cd = si.supplier_cd  -- supplier_info 테이블과 조인
+	    WHERE 
+	        wl.location_cd LIKE CONCAT(#{area_cd}, '%')   -- 구역 코드로 필터링
+	</select>
+
+	<!-- 창고 위치 관리 페이지 - 위치 정보 조회 -->
+    <select id="findLocationByCode" parameterType="string" resultType="kr.co.pikpak.dto.LocationDTO">
+        SELECT 
+            wl.location_cd,
+            wl.supplier_cd,
+            wl.current_capacity,
+            wl.max_capacity,
+            wl.assigned_dt,
+            CASE 
+                WHEN wl.current_capacity > 0 THEN 1
+                ELSE 0
+            END AS isOccupied,
+            CASE 
+                WHEN w.product_qty > 0 THEN 1
+                ELSE 0
+            END AS hasStock
+        FROM 
+            warehouse_locations wl
+        LEFT JOIN 
+            warehouse w ON wl.location_cd = w.location_cd
+        WHERE 
+            wl.location_cd = #{location_cd}
+    </select>
+    
+	
+	
+	<!-- 창고 관리 페이지 - 구역 점검 리스트 출력 -->
+	<select id="getCheckData" resultType="kr.co.pikpak.dto.WarehouseInspection_dto">
+		SELECT * FROM warehouse_area_check ORDER BY a_check_idx DESC;
+	</select>
+	
+	<!-- 창고 관리 페이지 - 구역 점검 등록 -->
+	<insert id="insertCheckData2" parameterType="Map">
+		INSERT INTO warehouse_area_check VALUES
+		(0, #{area_cd}, #{manager_nm}, #{statement}, #{temperature}, #{humidity}, #{type1_stock}, #{type2_stock}, #{type3_stock}, #{check_log}, #{check_start_dt}, #{check_end_dt})
+	</insert>
+	
+	<!-- 창고 관리 페이지 - 점검 등록/ 재고 수량 일치여부 확인 -->
+	<select id="getStockDataByZone" parameterType="string" resultType="Map">
+	    SELECT 
+	        location_cd,
+	        product_cd,
+	        product_nm,
+	        product_qty,
+	        CASE
+	            WHEN SUBSTRING(location_cd, 5, 1) = '1' THEN '대형'
+	            WHEN SUBSTRING(location_cd, 5, 1) IN ('2', '3') THEN '중형'
+	            WHEN SUBSTRING(location_cd, 5, 1) = '4' THEN '소형'
+	        END AS product_type
+	    FROM warehouse
+	    WHERE location_cd LIKE CONCAT(#{zoneId}, '%')
+	</select>	
+	
+	<!-- 창고 관리 페이지 - 상세 보기 -->
+	<select id="getCheckRecordDetailsByIdx" parameterType="Integer" resultType="Map">
+		SELECT * FROM warehouse_area_check WHERE a_check_idx =#{a_check_idx}
+	</select>
+	
+</mapper>

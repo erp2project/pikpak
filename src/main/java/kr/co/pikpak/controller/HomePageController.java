@@ -10,8 +10,8 @@ public class HomePageController {
 	
 	@GetMapping("/home")
 	public String homePage() {
-		return "/home/home";
-		//return "/notice/noticeTable"; 
+		//return "/home/home";
+		return "/notice/noticeTable"; 
 	}
 	
 	@GetMapping("/auth/access-denied")

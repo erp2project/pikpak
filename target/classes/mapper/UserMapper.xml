@@ -23,7 +23,7 @@
 		values 
 		('0',
 		#{user_nm},#{user_id},#{user_pw},#{user_tel},
-		#{user_mail},#{user_co},#{user_type},
+		#{user_mail},#{user_co},#{company_cd},#{user_type},
 		<if test="user_type == 'admin' or user_type == 'operator'">
 		#{user_lv},
 		</if>
@@ -64,5 +64,8 @@
 		${target_id} = #{old_user_id}
 	</update>
 	
-
+	<select id="companyListFromView" resultType="kr.co.pikpak.dto.InfoTraderSimpleDTO">
+		select * from trader_info_view
+	</select>
+	
 </mapper>
