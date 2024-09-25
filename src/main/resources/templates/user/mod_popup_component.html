@@ -89,6 +89,10 @@
 											<td th:text="${userDetails.user_company}"></td>
 										</tr>
 										<tr>
+											<td class="form-title-custom">소속</td>
+											<td th:text="${userDetails.company_cd}"></td>
+										</tr>
+										<tr>
 											<td class="form-title-custom">사용자 유형</td>
 											<td th:if="${userDetails.user_type=='admin'}">
 												관리자

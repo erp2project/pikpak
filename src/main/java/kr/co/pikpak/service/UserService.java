@@ -2,6 +2,7 @@ package kr.co.pikpak.service;
 
 import java.util.List;
 
+import kr.co.pikpak.dto.InfoTraderSimpleDTO;
 import kr.co.pikpak.dto.LoginDTO;
 import kr.co.pikpak.dto.UserAddDTO;
 import kr.co.pikpak.dto.UserOperatorDTO;
@@ -31,4 +32,7 @@ public interface UserService {
 	
 	// 회원 수정
 	int modUserInTable(UserAddDTO dto);
+	
+	// 회사정보 조회 
+	List<InfoTraderSimpleDTO> companyListFromView();
 }

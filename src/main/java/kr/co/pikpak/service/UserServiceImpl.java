@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.co.pikpak.dto.InfoTraderSimpleDTO;
 import kr.co.pikpak.dto.LoginDTO;
 import kr.co.pikpak.dto.UserAddDTO;
 import kr.co.pikpak.dto.UserOperatorDTO;
@@ -64,4 +65,9 @@ public class UserServiceImpl implements UserService{
 		return result;
 	}
 	
+	@Override
+	public List<InfoTraderSimpleDTO> companyListFromView() {
+		List<InfoTraderSimpleDTO> result = ur.companyListFromView();
+		return result;
+	}
 }

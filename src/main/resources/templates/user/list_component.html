@@ -6,9 +6,9 @@
 </head>
 <body>
 	<!-- MAIN -->
-	<div class="main" th:fragment="main">
+	<div class="main" th:fragment="main" style="height:100%;">
 		<!-- MAIN CONTENT -->
-		<div class="main-content">
+		<div class="main-content" style="height: 100%;">
 			<div class="container-fluid">
 				<!-- MAIN DATA VIEW -->
 				<div class="panel panel-headline">
@@ -21,7 +21,7 @@
 							<!-- 검색 -->
 							<span style="float: right; height: 40px;">
 							<button type="button" class="btn btn-success" onclick="window.location.reload()">초기화</button>
-							<button type="button" class="btn btn-warning" onclick="sendUserSearchForm()">조회</button>
+							<button type="button" class="btn btn-warning" onclick="applyUserSearch()">조회</button>
 							</span>
 							<p style="font-size: 12px; height: 25px; line-height: 30px;">※ 조회옵션</p>
 							<form id="searchUserForm">
@@ -67,8 +67,8 @@
 								</span>
 							</div>
 							
-							<div class="panel-body" style="height: 400px; overflow-y: auto;">
-								<table class="table table-hover">
+							<div class="panel-body" style="height: 600px; overflow-y: auto;">
+								<table class="table table-hover" id="userDataTable">
 									<thead style="background-color: rgb(130, 210, 213);">
 										<tr>
 											<th style="width:10%;">아이디</th>
@@ -76,7 +76,8 @@
 											<th style="width:10%;">연락처</th>
 											<th style="width:20%;">이메일</th>
 											<th style="width:10%;">사용자 유형</th>
-											<th style="width:30%;">소속</th>
+											<th style="width:20%;">소속</th>
+											<th style="width:10%;">회사 코드</th>
 											<th style="width:10%; text-align: center;">상세보기</th>
 										</tr>
 									</thead>
@@ -91,6 +92,7 @@
 											<td th:if="${userData.user_type=='supplier'}">공급</td>
 											<td th:if="${userData.user_type=='vendor'}">판매</td>
 											<td th:text="${userData.user_company}"></td>
+											<td th:text="${userData.company_cd}"></td>
 											<td class="text-button">
 												<a th:href="@{'/admin/user/view/' + ${userData.user_id}}">상세</a>
 											</td>

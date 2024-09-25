@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import kr.co.pikpak.dto.InfoTraderSimpleDTO;
 import kr.co.pikpak.dto.LoginDTO;
 import kr.co.pikpak.dto.UserAddDTO;
 import kr.co.pikpak.dto.UserOperatorDTO;
@@ -34,4 +35,7 @@ public interface UserRepo {
 
 	// 회원 수정
 	int modUserInTable(UserAddDTO dto);
+	
+	// 회사정보 조회 
+	List<InfoTraderSimpleDTO> companyListFromView();
 }
