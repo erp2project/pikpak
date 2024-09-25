@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import kr.co.pikpak.dto.accepted_order_enroll_dto;
 import kr.co.pikpak.dto.deliver_return_dto;
 import kr.co.pikpak.dto.ex_receiving_dto;
 import kr.co.pikpak.dto.ex_receiving_joined_dto;
@@ -76,7 +77,7 @@ public interface InoutBoundRepo {
 	int update_exrecv_return(String return_qty, String exreceiving_cd);
 	
 	//주문현황 확인
-	List<order_enroll_dto_lhwtemp> select_order_enroll();
+	List<accepted_order_enroll_dto> select_order_enroll();
 	
 	//위치코드 정보 가지고 오기
 	List<warehouse_locations_dto_lhwtemp> select_locations(String supplier_cd);
@@ -105,9 +106,20 @@ public interface InoutBoundRepo {
 	//출고피킹등록
 	int insert_outgoing_picking(List<Map<String, Object>> picking);
 	
+	//출고등록시 주문승인 상태업데이트
+	int update_acceptedorder_st(String operator_id, String order_cd);
+	
 	//출고정보 가져오기
 	List<outgoing_enroll_dto> select_outgoing();
 	
 	//출고상세정보 가져오기
 	List<outgoing_info_joined_dto> select_outgoing_view();
+	
+	//출고등록 테이블 업데이트
+	int update_outenroll(String outenroll_cd);
+	
+	//출고확정과 동시에 데이터 차감
+	int update_warehouse_out(String subtractive_qty, String update_by, String wh_warehouse_idx);
+	
+	//출고등록정보 삭제
 }

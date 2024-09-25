@@ -124,6 +124,7 @@
             var outenroll_st = $(this).data("outenroll-st");
             var outenroll_log = $(this).data("outenroll-log");
             var expect_dt = $(this).data("expect-dt");
+            var outenroll_cd = $(this).data("outenroll-cd");
             
 			// 입력 필드에 값 설정
 			$("#order_cd_ac").val(order_cd);
@@ -132,6 +133,7 @@
 			$("#total_qty_ac").val(total_qty);
 			$("#expect_dt_ac").val(expect_dt);
 			$("#exoutgoing_area_ac").val(exoutgoing_area);
+			$("#outenroll_cd_ac").val(outenroll_cd); 
             
 			//배열 가져오기
            	var pickings_json = $(this).data("pickings-json");
@@ -150,8 +152,9 @@
             			'<td style="width: 30%;">로트번호</td>' +
                         '<td style="width: 60%;"><input type="text" style="width:100%;" value="' + pickings_json[$w].lot_no + '" readonly="readonly"></td>' +
                         '<td style="width: 30%;">수량</td>' +
-                        '<td><input type="text" value="' + pickings_json[$w].outpick_qty + '" readonly="readonly"></td>' +
-                        '</tr>'	
+                        '<td><input type="text" value="' + pickings_json[$w].outpick_qty + '" readonly="readonly">' +
+                        '<input type="hidden" name="subtract_values" value=' + pickings_json[$w].wh_warehouse_idx + "&" 
+                        + pickings_json[$w].outpick_qty + '></td></tr>'
             	);
             
             	$w++;
@@ -165,10 +168,28 @@
 	</script>
 
 	<script type="module">
-   import {page_move_outbound} from "../resources/js/inoutbound/outbound_main.js?v=3";
+   import {page_move_outbound, outaccept_modal, outbound_decide} from "../resources/js/inoutbound/outbound_main.js?v=4";
+	//전체 체크박스를 클릭했을 때
+	document.querySelector("#all_ck_out").addEventListener("click",function(){
+		new outbound_decide().out_all_ckbox();
+	});
+
+	//개별 체크박스를 클릭했을 때
+	document.querySelectorAll('[name="each_ck_out"]').forEach(function(ck){
+		ck.addEventListener('click', function() {
+        	new outbound_decide().out_each_ckbox();
+		});
+    });
+    
+	//삭제 버튼 클릭했을 때
+	document.querySelector("#del_out").addEventListener("click",function(){
+		new outbound_decide().out_delete_data();
+	});
+
+
 	//출고 확정 등록 버튼 
 	document.querySelector("#out_enroll").addEventListener("click",function(){
-		new page_move_outbound().go_outboudstate();
+		new outaccept_modal().decide_outgoing();
 	});
 
 

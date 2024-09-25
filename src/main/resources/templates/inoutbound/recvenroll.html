@@ -228,6 +228,7 @@ $(document).ready(function() {
 		var return_qty = $(this).data("return-qty");
 		var make_dt = $(this).data("make-dt");
 		
+		
 		if (parseInt(product_qty) == parseInt(return_qty)) {
 		   alert("모두 반송 처리된 데이터입니다.");
 		   return; // 반송 수량과 납품 수량이 같다면 모달을 띄우지 않음

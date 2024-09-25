@@ -188,7 +188,7 @@
 		$(document).ready(function() {
 			//출고 버튼 클릭시
 			// 문서 전체에 대해 이벤트 위임 설정
-			$(document).on("click", ".outbound_enroll", function(event) {
+			$(document).on("click", ".outbound_enroll2", function(event) {
 				event.preventDefault();  // 기본 동작 중단
 				
 				var order_cd = $(this).data("order-cd");
@@ -241,7 +241,7 @@ import {page_move_outbound, outbound_enroll} from "../resources/js/inoutbound/ou
     });
 
 	//출고등록 버튼 눌렀을 시 출고수량 정보 가져오기
-	document.querySelectorAll('.outbound_enroll').forEach(function(button) {
+	document.querySelectorAll('.outbound_enroll2').forEach(function(button) {
     	button.addEventListener('click', function(event) {
 			new outbound_enroll().qty_info(button.dataset.productCd);
 		});
@@ -250,6 +250,8 @@ import {page_move_outbound, outbound_enroll} from "../resources/js/inoutbound/ou
 	//출고등록 모달에서 등록버튼 눌러서 백엔드 제출 
 	document.querySelector("#out_enroll").addEventListener("click",function(){
 		new outbound_enroll().go_out_enroll();
+
+		
 	});
 
 	/* 메뉴 */

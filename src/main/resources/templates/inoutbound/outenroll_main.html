@@ -82,7 +82,7 @@
 											<th style="text-align: center; width: 8%;">상품수량</th>
 											<th style="text-align: center; width: 13%;">착수일자</th>
 											<th style="text-align: center; width: 13%;">납기일자</th>
-											<td style="text-align: center; width: 6%;">상태</td>
+											<th style="text-align: center; width: 6%;">상태</th>
 											<th style="text-align: center; width: 11%;">출고</th>
 										</tr>
 									</thead>
@@ -112,9 +112,10 @@
 												th:text="${order.getStart_dt()}"></td>
 											<td style="text-align: center; width: 13%;"
 												th:text="${order.getDue_dt()}"></td>
-											<td style="text-align: center; width: 6%;"></td>
+											<td style="text-align: center; width: 6%;"
+											th:text="${order.getAcceptedorder_st()}"></td>
 											<td style="text-align: center; width: 11%;">
-												<button class="btn btn-primary outbound_enroll"
+												<button class="btn btn-primary outbound_enroll2"
 													th:data-order-cd="${order.getOrder_cd()}"
 													th:data-product-cd="${order.getProduct_cd()}"
 													th:data-product-nm="${order.getProduct_nm()}"

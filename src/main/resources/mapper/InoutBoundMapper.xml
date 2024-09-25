@@ -2,8 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.pikpak.repo.InoutBoundRepo">
 
-<!-- 출고 승인을 위한 상세 정보 가져오기 -->
- 
+<!-- 출고등록 삭제 동시에 피킹정보 삭제 -->
+<delete id="delete_outpiking">
+delete from outgoing_picking where FIND_IN_SET(outenroll_cd,#{outenroll_cd})
+</delete>
+
+<!-- 출고등록정보 삭제 -->
+<delete id="delete_outenroll">
+delete from outgoing_enroll where FIND_IN_SET(outenroll_cd,#{outenroll_cd})
+</delete>
+
+<!-- 재고차감과 동시에 주문테이블 상태 완료로 변경 -->
+<update id="">
+
+</update>
+
+<!-- 상태 업데이트와 동시에 재고 차감 -->
+<update id="update_warehouse_out">
+update warehouse set product_qty = product_qty - #{subtractive_qty}, update_by=#{update_by} where wh_warehouse_idx=#{wh_warehouse_idx}
+</update>
+
+<!-- 출고등록테이블 상태 업데이트 -->
+<update id="update_outenroll">
+update outgoing_enroll set outenroll_st='확정' where outenroll_cd=#{outenroll_cd}
+</update>
+
+
+<!-- 출고 승인을 위한 상세 정보 가져오기 --> 
  <!-- 새로운 ResultMap for OutgoingEnrollViewDTO -->
     <resultMap id="OutgoingEnrollViewResultMap" type="kr.co.pikpak.dto.outgoing_info_joined_dto">
         <id property="outenroll_cd" column="outenroll_cd"/>
@@ -68,6 +93,11 @@ insert into outgoing_picking values
  </foreach>
 </insert>
 
+<!-- 출고 정보 등록고 동시에 acceptd_order 상태 업데이트 -->
+<update id="update_acceptedorder_st">
+update accepted_order_enroll set acceptedorder_st='등록', operator_id=#{operator_id} where order_cd=#{order_cd}
+</update>
+
 <!-- 출고 정보 등록하기 -->
 <insert id="insert_outgoing_enroll">
 insert into outgoing_enroll values ('0',#{outenroll_cd},#{order_cd},#{product_cd},#{product_nm},#{outenroll_st},#{total_qty},#{expect_dt}
@@ -93,7 +123,7 @@ update warehouse set product_qty = product_qty + #{additional_qty}, update_by=#{
 
 <!-- 입고와 동시에 warehouse insert -->
 <insert id="insert_warehouse" parameterType="Map">
-insert into warehouse values ('0',#{location_cd},#{product_cd},#{product_nm},#{supplier_nm},#{product_qty},#{intransit_qty},#{inventory_log},#{update_dt},#{update_by},#{supplier_cd})
+insert into warehouse values ('0',#{location_cd},#{product_cd},#{product_nm},#{supplier_nm},#{product_qty},#{inventory_log},#{update_dt},#{update_by},#{supplier_cd})
 </insert>
 
 <!-- warehouse에 데이터가 있는 지 없는 지 확인 -->
@@ -113,8 +143,8 @@ select * from warehouse_locations where supplier_cd=#{supplier_cd}
 </select>
 
 <!-- 주문현황 보여주기 -->
-<select id="select_order_enroll" resultType="kr.co.pikpak.dto.order_enroll_dto_lhwtemp">
-select * from order_enroll where process_st='승인' order by order_idx desc
+<select id="select_order_enroll" resultType="kr.co.pikpak.dto.accepted_order_enroll_dto">
+select * from accepted_order_enroll order by acceptedorder_idx desc
 </select>
 
 <!-- 반송 등록할 때 가입고 테이블 반송수량 업데이트 -->

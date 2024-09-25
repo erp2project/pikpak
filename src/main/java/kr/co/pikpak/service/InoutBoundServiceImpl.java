@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.co.pikpak.dto.accepted_order_enroll_dto;
 import kr.co.pikpak.dto.deliver_return_dto;
 import kr.co.pikpak.dto.ex_receiving_dto;
 import kr.co.pikpak.dto.ex_receiving_joined_dto;
@@ -28,6 +29,22 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	@Autowired
 	InoutBoundRepo iorepo;
 	
+	//재고차감
+	@Override
+	public int update_warehouse_out(String subtractive_qty, String update_by, String wh_warehouse_idx) {
+		int result = iorepo.update_warehouse_out(subtractive_qty, update_by, wh_warehouse_idx);
+		return result;
+	}
+	
+	
+	//출고등록 테이블 업데이트
+	@Override
+	public int update_outenroll(String outenroll_cd) {
+		int result = iorepo.update_outenroll(outenroll_cd);
+		return result;
+	}
+	
+	
 	//출고상세정보 가져오기
 	@Override
 	public List<outgoing_info_joined_dto> select_outgoing_view() {
@@ -42,6 +59,15 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 		List<outgoing_enroll_dto> outgoing = iorepo.select_outgoing();
 		return outgoing;
 	}
+	
+	//출고등록시 주문승인 상태변경
+	@Override
+	public int update_acceptedorder_st(String operator_id, String order_cd) {
+		int result = iorepo.update_acceptedorder_st(operator_id, order_cd); //인자명이 달라도 되나..??
+		return result;
+	}
+	
+	
 	
 	//출고피킹 정보 등록
 	@Override
@@ -154,12 +180,12 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 				else {
 				   //insert
 					//Map 만들기
-					System.out.println(dto.getReceiving_qty());
-					
+					System.out.println("dto에서 출력잘되고 있다고: " + dto.getProduct_nm());
+					String pd_name = dto.getProduct_nm();
 					Map<String, Object> wh_dto = new HashMap<String, Object>();
 					wh_dto.put("location_cd", dto.getLocation_cd());
 					wh_dto.put("product_cd", dto.getProduct_cd());
-					wh_dto.put("product_nm", dto.getProduct_nm());
+					wh_dto.put("product_nm", pd_name);
 					wh_dto.put("supplier_nm", dto.getSupplier_nm());
 					wh_dto.put("product_qty", dto.getReceiving_qty());
 					wh_dto.put("inventory_log", dto.getReceiving_log());
@@ -199,8 +225,8 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	
 	//출고등록에서 주문현황 보여주기
 	@Override
-	public List<order_enroll_dto_lhwtemp> select_order_enroll() {
-		List<order_enroll_dto_lhwtemp> orderlist = iorepo.select_order_enroll();
+	public List<accepted_order_enroll_dto> select_order_enroll() {
+		List<accepted_order_enroll_dto> orderlist = iorepo.select_order_enroll();
 		return orderlist;
 	}
 	

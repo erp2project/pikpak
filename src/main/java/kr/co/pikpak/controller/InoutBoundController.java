@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.annotation.Resource;
 import jakarta.servlet.ServletResponse;
+import kr.co.pikpak.dto.accepted_order_enroll_dto;
 import kr.co.pikpak.dto.deliver_return_dto;
 import kr.co.pikpak.dto.ex_receiving_dto;
 import kr.co.pikpak.dto.ex_receiving_joined_dto;
@@ -50,6 +51,79 @@ public class InoutBoundController {
 	@Resource(name="ir_dto")
 	input_request_dto irdto; 
 	
+	
+	//출고등록 데이터 삭제
+	@PostMapping("/inoutbound/delete_outenrollok")
+	public String delete_outenrollok(ServletResponse res,
+			@RequestParam(defaultValue = "", required = false) String[] each_ck_out,
+			@RequestParam(defaultValue = "", required = false) String outenroll_cd) {
+		System.out.println(each_ck_out.length);
+		System.out.println(outenroll_cd); //이거 잘라서 picking 테이블에 존재하는 outenroll_cd 다 찾아서 지워야함
+		
+		
+		return null;
+	}
+	
+	
+	//출고확정 
+	@PostMapping("/inoutbound/decide_outgoingok")
+	public String decide_outgoingok(ServletResponse res,
+			@RequestParam(defaultValue = "", required = true) String outenroll_cd,
+			@RequestParam(defaultValue = "", required = true) String subtract_values) {
+		res.setContentType("text/html;charset=utf-8");
+		
+		//System.out.println(outenroll_cd); //내 테이블 상태 업데이트용 ok
+		//System.out.println(subtract_values); //재고 테이블 차감용 88&2,88&1
+		
+		String subtract_idx[] = subtract_values.split(",");
+		
+		try {
+			this.pw = res.getWriter();
+			//outgoing_ernoll 상태 업데이트
+			//int out_state = ioservice.update_outenroll(outenroll_cd);
+			int out_state = 1; //강제로 때리고
+			int subtract_count = 0;
+			
+			String operator_id = "ad_leehw_1234";
+			if(out_state > 0) { //상태가 승인이 되면
+				int w = 0;
+				while(w < subtract_idx.length) {
+					String value[] = subtract_idx[w].split("&");
+					String subtractive_qty = value[1];
+					String update_by = operator_id;
+					String wh_warehouse_idx = value[0];
+					
+					int subtract_stock = 1;
+					//ioservice.update_warehouse_out(subtractive_qty, update_by, wh_warehouse_idx);
+					if(subtract_stock > 0) {
+						subtract_count++;
+					}
+					w++;
+				}
+				System.out.println(subtract_count);
+				if(subtract_count >= subtract_idx.length) {
+					this.pw.print("<script>"
+							+ "alert('배송 확정이 완료되었습니다.');"
+							+ "location.href = './outstate';"
+							+ "</script>");
+				}
+			}
+			
+		}
+		catch(Exception e) {
+			System.out.println(e);
+			this.pw.print("<script>"
+					+ "alert('데이터베이스 문제로 배송 확정에 실패했습니다.');"
+					+ "location.href = './outstate';"
+					+ "</script>");
+		}
+		finally {
+			this.pw.close();
+		}
+		return null;
+	}
+	
+	
 	//출고 등록
 	@PostMapping("/inoutbound/outgoing_enrollok")
 	public String outgoing_enrollok(ServletResponse res, 
@@ -58,7 +132,7 @@ public class InoutBoundController {
 		res.setContentType("text/html;charset=utf-8");
 		try {
 			this.pw = res.getWriter();
-			
+			System.out.println("뭐 작동되고 있는거야?");
 			/*  *****원래는 이걸 모듈로 빼야함*****  */			
 			//출고고유번호 생성
 			int i = 0;
@@ -102,10 +176,16 @@ public class InoutBoundController {
 			if(result > 0) {
 				int p_result = ioservice.insert_outgoing_picking(outgoing_picking);
 				if(p_result > 0) {
-					this.pw.print("<script>"
-							+ "alert('정상적으로 등록되었습니다.');"
-							+ "location.href = './outenroll';"
-							+ "</script>");
+					//상태도 변경		
+					//세션에서 정보가지고 왔다고 가정
+					String operator_id = "ad_leehw_1234";
+					int st_result = ioservice.update_acceptedorder_st(operator_id, dto.getOrder_cd());
+					if(st_result > 0) {
+						this.pw.print("<script>"
+								+ "alert('정상적으로 등록되었습니다.');"
+								+ "location.href = './outenroll';"
+								+ "</script>");						
+					}
 				}
 			}
 			
@@ -131,6 +211,7 @@ public class InoutBoundController {
 	@ResponseBody
 	public ResponseEntity<?> outgoing_locations(
 			@RequestParam(defaultValue = "", required = true) String product_cd){
+		System.out.println(product_cd); //ok 잘날아왔고
 		try {
 			List<outgoing_select_view_dto> stock_info = ioservice.select_stock(product_cd);
 			return ResponseEntity.ok(stock_info);  // JSON으로 변환되어 전송
@@ -147,7 +228,7 @@ public class InoutBoundController {
 			@RequestParam(defaultValue = "", required = true) String total_qty,
 			@RequestParam(defaultValue = "", required = false) String return_qty) {
 		res.setContentType("text/html;charset=utf-8");
-		//넘어오는 값 : deliver_cd, exreceiving_cd, supplier_cd, proudct_cd, product_nm, receiving_qty, receiving_size, location_cd, inventory_dt, receiving_log
+		//넘어오는 값 : deliver_cd, exreceiving_cd, supplier_nm, supplier_cd, proudct_cd, product_nm, receiving_qty, receiving_size, location_cd, inventory_dt, receiving_log
 		//만들어야하는 값 : receiving_cd, lot_no, operator_id
 		//자동으로 들어가는 값 : receiving_idx, receiving_dt
 		try {
@@ -516,7 +597,7 @@ public class InoutBoundController {
 	//출고 등록 이동
 	@GetMapping("inoutbound/outenroll")
 	public String outenroll(Model m) {
-		List<order_enroll_dto_lhwtemp> orderlist = ioservice.select_order_enroll();
+		List<accepted_order_enroll_dto> orderlist = ioservice.select_order_enroll();
 		m.addAttribute("orderlist",orderlist);
 		return null;
 	}

@@ -63,16 +63,20 @@
 						<!-- 검색 옵션 테이블 끝 -->
 
 						<!-- 조회 결과 테이블 시작 -->
-						<form id="frm_inreq_list">
+						<form id="frm_out_list">
 							<p
 								style="font-size: 12px; height: 25px; line-height: 30px; padding-top: 20px;">※
 								조회결과</p>
 							<div class="panel-body panel-thead">
+							<span style="float: right; height: 40px; margin-top:20px;">
+							<button type="button" class="btn btn-outline-danger" id="del_out">삭제</button>
+							
+						</span>	
 								<table class="table">
 									<thead style="background-color: rgb(130, 210, 213);">
 										<tr>
 											<th style="text-align: center; width: 5%;"><input
-												type="checkbox" id="del_all_ck"
+												type="checkbox" id="all_ck_out"
 												style="border: 1px solid #ccc;"></th>
 											<th style="text-align: center; width: 12%;">주문번호</th>
 											<th style="text-align: center; width: 12%;">상품코드</th>
@@ -99,7 +103,9 @@
 									-->
 										<tr th:each="outgoing : ${out_info}">
 											<td style="text-align: center; width: 5%;"><input
-												type="checkbox" style="border: 1px solid #ccc;"></td>
+												type="checkbox" name="each_ck_out" 
+												th:value="${outgoing.getOutenroll_cd()}"
+												style="border: 1px solid #ccc;"></td>
 											<td style="text-align: center; width: 12%;"
 												th:text="${outgoing.getOrder_cd()}">주문번호</td>
 											<td style="text-align: center; width: 12%;"
@@ -128,6 +134,7 @@
 													th:data-outenroll-log="${outgoing.getOutenroll_log()}"
 													th:data-expect-dt="${outgoing.getExpect_dt()}"
 													th:data-pickings-json="${outgoing.pickings_json}"
+													th:data-outenroll-cd="${outgoing.getOutenroll_cd()}"
 													style="padding-right: 10px; padding-left: 10px;"
 													type="button">승인</button>
 										</tr>
@@ -135,7 +142,7 @@
 									</tbody>
 								</table>
 							</div>
-
+						<input type="hidden" name="outenroll_cd"> <!-- 삭제 데이터 묶어 보내기 -->
 						</form>
 					</div>
 					<!-- panel body , 이 안에 두개의 테이블이 같이 들어감-->
