@@ -40,7 +40,7 @@ function fn_renderlist(data = null){
                 info_html += "<tr>";
                 info_html += "<td>" + (i + 1) + "</td>";
                 info_html += "<td>" + response[i].product_cd + "</td>";
-                info_html += "<td>" + response[i].product_nm + "</td>";
+                info_html += "<td style='text-align:left;'>" + response[i].product_nm + "</td>";
                 info_html += "<td>" + response[i].location_cd + "</td>";
                 info_html += "<td>" + response[i].inventory_chg + "</td>";
                 info_html += "<td>" + response[i].action_type + "</td>";

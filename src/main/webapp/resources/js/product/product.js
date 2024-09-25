@@ -94,39 +94,56 @@ function fn_searchProduct() {
 }
 
 
-function fn_openEditModal(product_cd){
-	$.ajax({
-		url : "/product/getproduct",
-		type : "post",
-		contentType : "application/json",
-		data : JSON.stringify({product_cd : product_cd}),
-		success : function(response){
-			$("#supplier_cd").val(response.supplier_cd);
-			$("#supplier_nm").val(response.supplier_nm);
-			$("#product_nm").val(response.product_nm);
-			$("#product_cd").val(response.product_cd);
-			$("#purchase_pr").val(response.purchase_pr);
-			$("#product_sz").val(response.product_sz);
-			$("#product_wt").val(response.product_wt);
-			$("#packaging_unit").val(response.packaging_unit);
-			$("#safetyinventory_qty").val(response.safetyinventory_qty);
-			$("#product_log").val(response.product_log);
-			$("#visibility_yn").val(response.visibility_yn);
-			
-			$("#supplier_nm").prop("readonly", true);
-			
-			
-			if (response.visibility_yn) {
+function fn_openEditModal(product_cd) {
+    $.ajax({
+        url : "/product/getproduct",
+        type : "post",
+        contentType : "application/json",
+        data : JSON.stringify({product_cd : product_cd}),
+        success : function(response) {
+            // 기존의 필드들 값 설정
+            $("#supplier_cd").val(response.supplier_cd);
+            $("#supplier_nm").val(response.supplier_nm);
+            $("#product_nm").val(response.product_nm);
+            $("#product_cd").val(response.product_cd);
+            $("#purchase_pr").val(response.purchase_pr);
+            $("#product_sz").val(response.product_sz);
+            $("#product_wt").val(response.product_wt);
+            $("#packaging_unit").val(response.packaging_unit);
+            $("#safetyinventory_qty").val(response.safetyinventory_qty);
+            $("#product_log").val(response.product_log);
+            $("#visibility_yn").val(response.visibility_yn);
+            
+            // 공급자명 읽기 전용으로 설정
+            $("#supplier_nm").prop("readonly", true);
+
+            // visibility_yn 값이 있으면 설정
+            if (response.visibility_yn) {
                 $("#visibility_yn").val(response.visibility_yn);
             }
 
             // visibility_yn 필드 보이기
             $("#visibilityField").show();
-			
-			// 모달창 띄우기
+
+            // 콘솔에서 최종 수정일자와 수정자 확인
+            console.log("최종 수정일자: ", response.lastmodified_at);
+            console.log("수정자: ", response.update_by);
+            
+            // 최종 수정일자와 수정자가 존재하면 화면에 표시
+            if (response.lastmodified_at && response.update_by) {
+                // lastmodified_at을 적절한 포맷으로 변환하여 표시
+                var formattedDate = new Date(response.lastmodified_at).toISOString().slice(0, 16).replace("T", " ");
+                $("#lastModifiedDate").text("최종수정일자: " + formattedDate);
+                $("#modifiedBy").text("수정자: " + response.update_by);
+                
+                // 숨겨져 있던 div를 보이게 설정
+                $("#lastModifiedInfo").css("display", "block");
+            }
+
+            // 모달창 띄우기
             $('#registerProductModal').modal('show');
 
-            // 모달창 제목을 "거래처 수정"으로 변경
+            // 모달창 제목을 "상품 수정"으로 변경
             $("#registerProductModalLabel").text("상품 수정");
 
             // 버튼 텍스트를 "수정"으로 변경하고, 수정 처리 함수로 연결
@@ -134,8 +151,11 @@ function fn_openEditModal(product_cd){
             $("#registerProductBtn").off("click").on("click", function() {
                 fn_updateProduct(product_cd);  // 수정 처리 함수 호출
             });
-		}
-	});
+        },
+        error: function(xhr, status, error) {
+            console.error("AJAX 요청 실패: ", status, error);
+        }
+    });
 }
 
 function fn_updateProduct(){
@@ -181,6 +201,8 @@ function fn_updateProduct(){
 				}
 				else{
 					alert(response.message);
+					$("#registerProductModal").modal("hide");
+					location.reload();
 				}
 				
 			}
@@ -213,19 +235,19 @@ function renderlist(data){
 			+ ("0" + date.getDate()).slice(-2);
 		info_html += "<tr style='height: 10px;'>";
 		info_html += "<td class='text-center'><input type='checkbox' style='text-align: center; vertical-align: middle;'></td>";
-		info_html += "<td class='list-sty2' style='vertical-align: middle;'>"+ data[i].product_cd +"</td>";
-		info_html += "<td class='list-sty2' style='vertical-align: middle; text-align: left;'>"+ data[i].product_nm +"</td>";
-		info_html += "<td class='list-sty2' style='vertical-align: middle; text-align: left;'>"+ data[i].supplier_nm +"</td>";
-		info_html += "<td class='list-sty2' style='vertical-align: middle; text-align: center;'>"+ data[i].supplier_cd +"</td>";
-		info_html += "<td class='list-sty2' style='vertical-align: middle; text-align: right;'>"+ Number(data[i].purchase_pr).toLocaleString() +"원</td>";
-		info_html += "<td class='list-sty2' style='vertical-align: middle; text-align: center;'>"+ (data[i].product_sz ||'-') +"</td>";
-		info_html += "<td class='list-sty2' style='vertical-align: middle; text-align: right;'>"+ (data[i].product_wt ||'-') +"</td>";
-		info_html += "<td class='list-sty2' style='vertical-align: middle;'>"+ (data[i].packaging_unit ||'-') +"</td>";
-		info_html += "<td class='list-sty2' style='vertical-align: middle;'>"+ (data[i].safetyinventory_qty ||'-') +"</td>";
-		info_html += "<td class='list-sty2' style='vertical-align: middle;'>"+ data[i].operator_nm +"</td>";
-		info_html += "<td class='list-sty2' style='vertical-align: middle;'>"+ formattedDate +"</td>";
-		info_html += "<td class='list-sty2' style='vertical-align: middle;'>"+ data[i].visibility_yn +"</td>";
-		info_html += "<td class='list-sty2' style='vertical-align: middle; text-align: left;'>"+ (data[i].product_log ||'-')+"</td>";
+		info_html += "<td style='vertical-align: middle;'>"+ data[i].product_cd +"</td>";
+		info_html += "<td style='vertical-align: middle; text-align: left;'>"+ data[i].product_nm +"</td>";
+		info_html += "<td style='vertical-align: middle; text-align: left;'>"+ data[i].supplier_nm +"</td>";
+		info_html += "<td style='vertical-align: middle; text-align: center;'>"+ data[i].supplier_cd +"</td>";
+		info_html += "<td style='vertical-align: middle; text-align: right;'>"+ Number(data[i].purchase_pr).toLocaleString() +"원</td>";
+		info_html += "<td style='vertical-align: middle; text-align: center;'>"+ (data[i].product_sz ||'-') +"</td>";
+		info_html += "<td style='vertical-align: middle; text-align: right;'>"+ (data[i].product_wt ||'-') +"kg</td>";
+		info_html += "<td style='vertical-align: middle;'>"+ (data[i].packaging_unit ||'-') +"</td>";
+		info_html += "<td style='vertical-align: middle;'>"+ (data[i].safetyinventory_qty ||'-') +"</td>";
+		info_html += "<td style='vertical-align: middle;'>"+ data[i].operator_nm +"</td>";
+		info_html += "<td style='vertical-align: middle;'>"+ formattedDate +"</td>";
+		info_html += "<td style='vertical-align: middle;'>"+ data[i].visibility_yn +"</td>";
+		info_html += "<td style='vertical-align: middle; text-align: left;'>"+ (data[i].product_log ||'-')+"</td>";
 		info_html += "<td class='text-center'><button type='button' class='btn btn-secondary btn-xs manage-btn' style='line-height: 10px; text-align: center;' >관리</button></td>";
 		info_html += "<tr>";
 		

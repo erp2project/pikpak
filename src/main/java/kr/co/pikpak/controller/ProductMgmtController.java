@@ -69,7 +69,16 @@ public class ProductMgmtController {
 
 	@PostMapping(value = "/updateproduct", consumes = "application/json")
 	public @ResponseBody HashMap<String, Object> updateProduct(@RequestBody HashMap<String, Object> param) {
-
+		
+		String userId = (String) session.getAttribute("activeUserID");
+		
+		String operatorNm = productMgmtService.getOperatorNameByUserId(userId);
+		
+		param.put("userId", userId);
+		param.put("operatorNm", operatorNm);
+		
+		
+		
 		HashMap<String, Object> returnMap = productMgmtService.updateProduct(param);
 
 		return returnMap;

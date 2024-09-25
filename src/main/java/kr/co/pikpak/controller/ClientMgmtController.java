@@ -22,13 +22,8 @@ public class ClientMgmtController {
 	private ClientMgmtService clientMgmtService;
 
 	@GetMapping("/list")
-	public String home3() {
+	public String home() {
 		return "/client/clientmgmt";
-	}
-
-	@GetMapping("/registerClient")
-	public String showRegisterClientForm() {
-		return "/client/registerClient";
 	}
 
 	@PostMapping(value = "/regsupplier", consumes = "application/json")

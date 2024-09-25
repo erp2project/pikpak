@@ -89,7 +89,9 @@
 		safetyinventory_qty,
 		operator_nm,          
 		registered_dt,        
-		visibility_yn,        
+		visibility_yn,
+		update_by,
+		lastmodified_at,        
 		product_log
 	FROM product
 	WHERE product_cd = #{product_cd}
@@ -97,22 +99,34 @@
 </select>
 
 <update id="updateProduct" parameterType="HashMap">
-	UPDATE product
-	SET
-		supplier_cd = #{supplier_cd},
-		supplier_nm = #{supplier_nm},
-		product_nm = #{product_nm},
-		purchase_pr = #{purchase_pr},
-		product_sz = #{product_sz},
-		product_wt = #{product_wt},
-		packaging_unit = #{packaging_unit},
-		safetyinventory_qty = IF(#{safetyinventory_qty} = '', 0, #{safetyinventory_qty}),
-		product_log = #{product_log},
-		operator_nm = #{operator_nm}, 
-		visibility_yn = #{visibility_yn}, 
-		lastmodified_at = NOW() 
-	WHERE 
-		product_cd = #{product_cd}
+    UPDATE product
+    SET
+        supplier_cd = #{supplier_cd},
+        supplier_nm = #{supplier_nm},
+        product_nm = #{product_nm},
+        purchase_pr = #{purchase_pr},
+        product_sz = #{product_sz},
+        product_wt = #{product_wt},
+        packaging_unit = #{packaging_unit},
+        safetyinventory_qty = IF(#{safetyinventory_qty} = '', 0, #{safetyinventory_qty}),
+        product_log = #{product_log},
+        visibility_yn = #{visibility_yn},
+        update_by = #{operatorNm},
+        lastmodified_at = NOW()
+    WHERE 
+        product_cd = #{product_cd}
+        AND (
+            supplier_cd != #{supplier_cd} OR
+            supplier_nm != #{supplier_nm} OR
+            product_nm != #{product_nm} OR
+            purchase_pr != #{purchase_pr} OR
+            product_sz != #{product_sz} OR
+            product_wt != #{product_wt} OR
+            packaging_unit != #{packaging_unit} OR
+            safetyinventory_qty != IF(#{safetyinventory_qty} = '', 0, #{safetyinventory_qty}) OR
+            product_log != #{product_log} OR
+            visibility_yn != #{visibility_yn}
+        )
 </update>
 
 <select id="selectSearchProduct" resultType="hashmap">
