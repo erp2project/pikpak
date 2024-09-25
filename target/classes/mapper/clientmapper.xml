@@ -33,7 +33,7 @@
 		#{addr},
 		#{addr2},
 		#{email},
-		#{supplier_initial}
+		#{supplier_initial},
 		now()
 	)
 </insert>

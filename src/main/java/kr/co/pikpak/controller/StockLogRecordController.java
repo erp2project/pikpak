@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.pikpak.service.StockLogRecordService;
+
 @Controller
 @RequestMapping("/stocklogrecord")
 public class StockLogRecordController {
