@@ -12,6 +12,8 @@ import kr.co.pikpak.dto.ex_receiving_dto;
 import kr.co.pikpak.dto.ex_receiving_joined_dto;
 import kr.co.pikpak.dto.input_request_dto;
 import kr.co.pikpak.dto.order_enroll_dto_lhwtemp;
+import kr.co.pikpak.dto.outgoing_enroll_dto;
+import kr.co.pikpak.dto.outgoing_info_joined_dto;
 import kr.co.pikpak.dto.outgoing_select_view_dto;
 import kr.co.pikpak.dto.product_dto_lhwtemp;
 import kr.co.pikpak.dto.receiving_dto;
@@ -25,6 +27,45 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	
 	@Autowired
 	InoutBoundRepo iorepo;
+	
+	//출고상세정보 가져오기
+	@Override
+	public List<outgoing_info_joined_dto> select_outgoing_view() {
+		List<outgoing_info_joined_dto> outgoing_info = iorepo.select_outgoing_view();
+		return outgoing_info;
+	}
+	
+	
+	//출고정보 가져오기
+	@Override
+	public List<outgoing_enroll_dto> select_outgoing() {
+		List<outgoing_enroll_dto> outgoing = iorepo.select_outgoing();
+		return outgoing;
+	}
+	
+	//출고피킹 정보 등록
+	@Override
+	public int insert_outgoing_picking(List<Map<String, Object>> picking) {
+		int result = iorepo.insert_outgoing_picking(picking);
+		return result;
+	}
+	
+	//출고정보 등록
+	@Override
+	public int insert_outgoing_enroll(outgoing_enroll_dto dto) {
+		//dto.setOutenroll_cd(this.make_outenrollcode());
+		
+		//세션에서 가져왔다고 가정
+		String operator_id = "ad_leehw_1234";
+		dto.setOperator_id(operator_id);
+		
+		dto.setOutenroll_st("대기");
+		
+		int result = iorepo.insert_outgoing_enroll(dto);
+		
+		return result;
+	}
+	
 	
 	//출고수량 등록
 	@Override
@@ -382,7 +423,27 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 			return code;
 		}
 	
-	
+		//출고 데이터 등록시 출고등록코드 랜덤생성
+		public String make_outenrollcode() {
+			//서버 시간
+			String server_time = this.get_time();
+			
+			//랜덤숫자 4개 생성
+			int w = 0;
+			String randnum = "";
+				
+			while(w < 4) {
+				int pc = (int)(Math.ceil(Math.random()*9));
+				randnum += pc;
+				w++;
+			}
+				
+			String code = "OE"+ "-" + randnum;
+				
+			return code;
+		}
+		
+		
 	//입고 시 로트번호 생성하기
 	public String make_lotno(String product_cd, String make_dt, String inventory_dt) {
 		String makedate = make_dt.replaceAll("-", "");

@@ -8,6 +8,8 @@ import kr.co.pikpak.dto.ex_receiving_dto;
 import kr.co.pikpak.dto.ex_receiving_joined_dto;
 import kr.co.pikpak.dto.input_request_dto;
 import kr.co.pikpak.dto.order_enroll_dto_lhwtemp;
+import kr.co.pikpak.dto.outgoing_enroll_dto;
+import kr.co.pikpak.dto.outgoing_info_joined_dto;
 import kr.co.pikpak.dto.outgoing_select_view_dto;
 import kr.co.pikpak.dto.product_dto_lhwtemp;
 import kr.co.pikpak.dto.receiving_dto;
@@ -91,4 +93,16 @@ public interface InoutBoundService {
 	
 	//출고수량 등록 
 	public List<outgoing_select_view_dto> select_stock(String product_cd);
+	
+	//출고정보 등록
+	public int insert_outgoing_enroll(outgoing_enroll_dto dto);
+	
+	//출고피킹 정보 등록
+	public int insert_outgoing_picking(List<Map<String, Object>> picking);
+	
+	//출고정보 가져오기
+	public List<outgoing_enroll_dto> select_outgoing();
+	
+	//출고 상세 정보
+	public List<outgoing_info_joined_dto> select_outgoing_view();
 }

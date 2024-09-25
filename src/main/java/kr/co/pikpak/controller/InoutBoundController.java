@@ -2,6 +2,7 @@ package kr.co.pikpak.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.util.HtmlUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.annotation.Resource;
 import jakarta.servlet.ServletResponse;
@@ -27,7 +31,7 @@ import kr.co.pikpak.dto.ex_receiving_joined_dto;
 import kr.co.pikpak.dto.input_request_dto;
 import kr.co.pikpak.dto.order_enroll_dto_lhwtemp;
 import kr.co.pikpak.dto.outgoing_enroll_dto;
-import kr.co.pikpak.dto.outgoing_picking_dto;
+import kr.co.pikpak.dto.outgoing_info_joined_dto;
 import kr.co.pikpak.dto.outgoing_select_view_dto;
 import kr.co.pikpak.dto.product_dto_lhwtemp;
 import kr.co.pikpak.dto.receiving_dto;
@@ -49,21 +53,72 @@ public class InoutBoundController {
 	//출고 등록
 	@PostMapping("/inoutbound/outgoing_enrollok")
 	public String outgoing_enrollok(ServletResponse res, 
-			@ModelAttribute("outenroll") outgoing_enroll_dto dto_enroll,
+			@ModelAttribute("outenroll") outgoing_enroll_dto dto,
 			@RequestParam(defaultValue = "", required = true) String item_data) {
+		res.setContentType("text/html;charset=utf-8");
 		try {
-			System.out.println(dto_enroll.getOrder_cd());
+			this.pw = res.getWriter();
 			
-			String ea[] = item_data.split(",");
-			String value[] = ea[0].split("&");
-			System.out.println(ea[0]);
-			System.out.println(value[0]);
+			/*  *****원래는 이걸 모듈로 빼야함*****  */			
+			//출고고유번호 생성
+			int i = 0;
+			String randnum = "";
+				
+			while(i < 4) {
+				int pc = (int)(Math.ceil(Math.random()*9));
+				randnum += pc;
+				i++;
+			}
+				
+			String code = "OE"+ "-" + randnum;
+			
+			dto.setOutenroll_cd(code);
+				
+			//out_picking 데이터 생성
+			List<Map<String, Object>> outgoing_picking = new ArrayList<Map<String, Object>>();
+			
+			String picking_data[] = item_data.split(",");
+			int total_qty = 0;
+			int w = 0;
+			while(w < picking_data.length) {
+				String datas[] = picking_data[w].split("&");
+				total_qty += Integer.parseInt(datas[1]);
+				
+				Map<String, Object> outgoing_picking_data = new HashMap<>();
+				outgoing_picking_data.put("out_enroll_cd", dto.getOutenroll_cd());
+				outgoing_picking_data.put("wh_warehouse_idx", datas[2]);
+				outgoing_picking_data.put("product_cd", dto.getProduct_cd());
+				outgoing_picking_data.put("location_cd", datas[0]);
+				outgoing_picking_data.put("receiving_cd", datas[3]);
+				outgoing_picking_data.put("outpick_qty", datas[1]);
+				w++;
+				outgoing_picking.add(outgoing_picking_data);
+			}	
+			
+			dto.setTotal_qty(total_qty);
+			
+			//쿼리 실행
+			int result = ioservice.insert_outgoing_enroll(dto);
+			if(result > 0) {
+				int p_result = ioservice.insert_outgoing_picking(outgoing_picking);
+				if(p_result > 0) {
+					this.pw.print("<script>"
+							+ "alert('정상적으로 등록되었습니다.');"
+							+ "location.href = './outenroll';"
+							+ "</script>");
+				}
+			}
+			
 		}
 		catch(Exception e) {
-			
+			e.printStackTrace();
+			this.pw.print("<script>"
+					+ "alert('데이터베이스 문제로 등록되지 못하였습니다.');"
+					+ "location.href = './outenroll';"
+					+ "</script>");
 		}
 		finally {
-			
+			this.pw.close();
 		}
 		return null;
 	}
@@ -395,6 +450,7 @@ public class InoutBoundController {
 	}
 	
 	
+
 	
 	//입고요청 이동
 	@GetMapping("inoutbound/inboundreq")
@@ -436,7 +492,23 @@ public class InoutBoundController {
 	//출고현황 이동
 	@GetMapping("inoutbound/outstate")
 	public String outstate(Model m) {
+		List<outgoing_info_joined_dto> out_info = ioservice.select_outgoing_view();
 		
+		ObjectMapper objectMapper = new ObjectMapper();
+		out_info.forEach(dto -> {
+		    try {
+		        dto.setPickings_json(objectMapper.writeValueAsString(dto.getPickings()));
+		    } 
+		    catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		 });
+		
+		m.addAttribute("out_info",out_info);
+		/*
+		List<outgoing_enroll_dto> outlist = ioservice.select_outgoing();
+		m.addAttribute("outlist",outlist);
+		*/
 		return null;
 	}
 	

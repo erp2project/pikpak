@@ -76,13 +76,15 @@
 		<section th:replace="~{inoutbound/outstate_main :: main_outstate}"></section>
 		<!-- MAIN 끝-->
 
-		<!-- 모달 
+		
+		<!-- 모달 -->
+		<section th:replace="~{inoutbound/outbound_accept_popup :: out_accept_popup}"></section> 
+		<!--
 		<section
 			th:replace="~{inoutbound/product_search :: product_search_popup}"></section>
 		<section
 			th:replace="~{inoutbound/company_search :: company_search_popup}"></section>
-		<section
-			th:replace="~{inoutbound/add_inboundreq_popup :: add_inreq_popup}"></section>
+		
 		<section
 			th:replace="~{inoutbound/inreq_manage_popup :: inreq_manage_popup}"></section>
 		-->
@@ -108,13 +110,78 @@
 		src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
 	<script>
-		$(document).ready(function() {
+	$(document).ready(function() {
+		//출고 버튼 클릭시
+		// 문서 전체에 대해 이벤트 위임 설정
+		$(document).on("click", ".outbound_decide", function(event) {
+			event.preventDefault();  // 기본 동작 중단
+			
+			var order_cd = $(this).data("order-cd");
+            var product_cd = $(this).data("product-cd");
+            var product_nm = $(this).data("product-nm");
+            var total_qty = $(this).data("total-qty");
+            var exoutgoing_area = $(this).data("exoutgoing-area");
+            var outenroll_st = $(this).data("outenroll-st");
+            var outenroll_log = $(this).data("outenroll-log");
+            var expect_dt = $(this).data("expect-dt");
+            
+			// 입력 필드에 값 설정
+			$("#order_cd_ac").val(order_cd);
+			$("#product_cd_ac").val(product_cd);
+			$("#product_nm_ac").val(product_nm);
+			$("#total_qty_ac").val(total_qty);
+			$("#expect_dt_ac").val(expect_dt);
+			$("#exoutgoing_area_ac").val(exoutgoing_area);
+            
+			//배열 가져오기
+           	var pickings_json = $(this).data("pickings-json");
+            //console.log(pickings_json[0].lot_no);
+            //console.log(pickings_json.length); //2나옴
+           
+            //로트번호, 수량 개수
+            var $detail_info_size = pickings_json.length;
+            
+            var $tbody = $('#modal_tbody');
+            $tbody.empty();
+            var $w = 0;
+            while($w < $detail_info_size){
+            	$tbody.append(
+            			'<tr>' +
+            			'<td style="width: 30%;">로트번호</td>' +
+                        '<td style="width: 60%;"><input type="text" style="width:100%;" value="' + pickings_json[$w].lot_no + '" readonly="readonly"></td>' +
+                        '<td style="width: 30%;">수량</td>' +
+                        '<td><input type="text" value="' + pickings_json[$w].outpick_qty + '" readonly="readonly"></td>' +
+                        '</tr>'	
+            	);
+            
+            	$w++;
+            }
+        
+            // 모달 보여주기
+			$("#outacceptModal").modal('show');
 			
 		});
+	});
 	</script>
 
 	<script type="module">
-   
+   import {page_move_outbound} from "../resources/js/inoutbound/outbound_main.js?v=3";
+	//출고 확정 등록 버튼 
+	document.querySelector("#out_enroll").addEventListener("click",function(){
+		new page_move_outbound().go_outboudstate();
+	});
+
+
+	/* 메뉴 */
+	//출고현황 이동
+	document.querySelector("#go_outstate").addEventListener("click",function(){
+		new page_move_outbound().go_outboudstate();
+	});
+	
+	//출고등록 이동
+	document.querySelector("#go_outenroll").addEventListener("click",function(){
+		new page_move_outbound().go_outboundenroll();
+	});
     </script>
 </body>
 </html>

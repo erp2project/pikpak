@@ -2,6 +2,79 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.pikpak.repo.InoutBoundRepo">
 
+<!-- 출고 승인을 위한 상세 정보 가져오기 -->
+ 
+ <!-- 새로운 ResultMap for OutgoingEnrollViewDTO -->
+    <resultMap id="OutgoingEnrollViewResultMap" type="kr.co.pikpak.dto.outgoing_info_joined_dto">
+        <id property="outenroll_cd" column="outenroll_cd"/>
+        <result property="order_cd" column="order_cd"/>
+        <result property="product_cd" column="product_cd"/>
+        <result property="product_nm" column="product_nm"/>
+        <result property="total_qty" column="total_qty"/>
+        <result property="expect_dt" column="expect_dt"/>
+        <result property="exoutgoing_area" column="exoutgoing_area"/>
+        <result property="outenroll_log" column="outenroll_log"/>
+        <result property="outenroll_st" column="outenroll_st"/>
+        <collection property="pickings" ofType="java.util.HashMap">
+            <result property="wh_warehouse_idx" column="wh_warehouse_idx"/>
+            <result property="lot_no" column="lot_no"/>
+            <result property="outpick_qty" column="outpick_qty"/>
+        </collection>
+    </resultMap>
+
+  <!-- 새로운 Select 쿼리 정의 -->
+    <select id="select_outgoing_view" resultMap="OutgoingEnrollViewResultMap">
+        SELECT 
+            a.outenroll_cd, 
+            a.order_cd, 
+            a.product_cd, 
+            a.product_nm, 
+            a.total_qty, 
+            a.expect_dt, 
+            a.exoutgoing_area, 
+            a.outenroll_log, 
+            a.outenroll_st,
+            b.wh_warehouse_idx, 
+            b.outpick_qty,
+            c.lot_no 
+        FROM 
+            outgoing_enroll a 
+        LEFT JOIN 
+            outgoing_picking b ON a.outenroll_cd = b.outenroll_cd 
+        LEFT JOIN 
+            receiving c ON b.receiving_cd = c.receiving_cd
+        ORDER BY 
+            a.outenroll_cd DESC
+    </select>
+
+
+
+<!-- 출고 정보 가져오기 -->
+<select id="select_outgoing" resultType="kr.co.pikpak.dto.outgoing_enroll_dto">
+select * from outgoing_enroll order by outgoing_idx desc
+</select>
+
+<!-- 출고 정보와 동시에 관련 위치코드 정보 등록하기 -->
+<insert id="insert_outgoing_picking" parameterType="list">
+insert into outgoing_picking values 
+ <foreach collection="list" item="item" separator=",">
+        ('0',
+        #{item.out_enroll_cd},
+         #{item.wh_warehouse_idx},
+         #{item.product_cd},
+         #{item.location_cd},
+         #{item.receiving_cd},
+         #{item.outpick_qty})
+ </foreach>
+</insert>
+
+<!-- 출고 정보 등록하기 -->
+<insert id="insert_outgoing_enroll">
+insert into outgoing_enroll values ('0',#{outenroll_cd},#{order_cd},#{product_cd},#{product_nm},#{outenroll_st},#{total_qty},#{expect_dt}
+,#{exoutgoing_area},#{outenroll_log},now(),#{update_dt},#{operator_id},#{update_id})
+</insert>
+
+
 <!-- 출고 위치 선택을 위해 재고정보 끌고오기  -->
 <select id="select_stock" resultType="kr.co.pikpak.dto.outgoing_select_view_dto">
 select * from outgoing_select_view where product_cd=#{product_cd}

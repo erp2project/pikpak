@@ -22,8 +22,7 @@
 						<p class="menu"
 							style="border-bottom: 1px solid black; height: 30px;">
 							<span class="menu-item active" id="go_outenroll">출고등록</span> <span
-								class="menu-item" id="go_outstate">출고현황</span> <span
-								class="menu-item" id="go_outlist">출고확정</span>
+								class="menu-item" id="go_outstate">출고현황</span>
 						</p>
 						<span style="float: right; height: 40px;">
 							<button type="button" class="btn btn-success" id="list_reset">초기화</button>
@@ -81,9 +80,9 @@
 											<th style="text-align: center; width: 9%;">상품코드</th>
 											<th style="text-align: center; width: 16%;">상품명</th>
 											<th style="text-align: center; width: 8%;">상품수량</th>
-											<th style="text-align: center; width: 10%;">착수일자</th>
-											<th style="text-align: center; width: 10%;">납기일자</th>
-											<th style="text-align: center; width: 12%;">출고 등록일자</th>
+											<th style="text-align: center; width: 13%;">착수일자</th>
+											<th style="text-align: center; width: 13%;">납기일자</th>
+											<td style="text-align: center; width: 6%;">상태</td>
 											<th style="text-align: center; width: 11%;">출고</th>
 										</tr>
 									</thead>
@@ -98,8 +97,9 @@
 												없습니다.</td>
 										</tr>
 										 -->
-										<tr th:each="order : ${orderlist}">
-											<td style="text-align: center; width: 4%;">NO.</td>
+										<tr th:each="order, status : ${orderlist}">
+											<td style="text-align: center; width: 4%;"
+											th:text="${status.count}"></td>
 											<td style="text-align: center; width: 10%;"
 												th:text="${order.getOrder_cd()}"></td>
 											<td style="text-align: center; width: 9%;"
@@ -108,12 +108,11 @@
 												th:text="${order.getProduct_nm()}"></td>
 											<td style="text-align: center; width: 8%;"
 												th:text="${order.getOrder_qty()}"></td>
-											<td style="text-align: center; width: 10%;"
+											<td style="text-align: center; width: 13%;"
 												th:text="${order.getStart_dt()}"></td>
-											<td style="text-align: center; width: 10%;"
+											<td style="text-align: center; width: 13%;"
 												th:text="${order.getDue_dt()}"></td>
-											
-											<td style="text-align: center; width: 12%;"></td>
+											<td style="text-align: center; width: 6%;"></td>
 											<td style="text-align: center; width: 11%;">
 												<button class="btn btn-primary outbound_enroll"
 													th:data-order-cd="${order.getOrder_cd()}"

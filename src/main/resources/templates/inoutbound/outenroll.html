@@ -255,12 +255,12 @@ import {page_move_outbound, outbound_enroll} from "../resources/js/inoutbound/ou
 	/* 메뉴 */
 	//출고현황 이동
 	document.querySelector("#go_outstate").addEventListener("click",function(){
-		new page_move().go_inboundreq();
+		new page_move_outbound().go_outboudstate();
 	});
 	
 	//출고등록 이동
 	document.querySelector("#go_outenroll").addEventListener("click",function(){
-		new page_move().go_outboundenroll();
+		new page_move_outbound().go_outboundenroll();
 	});
     </script>
 </body>

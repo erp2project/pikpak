@@ -1,3 +1,14 @@
+export class outaccept_modal{
+	decide_outgoing(){
+		
+		
+		
+		
+	}
+	
+}
+
+
 export class outbound_enroll{
 	qty_ui(location, lotDetails, quantity, whWarehouseIdx, receivingCd){
 	var container = document.getElementById('item_container');
@@ -39,7 +50,6 @@ export class outbound_enroll{
 			return result_data.json();
 		})
 		.then(function(data){
-			 console.log(data);
             var locationSelect = document.getElementById('location_select');
             var lotSelect = document.getElementById('lot_select');
 
@@ -90,7 +100,8 @@ export class outbound_enroll{
 		
 	}
 	
-	go_out_enroll(){
+	go_out_enroll(index){
+		console.log(index);
 		const qty_items = document.getElementsByName("item_data");
 		console.log(qty_items[0]);
 		console.log(qty_items[1]);
