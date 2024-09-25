@@ -19,12 +19,6 @@ public class UserController {
 	@Autowired
 	private SHA256Encoder stringEncoder;
 	
-	@GetMapping("/admin/users/search/{search}")
-	public String userListFilter() {
-		
-		return null;
-	}
-	
 	@PostMapping("/admin/check/id")
 	public String checkUserId(@RequestParam(value="user_id", required = false) String userId) {
 		String responseText = "";

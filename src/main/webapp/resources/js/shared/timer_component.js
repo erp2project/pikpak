@@ -39,6 +39,9 @@ const startTimer = (expiryTime) => {
                 clearInterval(interval);
                 expirationTimerArea.textContent = "시간 초과";
                 localStorage.clear();
+                setTimeout(() => {
+                	location.href = "/auth/session-expired"
+                }, 2000);
                 return;
             }
 			const min = Math.floor((timer % (1000 * 60 * 60)) / (1000 * 60));
@@ -52,11 +55,9 @@ const startTimer = (expiryTime) => {
 	}
 	else {
 		expirationTimerArea.textContent = "시간 초과";
-		
-		/*
+		localStorage.clear();
 		setTimeout(() => {
-		    location.href = "/auth/timer-expired";
-		}, 2000);
-		*/
+        	location.href = "/auth/session-expired"
+        }, 2000);
 	}
 }

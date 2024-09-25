@@ -1,14 +1,71 @@
 const checkUserType = () => {
 	var userType = document.querySelector("[name='user_type']").value;
 	var userLvRow = document.getElementById("user_lv_row");
+	var userCoRow = document.getElementById("user_co_row");
 	
-	if(userType == "operator" || userType == "admin"){
-		userLvRow.style.visibility = "visible";
+	var userCoPikPak = document.getElementById("user_co_pikpak");
+	var userCoFixed = document.getElementById("user_co_fixed");
+	
+	var supplierSelectArea = document.getElementById("supplier_select_area");
+	var supplierSelect = document.getElementById("supplier_select");
+	var vendorSelectArea = document.getElementById("vendor_select_area");
+	var vendorSelect = document.getElementById("vendor_select");
+	
+	var companyCd = document.querySelector("[name='company_cd']");
+	
+	
+	$("#supplier_select").val('').trigger('change');
+	$("#vendor_select").val('').trigger('change');
+	
+	if (userType == "") {
+		userCoRow.style.visibility = "collapse";
+		userCoPikPak.style.display = "none";
+		supplierSelectArea.style.display = "none";
+		vendorSelectArea.style.display = "none";
 	}
-	else{
-		userLvRow.style.visibility = "collapse";
+	else {
+		userCoRow.style.visibility = "visible";
+		
+		if (userType == "supplier") {
+			userLvRow.style.visibility = "collapse";
+			
+			supplierSelectArea.style.display = "inline";
+			supplierSelect.name = "user_co";
+			
+			vendorSelectArea.style.display = "none";
+			vendorSelect.removeAttribute("name");
+			
+			userCoPikPak.style.display = "none";
+			userCoFixed.removeAttribute("name");
+		}
+		else if (userType == "vendor") {
+			userLvRow.style.visibility = "collapse";
+			
+			vendorSelectArea.style.display = "inline";
+			vendorSelect.name = "user_co";
+			
+			supplierSelectArea.style.display = "none";
+			supplierSelect.removeAttribute("name");
+			
+			userCoPikPak.style.display = "none";
+			userCoFixed.removeAttribute("name");
+		}
+		else {
+			userLvRow.style.visibility = "visible";
+			
+			supplierSelectArea.style.display = "none";
+			supplierSelect.removeAttribute("name");
+			
+			vendorSelectArea.style.display = "none";
+			vendorSelect.removeAttribute("name");
+			
+			userCoPikPak.style.display = "inline";
+			userCoFixed.name = "user_co";
+			companyCd.value = "P0001";
+		}
 	}
 }
+
 
 const checkUserId = () => {
 	var userId = document.getElementById("user_id");

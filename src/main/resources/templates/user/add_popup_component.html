@@ -85,26 +85,50 @@
 											<input type="text" class="form-control dark-border  custom-width-40" name="user_mail">
 										</td>
 									</tr>
-									<tr>
+									<tr id="user_co_row" class="visibility-hide">
 										<td class="form-title-custom">소속</td>
 										<td>
+											<input type="hidden" name="company_cd">
+											<div id="user_co_pikpak" class="display-none">
+												<input type="text" class="form-control dark-border custom-width-40" id="user_co_fixed" readonly="readonly" value="PikPak">
+											</div>
+											
 											<!-- 상품코드 Select2 적용 --> <!-- Map도 받아지네 -->
-											<select class="form-control select2 dark-border" name="user_co" style="width:40%;">
-												<option value="">회사 선택</option>
-												<option value="PikPak">PikPak</option>
-												<option th:value="'중앙 IT'" th:text="'중앙 IT'"></option>
-											</select> 
 											<!-- 
-											<select class="form-control select2" id="pd" name="product_cd" style="width:40%">
-												<option value="">상품코드 선택</option>
-												<option th:each="product : ${pdlist}"
-													th:value="${product.product_cd}"
-													th:data-product-name="${product.product_nm}"
-													th:data-supplier-code="${product.supplier_cd}"
-													th:data-supplier-name="${product.supplier_nm}"
-													th:text="${product.product_cd}"></option>
-											</select> 
+s											<div id="user_co_select_area" class="display-none">
+												<select class="form-control select2 dark-border" style="width: 40%;" id="user_co_select">
+													<option value="">회사 선택</option>
+													<option th:each="company : ${companyList}"
+														th:value="${company.trader_nm}" 
+														th:data-trader-cd="${company.trader_cd}" 
+														th:text="${company.trader_nm}"
+														th:attr="id=${#strings.startsWith(company.trader_cd, 'C') ? 'co_option_supplier' : 'co_option_vendor'}">
+													</option>
+												</select> 
+											</div>
 											 -->
+											
+											<div id="supplier_select_area" class="display-none">
+												<select class="form-control select2 dark-border" style="width: 40%;" id="supplier_select">
+													<option value="">회사 선택</option>
+													<option th:each="supplier : ${supplierList}"
+														th:value="${supplier.trader_nm}" 
+														th:data-trader-cd="${supplier.trader_cd}" 
+														th:text="${supplier.trader_nm}">
+													</option>
+												</select> 
+											</div>
+											
+											<div id="vendor_select_area" class="display-none">
+												<select class="form-control select2 dark-border" style="width: 40%;" id="vendor_select">
+													<option value="">회사 선택</option>
+													<option th:each="vendor : ${vendorList}"
+														th:value="${vendor.trader_nm}" 
+														th:data-trader-cd="${vendor.trader_cd}" 
+														th:text="${vendor.trader_nm}">
+													</option>
+												</select> 
+											</div>
 										</td>
 									</tr>
 									<tr class="visibility-hide" id="user_lv_row">

@@ -91,6 +91,10 @@
 	visibility: collapse;
 }
 
+.display-none {
+	display: none;
+}
+
 .response-text{
 	color: red;
 	opacity: 0;
@@ -137,6 +141,10 @@
 
 .custom-fixed-width-200 {
 	width: 200px;
+}
+
+.custom-fixed-width-150 {
+	width: 150px;
 }
 
 .custom-fixed-width-100 {
