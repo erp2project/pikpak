@@ -36,6 +36,11 @@ update return_request set return_st=#{return_dto.return_st},
  where return_cd=#{return_dto.return_cd}
 </update>
 
+<insert id="return_restock">
+insert into ex_receiving (return_cd, supplier_cd, exreceiving_cd, product_cd, exreceiving_qty, exreceiving_st, exreceiving_size, make_dt, exreceiving_type, operator_id)
+values (#{return_cd}, #{supplier_cd}, #{exreceiving_cd}, #{product_cd}, #{exreceiving_qty}, '대기', #{exreceiving_size}, now(), '반품', #{operator_id})
+</insert>
+
 <delete id="return_delete">
 delete from return_request where return_idx=#{return_idx}
 </delete>

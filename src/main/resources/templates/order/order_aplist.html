@@ -19,6 +19,8 @@
 <!-- MAIN CSS -->
 <link rel="stylesheet" href="resources/assets/css/main.css">
 <link rel="stylesheet" href="resources/assets/css/demo.css">
+<link rel="stylesheet" href="/resources/css/shared/custom_style.css">
+<link rel="stylesheet" href="/resources/css/shared/custom_components_style.css">
 <!-- GOOGLE FONTS -->
 <link
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700"
@@ -140,23 +142,23 @@
 											</tr>
 											<tr th:each="order_aplist, no : ${order_aplist}">
 												<td style="text-align: center;" th:text="${no.index+1}"></td>
-												<td style="text-align: left;"><a
-													th:text="${order_aplist.user_company}"></a></td>
-												<td style="text-align: center;"><a
-													th:text="${order_aplist.order_cd}"></a></td>
-												<td style="text-align: center;"><a
-													th:text="${order_aplist.product_cd}"></a></td>
-												<td style="text-align: left;"><a
-													th:text="${order_aplist.product_nm}"></a></td>
-												<td style="text-align: right;"><a
-													th:text="${order_aplist.order_qty}"></a></td>
-												<td style="text-align: right;"><a class="a_purchase_pr"
-													th:text="${order_aplist.purchase_pr}"></a>원(<a
-													class="a_order_price" th:text="${order_aplist.order_price}"></a>원)</td>
-												<td style="text-align: center;"><a
-													th:text="${order_aplist.order_dt}"></a></td>
-												<td style="text-align: center;"><a
-													th:text="${order_aplist.process_st}"></a></td>
+												<td style="text-align: left;"><c
+													th:text="${order_aplist.user_company}"></c></td>
+												<td style="text-align: center;"><c
+													th:text="${order_aplist.order_cd}"></c></td>
+												<td style="text-align: center;"><c
+													th:text="${order_aplist.product_cd}"></c></td>
+												<td style="text-align: left;"><c
+													th:text="${order_aplist.product_nm}"></c></td>
+												<td style="text-align: right;"><c
+													th:text="${order_aplist.order_qty}"></c></td>
+												<td style="text-align: right;"><c class="a_purchase_pr"
+													th:text="${order_aplist.purchase_pr}"></c>원(<c
+													class="a_order_price" th:text="${order_aplist.order_price}"></c>원)</td>
+												<td style="text-align: center;"><c
+													th:text="${order_aplist.order_dt}"></c></td>
+												<td style="text-align: center;"><c
+													th:text="${order_aplist.process_st}"></c></td>
 												<td style="text-align: center;"><nav
 														th:replace="~{/order/order_approval.html :: order_approval}"></nav></td>
 											</tr>

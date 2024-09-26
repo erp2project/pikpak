@@ -16,6 +16,12 @@ public class return_serviceImpl implements return_service{
 	private kr.co.pikpak.repo.return_repo return_repo;
 	
 	@Override
+	public int return_restock(return_dto return_dto) {
+		int result = return_repo.return_restock(return_dto);
+		return result;
+	}
+	
+	@Override
 	public int return_approval(return_dto return_dto, int type) {
 		int result = return_repo.return_approval(return_dto, type);
 		return result;

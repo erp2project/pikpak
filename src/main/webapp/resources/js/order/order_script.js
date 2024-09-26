@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		else{
 			totalPrice.value = "";
 		}
-	}
+	}	
 	
 	productQuantity.addEventListener('input',qtyck);
 	

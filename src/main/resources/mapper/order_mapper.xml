@@ -7,6 +7,10 @@ insert into order_enroll (order_cd, order_id, vendor_nm, process_st, order_qty, 
 values (#{order_cd}, #{order_id}, #{vendor_nm}, '대기', #{order_qty}, #{order_price}, #{start_dt}, #{due_dt}, now(), #{product_cd}, #{product_nm})
 </insert>
 
+<select id="search_login" resultType="kr.co.pikpak.dto.order_list_dto">
+select user_nm, user_tel, user_company from login_view where user_id=#{activeUserID}
+</select>
+
 <select id="order_list" resultType="kr.co.pikpak.dto.order_list_dto">
 select * from order_check_view where user_company=#{user_company} order by order_idx desc
 </select>
@@ -20,7 +24,7 @@ select product_nm, supplier_nm, product_sz, product_wt, purchase_pr from product
 </select>
 
 <update id="order_modify">
-update order_enroll set product_cd=#{product_cd}, product_nm=#{product_nm}, order_qty=#{order_qty}, order_price=#{order_price}, start_dt=#{start_dt}, due_dt=#{due_dt}, update_dt=now() where order_idx=#{order_idx}
+update order_enroll set product_cd=#{order_dto.product_cd}, product_nm=#{order_dto.product_nm}, order_qty=#{order_dto.order_qty}, order_price=#{order_dto.order_price}, start_dt=#{order_dto.start_dt}, due_dt=#{order_dto.due_dt}, update_by=#{activeUserID}, update_dt=now() where order_idx=#{order_dto.order_idx}
 </update>
 
 <update id="order_approval">

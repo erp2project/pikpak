@@ -7,6 +7,8 @@ import kr.co.pikpak.dto.order_list_dto;
 import kr.co.pikpak.dto.product_cd_dto;
 
 public interface order_service {
+	//로그인 정보
+	public List<order_list_dto> search_login(String activeUserID);
 	
 	//주문 등록
 	public int order_enroll(kr.co.pikpak.dto.order_dto order_dto);
@@ -24,7 +26,7 @@ public interface order_service {
 	public List<product_cd_dto> product_cd_search(String product_cd);
 	
 	//주문 수정
-	public int order_modify(order_dto order_dto);
+	public int order_modify(order_dto order_dto, String activeUserID);
 	
 	//주문 승인
 	public int order_approval(order_dto order_dto);

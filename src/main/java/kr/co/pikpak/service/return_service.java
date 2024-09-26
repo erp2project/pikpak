@@ -31,4 +31,7 @@ public interface return_service {
 	
 	//반품 삭제
 	public int return_delete(int return_idx);
+	
+	//재입고
+	public int return_restock(return_dto return_dto);
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpSession;
 import kr.co.pikpak.dto.order_dto;
 import kr.co.pikpak.dto.order_list_dto;
 import kr.co.pikpak.dto.product_cd_dto;
@@ -42,12 +43,18 @@ public class OrderController {
 		return "/order/order_aplist";
 	}
 	
-	//주문 리스트 페이지 - 아이디 값에서 회사명 받아오기
+	//주문 리스트 페이지
 	@GetMapping("/order_list")
-	public String order_list(Model m) {
-		String user_company = "PikPak";
+	public String order_list(Model m, HttpSession sess) {
+		String activeUserID = (String)sess.getAttribute("activeUserID");
+		List<order_list_dto> member_list = order_service.search_login(activeUserID);
+		String user_company = member_list.get(0).getUser_company();
+		
 		List<order_list_dto> order_cklist = order_service.order_list(user_company);
 		List<order_list_dto> product_list = order_service.product_search();
+		
+		m.addAttribute("activeUserID",activeUserID);
+		m.addAttribute("member_list",member_list);
 		m.addAttribute("order_cklist",order_cklist);
 		m.addAttribute("product_list",product_list);
 		
@@ -123,9 +130,12 @@ public class OrderController {
 	//주문 수정
 	@PostMapping("/order_modify")
 	public String order_modify(@ModelAttribute kr.co.pikpak.dto.order_dto order_dto,
-			ServletResponse res) {
+			ServletResponse res, HttpSession sess) {
+		System.out.println(order_dto.getProduct_cd());
 		res.setContentType("text/html;charset=utf-8");
-		int result = order_service.order_modify(order_dto);
+		String activeUserID = (String)sess.getAttribute("activeUserID");
+		
+		int result = order_service.order_modify(order_dto, activeUserID);
 		try {
 			this.pw = res.getWriter();
 			if(result > 0) {

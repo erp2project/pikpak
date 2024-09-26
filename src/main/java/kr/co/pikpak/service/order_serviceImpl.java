@@ -17,6 +17,12 @@ public class order_serviceImpl implements order_service{
 	private order_repo order_repo;
 	
 	@Override
+	public List<order_list_dto> search_login(String activeUserID) {
+		List<order_list_dto> list = order_repo.search_login(activeUserID);
+		return list;
+	}
+	
+	@Override
 	public int order_enroll(order_dto order_dto) {
 		int result = order_repo.order_enroll(order_dto);
 		
@@ -63,8 +69,8 @@ public class order_serviceImpl implements order_service{
 	}
 	
 	@Override
-	public int order_modify(order_dto order_dto) {
-		int result = order_repo.order_modify(order_dto);
+	public int order_modify(order_dto order_dto, String activeUserID) {
+		int result = order_repo.order_modify(order_dto, activeUserID);
 		
 		return result;
 	}

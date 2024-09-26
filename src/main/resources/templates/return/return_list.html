@@ -19,6 +19,8 @@
 <!-- MAIN CSS -->
 <link rel="stylesheet" href="resources/assets/css/main.css">
 <link rel="stylesheet" href="resources/assets/css/demo.css">
+<link rel="stylesheet" href="/resources/css/shared/custom_style.css">
+<link rel="stylesheet" href="/resources/css/shared/custom_components_style.css">
 <!-- GOOGLE FONTS -->
 <link
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700"
@@ -132,21 +134,21 @@
 												<tr th:each="return_cklist, no : ${return_cklist}">
 													<td style="text-align: center;"
 														th:text="${no.index+1}"></td>
-													<td style="text-align: center;"><a
-														th:text="${return_cklist.return_cd}"></a></td>
-													<td style="text-align: center;"><a
-														th:text="${return_cklist.product_cd}"></a></td>
-													<td style="text-align: left;"><a
-														th:text="${return_cklist.product_nm}"></a></td>
-													<td style="text-align: right;"><a
-														th:text="${return_cklist.return_qty}"></a></td>
-													<td style="text-align: right;"><a class="c_purchase_pr"
-														th:text="${return_cklist.purchase_pr}"></a>원(<a class="c_return_price"
-														th:text="${return_cklist.return_price}"></a>원)</td>
-													<td style="text-align: center;"><a
-														th:text="${return_cklist.requested_dt}"></a></td>
-													<td style="text-align: center;"><a
-														th:text="${return_cklist.return_st}"></a></td>
+													<td style="text-align: center;"><c
+														th:text="${return_cklist.return_cd}"></c></td>
+													<td style="text-align: center;"><c
+														th:text="${return_cklist.product_cd}"></c></td>
+													<td style="text-align: left;"><c
+														th:text="${return_cklist.product_nm}"></c></td>
+													<td style="text-align: right;"><c
+														th:text="${return_cklist.return_qty}"></c></td>
+													<td style="text-align: right;"><c class="c_purchase_pr"
+														th:text="${return_cklist.purchase_pr}"></c>원(<c class="c_return_price"
+														th:text="${return_cklist.return_price}"></c>원)</td>
+													<td style="text-align: center;"><c
+														th:text="${return_cklist.requested_dt}"></c></td>
+													<td style="text-align: center;"><c
+														th:text="${return_cklist.return_st}"></c></td>
 													<td style="text-align: center;"><nav
 															th:replace="~{/return/return_check.html :: return_check}"></nav></td>
 												</tr>

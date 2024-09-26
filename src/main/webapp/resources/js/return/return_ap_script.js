@@ -41,7 +41,13 @@ document.querySelectorAll('.openPopupBtn').forEach(function(button){
 	var rt_idx = button.getAttribute('data-index');	//idx값
 	var apc_return_cd = document.querySelector('.apc_return_cd[data-index="' + rt_idx + '"]');
 	var reprocess_log = document.querySelector('.reprocess_log[data-index="' + rt_idx + '"]');
+	var productTypeGroup = document.querySelector('.productTypeGroup[data-index="' + rt_idx + '"]');
+	var product_type = document.querySelector('.product_type[data-index="' + rt_idx + '"]');
 	var reprocess_wk = document.querySelector('.reprocess_wk[data-index="' + rt_idx + '"]');
+	var ra_product_cd = document.querySelector('.ra_product_cd[data-index="' + rt_idx + '"]');
+	var ra_user_id = document.querySelector('.ra_user_id[data-index="' + rt_idx + '"]');
+	var ra_supplier = document.querySelector('.ra_supplier[data-index="' + rt_idx + '"]');
+	var ra_restock = document.querySelector('.ra_restock[data-index="' + rt_idx + '"]');
 	var ap_reprocess_st = "";
 
 	//승인 버튼
@@ -89,8 +95,33 @@ document.querySelectorAll('.openPopupBtn').forEach(function(button){
 			document.getElementById('ap_reprocess_wk').value = "대기";
 		}
 		else{
+			document.getElementById('exreceiving_size').value = product_type.value;
 			document.getElementById('ap_reprocess_wk').value = reprocess_wk.value;
+			document.getElementById('ra_product_cd').value = ra_product_cd.value;
+			document.getElementById('ra_user_id').value = ra_user_id.value;
+			document.getElementById('ra_supplier').value = ra_supplier.value;
+			document.getElementById('ra_restock').value = ra_restock.value;
 		}
 	}
+	
+	//유형 정하기
+	reprocess_wk.forEach(function(select){
+		//초기 상태 확인
+		if(select.value == '재입고'){
+			productTypeGroup.style.display = "block";
+		}
+		else{
+			productTypeGroup.style.display = "none";
+		}
+		
+		//선택 값 변화에 따른 동작
+		select.addEventListener('change', function () {
+            if (this.value == '재입고') {
+                productTypeGroup.style.display = 'block';
+            } else {
+                productTypeGroup.style.display = 'none';
+            }
+        });
+	});
 	
 });
