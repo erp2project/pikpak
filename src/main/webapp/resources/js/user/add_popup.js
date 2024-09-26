@@ -71,6 +71,7 @@ const checkUserId = () => {
 	var userId = document.getElementById("user_id");
 	var responseArea = document.getElementById("id-check-response");
 	let checkedStatus = document.getElementById("id-checked-status");
+	let responseMsg = "";
 	let searchParams = new URLSearchParams();
 	searchParams.append("user_id", userId.value);
 	
@@ -130,6 +131,7 @@ const checkUserTel = () => {
 	var responseArea = document.getElementById("tel-check-response");
 	let checkedStatus = document.getElementById("tel-checked-status");
 	let searchParams = new URLSearchParams();
+	let responseMsg = "";
 	searchParams.append("user_tel", userTel.value);
 	searchParams.append("user_type", userType.value);
 	

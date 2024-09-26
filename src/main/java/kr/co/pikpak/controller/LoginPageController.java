@@ -17,4 +17,9 @@ public class LoginPageController {
 	public String logoutPage() {
 		return "/home/logout";
 	}
+	
+	@GetMapping("/login/find")
+	public String credResetPage() {
+		return "/home/find";
+	}
 }

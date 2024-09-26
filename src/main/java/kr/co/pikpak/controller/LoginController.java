@@ -32,7 +32,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import kr.co.pikpak.device.CookieUtility;
+import kr.co.pikpak.dto.LoginAccessDTO;
 import kr.co.pikpak.dto.LoginDTO;
+import kr.co.pikpak.repo.LoginAccessRepo;
 import kr.co.pikpak.security.CustomUserDetails;
 import kr.co.pikpak.security.CustomUserDetailsService;
 import kr.co.pikpak.security.JWTUtility;
@@ -51,6 +53,9 @@ public class LoginController {
 	
     @Autowired
     private AuthenticationManager authenticationManager;
+	
+	@Autowired
+	private LoginAccessRepo lar;
     
     @Autowired 
     private JWTUtility JWTUtil;
@@ -60,7 +65,7 @@ public class LoginController {
 	
 	// 회원 로그인 및 토큰 생성
 	@PostMapping("/login/auth")
-	public ResponseEntity<?> createAuthenticationToken(LoginDTO logindto, HttpServletResponse res, HttpSession sess) throws Exception {
+	public ResponseEntity<?> createAuthenticationToken(LoginDTO logindto, HttpServletRequest req, HttpServletResponse res, HttpSession sess) throws Exception {
 		// Fetch API 결과 핸들링
 		String responseMsg = "";
 		Date expiryDate = null;
@@ -96,6 +101,11 @@ public class LoginController {
 			sess.setAttribute("activeUserID", logindto.getUser_id());
 			sess.setMaxInactiveInterval(60*60*24+7);
 			
+			// 로그인 로그기록 등록
+			LoginAccessDTO ldto = new LoginAccessDTO();
+			ldto.setUser_id(logindto.getUser_id());
+			ldto.setJsession_id(sess.getId());
+			lar.addAccessLog(ldto);
 			
 			responseMsg = "Y";
 		} catch (BadCredentialsException e) {
