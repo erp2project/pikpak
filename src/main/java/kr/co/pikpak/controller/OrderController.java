@@ -1,6 +1,9 @@
 package kr.co.pikpak.controller;
 
 import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,57 +31,13 @@ public class OrderController {
 	
 	PrintWriter pw = null;
 	
-	//특정 리스트 조회(주문 승인)
-	@GetMapping("/order_aplistck")
-	public String order_aplistck(@RequestParam String process_st,
-			@RequestParam String start_dt, @RequestParam String end_dt,
-			@RequestParam String product_cd, Model m) {
-		String user_company = "all";
-		int notall = 0;
-		int type = 0;
-		if(!end_dt.equals("") && product_cd.equals("")) {
-			type = 1;
-		}
-		else if(end_dt.equals("") && !product_cd.equals("")) {
-			type = 2;
-		}
-		else if(!end_dt.equals("") && !product_cd.equals("")) {
-			type = 3;
-		}
-		List<order_list_dto> order_cklist = order_service.order_list_type(process_st, start_dt, end_dt, product_cd, type, notall, user_company);
-		m.addAttribute("order_aplist",order_cklist);
-		
-		return "/order/order_aplist";
-	}
-	
-	//특정 리스트 조회
-	@GetMapping("/order_listck")
-	public String order_listck(@RequestParam String process_st,
-			@RequestParam String start_dt, @RequestParam String end_dt,
-			@RequestParam String product_cd, Model m) {
-		String user_company = "PikPak";
-		int notall = 1;
-		int type = 0;
-		if(!end_dt.equals("") && product_cd.equals("")) {
-			type = 1;
-		}
-		else if(end_dt.equals("") && !product_cd.equals("")) {
-			type = 2;
-		}
-		else if(!end_dt.equals("") && !product_cd.equals("")) {
-			type = 3;
-		}
-		List<order_list_dto> order_cklist = order_service.order_list_type(process_st, start_dt, end_dt, product_cd, type, notall, user_company);
-		m.addAttribute("order_cklist",order_cklist);
-		
-		return "/order/order_list";
-	}
-	
 	//주문 승인 리스트 페이지
 	@GetMapping("/order_aplist")
 	public String order_aplist(Model m) {
 		List<order_list_dto> order_alllist = order_service.order_list_all();
+		List<order_list_dto> product_list = order_service.product_search();
 		m.addAttribute("order_aplist",order_alllist);
+		m.addAttribute("product_list",product_list);
 		
 		return "/order/order_aplist";
 	}
@@ -88,7 +47,9 @@ public class OrderController {
 	public String order_list(Model m) {
 		String user_company = "PikPak";
 		List<order_list_dto> order_cklist = order_service.order_list(user_company);
+		List<order_list_dto> product_list = order_service.product_search();
 		m.addAttribute("order_cklist",order_cklist);
+		m.addAttribute("product_list",product_list);
 		
 		return "/order/order_list";
 	}
@@ -222,12 +183,18 @@ public class OrderController {
 	public String order_enroll(@ModelAttribute kr.co.pikpak.dto.order_dto order_dto,
 			ServletResponse res) {
 		res.setContentType("text/html;charset=utf-8");
-		String order_cd = "";
-		for(int f=0; f<8; f++) {
+		//코드 생성
+		String for_order_cd = "OD-";
+		LocalDate ymd = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
+		String formattedDate = ymd.format(formatter);
+		for(int f=0; f<4; f++) {
 			int ran = (int)(Math.random()*10);
-			order_cd += ran;
+			formattedDate += ran;
 		}
+		String order_cd = for_order_cd + formattedDate;
 		order_dto.setOrder_cd(order_cd);
+		
 		int result = order_service.order_enroll(order_dto);
 		try {
 			this.pw = res.getWriter();

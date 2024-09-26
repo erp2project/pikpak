@@ -31,23 +31,8 @@ update order_enroll set process_st=#{process_st}, approval_log=#{approval_log}, 
 delete from order_enroll where order_idx=#{order_idx}
 </delete>
 
-<select id="order_list_type" resultType="kr.co.pikpak.dto.order_list_dto">
-select * from order_check_view where process_st=#{process_st} 
-	<choose>
-		<when test="type == 1">
-		and order_dt between #{start_dt} and #{end_dt}
-		</when>
-		<when test="type == 2">
-		and product_cd=#{product_cd}
-		</when>
-		<when test="type == 3">
-		and order_dt between #{start_dt} and #{end_dt} and product_cd=#{product_cd}
-		</when>
-		<when test="notall == 1">
-		and user_company=#{user_company}
-		</when>
-	</choose>
-order by order_idx desc
+<select id="product_search" resultType="kr.co.pikpak.dto.order_list_dto">
+select product_cd, product_nm, supplier_nm from product
 </select>
 
 </mapper>

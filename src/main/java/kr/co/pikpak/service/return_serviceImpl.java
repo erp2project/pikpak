@@ -56,6 +56,12 @@ public class return_serviceImpl implements return_service{
 	}
 	
 	@Override
+	public int outgoing_cd_check(String outgoing_cd) {
+		int result = return_repo.outgoing_cd_check(outgoing_cd);
+		return result;
+	}
+	
+	@Override
 	public int return_enroll(return_dto return_dto) {
 		int result = return_repo.return_enroll(return_dto);
 		

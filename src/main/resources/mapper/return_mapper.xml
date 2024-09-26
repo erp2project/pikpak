@@ -8,7 +8,11 @@ values (#{return_cd}, #{return_id}, #{vendor_nm}, '대기', #{outgoing_cd}, #{pr
 </insert>
 
 <select id="outgoing_cd_search" resultType="kr.co.pikpak.dto.outgoing_cd_dto">
-select product_cd, product_nm, supplier_nm, outgoing_dt, product_qty, purchase_pr from outgoingcd_check_view where outgoing_cd=#{outgoing_cd}
+select product_cd, product_nm, supplier_nm, outgoing_dt, total_qty, purchase_pr from outgoingcd_check_view where outenroll_cd=#{outgoing_cd}
+</select>
+
+<select id="outgoing_cd_check" resultType="int">
+select * from return_request where outgoing_cd=#{outgoing_cd}
 </select>
 
 <select id="return_list" resultType="kr.co.pikpak.dto.return_list_dto">
@@ -36,22 +40,4 @@ update return_request set return_st=#{return_dto.return_st},
 delete from return_request where return_idx=#{return_idx}
 </delete>
 
-<select id="return_list_type" resultType="kr.co.pikpak.dto.return_list_dto">
-select * from return_check_view where return_st=#{return_st}
-	<choose>
-		<when test="type == 1">
-		and requested_dt between #{start_dt} and #{end_dt}
-		</when>
-		<when test="type == 2">
-		and product_cd=#{product_cd}
-		</when>
-		<when test="type == 3">
-		and requested_dt between #{start_dt} and #{end_dt} and product_cd=#{product_cd}
-		</when>
-		<when test="notall == 1">
-		and user_company=#{user_company}
-		</when>
-	</choose>
-order by return_idx desc
-</select>
 </mapper>

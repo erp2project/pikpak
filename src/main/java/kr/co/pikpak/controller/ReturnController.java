@@ -1,6 +1,8 @@
 package kr.co.pikpak.controller;
 
 import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,46 +15,29 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.ServletResponse;
+import kr.co.pikpak.dto.order_list_dto;
 import kr.co.pikpak.dto.outgoing_cd_dto;
 import kr.co.pikpak.dto.return_dto;
 import kr.co.pikpak.dto.return_list_dto;
+import kr.co.pikpak.service.order_service;
 
 @Controller
 public class ReturnController {
 	
 	@Autowired
 	private kr.co.pikpak.service.return_service return_service;
+	@Autowired
+	private kr.co.pikpak.service.order_service order_service;
 	
 	PrintWriter pw = null;
-	
-	//특정 리스트 조회
-	@GetMapping("/return_listck")
-	public String return_listck(@RequestParam String return_st,
-			@RequestParam String start_dt, @RequestParam String end_dt,
-			@RequestParam String product_cd, Model m) {
-		String user_company = "PikPak";
-		int notall = 1;
-		int type = 0;
-		if(!end_dt.equals("") && product_cd.equals("")) {
-			type = 1;
-		}
-		else if(end_dt.equals("") && !product_cd.equals("")) {
-			type = 2;
-		}
-		else if(!end_dt.equals("") && !product_cd.equals("")) {
-			type = 3;
-		}
-		List<return_list_dto> return_cklist = return_service.return_list_type(return_st, start_dt, end_dt, product_cd, type, notall, user_company);
-		m.addAttribute("return_cklist",return_cklist);
-		
-		return "/return/return_list";
-	}
 	
 	//반품 승인 리스트 페이지
 	@GetMapping("/return_aplist")
 	public String return_aplist(Model m) {
 		List<return_list_dto> return_alllist = return_service.return_list_all();
+		List<order_list_dto> product_list = order_service.product_search();
 		m.addAttribute("return_cklist",return_alllist);
+		m.addAttribute("product_list",product_list);
 		
 		return "/return/return_aplist";
 	}	
@@ -62,7 +47,9 @@ public class ReturnController {
 	public String return_list(Model m) {
 		String user_company = "PikPak";
 		List<return_list_dto> return_cklist = return_service.return_list(user_company);
+		List<order_list_dto> product_list = order_service.product_search();
 		m.addAttribute("return_cklist",return_cklist);
+		m.addAttribute("product_list",product_list);
 		
 		return "/return/return_list";
 	}
@@ -152,22 +139,29 @@ public class ReturnController {
 	public String outgoing_cd_searchck(@RequestParam(value="outgoing_cd", required=false)
 	String outgoing_cd) {
 		String result = "";
-		List<outgoing_cd_dto> outgoing_list = return_service.outgoing_cd_search(outgoing_cd);
-		
-		if(outgoing_list.size() > 0) {
-			StringBuilder ol = new StringBuilder();
-			for(outgoing_cd_dto outgoing : outgoing_list) {
-				ol.append(outgoing.getProduct_cd()).append(",");
-				ol.append(outgoing.getProduct_nm()).append(",");
-				ol.append(outgoing.getSupplier_nm()).append(",");
-				ol.append(outgoing.getOutgoing_dt()).append(",");
-				ol.append(outgoing.getProduct_qty()).append(",");
-				ol.append(outgoing.getPurchase_pr());
-			}
-			result = ol.toString();
+		//출고 코드 중복확인
+		int check = return_service.outgoing_cd_check(outgoing_cd);
+		if(check > 0) {
+			result = "overlap";
 		}
-		else if(outgoing_list.size() == 0) {
-			result = "no";			
+		else {
+			List<outgoing_cd_dto> outgoing_list = return_service.outgoing_cd_search(outgoing_cd);
+			
+			if(outgoing_list.size() > 0) {
+				StringBuilder ol = new StringBuilder();
+				for(outgoing_cd_dto outgoing : outgoing_list) {
+					ol.append(outgoing.getProduct_cd()).append(",");
+					ol.append(outgoing.getProduct_nm()).append(",");
+					ol.append(outgoing.getSupplier_nm()).append(",");
+					ol.append(outgoing.getOutgoing_dt()).append(",");
+					ol.append(outgoing.getTotal_qty()).append(",");
+					ol.append(outgoing.getPurchase_pr());
+				}
+				result = ol.toString();
+			}
+			else if(outgoing_list.size() == 0) {
+				result = "no";			
+			}
 		}
 		
 		return result;
@@ -178,12 +172,17 @@ public class ReturnController {
 	public String return_enroll(@ModelAttribute kr.co.pikpak.dto.return_dto return_dto,
 			ServletResponse res) {
 		res.setContentType("text/html;charset=utf-8");
-		String return_cd = "";
-		for(int f=0; f<8; f++) {
+		String for_return_cd = "RT-";
+		LocalDate ymd = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
+		String formattedDate = ymd.format(formatter);
+		for(int f=0; f<4; f++) {
 			int ran = (int)(Math.random()*10);
-			return_cd += ran;
+			formattedDate += ran;
 		}
+		String return_cd = for_return_cd + formattedDate;
 		return_dto.setReturn_cd(return_cd);
+		
 		int result = return_service.return_enroll(return_dto);
 		try {
 			this.pw = res.getWriter();

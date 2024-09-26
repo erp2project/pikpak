@@ -34,4 +34,7 @@ public interface order_repo {
 	
 	//주문 삭제
 	public int order_delete(int order_idx);
+	
+	//상품 검색
+	public List<order_list_dto> product_search();
 }

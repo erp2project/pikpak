@@ -155,25 +155,6 @@
 											</div>
 										</div>
 									</div>
-									<div class="input-row">
-										<div class="input-group-text">
-											<label for="approval_log">비고란: </label>
-											<div th:if="${order_cklist.approval_log != ''}">
-												<a th:text="${order_cklist.approval_log}"></a>
-											</div>
-											<div
-												th:if="${order_cklist.approval_log == '' || order_cklist.approval_log == null}">
-												없음</div>
-										</div>
-									</div>
-									<div th:if="${order_cklist.process_st == '완료'}">
-										<div class="input-row">
-											<div class="input-group-text">
-												<label for="approval_dt">완료일자: </label> <a
-													th:text="${order_cklist.approval_dt}"></a>
-											</div>
-										</div>
-									</div>
 								</div>
 							</div>
 							<!-- 끝 -->

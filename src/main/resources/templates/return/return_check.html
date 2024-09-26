@@ -90,7 +90,7 @@
 								<div class="input-row">
 									<div class="input-group">
 										<label for="productWeight">주문 개수:</label> <a
-											th:text="${return_cklist.product_qty}"></a>
+											th:text="${return_cklist.total_qty}"></a>
 									</div>
 									<div class="input-group">
 										<label for="productPrice">출고 가격:</label> <a
@@ -129,6 +129,7 @@
 											th:text="${return_cklist.requested_dt}"></a>
 									</div>
 								</div>
+								<div th:if="${return_cklist.return_st != '대기'}">
 								<div class="input-row">
 									<div class="input-group-text">
 										<label for="reprocess_log">비고란: </label>
@@ -139,6 +140,7 @@
 											th:if="${return_cklist.reprocess_log == '' || return_cklist.reprocess_log == null}">
 											없음</div>
 									</div>
+								</div>
 								</div>
 								<div th:if="${return_cklist.return_st == '완료'}">
 									<div class="input-row">

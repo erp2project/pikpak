@@ -3,8 +3,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	var oal_search_btn = document.getElementById('oal_search_btn');
 	var oal_start_dt = document.getElementById('oal_start_dt');
 	var oal_end_dt = document.getElementById('oal_end_dt');
-	var oal_product_cd = document.getElementById('oal_product_cd');
-	var oal_product_nm = document.getElementById('oal_product_nm');
 
 	//초기화 버튼
 	oal_reset_btn.addEventListener('click', function() {
@@ -20,63 +18,81 @@ document.addEventListener('DOMContentLoaded', function() {
 			alert("날짜를 확인해 주세요.");
 		}
 		else{
-			oal_frm.method = "get";
-			oal_frm.action = "/order_aplistck";
-			oal_frm.submit();
-		}
-		
-		/*
-		else{
-			const params = new URLSearchParams({
-				process_st: ol_process_st.value,
-				start_dt: ol_start_dt.value,
-				end_dt: ol_end_dt.value,
-				product_cd: ol_product_cd.value,
-				product_nm: ol_product_nm.value
-			}).toString();
-			fetch('/order_listck?' + params, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded'
+			//검색 값
+			let process_stF = document.getElementById('oal_process_st').value;
+			let product_cdF = document.getElementById('oal_product_cd').value;
+			let product_nmF = document.getElementById('oal_product_nm').value;
+			let start_dtF = new Date(oal_start_dt.value);
+			let end_dtF = new Date(oal_end_dt.value);
+
+			const table = document.getElementById("oal_table");
+			const tr = table.getElementsByTagName("tr");
+			
+			let visibleRows = 0;
+			
+			// 기존 메시지 제거
+			const existingNoDataRow = document.getElementById("no-data-message");
+			if (existingNoDataRow) {
+				table.removeChild(existingNoDataRow);
+			}
+
+			for (let i = 1; i < tr.length; i++) {
+				const tdSt = tr[i].getElementsByTagName("td")[8];
+				const tdCd = tr[i].getElementsByTagName("td")[3];
+				const tdNm = tr[i].getElementsByTagName("td")[4];
+				const tdDt = tr[i].getElementsByTagName("td")[7];
+
+				const StText = tdSt.textContent || tdSt.innerText;
+				const CdText = tdCd.textContent || tdCd.innerText;
+				const NmText = tdNm.textContent || tdNm.innerText;
+				const DtText = tdDt.textContent || tdDt.innerText;
+
+				let orderDate = new Date(DtText.replace(/-/g, '/'));
+				//날짜 빈 값
+				const isDateInRange = (
+					(!oal_start_dt.value && !oal_end_dt.value) || 
+					(orderDate >= start_dtF && orderDate <= end_dtF)
+				);
+
+				if (
+					(StText.indexOf(process_stF) > -1 || !process_stF) &&
+					(CdText.indexOf(product_cdF) > -1 || !product_cdF) &&
+					(NmText.indexOf(product_nmF) > -1 || !product_nmF) &&
+					isDateInRange
+				) {
+					tr[i].style.display = "";
+					visibleRows++;
+				} else {
+					tr[i].style.display = "none";
 				}
-			})
-				.then(response => response.json())
-				.then(data => {
-					console.log(data);
-					var tablebody = document.getElementById('order_tablebody');
-					tablebody.innerHTML = '';
-					
-					data.forEach((order) => {
-						const row = document.createElement('tr');
-						row.innerHTML = `
-							<td><input type="checkbox"></td>
-							<td style="text-align: center;">NO.</td>
-							<td style="text-align: center;"><a
-								${order.order_cd}></a></td>
-							<td style="text-align: center;"><a
-								${order.product_cd}></a></td>
-							<td style="text-align: left;"><a
-								${order.product_nm}></a></td>
-							<td style="text-align: right;"><a
-								${order.order_qty}></a></td>
-							<td style="text-align: right;"><a
-								${order.purchase_pr}></a>원(<a
-								${order.order_price}></a>원)</td>
-							<td style="text-align: center;"><a
-								${order.order_dt}></a></td>
-							<td style="text-align: center;"><a
-								${order.process_st}></a></td>
-							<td style="text-align: center;"><nav
-							th:replace="~{/order/order_check.html :: order_check}"></nav></td>
-						`;
-						tablebody.appendChild(row);
-					});
-				})
-				.catch((error) => {
-					console.log(error);
-				});
+			}
+			
+			// 보이는 행이 없는 경우 메시지 추가
+			if (visibleRows === 0) {
+				const noDataRow = document.createElement("tr");
+				noDataRow.id = "no-data-message"; // ID 설정
+				noDataRow.innerHTML = "<td colspan='10' style='text-align: center;'>등록된 주문이 없습니다.</td>";
+				table.appendChild(noDataRow);
+			}
 		}
-		*/
+	});
+	
+	//클릭 값 가져오기
+	const ps_table_body = document.querySelector("#ps_table tbody");
+	ps_table_body.addEventListener('click', function(event){
+		if(event.target.tagName == 'TD'){
+			const row = event.target.parentNode;
+			const cells = row.getElementsByTagName('td');
+			const cellValues = [];
+			
+			for(let f = 0; f < cells.length; f++){
+				cellValues.push(cells[f].textContent);
+			}
+			document.getElementById("oal_product_cd").value = cellValues[0];
+			document.getElementById("oal_product_nm").value = cellValues[1];
+			
+			document.getElementById("ps_popup").style.display = "none";
+		}
 	});
 
 	//날짜
@@ -89,4 +105,18 @@ document.addEventListener('DOMContentLoaded', function() {
 			alert("날짜를 확인해 주세요.");
 		}
 	}
+	
+	//금액
+	const a_purchase_pr = document.querySelectorAll(".a_purchase_pr");
+	const a_order_price = document.querySelectorAll(".a_order_price");
+	
+	a_purchase_pr.forEach(function(element){
+		const value = Number(element.textContent);
+		element.textContent = value.toLocaleString();
+	});
+	
+	a_order_price.forEach(function(element){
+		const value = Number(element.textContent);
+		element.textContent = value.toLocaleString();
+	});
 });

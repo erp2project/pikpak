@@ -184,19 +184,7 @@
 						</div>
 					</div>
 					<!-- 승인 상태 -->
-					<div th:if="${order_aplist.process_st == '승인'}">
-						<div class="button-group">
-							<div class="button-4" th:data-index_2="${order_aplist.order_idx}">
-								<div class="divbutton">완료</div>
-							</div>
-							<div class="button-3">
-								<div class="divbutton">취소</div>
-							</div>
-						</div>
-					</div>
-					<!-- 거절/완료 상태 -->
-					<div
-						th:if="${order_aplist.process_st == '거절' || order_aplist.process_st == '완료'}">
+					<div th:if="${order_aplist.process_st != '대기'}">
 						<div class="button-group">
 							<div class="button-3">
 								<div class="divbutton">취소</div>

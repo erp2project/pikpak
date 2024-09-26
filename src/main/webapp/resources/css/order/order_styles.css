@@ -80,7 +80,8 @@ button {
     height: 650px; /* Increased height to avoid scroll */
     margin-bottom: 10px; /* Space below the box */
     background-color: #f9f9f9; /* Light background color for the box */
-    overflow: hidden; /* Hide scrollbars */
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 /* Box title styling */

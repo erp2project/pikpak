@@ -24,6 +24,12 @@ public class order_serviceImpl implements order_service{
 	}
 	
 	@Override
+	public List<order_list_dto> product_search() {
+		List<order_list_dto> list = order_repo.product_search();
+		return list;
+	}
+	
+	@Override
 	public List<order_list_dto> order_list(String user_company) {
 		List<order_list_dto> list = order_repo.order_list(user_company);
 		

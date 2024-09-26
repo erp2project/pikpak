@@ -46,7 +46,11 @@ document.addEventListener('DOMContentLoaded', function() {
 	        })
 	        .then(response => response.text())
 	        .then(data => {
-	            if(data == "no"){
+				if(data == "overlap"){
+					outgoingCode.value="";
+					alert("해당 출고 코드는 이미 반품 신청이 완료되었습니다.");
+				}
+	            else if(data == "no"){
 					outgoingCode.value="";
 					alert("해당 출고 코드는 미등록된 코드입니다.");
 				}
