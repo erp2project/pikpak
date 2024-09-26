@@ -103,7 +103,7 @@ public class UserController {
 		}
 		else {
 			userModDto.setTarget_table("login_trader");
-			userModDto.setTarget_id("trader_id");
+			userModDto.setTarget_id("trader_id"); 
 			userModDto.setTarget_pw("trader_pw");
 			userModDto.setTarget_tel("trader_tel");
 			userModDto.setTarget_mail("trader_mail");

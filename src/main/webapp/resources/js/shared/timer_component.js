@@ -3,6 +3,10 @@ window.onload = () => {
 	startTimer(expiryTime);
 }
 
+window.addEventListener("beforeunload", function (event) {
+    navigator.sendBeacon('/logout'); // Send a logout request
+});
+
 const refreshSession = () => {
 	fetch("/login/refresh",{
 		method : "GET"
@@ -19,7 +23,8 @@ const refreshSession = () => {
 			window.location.reload();
 		}
 		else{
-			alert("error");
+			alert("시스템 오류가 났습니다. 다시 한번 로그인해주세요.");
+			location.href = '/login';
 		}
 	})
 	.catch(error => {

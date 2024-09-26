@@ -151,6 +151,24 @@
 	width: 100px;
 }
 
+.custom-fixed-width-75 {
+	width: 75px;
+}
+
+.custom-fixed-width-50 {
+	width: 50px;
+}
+
+.custom-justify-between {
+	display: flex;
+	justify-content: space-between;
+	align-items:center;
+}
+
+.custom-rounded {
+	border-radius: 5px;
+}
+
 .custom-flex-row {
 	display:flex; 
 	flex-direction: row;

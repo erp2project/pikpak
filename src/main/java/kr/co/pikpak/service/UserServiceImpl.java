@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.co.pikpak.dto.CredChangeDTO;
 import kr.co.pikpak.dto.InfoTraderSimpleDTO;
 import kr.co.pikpak.dto.LoginDTO;
 import kr.co.pikpak.dto.UserAddDTO;
@@ -26,6 +27,18 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public int ctnFromView(String userId) {
 		int result = ur.ctnFromView(userId);
+		return result;
+	}
+	
+	@Override
+	public int ctnPwFromView(String userId, String userPw) {
+		int result = ur.ctnPwFromView(userId, userPw);
+		return result;
+	}
+	
+	@Override
+	public int ctnEmailFromView(String userId, String userMail) {
+		int result = ur.ctnEmailFromView(userId, userMail);
 		return result;
 	}
 	
@@ -68,6 +81,18 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public List<InfoTraderSimpleDTO> companyListFromView() {
 		List<InfoTraderSimpleDTO> result = ur.companyListFromView();
+		return result;
+	}
+	
+	@Override
+	public int resetCredInTable(CredChangeDTO cdto) {
+		int result = ur.resetCredInTable(cdto);
+		return result;
+	}
+	
+	@Override
+	public int modCredInTable(CredChangeDTO cdto) {
+		int result = ur.modCredInTable(cdto);
 		return result;
 	}
 }

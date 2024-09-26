@@ -32,23 +32,23 @@
 										<td>
 										<select class="form-control" name="userTypeSearch">
 											<option value="">유형 선택</option>
-											<option value="admin">관리자</option>
-											<option value="operator">운영</option>
-											<option value="supplier">공급</option>
-											<option value="vendor">판매</option>
+											<option value="관리자">관리자</option>
+											<option value="운영">운영</option>
+											<option value="공급">공급</option>
+											<option value="판매">판매</option>
 										</select>
 										</td>
 										<td style="width:150px; height: 34px; line-height: 34px;">회원 아이디</td>
-										<td style="display: flex; flex-direction: row; line-height: 34px;">
-											<input type="text" class="form-control" style="width: 70%;" name="userIdSearch">&nbsp;&nbsp;
-											<span class="input-group-btn" style="width: 30%">
+										<td style="width:100%; display: flex; flex-direction: row; line-height: 34px;">
+											<input type="text" class="form-control" style="width: 100%;" name="userIdSearch">&nbsp;&nbsp;
+											<span class="input-group-btn" style="width: 100px;">
 												<button class="btn btn-default" type="button" style="float: right;" onclick="lockIdSearch()">적용</button>
 											</span>
 										</td>
 										<td style="width:150px; height: 34px; line-height: 34px;">회원 명</td>
-										<td style="display: flex; flex-direction: row; line-height: 34px;">
-											<input type="text" class="form-control" style="width: 70%;" name="userNameSearch">&nbsp;&nbsp;
-											<span class="input-group-btn" style="width: 30%">
+										<td style="width:100%; display: flex; flex-direction: row; line-height: 34px;">
+											<input type="text" class="form-control" style="width: 100%;" name="userNameSearch">&nbsp;&nbsp;
+											<span class="input-group-btn" style="width: 100px;">
 												<button class="btn btn-default" type="button" style="float: right;"	onclick="lockNameSearch()">적용</button>
 											</span>
 										</td>
@@ -67,9 +67,9 @@
 								</span>
 							</div>
 							
-							<div class="panel-body" style="height: 600px; overflow-y: auto;">
-								<table class="table table-hover" id="userDataTable">
-									<thead style="background-color: rgb(130, 210, 213);">
+							<div style="height: 470px; overflow-y: auto;">
+								<table class="table table-hover" style="width: 100%;" id="userDataTable">
+									<thead style="background-color: rgb(130, 210, 213); position: sticky; top:0;">
 										<tr>
 											<th style="width:10%;">아이디</th>
 											<th style="width:10%;">이름</th>

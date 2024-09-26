@@ -13,11 +13,15 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint{
 	@Override
 	public void commence(HttpServletRequest req, HttpServletResponse res,
 			AuthenticationException authException) throws IOException, ServletException {
-		Boolean isTokenExpired = (Boolean) req.getAttribute("expired");
-		if (isTokenExpired) {
-			res.sendRedirect("/auth/session-expired");
-		}
-		else {
+		try {
+			Boolean isTokenExpired = (Boolean) req.getAttribute("expired");
+			if (isTokenExpired) {
+				res.sendRedirect("/auth/session-expired");
+			}
+			else {
+				res.sendRedirect("/auth/auth-error");
+			}
+		} catch (Exception e) {
 			res.sendRedirect("/auth/auth-error");
 		}
 	}

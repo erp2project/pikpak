@@ -30,7 +30,7 @@ document.getElementById("loginForm").addEventListener("submit",
 					location.href="/home";
 				}
 				else{
-					responseArea.innerHTML = `<p>${result}</p>`;
+					responseArea.innerHTML = `<p>${responseMsg}</p>`;
 					responseArea.style.visibility = "visible";
 					responseArea.style.opacity = "1";
 				}

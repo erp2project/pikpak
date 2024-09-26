@@ -14,6 +14,12 @@ public class HomePageController {
 		//return "/notice/noticeTable"; 
 	}
 	
+	@GetMapping("/home/user/cred") 
+	public String passwordChangePage() {
+		return "/user/cred_change";
+	}
+	
+	
 	@GetMapping("/auth/access-denied")
 	public String accessDeniedPage() {
 		return "/home/access_denied";
