@@ -59,6 +59,14 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	}
 	
 	
+	//출고등록 시 재고기록 '출고' 타입 지정
+	@Override
+	public int update_stock_log_out(String wh_warehouse_idx) {
+		int result = iorepo.update_stock_log_out(wh_warehouse_idx);
+		return result;
+	}
+	
+	
 	//출고등록 테이블 업데이트
 	@Override
 	public int update_outenroll(String outenroll_cd) {
@@ -210,6 +218,7 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 					wh_dto.put("supplier_cd", dto.getSupplier_cd());
 					wh_dto.put("product_qty", dto.getReceiving_qty());
 					wh_dto.put("inventory_log", dto.getReceiving_log());
+					wh_dto.put("update_by", operator_id);
 					
 				    int insert_result = this.insert_warehouse(wh_dto);   
 				    

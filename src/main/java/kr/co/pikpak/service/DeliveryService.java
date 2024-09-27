@@ -18,7 +18,8 @@ public interface DeliveryService {
 	public int insert_deliver_enroll(deliver_enroll_dto dto);
 	
 	//납품등록 현황
-	public List<deliver_enroll_dto> select_deliver_enroll(String supplier_cd);
+	//public List<deliver_enroll_dto> select_deliver_enroll(String supplier_cd);
+	public List<deliver_enroll_dto> select_deliver_enroll(Map<String, Object> data_arr);
 	
 	//납품등록 삭제
 	public int delete_deliver_enroll(String deliver_idx);

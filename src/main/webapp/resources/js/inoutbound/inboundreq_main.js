@@ -2,6 +2,98 @@ export var active_ck;
 
 
 export class receiving_enroll {
+	//처음 리스트를 띄우기 위한 ajax
+	recv_enroll_list(){
+		const recv_type = document.getElementById("recv_type").value;
+		const recv_date_type = document.getElementById("recv_date_type").innerText;
+		const recv_start_date = document.getElementById("recv_start_date").value;
+		const recv_end_date = document.getElementById("recv_end_date").value;
+		const recv_spcd = document.getElementById("recv_spcd").value;
+		const recv_pdcd = document.getElementById("recv_pdcd").value;
+
+		if (start_date > end_date) {
+			alert('정상적인 일자를 입력해주세요');
+		}
+		else if ((start_date != "" && end_date == "") || (start_date == "" && end_date != "")) {
+			alert('입고요청일자로 검색 시 모두 입력되어야합니다.');
+		}
+		else {	
+			/*	
+			var data = {
+				"start_date": start_date,
+				"end_date": end_date,
+				"supplier_cd": search_cp_cd,
+				"product_cd": search_pd_cd,
+				"request_st": search_state,
+				"operator_nm": search_operator
+			};
+
+			this.search_data = JSON.stringify(data);
+			//console.log(this.search_data);
+
+			
+			fetch("/inboundreq_search", {
+				method: "post",
+				headers: { "Content-type": "application/json" },
+				body: this.search_data
+			})
+				.then(function(result_data) {
+					return result_data.json();
+				})
+				.then(function(result_res) {
+					//console.log(result_res);
+
+					const tbody = document.querySelector("#ir_tbody");
+
+					tbody.innerHTML = '';
+					window.active_ck = 0; // 활성화된 체크박스 수를 리셋
+					
+					result_res.forEach(function(inputreq) {
+					const disabled = ['진행', '완료', '거절'].includes(inputreq.request_st) ? 'disabled' : '';
+                    const manageButtonDisabled = disabled ? 'disabled' : '';
+					const checkboxDisabled = inputreq.request_st === '진행' || inputreq.request_st === '완료' || inputreq.request_st === '거절' ? 'disabled' : '';
+					if (!checkboxDisabled) {
+                			window.active_ck++; // 활성화된 체크박스 카운트
+            		}
+					const list = `<tr>
+        			<td style="text-align: center; width: 3%;"><input type="checkbox" name="each_ck" value="${inputreq.request_idx}"  ${checkboxDisabled}></td>
+            		<td style="text-align: center; width: 6%;">${inputreq.supplier_nm}</td>
+            		<td style="text-align: center; width: 7%;">${inputreq.product_cd}</td>
+            		<td style="text-align: center; width: 10%;">${inputreq.product_nm}</td>
+            		<td style="text-align: center; width: 7%;">${inputreq.product_qty}</td>
+            		<td style="text-align: center; width: 25%;">${inputreq.add_req}</td>
+            		<td style="text-align: center; width: 12%;">${inputreq.hope_dt}</td>
+            		<td style="text-align: center; width: 5%;">${inputreq.request_st}</td>
+            		<td style="text-align: center; width: 9%;">${inputreq.request_dt.substring(0, 10)}</td>
+										
+					<td style="text-align: center; width: 9%;">${(inputreq.update_dt != null) ? inputreq.update_dt.substring(0, 10) : ''}</td>
+										
+            		<td style="text-align: center; width: 7%;">
+            		<button style="padding-right:10px; padding-left:10px;" class="btn btn-primary inreq_manage" ${manageButtonDisabled}
+            		data-product-cd="${inputreq.product_cd}"
+					data-product-nm="${inputreq.product_nm}"
+					data-supplier-nm="${inputreq.supplier_nm}"
+					data-product-qty="${inputreq.product_qty}"
+					data-add-req="${inputreq.add_req}"
+					data-hope-dt="${inputreq.hope_dt}"
+					data-request-idx="${inputreq.request_idx}">관리</button>
+            		</td>
+					</tr>`;
+
+						tbody.innerHTML += list;
+					});
+				})
+				.catch(function(error) {
+					//console.log(error);
+					alert('데이터 조회에 문제가 발생하였습니다.');
+				});
+				*/
+		}
+	}
+	
+	
+	
+	
 	//위치정보 가져오기 위한 ajax
 	bring_locations(sp_cd) {
 		if(frm_decide_recv.total_qty != frm_decide_recv.return_qty){
@@ -520,7 +612,7 @@ export class inboundreq_list {
         		}
         		
         		
-    		});
+    	});
 
 			
 			
@@ -533,8 +625,7 @@ export class inboundreq_list {
 			}
 			*/
 			
-			
-		}
+	   }
 		if (ck_count == window.active_ck) {
 			document.getElementById("all_ck").checked = true;
 		}

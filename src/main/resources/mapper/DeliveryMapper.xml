@@ -77,9 +77,30 @@ delete from deliver_enroll where FIND_IN_SET(deliver_idx,#{deliver_idx})
 </delete>
 
 <!-- 납품등록 현황 -->
+<select id="select_deliver_enroll" resultType="kr.co.pikpak.dto.deliver_enroll_dto" parameterType="Map">
+select * from deliver_enroll
+where 1=1
+<if test="product_cd != null and product_cd != ''">
+and product_cd=#{product_cd} 
+</if>
+<if test="deliver_st != null and deliver_st != ''">
+and deliver_st=#{deliver_st} 
+</if>
+<if test="supplier_cd != null and supplier_cd != ''">
+and supplier_cd=#{supplier_cd} 
+</if>
+<if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
+ AND deliver_dt BETWEEN #{start_date} AND #{end_date}
+</if>
+ order by deliver_idx desc
+</select>
+
+<!-- 납품등록현황 전체에서 불러옴 
 <select id="select_deliver_enroll" resultType="kr.co.pikpak.dto.deliver_enroll_dto">
 select * from deliver_enroll where supplier_cd=#{supplier_cd} order by deliver_idx desc
 </select>
+-->
+
 
 <!-- 납품등록 -->
 <insert id="insert_deliver_enroll">
@@ -122,7 +143,7 @@ and request_st=#{request_st}
 and supplier_cd=#{supplier_cd} 
 </if>
 <if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
-    AND a.request_dt BETWEEN #{start_date} AND #{end_date}
+    AND request_dt BETWEEN #{start_date} AND #{end_date}
 </if>
  order by request_idx desc
 </select>

@@ -23,6 +23,11 @@ delete from outgoing_enroll where FIND_IN_SET(outenroll_cd,#{outenroll_cd})
 
 </update>
 
+<!-- 재고로그기록 테이블에서 '출고'로 타입지정 업데이트 -->
+<update id="update_stock_log_out">
+update stock_log_record set  action_type = '출고' where wh_warehouse_idx=#{wh_warehouse_idx} order by log_dt desc limit 1
+</update>
+
 <!-- 상태 업데이트와 동시에 재고 차감 -->
 <update id="update_warehouse_out">
 update warehouse set product_qty = product_qty - #{subtractive_qty}, update_by=#{update_by} where wh_warehouse_idx=#{wh_warehouse_idx}
@@ -129,7 +134,7 @@ update warehouse set product_qty = product_qty + #{additional_qty}, update_by=#{
 
 <!-- 입고와 동시에 warehouse insert -->
 <insert id="insert_warehouse" parameterType="Map">
-insert into warehouse values ('0',#{location_cd},#{product_cd},#{product_nm},#{supplier_nm},#{supplier_cd},#{product_qty},#{inventory_log},#{update_dt},#{update_by})
+insert into warehouse (location_cd, product_cd, product_nm, supplier_nm, supplier_cd, product_qty, inventory_log, update_dt, update_by) values (#{location_cd},#{product_cd},#{product_nm},#{supplier_nm},#{supplier_cd},#{product_qty},#{inventory_log},#{update_dt},#{update_by})
 </insert>
 
 <!-- warehouse에 데이터가 있는 지 없는 지 확인 -->

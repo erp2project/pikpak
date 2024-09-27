@@ -184,7 +184,7 @@ $(document).ready(function() {
 		var product_qty = $(this).data("deliver-qty");
 		var make_dt = $(this).data("make-dt");
 		var deliver_dt = $(this).data("deliver-dt");
-		var deliver_area = $(this).data("deliver-area");
+		
 		/* 여기서부터 hidden 값 */
 		var request_cd =  $(this).data("request-cd");
 		var supplier_cd  = $(this).data("supplier-cd");
@@ -199,7 +199,6 @@ $(document).ready(function() {
 		$("#product_qty_deli").val(product_qty);
 		$("#make_dt_deli").val(make_dt.substring(0,10));
 		$("#deliver_dt_deli").val(deliver_dt.substring(0,10));
-		$("#exreceiving_area_deli").val(deliver_area);
 		/* 여기서부터 hidden 값 */
 		$("#request_cd_deli").val(request_cd);
 		$("#supplier_cd_deli").val(supplier_cd);
@@ -220,9 +219,41 @@ import {delivery_page_move, delivery_list} from "../resources/js/deliver/deliver
 
 /* 페이지 처음 로드 */
 document.addEventListener('DOMContentLoaded', function() {
-   new delivery_list().delivery_btn();
+    // 페이지 로드 시 기본 날짜 설정
+        const today = new Date();
+        const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+
+        const formatDate = (date) => {
+            let d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) 
+                month = '0' + month;
+            if (day.length < 2) 
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        };
+
+        document.getElementById("delenroll_start_date").value = formatDate(lastWeek);
+        document.getElementById("delenroll_end_date").value = formatDate(today);
+
+	//ajax로 리스트 요청
+	new delivery_list().delivery_go_list();
 });
 
+//초기화 버튼 클릭시 deli_enroll_reset
+document.querySelector("#deli_enroll_reset").addEventListener("click",function(){
+	location.reload();
+});
+
+
+//조회버튼 클릭시
+document.querySelector("#deli_enroll_search").addEventListener("click",function(){
+	new delivery_list().delivery_go_list();
+});
 
 //납품등록 배송 모달 등록 버튼
 document.querySelector("#decide_deli").addEventListener("click",function(){
@@ -236,12 +267,24 @@ document.querySelector("#del_all_ck").addEventListener("click",function(){
 		new delivery_list().deli_all_ckbox();
 });
 
+/*
 //개별 체크박스
 document.querySelectorAll('[name="del_each_ck"]').forEach(function(ck){
 		ck.addEventListener('click', function() {
         	new delivery_list().deli_each_ckbox();
 		});
 });
+*/
+
+//개별 체크박스 -> 동적생성해서 이벤트 위임을 따로 해줘야함
+document.querySelector("#denroll_tbody").addEventListener("click", function(event) {
+    // 이벤트가 발생한 요소가 체크박스인지 확인
+    if (event.target.name === "del_each_ck") {
+		new delivery_list().deli_each_ckbox();
+    }
+});
+
+
 
 //삭제 버튼 클릭시
 document.querySelector("#delist_delete").addEventListener("click",function(){

@@ -140,7 +140,7 @@ public class DeliveryController {
 	//납품등록
 	@PostMapping("/delivery/delivery_enrollok")
 	public String delivery_enrollok(ServletResponse res, @ModelAttribute("deliver") deliver_enroll_dto dto) {
-		//프론트에서 넘어오는 값 : request_cd, prodcut_cd, product_nm, deliver_qty, make_dt, expect_dt, deliver_size, deliver_area,supplier_cd
+		//프론트에서 넘어오는 값 : request_cd, prodcut_cd, product_nm, deliver_qty, make_dt, expect_dt, deliver_size,supplier_cd =>deliver_area 없앨 예정(일단 null)
 		//여기서 넣어야하는 값 : deliver_cd, deliver_st, operator_nm, operator_id
 		//쿼리문에서 넣는 값 or null 값 : deliver_idx, deliver_dt, update_id, update_nm, update_dt
 		res.setContentType("text/html;charset=utf-8");
@@ -197,8 +197,7 @@ public class DeliveryController {
 		
 		//세션에서 회사정보를 가져왔다고 가정
 		String supplier_cd = "C001";
-		
-		
+
 		try {
 			//data_arr : start_date, end_date, request_st, product_cd
 			
@@ -234,16 +233,42 @@ public class DeliveryController {
 		return null;
 	}
 	
+	//납품등록 배송확정 페이지 리스트 동적 생성
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@PostMapping("/deliverenroll_search")
+	public ResponseEntity<List<deliver_enroll_dto>> deliverenroll_search(@RequestBody Map<String, Object> data_arr) {
+		//배열 파싱해서 잘 받으려면 RequestBody 필수..
+		List<deliver_enroll_dto> deli_enroll_search = null;
+		//여기도 세션에서 가지고 와야지
+		String supplier_cd = "C001";
+		
+		try {
+			//data_arr : start_date, end_date, deliver_st, product_cd
+			
+			//회사정보를 넣어주기
+			data_arr.put("supplier_cd", supplier_cd);
+			
+			//쿼리 실행
+			deli_enroll_search = delservice.select_deliver_enroll(data_arr);
+			return ResponseEntity.ok(deli_enroll_search);
+		}
+		catch(Exception e) {
+			System.out.println(e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+	
+	
 	//납품 등록
 	@GetMapping("/delivery/deliveryenroll")
 	public String deliveryenroll(Model m) {
 		//여기도 세션에서 가지고 와야지
 		String supplier_cd = "C001";
 		try {
-			List<deliver_enroll_dto> deliver_list = delservice.select_deliver_enroll(supplier_cd);
+			//List<deliver_enroll_dto> deliver_list = delservice.select_deliver_enroll(supplier_cd);
 			//System.out.println(deliver_list.get(0).getDeliver_cd());
 			//System.out.println(deliver_list.get(0).getProduct_nm());
-			m.addAttribute("deliver_list",deliver_list);
+			//m.addAttribute("deliver_list",deliver_list);
 		}
 		catch(Exception e) {
 			System.out.println(e);

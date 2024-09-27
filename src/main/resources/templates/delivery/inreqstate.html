@@ -182,19 +182,14 @@ $(document).ready(
 			var supplier_cd = $(this).data("supplier-cd");
 			var product_cd = $(this).data("product-cd");
 			var product_nm = $(this).data("product-nm");
-			var supplier_nm = $(this).data("supplier-nm");
 			var product_qty = $(this).data("product-qty");
 			var add_req = $(this).data("add-req");
 			var hope_dt = $(this).data("hope-dt");
 			var request_cd = $(this).data("request-cd");
 			
-			console.log(supplier_nm);
-			console.log(product_nm);
-			
 			// 입력 필드에 값 설정
 			$("#product_cd_del").val(product_cd);
 			$("#product_nm_del").val(product_nm);
-			$("#supplier_nm_del").val(supplier_nm);
 			$("#product_qty_del").val(product_qty);
 			$("#add_req_del").val(add_req);
 			$("#hope_dt_del").val(hope_dt);
@@ -213,8 +208,31 @@ $(document).ready(
 <script type="module">
 import {delivery_page_move, delivery_modal, delivery_list, inreq_list} from "../resources/js/deliver/deliveryenroll_main.js?v=6";
 /* 페이지 처음 로드 */
+
 document.addEventListener('DOMContentLoaded', function() {
-    new delivery_modal().delivery_load(); //상태 색상 변경
+  
+	// 페이지 로드 시 기본 날짜 설정
+        const today = new Date();
+        const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+
+        const formatDate = (date) => {
+            let d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) 
+                month = '0' + month;
+            if (day.length < 2) 
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        };
+
+        document.getElementById("inreqst_start_date").value = formatDate(lastWeek);
+        document.getElementById("inreqst_end_date").value = formatDate(today);
+	
+
 	new inreq_list().inreqstate_list(); //ajax 검색 리스트 불러오기
 });
 
@@ -232,13 +250,10 @@ document.querySelector('#irst_tbody').addEventListener('click', function(event) 
     // 이벤트가 발생한 요소가 'inreq_reject' 클래스를 가진 버튼인지 확인
     if (event.target.classList.contains('inreq_reject')) {
         var button = event.target;
-        var product_qty = button.dataset.productQty;
-        var remain_qty = button.dataset.remainQty;
-        var request_st = button.dataset.requestSt;
         var request_idx = button.dataset.requestIdx;
 
         // 거절 로직을 실행하는 메소드 호출
-        new inreq_list().reject_list(request_idx, product_qty, remain_qty, request_st);
+        new inreq_list().reject_list(request_idx);
     }
 });
 

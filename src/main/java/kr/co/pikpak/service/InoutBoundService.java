@@ -98,9 +98,12 @@ public interface InoutBoundService {
 	//출고정보 등록
 	public int insert_outgoing_enroll(outgoing_enroll_dto dto);
 	
+	//출고정보 등록 시 재고기록테이블 타입 지정
+	public int update_stock_log_out(String wh_warehouse_idx);
+	
 	//출고피킹 정보 등록
 	public int insert_outgoing_picking(List<Map<String, Object>> picking);
-	
+
 	//출고등록시 주문승인 상태 변경
 	public int update_acceptedorder_st(String operator_id, String order_cd);
 	

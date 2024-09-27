@@ -36,43 +36,43 @@
 						<table class="table table-bordered">
 							<tbody>
 								<tr>
-									<td style="width: 10%; height: 34px; line-height: 34px;">가입고
-										일자</td>
+									<td style="width: 10%; height: 34px; line-height: 34px;">종류</td>
+									<td style="width: 15%; line-height: 34px;"><select 
+										class="form-control" id="type_select"
+										style="width: 60%; float: left; margin-right: 5px;" id="recv_type">
+											<option value="">종류 선택</option>
+											<option value="납품">납품</option>
+											<option value="반품">반품</option>
+									</select></td>
+									<td id="date_header" style="width: 10%; height: 34px; line-height: 34px;" id="recv_date_type">일자</td>
 									<td style="width: 20%; line-height: 34px;">
 										<div style="display: flex; align-items: center;">
-											<input type="date" class="form-control" style="width: 40%;">&nbsp;&nbsp;
-											~ &nbsp;&nbsp; <input type="date" class="form-control"
+											<input type="date" class="form-control" style="width: 40%;" id="recv_start_date">&nbsp;&nbsp;
+											~ &nbsp;&nbsp; <input type="date" class="form-control" id="recv_end_date"
 												style="width: 40%;">
 										</div>
 									<td style="width: 10%; height: 34px; line-height: 34px;">매입처
 										회사명</td>
 									<td style="width: 15%; line-height: 34px;">
 										<div style="display: flex; align-items: center;">
-											<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
+											<input type="text" class="form-control" style="width: 40%;" id="recv_spcd">&nbsp;&nbsp;
 											<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
 											<button class="btn btn-primary" type="button" id="cp_search">검색</button>
 										</div>
 									</td>
-									<td style="width: 10%; height: 34px; line-height: 34px;">상품코드
-										/ 상품명</td>
+									
+							
+								</tr>
+								<tr>
+								<td style="width: 10%; height: 34px; line-height: 34px;">상품코드
+										/ 명</td>
 									<td style="width: 15%; line-height: 34px;">
 										<div style="display: flex; align-items: center;">
-											<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
+											<input type="text" class="form-control" style="width: 40%;" id="recv_pdcd">&nbsp;&nbsp;
 											<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
 											<button class="btn btn-primary" type="button" id="pd_search">검색</button>
 										</div>
-									</td>
-
-								</tr>
-								<tr>
-
-
-									<td style="width: 10%; height: 34px; line-height: 34px;">관리자</td>
-									<td style="width: 15%; line-height: 34px;">
-										<div style="display: flex; align-items: center;">
-											<input type="text" class="form-control" style="width: 40%;">
-										</div>
-									</td>
+									</td>	
 								</tr>
 							</tbody>
 						</table>
@@ -104,9 +104,10 @@
 						<div class="panel-body" style="height: 400px; overflow-y: auto;">
 							<table class="table table-hover">
 								<tbody>
-									<tr th:each="exrecv : ${exrecv_list}">
+									<tr th:each="exrecv, stat : ${exrecv_list}">
 										<td
-											style="text-align: center; padding-right: 25px; width: 3%;">1</td>
+											style="text-align: center; padding-right: 25px; width: 3%;"
+											th:text="${stat.count}"></td>
 										<td style="text-align: center; width: 9%;"
 											th:text="${exrecv.getSupplier_nm()}"></td>
 										<td style="text-align: center; width: 9%;"

@@ -118,6 +118,9 @@ public interface InoutBoundRepo {
 	//출고등록 테이블 업데이트
 	int update_outenroll(String outenroll_cd);
 	
+	//출고등록 시 로그테이블 타입 '출고' 지정
+	int update_stock_log_out(String wh_warehouse_idx);
+	
 	//출고확정과 동시에 데이터 차감
 	int update_warehouse_out(String subtractive_qty, String update_by, String wh_warehouse_idx);
 	
@@ -127,6 +130,8 @@ public interface InoutBoundRepo {
 	//출고피킹정보 삭제
 	int delete_outpiking(String outenroll_cd);
 	
+	
 	//출고정보 삭제시 주문승인 상태 원복
 	int update_accepted_back(String order_cd);
+
 }
