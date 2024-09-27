@@ -3,10 +3,6 @@ window.onload = () => {
 	startTimer(expiryTime);
 }
 
-window.addEventListener("beforeunload", function (event) {
-    navigator.sendBeacon('/logout'); // Send a logout request
-});
-
 const refreshSession = () => {
 	fetch("/login/refresh",{
 		method : "GET"

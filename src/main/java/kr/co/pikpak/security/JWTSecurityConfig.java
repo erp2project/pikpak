@@ -32,13 +32,6 @@ import kr.co.pikpak.service.LoginService;
 @Configuration
 @EnableWebSecurity
 public class JWTSecurityConfig {
-	
-	@Autowired
-	private CustomLogoutSuccessHandler customLogoutSuccessHandler;
-	
-	@Autowired
-	private JWTUtility JWTUtil;
-	
 	@Autowired
 	private LoginService LoginService;
 	
@@ -79,7 +72,7 @@ public class JWTSecurityConfig {
 			*/
 			.httpBasic(auth -> auth.disable())
 			.authenticationProvider(authenticationProvider())
-			.logout(config -> config.logoutSuccessHandler(customLogoutSuccessHandler).deleteCookies("accessToken").invalidateHttpSession(true))
+			.logout(config -> config.deleteCookies("accessToken").invalidateHttpSession(true))
 			.addFilterBefore(JWTRequestFilter, UsernamePasswordAuthenticationFilter.class);
 			//.addFilterBefore(JWTRequestFilter, BasicAuthenticationFilter.class);
 

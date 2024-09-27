@@ -169,6 +169,14 @@
 	border-radius: 5px;
 }
 
+.custom-ani-bc {
+	transition: background-color 100ms linear;
+}
+
+.custom-margin-bt-10 {
+	margin-bottom: 10px;
+}
+
 .custom-flex-row {
 	display:flex; 
 	flex-direction: row;
