@@ -60,8 +60,9 @@ select count(*) as lot_ea from ex_receiving where lot_no like concat ('%',#{exre
  
 <!-- 배송 확정 시 가입고 등록 -->
 <insert id="insert_ex_receiving">
-insert into ex_receiving values ('0',#{request_cd},#{deliver_cd},#{supplier_cd},#{exreceiving_cd},#{product_cd},
-#{exreceiving_qty},#{return_qty},#{exreceiving_st},#{exreceiving_area},#{exreceiving_size},#{make_dt},#{departure_dt},#{operator_id},#{update_dt},#{update_id}) 
+insert into ex_receiving values ('0',#{request_cd},#{deliver_cd},#{return_cd},#{supplier_cd},#{exreceiving_cd},#{product_cd},
+#{exreceiving_qty},#{return_qty},#{exreceiving_st},#{exreceiving_area},#{exreceiving_size},#{make_dt},#{departure_dt},#{processing_dt},
+#{exreceiving_type},#{operator_id},#{update_dt},#{update_id}) 
 </insert>
 
 <!-- 입고요청 거절 시 상태변경 -->

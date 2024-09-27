@@ -1,5 +1,4 @@
 export class outbound_decide {
-
 	//전체 체크 누르고 끌 때
 	out_all_ckbox() {
 		this.all_ck_checked = document.getElementById("all_ck_out").checked;
@@ -32,7 +31,7 @@ export class outbound_decide {
 				}
 
 			}
-			
+
 			if (this.ck_count == frm_out_list.each_ck_out.length) {
 				document.getElementById("all_ck_out").checked = true;
 			}
@@ -45,25 +44,33 @@ export class outbound_decide {
 	}
 
 	out_delete_data() {
+		this.each_ck = document.getElementsByName("each_ck_out"); // 리스트 개수 세기 위함
+		
 		if (this.out_each_ckbox() == 0) {
 			alert('삭제할 데이터를 선택해주세요');
 		}
 		else if (confirm("정말로 삭제하시겠습니까?")) {
 			this.idx_data = new Array();
 
-			for (this.f = 0; this.f < frm_out_list.each_ck_out.length; this.f++) {
-				if (frm_out_list.each_ck_out[this.f].checked == true) {
-					this.idx_data.push(frm_out_list.each_ck_out[this.f].value);
+			if (this.each_ck.length == 1) {
+				this.idx_data.push(frm_out_list.each_ck_out.value);
+			}
+			else {
+				for (this.f = 0; this.f < frm_out_list.each_ck_out.length; this.f++) {
+					if (frm_out_list.each_ck_out[this.f].checked == true) {
+						this.idx_data.push(frm_out_list.each_ck_out[this.f].value);
+					}
 				}
+
 			}
 
 			frm_out_list.outenroll_cd.value = this.idx_data.join(",");
-
+			
 			frm_out_list.method = "post";
 			frm_out_list.action = "./delete_outenrollok";
-			frm_out_list.submit();			
+			frm_out_list.submit();
 		}
-		
+
 	}
 
 
@@ -84,7 +91,8 @@ export class outaccept_modal {
 
 
 export class outbound_enroll {
-	qty_ui(location, lotDetails, quantity, whWarehouseIdx, receivingCd) {
+	qty_ui(location, lotDetails, quantity, whWarehouseIdx, receivingCd, lotNo) {
+		
 		var container = document.getElementById('item_container');
 
 		var item = document.createElement('div');
@@ -105,8 +113,22 @@ export class outbound_enroll {
 		// 삭제 버튼
 		var removeButton = document.createElement('button');
 		removeButton.textContent = 'X';
+		
+		// lotNo 값을 데이터 속성으로 저장
+        removeButton.setAttribute('data-lot-no', lotNo);
+		
 		removeButton.onclick = function() {
+			var lotToDelete = this.getAttribute('data-lot-no');
 			container.removeChild(item);
+			
+			// 전역 변수 window.selectedLots에 접근
+            if (window.selectedLots[lotToDelete]) {
+                window.selectedLots[lotToDelete] -= quantity;
+                if (window.selectedLots[lotToDelete] <= 0) {
+                    delete window.selectedLots[lotToDelete];
+                }
+            }
+			
 		};
 		item.appendChild(removeButton);
 
@@ -129,7 +151,7 @@ export class outbound_enroll {
 
 				// 위치 select 초기화
 				locationSelect.innerHTML = '<option value="">위치 선택</option>';
-				lotSelect.innerHTML = '<option value="">로트번호/수량 선택</option>'; // 초기화
+				lotSelect.innerHTML = '<option value="">로트번호/수량 선택</option>';
 
 				// 위치 데이터를 이용해 고유한 위치 목록 생성
 				var uniqueLocations = data.reduce(function(acc, current) {
@@ -161,7 +183,8 @@ export class outbound_enroll {
 					filteredItems.forEach(function(item) {
 						var option = document.createElement('option');
 						option.value = item.lot_no;  // 로트번호를 값으로 사용
-						option.textContent = item.lot_no + " / " + item.receiving_qty;  // 텍스트 형식 정의
+						option.textContent = item.lot_no + "/" + item.receiving_qty;  // 텍스트 형식 정의
+						option.setAttribute('data-max_qty', item.receiving_qty);  // 최대 수량 데이터 추가
 						option.setAttribute('data-wh_warehouse_idx', item.wh_warehouse_idx);  // hidden으로 추가할 값
 						option.setAttribute('data-receiving_cd', item.receiving_cd);  // hidden으로 추가할 값
 						lotSelect.appendChild(option);
@@ -173,19 +196,54 @@ export class outbound_enroll {
 			});
 
 	}
+	
+	//출고등록 보내기 전에 수량 체크하는 메소드
+	check_qty(){
+		const qty_items = document.getElementsByName("item_data");
+		//item_data = '위치코드&수량&idx&입고코드'
+		//모든 로트번호에서 가져온 수량의 합이 요청수량과 같은지 (적거나 넘쳐선 안됨)
+		const all_lot_data = [];
+        
+        var total_qty = 0; //선택한 수량합하는 변수
+        
+        for (let item of qty_items) {
+        	const split_data = item.value.split("&");
+        	const lot_info = {
+            location_cd: split_data[0],
+            qty: parseInt(split_data[1], 10),
+            wh_idx: parseInt(split_data[2], 10),
+            recv_cd: split_data[3]
+            };
+
+        	all_lot_data.push(lot_info);
+    		total_qty += lot_info.qty;
+    	}
+	  
+	   return total_qty;
+	}
 
 	go_out_enroll() {
-
 		const qty_items = document.getElementsByName("item_data");
-		//console.log(qty_items[0]);
-		//console.log(qty_items[1]);
+		const product_qty = document.getElementById("order_qty_out").value;
+	
+		//item_data = 위치코드&수량&idx&입고코드
+		/* 수량체크
+		1. 각 로트번호에 있는 수량보다 넘치게 하지 않았는지 => 앞에서 ok
+		
+		2. 모든 로트번호에서 가져온 수량의 합이 요청수량과 같은지 (적거나 넘쳐선 안됨)
+		*/
+		
 		//위치코드, 로트번호, 수량   (idx,receiving_cd)
-		if (qty_items.length == 0 || frm_out_enroll.exoutgoing_area.value == "" || frm_out_enroll.expect_dt.value == "") {
+		if (qty_items.length == 0 ||  frm_out_enroll.expect_dt.value == "") {
 			alert('값을 모두 입력해주세요');
 		}
+		else if(this.check_qty() != product_qty){
+			alert('선택된 수량과 주문 수량이 일치하지 않습니다');
+		}
 		else {
-			frm_out_enroll.method = "post",
-			frm_out_enroll.action = "./outgoing_enrollok";
+			//여기서 등록이 되면 재고차감 할거임
+			frm_out_enroll.method = "post";	
+			frm_out_enroll.action = "./outgoing_enrollok";	
 			frm_out_enroll.submit();
 		}
 	}

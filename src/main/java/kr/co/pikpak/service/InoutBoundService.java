@@ -115,4 +115,13 @@ public interface InoutBoundService {
 	
 	//출고확정과 동시에 데이터 차감
 	public int update_warehouse_out(String subtractive_qty, String update_by, String wh_warehouse_idx);
+	
+	//출고등록정보 삭제
+	public int delete_outenroll(String outenroll_cd);
+		
+	//출고피킹정보 삭제
+	public int delete_outpiking(String outenroll_cd);
+	
+	//주문승인 상태 원복
+	public int update_accepted_back(String order_cd);
 }

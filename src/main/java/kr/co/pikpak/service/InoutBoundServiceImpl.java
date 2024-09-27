@@ -29,6 +29,28 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	@Autowired
 	InoutBoundRepo iorepo;
 	
+	//주문 승인 상태 원복
+	@Override
+	public int update_accepted_back(String order_cd) {
+		int result = iorepo.update_accepted_back(order_cd);
+		return result;
+	}
+	
+	
+	//출고피킹 정보 삭제
+	@Override
+	public int delete_outpiking(String outenroll_cd) {
+		int result = iorepo.delete_outpiking(outenroll_cd);
+		return result;
+	}
+	
+	//출고등록 정보 삭제
+	@Override
+	public int delete_outenroll(String outenroll_cd) {
+		int result = iorepo.delete_outenroll(outenroll_cd);
+		return result;
+	}
+	
 	//재고차감
 	@Override
 	public int update_warehouse_out(String subtractive_qty, String update_by, String wh_warehouse_idx) {
@@ -178,18 +200,16 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 					}
 				} 
 				else {
-				   //insert
+				   //insert	
 					//Map 만들기
-					System.out.println("dto에서 출력잘되고 있다고: " + dto.getProduct_nm());
-					String pd_name = dto.getProduct_nm();
 					Map<String, Object> wh_dto = new HashMap<String, Object>();
 					wh_dto.put("location_cd", dto.getLocation_cd());
 					wh_dto.put("product_cd", dto.getProduct_cd());
-					wh_dto.put("product_nm", pd_name);
+					wh_dto.put("product_nm", dto.getProduct_nm());
 					wh_dto.put("supplier_nm", dto.getSupplier_nm());
+					wh_dto.put("supplier_cd", dto.getSupplier_cd());
 					wh_dto.put("product_qty", dto.getReceiving_qty());
 					wh_dto.put("inventory_log", dto.getReceiving_log());
-					wh_dto.put("supplier_cd", dto.getSupplier_cd());
 					
 				    int insert_result = this.insert_warehouse(wh_dto);   
 				    
@@ -209,7 +229,7 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 		
 		/*	
 		3. stock_log_record
-		Trigger 걸어놓기
+		Trigger 걸어놓기 ok
 		*/
 		
 		return final_result;

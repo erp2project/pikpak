@@ -81,6 +81,9 @@ public class DeliveryServiceImpl implements DeliveryService{
 		//상태 기본 데이터
 		dto.setExreceiving_st("대기");
 		
+		//타입 기본 데이터
+		dto.setExreceiving_type("납품");
+		
 		int final_result = 0;
 		
 		int result = delrepo.insert_ex_receiving(dto);

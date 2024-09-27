@@ -89,12 +89,13 @@
 										<th style="text-align: center; width: 9%;">상품코드</th>
 										<th style="text-align: center; width: 12%;">상품명</th>
 										<th style="text-align: center; width: 7%;">상품크기</th>
+										<th style="text-align: center; width: 6%;">종류</th>
 										<th style="text-align: center; width: 6%;">납품수량</th>
 										<th style="text-align: center; width: 6%;">반품수량</th>
-										<th style="text-align: center; width: 9%;">가입고 위치</th>
-										<th style="text-align: center; width: 12%;">배송 일자</th>
+										<th style="text-align: center; width: 10%;">반품 일자</th>
+										<th style="text-align: center; width: 10%;">배송 일자</th>
 										<th style="text-align: center; width: 7%;">상태</th>
-										<th style="text-align: center; width: 20%;">관리</th>
+										<th style="text-align: center; width: 15%;">관리</th>
 									</tr>
 
 								</thead>
@@ -111,17 +112,24 @@
 										<td style="text-align: center; width: 9%;"
 											th:text="${exrecv.getProduct_cd()}"></td>
 										<td style="text-align: center; width: 12%;"
-											th:text="${exrecv.getProduct_nm()}"></td>
+											th:text="${exrecv.getProduct_nm()}"></td>											
 										<td style="text-align: center; width: 7%;"
 											th:text="${exrecv.getExreceiving_size()}"></td>
+										
+										<td style="text-align: center; width: 6%;"
+											th:text="${exrecv.getExreceiving_type()}"></td>	
+										
 										<td style="text-align: center; width: 6%;"
 											th:text="${exrecv.getExreceiving_qty()}"></td>
 										<td style="text-align: center; width: 6%;"
 											th:text="${exrecv.getReturn_qty() != null ? exrecv.getReturn_qty() : ''}"></td>
-											<td style="text-align: center; width: 9%;"
-											th:text="${exrecv.getExreceiving_area()}"></td>
-										<td style="text-align: center; width: 12%;"
-											th:text="${exrecv.getDeparture_dt().substring(0,10)}"></td>
+										
+										<td style="text-align: center; width: 10%;"
+											th:text="${exrecv.getProcessing_dt() != null ? exrecv.getProcessing_dt().substring(0,10) : ''}"></td>
+										
+										<td style="text-align: center; width: 10%;"
+											th:text="${exrecv.getDeparture_dt() !=null ? exrecv.getDeparture_dt().substring(0,10) : ''}"></td>
+										
 										<td style="text-align: center; width: 7%;"
 											th:text="${exrecv.getExreceiving_st()}" class="recv_state_ck"></td>	
 										<td style="text-align: center; width: 20%;">
@@ -134,7 +142,7 @@
 												th:data-supplier-nm="${exrecv.getSupplier_nm()}"
 												th:data-product-qty="${exrecv.getExreceiving_qty()}"
 												th:data-return-qty="${exrecv.getReturn_qty()}"
-												th:data-exrecv-area="${exrecv.getExreceiving_area()}"
+												
 												th:data-exrecv-dt="${exrecv.getDeparture_dt()}"
 												th:data-deliver-cd="${exrecv.getDeliver_cd()}"
 												th:data-exrecv-cd="${exrecv.getExreceiving_cd()}"
@@ -147,7 +155,7 @@
 												th:data-product-nm="${exrecv.getProduct_nm()}"
 												th:data-supplier-nm="${exrecv.getSupplier_nm()}"
 												th:data-product-qty="${exrecv.getExreceiving_qty()}"
-												th:data-exrecv-area="${exrecv.getExreceiving_area()}"
+												
 												th:data-exrecv-dt="${exrecv.getDeparture_dt()}"
 												th:data-deliver-cd="${exrecv.getDeliver_cd()}"
 												th:data-exrecv-cd="${exrecv.getExreceiving_cd()}"

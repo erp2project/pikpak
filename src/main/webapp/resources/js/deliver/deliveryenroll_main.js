@@ -1,4 +1,8 @@
 export class inreq_list {
+	//검색어 조회 ajax
+	
+	
+	
 	//입고요청에 대한 거절 버튼 클릭시
 	reject_list(inreq_idx, product_qty, remain_qty, request_st) {
 		this.idx = "request_idx=" + inreq_idx;

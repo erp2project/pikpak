@@ -68,81 +68,70 @@
 		<!-- 최상단 끝 -->
 
 		<!-- 왼쪽 SIDEBAR -->
-<div id="sidebar-nav" class="sidebar">
+		<div id="sidebar-nav" class="sidebar">
 			<div class="sidebar-scroll">
 				<nav>
 					<ul class="nav">
-						<li>
-							<a href="#subPages" data-toggle="collapse" class="collapsed active">
-							<i class="lnr lnr-file-empty"></i> <span>기준정보 관리</span> 
-							<i class="icon-submenu lnr lnr-chevron-left"></i>
-							</a>
+						<li><a href="#subPages" data-toggle="collapse"
+							class="collapsed active"> <i class="lnr lnr-file-empty"></i>
+								<span>기준정보 관리</span> <i
+								class="icon-submenu lnr lnr-chevron-left"></i>
+						</a>
 							<div id="subPages" class="collapse ">
 								<ul class="nav">
 									<li><a href="" class="">거래처 관리</a></li>
 									<li><a href="" class="">품목 관리</a></li>
 								</ul>
-							</div>
-						</li>
-						<li>
-							<a href="#subPages2" data-toggle="collapse" class="collapsed">
-							<i class="lnr lnr-dice"></i> <span>주문 | 반품</span> 
-							<i class="icon-submenu lnr lnr-chevron-left"></i>
-							</a>
+							</div></li>
+						<li><a href="#subPages2" data-toggle="collapse"
+							class="collapsed"> <i class="lnr lnr-dice"></i> <span>주문
+									| 반품</span> <i class="icon-submenu lnr lnr-chevron-left"></i>
+						</a>
 							<div id="subPages2" class="collapse ">
 								<ul class="nav">
 									<li><a href="" class="">주문 관리</a></li>
 									<li><a href="" class="">반품 관리</a></li>
 								</ul>
-							</div>
-						</li>
-						<li>
-							<a href="#subPages3" data-toggle="collapse" class="collapsed">
-							<i class="lnr lnr-inbox"></i> <span>재고</span> 
-							<i class="icon-submenu lnr lnr-chevron-left"></i>
-							</a>
+							</div></li>
+						<li><a href="#subPages3" data-toggle="collapse"
+							class="collapsed"> <i class="lnr lnr-inbox"></i> <span>재고</span>
+								<i class="icon-submenu lnr lnr-chevron-left"></i>
+						</a>
 							<div id="subPages3" class="collapse ">
 								<ul class="nav">
 									<li><a href="" class="">재고 현황</a></li>
 									<li><a href="" class="">창고 관리</a></li>
 								</ul>
-							</div>
-						</li>
-						<li>
-							<a href="#subPages4" data-toggle="collapse" class="collapsed">
-							<i class="lnr lnr-download"></i> <span>입고 | 출고</span> 
-							<i class="icon-submenu lnr lnr-chevron-left"></i>
-							</a>
+							</div></li>
+						<li><a href="#subPages4" data-toggle="collapse"
+							class="collapsed"> <i class="lnr lnr-download"></i> <span>입고
+									| 출고</span> <i class="icon-submenu lnr lnr-chevron-left"></i>
+						</a>
 							<div id="subPages4" class="collapse ">
 								<ul class="nav">
 									<li><a href="" class="">입고 관리</a></li>
 									<li><a href="" class="">출고 관리</a></li>
 								</ul>
-							</div>
-						</li>
-						<li>
-							<a href="#subPages5" data-toggle="collapse" class="collapsed">
-							<i class="lnr lnr-chart-bars"></i> <span>납품</span> 
-							<i class="icon-submenu lnr lnr-chevron-left"></i>
-							</a>
+							</div></li>
+						<li><a href="#subPages5" data-toggle="collapse"
+							class="collapsed"> <i class="lnr lnr-chart-bars"></i> <span>납품</span>
+								<i class="icon-submenu lnr lnr-chevron-left"></i>
+						</a>
 							<div id="subPages5" class="collapse ">
 								<ul class="nav">
 									<li><a href="" class="">납품 관리</a></li>
 								</ul>
-							</div>
-						</li>
-						<li>
-							<a href="#subPages6" data-toggle="collapse" class="collapsed">
-							<i class="lnr lnr-cog"></i> <span>사이트 설정</span> 
-							<i class="icon-submenu lnr lnr-chevron-left"></i>
-							</a>
+							</div></li>
+						<li><a href="#subPages6" data-toggle="collapse"
+							class="collapsed"> <i class="lnr lnr-cog"></i> <span>사이트
+									설정</span> <i class="icon-submenu lnr lnr-chevron-left"></i>
+						</a>
 							<div id="subPages6" class="collapse">
 								<ul class="nav">
 									<li><a href="" class="">재고기록 관리</a></li>
 									<li><a href="" class="">인사 관리</a></li>
 								</ul>
-							</div>
-						</li>
+							</div></li>
 					</ul>
 				</nav>
 			</div>
@@ -162,7 +151,7 @@
 		 -->
 		<section
 			th:replace="~{inoutbound/add_outbound_popup :: add_out_popup}"></section>
-		
+
 	</div>
 	<div class="clearfix"></div>
 
@@ -217,13 +206,15 @@
 	<script type="module">
 import {page_move_outbound, outbound_enroll} from "../resources/js/inoutbound/outbound_main.js?v=2";
 
-   /* 출고등록 모달 */
-	 // 출고수량 UI 추가 버튼
+window.selectedLots = {}; //전역변수
+   	/* 출고등록 모달 */
+	// 출고수량 UI 추가 버튼
     document.querySelector("#add_button").addEventListener('click', function() {
-          var location_select = document.getElementById('location_select');
-    var lot_select = document.getElementById('lot_select');
-    var qty_input = document.getElementById('qty_input');
-    
+        
+    var location_select = document.getElementById('location_select'); // 위치코드 select태그
+    var lot_select = document.getElementById('lot_select'); // 로트번호/수량 select태그
+    var qty_input = document.getElementById('qty_input'); // 출고수량 input 태그
+
     var location = location_select.value;
     var lot_details = lot_select.options[lot_select.selectedIndex].text;
     var quantity = qty_input.value;
@@ -231,10 +222,23 @@ import {page_move_outbound, outbound_enroll} from "../resources/js/inoutbound/ou
     var selectedOption = lot_select.options[lot_select.selectedIndex];
     var whWarehouseIdx = selectedOption.getAttribute('data-wh_warehouse_idx');
     var receivingCd = selectedOption.getAttribute('data-receiving_cd');
+    var lotNo = selectedOption.value; //로트번호
+    var maxQty = parseInt(selectedOption.getAttribute('data-max_qty'), 10); // 최대 수량을 가져옵니다
 
-    if (quantity > 0) {
-        new outbound_enroll().qty_ui(location, lot_details, quantity, whWarehouseIdx, receivingCd);
-        qty_input.value = ''; // 입력 필드 초기화
+    // 이미 선택된 로트만 검증한다면 불필요해보이는 게 있어보이긴한데
+    if (quantity > 0 && quantity <= maxQty) {
+        if (window.selectedLots[lotNo] && (window.selectedLots[lotNo] + quantity > maxQty)) {
+            alert('이미 선택된 로트입니다.');
+        } else {
+            // 선택된 수량 업데이트
+            window.selectedLots[lotNo] = (window.selectedLots[lotNo] || 0) + quantity;
+
+            // 여기서 lotNo를 함께 넘겨줍니다.
+            new outbound_enroll().qty_ui(location, lot_details, quantity, whWarehouseIdx, receivingCd, lotNo);
+            qty_input.value = ''; // 입력 필드 초기화
+        }
+    } else if (quantity > maxQty) {
+        alert('요청하신 수량이 총 재고를 초과하였습니다.');
     } else {
         alert('유효한 출고 수량을 입력해주세요.');
     }

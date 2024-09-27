@@ -218,7 +218,6 @@
 					// 문서 전체에 대해 이벤트 위임 설정
 					$(document).on("click", ".inreq_manage", function(event) {
 						event.preventDefault();  // 기본 동작 중단
-    					//console.log("외않되");
 						
 						var product_cd = $(this).data("product-cd");
     					var product_nm = $(this).data("product-nm");
@@ -236,7 +235,8 @@
     					$("#add_req_input").val(add_req);
     					$("#hope_dt_input").val(hope_dt);
     					$("#request_idx_input").val(request_idx);
-
+						
+    					
     					// 모달 보여주기
     					$("#inreqManageModal").modal('show');
     					
@@ -299,6 +299,39 @@
 	<script type="module">
     import {page_move, inboundreq_enroll, inboundreq_list, company_search_modal, product_search_modal} from "../resources/js/inoutbound/inboundreq_main.js?v=6";
 	
+window.active_ck = 0;	
+
+
+/*페이지 로드할 떄 ajax로 날짜 기본값 초기화 (오늘~7일 전)*/	
+ 
+	document.addEventListener("DOMContentLoaded", function() {
+        // 페이지 로드 시 기본 날짜 설정
+        const today = new Date();
+        const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+
+        const formatDate = (date) => {
+            let d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) 
+                month = '0' + month;
+            if (day.length < 2) 
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        };
+
+        document.getElementById("start_date").value = formatDate(lastWeek);
+        document.getElementById("end_date").value = formatDate(today);
+
+        // 초기 검색 실행
+        new inboundreq_list().inreq_list_search(); // 초기 조회 실행
+    });
+
+
+
 	//리스트 조회 초기화
 	document.querySelector("#list_reset").addEventListener("click",function(){
 		location.reload();
@@ -344,13 +377,27 @@
 		new inboundreq_list().all_ckbox();
 	});
 
+	/*
 	//개별 체크박스를 클릭했을 때
 	document.querySelectorAll('[name="each_ck"]').forEach(function(ck){
 		ck.addEventListener('click', function() {
-        	new inboundreq_list().each_ckbox();
+        	//new inboundreq_list().each_ckbox();
+			console.log("뭐야");
 		});
     });
-    
+    */
+	
+	//개별 체크박스 -> 동적생성해서 이벤트 위임을 따로 해줘야함
+    document.querySelector("#ir_tbody").addEventListener("click", function(event) {
+    	// 이벤트가 발생한 요소가 체크박스인지 확인
+    	if (event.target.name === "each_ck") {
+			new inboundreq_list().each_ckbox();
+    	}
+	});
+
+
+
+
 	//삭제 버튼 클릭했을 때
 	document.querySelector("#del_inreq").addEventListener("click",function(){
 		new inboundreq_list().delete_data();

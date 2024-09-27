@@ -188,7 +188,7 @@ $(document).ready(function() {
 		var supplier_nm = $(this).data("supplier-nm");
 		var supplier_cd = $(this).data("supplier-cd");
 		var product_qty = $(this).data("product-qty");
-		var exrecv_area = $(this).data("exrecv-area");
+		
 		var exrecv_dt = $(this).data("exrecv-dt");
 		var deliver_cd = $(this).data("deliver-cd");
 		var exrecv_cd = $(this).data("exrecv-cd");
@@ -198,7 +198,7 @@ $(document).ready(function() {
 		$("#product_nm_return").val(product_nm);
 		$("#supplier_nm_return").val(supplier_nm);
 		$("#product_qty_return").val(product_qty);
-		$("#exrecv_area_return").val(exrecv_area);
+		
 		$("#exrecv_dt_return").val(exrecv_dt.substring(0,10));
 		$("#deliver_cd_return").val(deliver_cd);
 		$("#exrecv_cd_return").val(exrecv_cd);
@@ -216,8 +216,8 @@ $(document).ready(function() {
 		var product_cd = $(this).data("product-cd");
 		var product_nm = $(this).data("product-nm");
 		var supplier_nm = $(this).data("supplier-nm");		
-		var product_qty = $(this).data("product-qty");
-		var exrecv_area = $(this).data("exrecv-area");
+		var product_qty = $(this).data("product-qty").toString().trim();
+		
 		var exrecv_size = $(this).data("exrecv-size");
 		var exrecv_dt = $(this).data("exrecv-dt");
 		
@@ -227,7 +227,6 @@ $(document).ready(function() {
 		var supplier_cd = $(this).data("supplier-cd");
 		var return_qty = $(this).data("return-qty");
 		var make_dt = $(this).data("make-dt");
-		
 		
 		if (parseInt(product_qty) == parseInt(return_qty)) {
 		   alert("모두 반송 처리된 데이터입니다.");
@@ -240,7 +239,7 @@ $(document).ready(function() {
 		$("#supplier_cd_recv").val(supplier_cd);
 		$("#supplier_nm_recv").val(supplier_nm);
 		$("#product_qty_recv").val(product_qty);
-		$("#exrecv_area").val(exrecv_area);
+		
 		$("#exrecv_dt").val(exrecv_dt.substring(0,10));
 		$("#deliver_cd_recv").val(deliver_cd);
 		$("#exrecv_cd").val(exrecv_cd);

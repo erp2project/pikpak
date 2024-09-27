@@ -122,4 +122,11 @@ public interface InoutBoundRepo {
 	int update_warehouse_out(String subtractive_qty, String update_by, String wh_warehouse_idx);
 	
 	//출고등록정보 삭제
+	int delete_outenroll(String outenroll_cd);
+	
+	//출고피킹정보 삭제
+	int delete_outpiking(String outenroll_cd);
+	
+	//출고정보 삭제시 주문승인 상태 원복
+	int update_accepted_back(String order_cd);
 }

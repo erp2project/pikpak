@@ -7,12 +7,18 @@
 delete from outgoing_picking where FIND_IN_SET(outenroll_cd,#{outenroll_cd})
 </delete>
 
+<!-- 출고등록 삭제 동시에 주문승인 상태 '대기'로 다시 변경 -->
+<update id="update_accepted_back">
+update accepted_order_enroll set acceptedorder_st='대기' where FIND_IN_SET(order_cd, #{order_cd}) > 0;
+</update>
+
+
 <!-- 출고등록정보 삭제 -->
 <delete id="delete_outenroll">
 delete from outgoing_enroll where FIND_IN_SET(outenroll_cd,#{outenroll_cd})
 </delete>
 
-<!-- 재고차감과 동시에 주문테이블 상태 완료로 변경 -->
+<!-- 배송 확정과 동시에 주문테이블 상태 완료로 변경 -->
 <update id="">
 
 </update>
@@ -93,7 +99,7 @@ insert into outgoing_picking values
  </foreach>
 </insert>
 
-<!-- 출고 정보 등록고 동시에 acceptd_order 상태 업데이트 -->
+<!-- 출고 정보 등록과 동시에 acceptd_order 상태 업데이트 -->
 <update id="update_acceptedorder_st">
 update accepted_order_enroll set acceptedorder_st='등록', operator_id=#{operator_id} where order_cd=#{order_cd}
 </update>
@@ -123,7 +129,7 @@ update warehouse set product_qty = product_qty + #{additional_qty}, update_by=#{
 
 <!-- 입고와 동시에 warehouse insert -->
 <insert id="insert_warehouse" parameterType="Map">
-insert into warehouse values ('0',#{location_cd},#{product_cd},#{product_nm},#{supplier_nm},#{product_qty},#{inventory_log},#{update_dt},#{update_by},#{supplier_cd})
+insert into warehouse values ('0',#{location_cd},#{product_cd},#{product_nm},#{supplier_nm},#{supplier_cd},#{product_qty},#{inventory_log},#{update_dt},#{update_by})
 </insert>
 
 <!-- warehouse에 데이터가 있는 지 없는 지 확인 -->
@@ -161,8 +167,8 @@ now(),#{operator_id})
 
 <!-- 가입고 테이블 select -->
 <select id="select_ex_receiving" resultType="kr.co.pikpak.dto.ex_receiving_joined_dto">
-select a.exreceiving_idx, a.deliver_cd, a.exreceiving_cd, b.supplier_cd, b.supplier_nm, a.product_cd, c.product_nm, a.exreceiving_qty,
-a.return_qty, a.exreceiving_size, a.exreceiving_area, a.departure_dt, a.exreceiving_st, a.update_id, a.make_dt
+select a.exreceiving_idx, a.deliver_cd, a.return_cd, a.exreceiving_cd, b.supplier_cd, b.supplier_nm, a.product_cd, c.product_nm, a.exreceiving_type, a.exreceiving_qty,
+a.return_qty, a.exreceiving_size, a.departure_dt, a.processing_dt, a.exreceiving_st, a.update_id, a.make_dt
 from ex_receiving as a join supplier_info as b join product as c where a.supplier_cd=b.supplier_cd
 and a.product_cd=c.product_cd order by a.exreceiving_idx desc
 </select>

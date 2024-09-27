@@ -1,3 +1,6 @@
+export var active_ck;
+
+
 export class receiving_enroll {
 	//위치정보 가져오기 위한 ajax
 	bring_locations(sp_cd) {
@@ -400,7 +403,7 @@ export class inboundreq_list {
 		const search_cp_cd = document.getElementById("search_cp_cd").value;
 		const search_pd_cd = document.getElementById("search_pd_cd").value;
 		const search_state = document.getElementById("search_state").value;
-		const search_operator = document.getElementById("search_operator").value;
+		const search_operator = "";
 
 		if (start_date > end_date) {
 			alert('정상적인 일자를 입력해주세요');
@@ -408,8 +411,7 @@ export class inboundreq_list {
 		else if ((start_date != "" && end_date == "") || (start_date == "" && end_date != "")) {
 			alert('입고요청일자로 검색 시 모두 입력되어야합니다.');
 		}
-		else {
-
+		else {		
 			var data = {
 				"start_date": start_date,
 				"end_date": end_date,
@@ -436,25 +438,30 @@ export class inboundreq_list {
 					const tbody = document.querySelector("#ir_tbody");
 
 					tbody.innerHTML = '';
-
+					window.active_ck = 0; // 활성화된 체크박스 수를 리셋
+					
 					result_res.forEach(function(inputreq) {
-						const list = `<tr>
-        			 <td style="text-align: center; width: 2%;"><input type="checkbox" name="each_ck" value="${inputreq.request_idx}"></td>
+					const disabled = ['진행', '완료', '거절'].includes(inputreq.request_st) ? 'disabled' : '';
+                    const manageButtonDisabled = disabled ? 'disabled' : '';
+					const checkboxDisabled = inputreq.request_st === '진행' || inputreq.request_st === '완료' || inputreq.request_st === '거절' ? 'disabled' : '';
+					if (!checkboxDisabled) {
+                			window.active_ck++; // 활성화된 체크박스 카운트
+            		}
+					const list = `<tr>
+        			<td style="text-align: center; width: 3%;"><input type="checkbox" name="each_ck" value="${inputreq.request_idx}"  ${checkboxDisabled}></td>
             		<td style="text-align: center; width: 6%;">${inputreq.supplier_nm}</td>
             		<td style="text-align: center; width: 7%;">${inputreq.product_cd}</td>
             		<td style="text-align: center; width: 10%;">${inputreq.product_nm}</td>
-            		<td style="text-align: center; width: 7%;">${inputreq.product_qty} EA</td>
-            		<td style="text-align: center; width: 15%;">${inputreq.add_req}</td>
-            		<td style="text-align: center; width: 9%;">${inputreq.hope_dt}</td>
+            		<td style="text-align: center; width: 7%;">${inputreq.product_qty}</td>
+            		<td style="text-align: center; width: 25%;">${inputreq.add_req}</td>
+            		<td style="text-align: center; width: 12%;">${inputreq.hope_dt}</td>
             		<td style="text-align: center; width: 5%;">${inputreq.request_st}</td>
             		<td style="text-align: center; width: 9%;">${inputreq.request_dt.substring(0, 10)}</td>
 										
 					<td style="text-align: center; width: 9%;">${(inputreq.update_dt != null) ? inputreq.update_dt.substring(0, 10) : ''}</td>
 										
-					<td style="text-align: center; width: 7%;">${inputreq.operator_nm + '(' + inputreq.operator_id + ')'}</td>
-            		<td style="text-align: center; width: 7%;">${inputreq.update_id != null ? inputreq.update_nm + '(' + inputreq.update_id + ')' : ''}</td>
-            		<td style="text-align: center; width: 12%;">
-            		<button class="btn btn-primary inreq_manage"
+            		<td style="text-align: center; width: 7%;">
+            		<button style="padding-right:10px; padding-left:10px;" class="btn btn-primary inreq_manage" ${manageButtonDisabled}
             		data-product-cd="${inputreq.product_cd}"
 					data-product-nm="${inputreq.product_nm}"
 					data-supplier-nm="${inputreq.supplier_nm}"
@@ -467,51 +474,78 @@ export class inboundreq_list {
 
 						tbody.innerHTML += list;
 					});
-
-
 				})
 				.catch(function(error) {
 					//console.log(error);
 					alert('데이터 조회에 문제가 발생하였습니다.');
 				});
-
 		}
-
+		
 	}
 
 
 
 	//전체 체크 누르고 끌 때
 	all_ckbox() {
+		this.each_ea = document.getElementsByName("each_ck"); //리스트 개수
 		this.all_ck_checked = document.getElementById("all_ck").checked;
-		for (this.f = 0; this.f < frm_inreq_list.each_ck.length; this.f++) {
-			frm_inreq_list.each_ck[this.f].checked = this.all_ck_checked;
+		
+		if(this.each_ea.length == 1 && !this.each_ea.disabled){
+			frm_inreq_list.each_ck.checked = this.all_ck_checked;
 		}
-
+		else{
+			for (this.f = 0; this.f < this.each_ea.length; this.f++) {
+				if(!this.each_ea[this.f].disabled){
+					this.each_ea[this.f].checked = this.all_ck_checked;
+				}
+				//frm_inreq_list.each_ck[this.f].checked = this.all_ck_checked;
+			}
+		}
 	}
 
 	//개별 체크 누르고 끌 때
 	each_ckbox() {
-		this.ck_count = 0;
-
-		for (this.f = 0; this.f < frm_inreq_list.each_ck.length; this.f++) {
-			if (frm_inreq_list.each_ck[this.f].checked == true) {
-				this.ck_count++;
-			}
-
+		const each_ck = document.getElementsByName("each_ck"); //리스트 개수
+		var ck_count = 0; //체크여부
+		
+		if(each_ck.length == 1 && each_ck.checked == true && !each_ck.disabled){
+			ck_count++;
+			document.getElementById("all_ck").checked = true;
 		}
+		else{
+			 // 모든 체크박스를 반복하면서 활성화된 체크박스의 수와 체크된 체크박스의 수를 센다.
+   	 		each_ck.forEach(checkbox => {
+        		if (!checkbox.disabled && checkbox.checked) { // 체크박스가 비활성화되지 않았을 경우
+      				ck_count++; // 체크된 체크박스 수 증가
+        		}
+        		
+        		
+    		});
 
-
-		if (this.ck_count == frm_inreq_list.each_ck.length) {
+			
+			
+			/*
+			for (this.f = 0; this.f <  this.each_ea.length; this.f++) {
+				
+				if (this.each_ea[this.f].checked == true && !this.each_ea[this.f].disabled) {
+					this.ck_count++;
+				}
+			}
+			*/
+			
+			
+		}
+		if (ck_count == window.active_ck) {
 			document.getElementById("all_ck").checked = true;
 		}
 		else {
 			document.getElementById("all_ck").checked = false;
 		}
-		return this.ck_count;
+		return ck_count;
 	}
 
 	delete_data() {
+		
 		if (this.each_ckbox() == 0) {
 			alert('삭제할 데이터를 선택해주세요');
 		}
@@ -545,52 +579,6 @@ export class page_move {
 }
 
 export class inboundreq_enroll {
-	/* 아놔..이건 datalist쓸 때
-	//[[상품코드,상품명,회사명],[상품코드,상품명,회사명],[상품코드,상품명,회사명]...] 이차배열 리턴
-	product_info() {
-		this.options = document.querySelectorAll("#products option"); //옵션 태그의 데이터
-
-		this.rows = this.options.length; //행(그룹) => 옵션 개수만큼
-		this.cols = 3;	//열(데이터)
-
-		this.option_data = new Array(this.rows); //이차배열 생성
-
-		this.w = 0;
-		while (this.w < this.rows) {
-			//각 행 배열로 초기화
-			this.option_data[this.w] = [];
-
-			//각 행마다 [상품코드, 상품명, 회사명]
-			this.option_data[this.w].push(this.options[this.w].value);
-			this.option_data[this.w].push(this.options[this.w].dataset.productName);
-			this.option_data[this.w].push(this.options[this.w].dataset.supplierName);
-
-			this.w++;
-		}
-
-		return this.option_data;
-	}
-
-	//상품코드 변경할 때마다 상품명, 회사명 자동 입력
-	insert_pdvalue() {
-		this.pd_datas = this.product_info(); //상품코드에 대한 정보를 담고있는 이차배열
-
-		this.pdcode = frm_inreq_modal.product_cd.value; //현재 사용자가 입력한 값
-		this.pdname = frm_inreq_modal.product_nm; //현재 사용자가 입력한 상품코드에 대한 상품명
-		this.spname = frm_inreq_modal.supplier_nm; //현재 사용자가 입력한 상품코드에 대한 회사명
-		
-		this.w = 0;
-		while (this.w < this.pd_datas.length) {
-			if (this.pdcode == this.pd_datas[this.w][0]) {
-				this.pdname.value = this.pd_datas[this.w][1];
-				this.spname.value = this.pd_datas[this.w][2];
-				break;
-			}
-			this.w++;
-		}
-	}
-	*/
-
 	//등록을 위해 값 날리기
 	submit_data() {
 		if (frm_inreq_modal.product_cd.value == "") {

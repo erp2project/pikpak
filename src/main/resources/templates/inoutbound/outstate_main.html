@@ -102,12 +102,16 @@
 										</tr>
 									-->
 										<tr th:each="outgoing : ${out_info}">
-											<td style="text-align: center; width: 5%;"><input
+											<td style="text-align: center; width: 5%;">
+											<input
 												type="checkbox" name="each_ck_out" 
 												th:value="${outgoing.getOutenroll_cd()}"
-												style="border: 1px solid #ccc;"></td>
+												style="border: 1px solid #ccc;">
+											<input type="hidden" name="order_cd" th:value="${outgoing.getOrder_cd()}">	
+												</td>
+											
 											<td style="text-align: center; width: 12%;"
-												th:text="${outgoing.getOrder_cd()}">주문번호</td>
+												th:text="${outgoing.getOrder_cd()}"></td>
 											<td style="text-align: center; width: 12%;"
 												th:text="${outgoing.getProduct_cd()}">상품코드</td>
 											<td style="text-align: center; width: 9%;"
