@@ -162,8 +162,18 @@ public class DeliveryServiceImpl implements DeliveryService{
 	
 	//현재 입고요청된 리스트 특정 회사에 대해서 가져오기
 	@Override
-	public List<input_request_state_dto> select_inreq_deliv(String supplier_cd) {
-		List<input_request_state_dto> ir_list = delrepo.select_inreq_deliv(supplier_cd);
+	public List<input_request_state_dto> select_inreq_deliv(Map<String, Object> data_arr) { //String supplier_cd
+		if((data_arr.get("start_date") != "") && (data_arr.get("end_date") != "")) {
+			String startdt = (String) data_arr.get("start_date");
+			startdt += " 00:00:00";
+			data_arr.put("start_date", startdt); 
+			
+			String enddt = (String) data_arr.get("end_date");
+			enddt += " 23:59:59";
+			data_arr.put("end_date", enddt);
+		}
+		
+		List<input_request_state_dto> ir_list = delrepo.select_inreq_deliv(data_arr);
 		return ir_list;
 	}
 

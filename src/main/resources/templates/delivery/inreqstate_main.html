@@ -26,8 +26,8 @@
 							<span class="menu-item" id="go_delreturn">납품반송현황</span>
 						</p>
 						<span style="float: right; height: 40px;">
-							<button type="button" class="btn btn-success">초기화</button>
-							<button type="button" class="btn btn-warning">조회</button>
+							<button type="button" class="btn btn-success" id="irst_list_reset">초기화</button>
+							<button type="button" class="btn btn-warning" id="irst_list_search">조회</button>
 						</span>
 						<p style="font-size: 12px; height: 25px; line-height: 30px;">※
 							조회옵션</p>
@@ -39,9 +39,12 @@
 									<td style="width: 10%; height: 34px; line-height: 34px;">등록일자</td>
 									<td style="width: 20%; line-height: 34px;">
 										<div style="display: flex; align-items: center;">
-											<input type="date" class="form-control" style="width: 40%;">&nbsp;&nbsp;
-											~ &nbsp;&nbsp; <input type="date" class="form-control"
-												style="width: 40%;">
+											<input type="date" class="form-control" 
+											id="inreqst_start_date"
+											style="width: 40%;">&nbsp;&nbsp;
+											~ &nbsp;&nbsp; 
+											<input type="date" class="form-control"
+											id="inreqst_end_date"	style="width: 40%;">
 										</div>
 									</td>
 									
@@ -50,7 +53,8 @@
 										/ 명</td>
 									<td style="width: 30%; line-height: 34px;">
 										<div style="display: flex; align-items: center;">
-											<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
+											<input type="text" class="form-control" style="width: 40%;"
+											id="inreqst_search_pdcd">&nbsp;&nbsp;
 											<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
 											<button class="btn btn-primary" type="button" id="pd_search">검색</button>
 										</div>
@@ -58,7 +62,7 @@
 									
 									<td style="width: 10%; height: 34px; line-height: 34px;">상태</td>
 									<td style="width: 25%; line-height: 34px;"><select
-										class="form-control"
+										class="form-control" id="inreqst_search_state"
 										style="width: 70%; float: left; margin-right: 5px;">
 											<option value="">상태 선택</option>
 											<option value="대기">대기</option>
@@ -95,7 +99,8 @@
 						</div>
 						<div class="panel-body" style="height: 400px; overflow-y: auto;">
 							<table class="table table-hover">
-								<tbody>
+								<tbody id="irst_tbody">
+								<!-- 
 									<tr th:each="inputreq : ${ir_list}">
 										<td style="text-align: center; width: 9%;"
 										th:text="${inputreq.getProduct_cd()}"></td>
@@ -128,6 +133,7 @@
 										th:data-request-cd="${inputreq.getRequest_cd()}"
 										style="padding-right:5px; padding-left:5px; width:40%;"
 										type="button">납품</button>
+										
 										<button class="btn btn-danger inreq_reject" 
 										style="padding-right:5px; padding-left:5px; width:40%;"
 										th:data-product-qty="${inputreq.getTotal_requested_qty()}"
@@ -137,6 +143,7 @@
 										type="button">거절</button>
 										</td>
 									</tr>
+									 -->
 								</tbody>
 							</table>
 						</div>

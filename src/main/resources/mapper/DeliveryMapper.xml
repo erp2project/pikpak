@@ -88,10 +88,51 @@ insert into deliver_enroll values ('0',#{request_cd},#{supplier_cd},#{deliver_cd
 #{update_id},now(),#{departure_dt})
 </insert>
 
+<!-- 
+
+select * from input_request_state 
+where 1=1
+<if test="supplier_cd != null and supplier_cd != ''">
+supplier_cd=#{supplier_cd} 
+</if>
+<if test="supplier_cd != null and supplier_cd != ''">
+supplier_cd=#{supplier_cd} 
+</if>
+<if test="supplier_cd != null and supplier_cd != ''">
+supplier_cd=#{supplier_cd} 
+</if>
+<if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
+    AND a.request_dt BETWEEN #{start_date} AND #{end_date}
+</if>
+ order by request_idx desc
+ -->
+
+
 <!-- 입고요청 현황 (뷰테이블에서 불러온 것) -->
+<select id="select_inreq_deliv" resultType="kr.co.pikpak.dto.input_request_state_dto" parameterType="Map">
+select * from input_request_state 
+where 1=1
+<if test="product_cd != null and product_cd != ''">
+and product_cd=#{product_cd} 
+</if>
+<if test="request_st != null and request_st != ''">
+and request_st=#{request_st} 
+</if>
+<if test="supplier_cd != null and supplier_cd != ''">
+and supplier_cd=#{supplier_cd} 
+</if>
+<if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
+    AND a.request_dt BETWEEN #{start_date} AND #{end_date}
+</if>
+ order by request_idx desc
+</select>
+
+<!-- 
+입고요청 현황 최초 찍을 떄
 <select id="select_inreq_deliv" resultType="kr.co.pikpak.dto.input_request_state_dto">
 select * from input_request_state where supplier_cd=#{supplier_cd} order by request_idx desc
 </select>
+ -->
 
 <!-- 입고요청 현황 (기본테이블에서 불러온 것)
 <select id="select_inreq_deliv" resultType="kr.co.pikpak.dto.input_request_dto">

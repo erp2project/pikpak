@@ -11,8 +11,9 @@ import kr.co.pikpak.dto.input_request_state_dto;
 
 public interface DeliveryService {
 	//입고요청 현황
-	public List<input_request_state_dto> select_inreq_deliv(String supplier_cd);
-
+	//public List<input_request_state_dto> select_inreq_deliv(String supplier_cd);
+	public List<input_request_state_dto> select_inreq_deliv(Map<String, Object> data_arr);
+	
 	//납품등록
 	public int insert_deliver_enroll(deliver_enroll_dto dto);
 	

@@ -187,7 +187,10 @@ $(document).ready(
 			var add_req = $(this).data("add-req");
 			var hope_dt = $(this).data("hope-dt");
 			var request_cd = $(this).data("request-cd");
-
+			
+			console.log(supplier_nm);
+			console.log(product_nm);
+			
 			// 입력 필드에 값 설정
 			$("#product_cd_del").val(product_cd);
 			$("#product_nm_del").val(product_nm);
@@ -208,21 +211,35 @@ $(document).ready(
 </script>
 </body>
 <script type="module">
-import {delivery_page_move, delivery_modal, delivery_list, inreq_list} from "../resources/js/deliver/deliveryenroll_main.js?v=5";
+import {delivery_page_move, delivery_modal, delivery_list, inreq_list} from "../resources/js/deliver/deliveryenroll_main.js?v=6";
 /* 페이지 처음 로드 */
 document.addEventListener('DOMContentLoaded', function() {
-    new delivery_modal().delivery_load();
+    new delivery_modal().delivery_load(); //상태 색상 변경
+	new inreq_list().inreqstate_list(); //ajax 검색 리스트 불러오기
 });
 
+
+/* 검색 조회 버튼 클릭 시 */
+document.querySelector("#irst_list_search").addEventListener("click",function(){
+		
+new inreq_list().inreqstate_list();
+});
+
+
+
 /* 거절 버튼 클릭 시 */
-document.querySelectorAll('.inreq_reject').forEach(function(button) {
-    button.addEventListener('click', function(event) {
-		var product_qty = this.dataset.productQty;
-		var remain_qty = this.dataset.remainQty;
-		var request_st = this.dataset.requestSt;
-		var request_idx = this.dataset.requestIdx;
-		new inreq_list().reject_list(request_idx, product_qty, remain_qty, request_st);
-	});
+document.querySelector('#irst_tbody').addEventListener('click', function(event) {
+    // 이벤트가 발생한 요소가 'inreq_reject' 클래스를 가진 버튼인지 확인
+    if (event.target.classList.contains('inreq_reject')) {
+        var button = event.target;
+        var product_qty = button.dataset.productQty;
+        var remain_qty = button.dataset.remainQty;
+        var request_st = button.dataset.requestSt;
+        var request_idx = button.dataset.requestIdx;
+
+        // 거절 로직을 실행하는 메소드 호출
+        new inreq_list().reject_list(request_idx, product_qty, remain_qty, request_st);
+    }
 });
 
 

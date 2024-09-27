@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -186,6 +188,35 @@ public class DeliveryController {
 		return null;
 	}
 	
+	//입고요청현황 리스트 검색
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@PostMapping("/inreqstate_search")
+	public ResponseEntity<List<input_request_state_dto>> inreqstate_search
+	(@RequestBody Map<String, Object> data_arr) {
+		List<input_request_state_dto> ir_state_search = null;
+		
+		//세션에서 회사정보를 가져왔다고 가정
+		String supplier_cd = "C001";
+		
+		
+		try {
+			//data_arr : start_date, end_date, request_st, product_cd
+			
+			//회사정보를 넣어주기
+			data_arr.put("supplier_cd", supplier_cd);
+			
+			//쿼리 실행
+			ir_state_search = delservice.select_inreq_deliv(data_arr);
+			return ResponseEntity.ok(ir_state_search);
+		}
+		catch(Exception e) {
+			System.out.println(e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+	
+	
+	
 	//입고요청현황
 	@GetMapping("/delivery/inreqstate")
 	public String inreqstate(Model m) {
@@ -193,9 +224,9 @@ public class DeliveryController {
 		//String supplier_nm = "LG전자";
 		String supplier_cd = "C001";
 		try {
-			List<input_request_state_dto> ir_list = delservice.select_inreq_deliv(supplier_cd);
+			//List<input_request_state_dto> ir_list = delservice.select_inreq_deliv(supplier_cd);
 			//System.out.println(ir_list.size());
-			m.addAttribute("ir_list", ir_list);
+			//m.addAttribute("ir_list", ir_list);
 		}	
 		catch(Exception e) {
 			System.out.println(e);

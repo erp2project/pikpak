@@ -1,10 +1,97 @@
 export class inreq_list {
 	//검색어 조회 ajax
-	
-	
-	
+	inreqstate_list() {
+		const inreqst_start_date = document.getElementById("inreqst_start_date").value;
+		const inreqst_end_date = document.getElementById("inreqst_end_date").value;
+		const inreqst_search_pdcd = document.getElementById("inreqst_search_pdcd").value;
+		const inreqst_search_state = document.getElementById("inreqst_search_state").value;
+
+		if (inreqst_start_date > inreqst_end_date) {
+			alert('정상적인 일자를 입력해주세요');
+		}
+		else if ((inreqst_start_date != "" && inreqst_end_date == "") || (inreqst_start_date == "" && inreqst_end_date != "")) {
+			alert('등록일자로 검색 시 모두 입력되어야합니다.');
+		}
+		else {
+			var inreqst_data = {
+				"start_date": inreqst_start_date,
+				"end_date": inreqst_end_date,
+				"product_cd": inreqst_search_pdcd,
+				"request_st": inreqst_search_state
+			};
+
+			this.search_data = JSON.stringify(inreqst_data);
+
+			fetch("/inreqstate_search", {
+				method: "post",
+				headers: { "Content-type": "application/json" },
+				body: this.search_data
+			})
+				.then(function(result_data) {
+					return result_data.json();
+				})
+				.then(function(result_res) {
+					const tbody = document.querySelector("#irst_tbody");
+
+					tbody.innerHTML = '';
+
+
+					result_res.forEach(function(irstate) {
+						//const disabled = ['진행', '완료', '거절'].includes(inputreq.request_st) ? 'disabled' : '';
+						//const manageButtonDisabled = disabled ? 'disabled' : '';
+
+
+						const list = `<tr>
+        			
+            		<td style="text-align: center; width: 9%;">${irstate.product_cd}</td>
+            		<td style="text-align: center; width: 17%;">${irstate.product_nm}</td>
+            		<td style="text-align: center; width: 7%;">${irstate.total_requested_qty}</td>
+            		<td style="text-align: center; width: 7%;">${irstate.remaining_qty}</td>
+            		<td style="text-align: center; width: 17%;">${irstate.add_req}</td>
+            		<td style="text-align: center; width: 11%;">${irstate.hope_dt}</td>
+            		<td style="text-align: center; width: 6%;">${irstate.request_st}</td>
+            		<td style="text-align: center; width: 11%;">${irstate.request_dt.substring(0, 10)}</td>
+													
+            		<td style="text-align: center; width: 15%;">
+            		<button class="btn btn-primary inreq_delivery" 
+					th:data-supplier-cd="${irstate.supplier_cd}"
+					th:data-supplier-nm="${irstate.supplier_nm}"
+					th:data-product-cd="${irstate.product_cd}"
+					th:data-product-nm="${irstate.product_nm}"
+					th:data-product-qty="${irstate.total_requested_qty}"
+					th:data-add-req="${irstate.add_req}"
+					th:data-hope-dt="${irstate.hope_dt}"
+					th:data-request-cd="${irstate.request_cd}"
+							
+					style="padding-right:5px; padding-left:5px; width:40%;"
+					type="button">납품</button>
+										
+					<button class="btn btn-danger inreq_reject" 
+					style="padding-right:5px; padding-left:5px; width:40%;"
+					th:data-product-qty="${irstate.total_requested_qty}"
+					th:data-remain-qty="${irstate.remaining_qty}"
+					th:data-request-st="${irstate.request_st}"
+					th:data-request-idx="${irstate.request_idx}"
+					type="button">거절</button>
+            		</td>
+					</tr>`;
+
+						tbody.innerHTML += list;
+					});
+
+				})
+				.catch(function(error) {
+					console.log(error);
+					alert('데이터 조회에 문제가 발생하였습니다.');
+				});
+		}
+	}
+
+
+
 	//입고요청에 대한 거절 버튼 클릭시
 	reject_list(inreq_idx, product_qty, remain_qty, request_st) {
+		console.log(inreq_idx);
 		this.idx = "request_idx=" + inreq_idx;
 
 		if (product_qty != remain_qty) {
