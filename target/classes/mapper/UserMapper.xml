@@ -11,6 +11,17 @@
 		select count(*) as ctn from login_view where user_id = #{userId}
 	</select>
 	
+	<!-- 회원 비밀번호 확인 -->
+	<select id="ctnPwFromView" resultType="Integer">
+		select count(*) as ctn from login_view where user_id = #{userId} and user_pw = #{userPw}
+	</select>
+	
+	<!--  -->
+	<select id="ctnEmailFromView" resultType="Integer">
+		select count(*) as ctn from login_view where user_id = #{userId} and user_mail = #{userMail}
+	</select>
+	
+	
 	<!-- 연락처 회원 유형 중복 체크 -->
 	<select id="ctnFromViewFilterBy" resultType="Integer">
 		select count(*) as ctn from login_view where user_tel = #{userTel} and user_type = #{userType}
@@ -22,7 +33,7 @@
 		${target_table} 
 		values 
 		('0',
-		#{user_nm},#{user_id},#{user_pw},#{user_tel},
+		#{user_nm},#{user_id},#{user_pw},#{user_pw},#{user_tel},
 		#{user_mail},#{user_co},#{company_cd},#{user_type},
 		<if test="user_type == 'admin' or user_type == 'operator'">
 		#{user_lv},
@@ -67,5 +78,25 @@
 	<select id="companyListFromView" resultType="kr.co.pikpak.dto.InfoTraderSimpleDTO">
 		select * from trader_info_view
 	</select>
+	
+	<update id="resetCredInTable" parameterType="kr.co.pikpak.dto.CredChangeDTO">
+		update
+		${target_table}
+		set
+		${target_pw} = init_pw
+		where
+		${target_id} = #{user_id}
+	</update>
+	
+	<update id="modCredInTable" parameterType="kr.co.pikpak.dto.CredChangeDTO">
+		update
+		${target_table}
+		set
+		${target_pw} = #{new_user_pw}
+		where
+		${target_id} = #{user_id}
+	</update>
+	
+	
 	
 </mapper>
