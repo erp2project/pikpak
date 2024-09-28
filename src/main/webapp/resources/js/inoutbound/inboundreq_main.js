@@ -3,36 +3,36 @@ export var active_ck;
 
 export class receiving_enroll {
 	//처음 리스트를 띄우기 위한 ajax
-	recv_enroll_list(){
-		const recv_type = document.getElementById("recv_type").value;
-		const recv_date_type = document.getElementById("recv_date_type").innerText;
+	recv_enroll_list() {
+		const type_select = document.getElementById("type_select").value;
 		const recv_start_date = document.getElementById("recv_start_date").value;
 		const recv_end_date = document.getElementById("recv_end_date").value;
 		const recv_spcd = document.getElementById("recv_spcd").value;
 		const recv_pdcd = document.getElementById("recv_pdcd").value;
+		const recv_st = document.getElementById("recv_st").value;
 
-		if (start_date > end_date) {
+		if (recv_start_date > recv_end_date) {
 			alert('정상적인 일자를 입력해주세요');
 		}
-		else if ((start_date != "" && end_date == "") || (start_date == "" && end_date != "")) {
+		else if ((recv_start_date != "" && recv_end_date == "") || (recv_start_date == "" && recv_end_date != "")) {
 			alert('입고요청일자로 검색 시 모두 입력되어야합니다.');
 		}
-		else {	
-			/*	
+		else {
+
 			var data = {
-				"start_date": start_date,
-				"end_date": end_date,
-				"supplier_cd": search_cp_cd,
-				"product_cd": search_pd_cd,
-				"request_st": search_state,
-				"operator_nm": search_operator
+				"exreceiving_type": type_select,
+				"start_date": recv_start_date,
+				"end_date": recv_end_date,
+				"exreceiving_st": recv_st,
+				"supplier_cd": recv_spcd,
+				"product_cd": recv_pdcd
 			};
 
 			this.search_data = JSON.stringify(data);
-			//console.log(this.search_data);
 
-			
-			fetch("/inboundreq_search", {
+
+
+			fetch("/receiving_search", {
 				method: "post",
 				headers: { "Content-type": "application/json" },
 				body: this.search_data
@@ -41,144 +41,199 @@ export class receiving_enroll {
 					return result_data.json();
 				})
 				.then(function(result_res) {
-					//console.log(result_res);
+					console.log(result_res);
 
-					const tbody = document.querySelector("#ir_tbody");
+					const tbody = document.querySelector("#rv_tbody");
 
 					tbody.innerHTML = '';
 					window.active_ck = 0; // 활성화된 체크박스 수를 리셋
+
+					result_res.forEach(function(exrecv) {
+						const disabled = ['입고'].includes(exrecv.exreceiving_st) ? 'disabled' : '';
+						const manageButtonDisabled = disabled ? 'disabled' : '';
+						
+						if (type_select == "납품") {
+						const list_deliver = `<tr>
+        			<td style="text-align: center; width: 3%;">1</td>
+            		<td style="text-align: center; width: 9%;">${exrecv.supplier_nm}</td>
+            		<td style="text-align: center; width: 9%;">${exrecv.product_cd}</td>
+            		<td style="text-align: center; width: 9%;">${exrecv.product_nm}</td>
+            		<td style="text-align: center; width: 6%;">${exrecv.exreceiving_size}</td>
+            		<td style="text-align: center; width: 5%;">${exrecv.exreceiving_type}</td>
+            		<td style="text-align: center; width: 5%;">${exrecv.exreceiving_qty}</td>
+            		<td style="text-align: center; width: 5%;">${exrecv.return_qty}</td>
+            		<td style="text-align: center; width: 5%;"></td>
+            		<td style="text-align: center; width: 9%;">${exrecv.departure_dt.substring(0, 10)}</td>
+					<td style="text-align: center; width: 7%;">${exrecv.exreceiving_st}</td>					
+					<td style="text-align: center; width: 9%;">${(exrecv.update_dt != null) ? exrecv.update_dt.substring(0, 10) : ''}</td>
+										
+            		<td style="text-align: center; width: 15%;">
+            		
+            		<button style="padding-right: 5px; padding-left: 5px; width: 40%;" class="btn btn-primary decide_inbound" ${manageButtonDisabled}
+            		data-make-dt="${exrecv.make_dt}"
+            		data-exrecv-size="${exrecv.exreceiving_size}"
+            		data-product-cd="${exrecv.product_cd}"
+					data-product-nm="${exrecv.product_nm}"
+					data-supplier-nm="${exrecv.supplier_nm}"
+					data-product-qty="${exrecv.exreceiving_qty}"
+					data-return-qty="${exrecv.return_qty}"
+					data-exrecv-dt="${exrecv.departure_dt}"
+					data-deliver_cd="${exrecv.deliver_cd}"
+					data-exrecv-cd="${exrecv.exreceiving_cd}"
+					data-supplier-cd="${exrecv.supplier_cd}"
+					data-exrecv-type="${exrecv.exreceiving_type}"
+					>입고</button>
 					
-					result_res.forEach(function(inputreq) {
-					const disabled = ['진행', '완료', '거절'].includes(inputreq.request_st) ? 'disabled' : '';
-                    const manageButtonDisabled = disabled ? 'disabled' : '';
-					const checkboxDisabled = inputreq.request_st === '진행' || inputreq.request_st === '완료' || inputreq.request_st === '거절' ? 'disabled' : '';
-					if (!checkboxDisabled) {
-                			window.active_ck++; // 활성화된 체크박스 카운트
-            		}
-					const list = `<tr>
-        			<td style="text-align: center; width: 3%;"><input type="checkbox" name="each_ck" value="${inputreq.request_idx}"  ${checkboxDisabled}></td>
-            		<td style="text-align: center; width: 6%;">${inputreq.supplier_nm}</td>
-            		<td style="text-align: center; width: 7%;">${inputreq.product_cd}</td>
-            		<td style="text-align: center; width: 10%;">${inputreq.product_nm}</td>
-            		<td style="text-align: center; width: 7%;">${inputreq.product_qty}</td>
-            		<td style="text-align: center; width: 25%;">${inputreq.add_req}</td>
-            		<td style="text-align: center; width: 12%;">${inputreq.hope_dt}</td>
-            		<td style="text-align: center; width: 5%;">${inputreq.request_st}</td>
-            		<td style="text-align: center; width: 9%;">${inputreq.request_dt.substring(0, 10)}</td>
-										
-					<td style="text-align: center; width: 9%;">${(inputreq.update_dt != null) ? inputreq.update_dt.substring(0, 10) : ''}</td>
-										
-            		<td style="text-align: center; width: 7%;">
-            		<button style="padding-right:10px; padding-left:10px;" class="btn btn-primary inreq_manage" ${manageButtonDisabled}
-            		data-product-cd="${inputreq.product_cd}"
-					data-product-nm="${inputreq.product_nm}"
-					data-supplier-nm="${inputreq.supplier_nm}"
-					data-product-qty="${inputreq.product_qty}"
-					data-add-req="${inputreq.add_req}"
-					data-hope-dt="${inputreq.hope_dt}"
-					data-request-idx="${inputreq.request_idx}">관리</button>
+					<button style="padding-right: 5px; padding-left: 5px; width: 40%;" class="btn btn-danger decide_return" ${manageButtonDisabled}
+            		
+            		data-product-cd="${exrecv.product_cd}"
+					data-product-nm="${exrecv.product_nm}"
+					data-supplier-nm="${exrecv.supplier_nm}"
+					data-product-qty="${exrecv.exreceiving_qty}"
+									
+					data-exrecv-dt="${exrecv.departure_dt}"		
+					data-deliver_cd="${exrecv.deliver_cd}"
+					data-exrecv-cd="${exrecv.exreceiving_cd}"
+					data-supplier-cd="${exrecv.supplier_cd}">반송</button>
             		</td>
 					</tr>`;
+						tbody.innerHTML += list_deliver;
+					}
+					else {
+					const list_return = `<tr>
+        			<td style="text-align: center; width: 3%;">1</td>
+            		<td style="text-align: center; width: 9%;">${exrecv.supplier_nm}</td>
+            		<td style="text-align: center; width: 9%;">${exrecv.product_cd}</td>
+            		<td style="text-align: center; width: 9%;">${exrecv.product_nm}</td>
+            		<td style="text-align: center; width: 6%;">${exrecv.exreceiving_size}</td>
+            		<td style="text-align: center; width: 5%;">${exrecv.exreceiving_type}</td>
+            		<td style="text-align: center; width: 5%;">${exrecv.exreceiving_qty}</td>
+            		<td style="text-align: center; width: 5%;"></td>
+            		<td style="text-align: center; width: 5%;">${exrecv.processing_dt.substring(0, 10)}</td>
+            		<td style="text-align: center; width: 9%;"></td>
+					<td style="text-align: center; width: 7%;">${exrecv.exreceiving_st}</td>					
+					<td style="text-align: center; width: 9%;">${(exrecv.update_dt != null) ? exrecv.update_dt.substring(0, 10) : ''}</td>
+										
+            		<td style="text-align: center; width: 15%;">
+            		
+            		<button style="padding-right: 5px; padding-left: 5px; width: 40%;" class="btn btn-primary decide_inbound" ${manageButtonDisabled}
+            		data-make-dt="${exrecv.make_dt}"
+            		data-exrecv-size="${exrecv.exreceiving_size}"
+            		data-product-cd="${exrecv.product_cd}"
+					data-product-nm="${exrecv.product_nm}"
+					data-supplier-nm="${exrecv.supplier_nm}"
+					data-product-qty="${exrecv.exreceiving_qty}"
+					data-return-qty=0
+					data-exrecv-dt="${exrecv.processing_dt}"
+					data-deliver_cd=""
+					data-exrecv-cd="${exrecv.exreceiving_cd}"
+					data-supplier-cd="${exrecv.supplier_cd}"
+					data-exrecv-type="${exrecv.exreceiving_type}"
+					>입고</button>
+					
+					</tr>`;
+						tbody.innerHTML += list_return;
+					}
 
-						tbody.innerHTML += list;
 					});
+
 				})
 				.catch(function(error) {
-					//console.log(error);
+					console.log(error);
 					alert('데이터 조회에 문제가 발생하였습니다.');
 				});
-				*/
+
 		}
 	}
-	
-	
-	
-	
+
+
+
+
 	//위치정보 가져오기 위한 ajax
 	bring_locations(sp_cd) {
-		if(frm_decide_recv.total_qty != frm_decide_recv.return_qty){
-		//supplier_cd에 대한 위치코드 긁어오기
-		fetch("/inventory_locations?supplier_cd=" + sp_cd, {
-			method: "get"
-		})
-			.then(function(result_data) {
-				return result_data.json();
+		if (frm_decide_recv.total_qty != frm_decide_recv.return_qty) {
+			//supplier_cd에 대한 위치코드 긁어오기
+			fetch("/inventory_locations?supplier_cd=" + sp_cd, {
+				method: "get"
 			})
-			.then(function(locations) {
-				var exrecv_size = document.getElementById('exrecv_size');
-				var location_select = document.getElementById("location_select");
+				.then(function(result_data) {
+					return result_data.json();
+				})
+				.then(function(locations) {
+					var exrecv_size = document.getElementById('exrecv_size');
+					var location_select = document.getElementById("location_select");
 
-				function update_location_option() {
-					var selected_type = exrecv_size.value;
-					location_select.innerHTML = '<option value="">위치 선택</option>'; // 초기화
+					function update_location_option() {
+						var selected_type = exrecv_size.value;
+						location_select.innerHTML = '<option value="">위치 선택</option>'; // 초기화
 
-					locations.forEach(function(location) {
-						var type_matches = false;
-						if (selected_type == '1유형' && location.location_cd.includes("L1")) {
-							type_matches = true;
-						} else if (selected_type == '2유형' && (location.location_cd.includes("L2") || location.location_cd.includes("L3"))) {
-							type_matches = true;
-						} else if (selected_type == '3유형' && location.location_cd.includes("L4")) {
-							type_matches = true;
-						}
+						locations.forEach(function(location) {
+							var type_matches = false;
+							if (selected_type == '1유형' && location.location_cd.includes("L1")) {
+								type_matches = true;
+							} else if (selected_type == '2유형' && (location.location_cd.includes("L2") || location.location_cd.includes("L3"))) {
+								type_matches = true;
+							} else if (selected_type == '3유형' && location.location_cd.includes("L4")) {
+								type_matches = true;
+							}
 
-						if (type_matches) {
-							var option = document.createElement('option');
-							option.value = location.location_cd;
-							option.textContent = location.location_cd + " (" + location.current_capacity + "/" + location.max_capacity + ")";
-							location_select.appendChild(option);
-						}
-					});
-				}
+							if (type_matches) {
+								var option = document.createElement('option');
+								option.value = location.location_cd;
+								option.textContent = location.location_cd + " (" + location.current_capacity + "/" + location.max_capacity + ")";
+								location_select.appendChild(option);
+							}
+						});
+					}
 
-				exrecv_size.addEventListener('change', update_location_option);
+					exrecv_size.addEventListener('change', update_location_option);
 
-				// 모달이 열릴 때 초기 옵션을 설정
-				update_location_option();
-			})
-			.catch(function(error) {
-				console.log(error);
-			});
-			
+					// 모달이 열릴 때 초기 옵션을 설정
+					update_location_option();
+				})
+				.catch(function(error) {
+					console.log(error);
+				});
+
 		}
-		
-			
-		
+
+
+
 	}
 
-	no_button(){
-		 // 'recv_state_ck' 클래스를 가진 모든 td 요소를 가져옵니다.
-    	const state_cells = document.querySelectorAll('.recv_state_ck');
+	no_button() {
+		// 'recv_state_ck' 클래스를 가진 모든 td 요소를 가져옵니다.
+		const state_cells = document.querySelectorAll('.recv_state_ck');
 
-    	// 각 상태 셀을 순회하면서 상태 확인
-    	state_cells.forEach(function(cell) {
+		// 각 상태 셀을 순회하면서 상태 확인
+		state_cells.forEach(function(cell) {
 
-        // 상태가 '입고'인 경우
-        if (cell.innerText == '입고') {
-            const row = cell.closest('tr'); // 현재 셀의 행을 찾음
-            const inbound_button = row.querySelector('.decide_inbound'); // '입고' 버튼
-            const return_button = row.querySelector('.decide_return'); // '반송' 버튼
+			// 상태가 '입고'인 경우
+			if (cell.innerText == '입고') {
+				const row = cell.closest('tr'); // 현재 셀의 행을 찾음
+				const inbound_button = row.querySelector('.decide_inbound'); // '입고' 버튼
+				const return_button = row.querySelector('.decide_return'); // '반송' 버튼
 
-            // 버튼들을 비활성화
-           	inbound_button.disabled = true;
-            return_button.disabled = true;
-        }
+				// 버튼들을 비활성화
+				inbound_button.disabled = true;
+				return_button.disabled = true;
+			}
 
-    });
+		});
 	}
 
 	//입고 등록
 	go_recv_enroll() {
 		var location_select = document.getElementById("location_select");
-    	var selected_option = location_select.options[location_select.selectedIndex].text;
-    
-    	// 현재 용량과 최대 용량 추출
-    	var capacity_match = selected_option.match(/\((\d+)\/(\d+)\)$/);
-    	
+		var selected_option = location_select.options[location_select.selectedIndex].text;
+
+		// 현재 용량과 최대 용량 추출
+		var capacity_match = selected_option.match(/\((\d+)\/(\d+)\)$/);
+
 		if (frm_decide_recv.inventory_dt.value == "" || frm_decide_recv.location_cd.value == "") {
 			alert("입고일자 및 위치코드를 지정해주세요.");
 		}
-		else if( parseInt(capacity_match[1]) >= parseInt(capacity_match[2]) ){
+		else if (parseInt(capacity_match[1]) >= parseInt(capacity_match[2])) {
 			alert("해당 위치는 사용하실 수 없습니다.");
 		}
 		else {
@@ -503,7 +558,7 @@ export class inboundreq_list {
 		else if ((start_date != "" && end_date == "") || (start_date == "" && end_date != "")) {
 			alert('입고요청일자로 검색 시 모두 입력되어야합니다.');
 		}
-		else {		
+		else {
 			var data = {
 				"start_date": start_date,
 				"end_date": end_date,
@@ -531,15 +586,15 @@ export class inboundreq_list {
 
 					tbody.innerHTML = '';
 					window.active_ck = 0; // 활성화된 체크박스 수를 리셋
-					
+
 					result_res.forEach(function(inputreq) {
-					const disabled = ['진행', '완료', '거절'].includes(inputreq.request_st) ? 'disabled' : '';
-                    const manageButtonDisabled = disabled ? 'disabled' : '';
-					const checkboxDisabled = inputreq.request_st === '진행' || inputreq.request_st === '완료' || inputreq.request_st === '거절' ? 'disabled' : '';
-					if (!checkboxDisabled) {
-                			window.active_ck++; // 활성화된 체크박스 카운트
-            		}
-					const list = `<tr>
+						const disabled = ['진행', '완료', '거절'].includes(inputreq.request_st) ? 'disabled' : '';
+						const manageButtonDisabled = disabled ? 'disabled' : '';
+						const checkboxDisabled = inputreq.request_st === '진행' || inputreq.request_st === '완료' || inputreq.request_st === '거절' ? 'disabled' : '';
+						if (!checkboxDisabled) {
+							window.active_ck++; // 활성화된 체크박스 카운트
+						}
+						const list = `<tr>
         			<td style="text-align: center; width: 3%;"><input type="checkbox" name="each_ck" value="${inputreq.request_idx}"  ${checkboxDisabled}></td>
             		<td style="text-align: center; width: 6%;">${inputreq.supplier_nm}</td>
             		<td style="text-align: center; width: 7%;">${inputreq.product_cd}</td>
@@ -572,7 +627,7 @@ export class inboundreq_list {
 					alert('데이터 조회에 문제가 발생하였습니다.');
 				});
 		}
-		
+
 	}
 
 
@@ -581,13 +636,13 @@ export class inboundreq_list {
 	all_ckbox() {
 		this.each_ea = document.getElementsByName("each_ck"); //리스트 개수
 		this.all_ck_checked = document.getElementById("all_ck").checked;
-		
-		if(this.each_ea.length == 1 && !this.each_ea.disabled){
+
+		if (this.each_ea.length == 1 && !this.each_ea.disabled) {
 			frm_inreq_list.each_ck.checked = this.all_ck_checked;
 		}
-		else{
+		else {
 			for (this.f = 0; this.f < this.each_ea.length; this.f++) {
-				if(!this.each_ea[this.f].disabled){
+				if (!this.each_ea[this.f].disabled) {
 					this.each_ea[this.f].checked = this.all_ck_checked;
 				}
 				//frm_inreq_list.each_ck[this.f].checked = this.all_ck_checked;
@@ -599,23 +654,23 @@ export class inboundreq_list {
 	each_ckbox() {
 		const each_ck = document.getElementsByName("each_ck"); //리스트 개수
 		var ck_count = 0; //체크여부
-		
-		if(each_ck.length == 1 && each_ck.checked == true && !each_ck.disabled){
+
+		if (each_ck.length == 1 && each_ck.checked == true && !each_ck.disabled) {
 			ck_count++;
 			document.getElementById("all_ck").checked = true;
 		}
-		else{
-			 // 모든 체크박스를 반복하면서 활성화된 체크박스의 수와 체크된 체크박스의 수를 센다.
-   	 		each_ck.forEach(checkbox => {
-        		if (!checkbox.disabled && checkbox.checked) { // 체크박스가 비활성화되지 않았을 경우
-      				ck_count++; // 체크된 체크박스 수 증가
-        		}
-        		
-        		
-    	});
+		else {
+			// 모든 체크박스를 반복하면서 활성화된 체크박스의 수와 체크된 체크박스의 수를 센다.
+			each_ck.forEach(checkbox => {
+				if (!checkbox.disabled && checkbox.checked) { // 체크박스가 비활성화되지 않았을 경우
+					ck_count++; // 체크된 체크박스 수 증가
+				}
 
-			
-			
+
+			});
+
+
+
 			/*
 			for (this.f = 0; this.f <  this.each_ea.length; this.f++) {
 				
@@ -624,8 +679,8 @@ export class inboundreq_list {
 				}
 			}
 			*/
-			
-	   }
+
+		}
 		if (ck_count == window.active_ck) {
 			document.getElementById("all_ck").checked = true;
 		}
@@ -636,7 +691,7 @@ export class inboundreq_list {
 	}
 
 	delete_data() {
-		
+
 		if (this.each_ckbox() == 0) {
 			alert('삭제할 데이터를 선택해주세요');
 		}

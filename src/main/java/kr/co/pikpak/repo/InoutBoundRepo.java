@@ -68,7 +68,7 @@ public interface InoutBoundRepo {
 	List<input_request_dto> select_inreq_search(Map<String, Object> data_arr);
 	
 	//가입고 테이블 select -> 입고등록 페이지
-	List<ex_receiving_joined_dto> select_ex_receiving();
+	List<ex_receiving_joined_dto> select_ex_receiving(Map<String, Object> data_arr);
 	
 	//가입고 반송등록
 	int insert_deliver_return(deliver_return_dto dto);

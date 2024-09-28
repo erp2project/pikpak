@@ -63,7 +63,7 @@ public interface InoutBoundService {
 	public List<input_request_dto> select_inreq_search(Map<String, Object> data_arr);
 	
 	//가입고 리스트 select
-	public List<ex_receiving_joined_dto> select_ex_receiving();
+	public List<ex_receiving_joined_dto> select_ex_receiving(Map<String, Object> data_arr);
 	
 	//가입고 반송
 	public int insert_deliver_return(deliver_return_dto dto);

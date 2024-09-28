@@ -227,7 +227,8 @@ $(document).ready(function() {
 		var supplier_cd = $(this).data("supplier-cd");
 		var return_qty = $(this).data("return-qty");
 		var make_dt = $(this).data("make-dt");
-		
+		var exrecv_type = $(this).data("exrecv-type");
+	
 		if (parseInt(product_qty) == parseInt(return_qty)) {
 		   alert("모두 반송 처리된 데이터입니다.");
 		   return; // 반송 수량과 납품 수량이 같다면 모달을 띄우지 않음
@@ -246,6 +247,7 @@ $(document).ready(function() {
 		$("#exrecv_size").val(exrecv_size);
 		$("#return_qty").val(return_qty);
 		$("#make_dt_recv").val(make_dt);
+		$("#exrecv_type_recv").val(exrecv_type);
 		
 		// 모달 보여주기
 		$("#decideRecvModal").modal('show');
@@ -274,8 +276,27 @@ $(document).ready(function() {
     import {page_move, receiving_enroll} from "../resources/js/inoutbound/inboundreq_main.js?v=4";
 	/* 페이지 처음 로드 */
 	document.addEventListener('DOMContentLoaded', function() {
-		//'입고' 상태 변화된 리스트 버튼 비활성화
-		new receiving_enroll().no_button();
+		const today = new Date();
+        const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+
+        const formatDate = (date) => {
+            let d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) 
+                month = '0' + month;
+            if (day.length < 2) 
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        };
+
+        document.getElementById("recv_start_date").value = formatDate(lastWeek);
+        document.getElementById("recv_end_date").value = formatDate(today);
+		document.getElementById("type_select").value = '납품';
+		new receiving_enroll().recv_enroll_list(); //페이지 리스트를 위한 ajax
 	});	
 
 
@@ -295,13 +316,36 @@ $(document).ready(function() {
     	}
 });
 
+	//초기화 버튼 클릭시
+	document.querySelector("#recv_reset").addEventListener("click",function(){
+	location.reload();
+	});
+
+	//조회버튼 클릭시
+	document.querySelector("#recv_search").addEventListener("click",function(){
+	new receiving_enroll().recv_enroll_list(); //페이지 리스트를 위한 ajax
+	});
+
+
+	//개별 입고등록 -> 동적생성해서 이벤트 위임을 따로 해줘야함
+document.getElementById('rv_tbody').addEventListener('click', function(event) {
+    // 클릭한 요소가 decide_inbound 클래스를 가진 버튼인지 확인
+    if (event.target.classList.contains('decide_inbound')) {
+        const supplierCd = event.target.dataset.supplierCd;
+        
+        // receiving_enroll 객체의 bring_locations 메서드 호출
+        new receiving_enroll().bring_locations(supplierCd);
+    }
+});
+
+/*
     //가입고 리스트 입고등록시, 입고 등록버튼 decide_inbound	
 	document.querySelectorAll('.decide_inbound').forEach(function(button) {
     	button.addEventListener('click', function(event) {
 			new receiving_enroll().bring_locations(button.dataset.supplierCd);
 		});
 	});
-
+*/
 	//가입고 리스트 입고등록하기 go_recv_enroll
 	document.querySelector("#recv_enroll").addEventListener("click",function(){
 		new receiving_enroll().go_recv_enroll();

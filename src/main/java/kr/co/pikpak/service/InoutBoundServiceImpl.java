@@ -164,7 +164,8 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	public int insert_receiving(receiving_dto dto) {
 		int final_result = 0;
 		
-		//lot_no 생성
+		//lot_no 생성 => 반품과 납품이 달라야함
+		System.out.println(dto.getExreceiving_type());
 		/*
 		  상품코드 + 제조일자 + 입고일자 
 		 */
@@ -298,8 +299,18 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	
 	//가입고 리스트
 	@Override
-	public List<ex_receiving_joined_dto> select_ex_receiving() {
-		List<ex_receiving_joined_dto> exrecv_list = iorepo.select_ex_receiving();
+	public List<ex_receiving_joined_dto> select_ex_receiving(Map<String, Object> data_arr) {
+		if((data_arr.get("start_date") != "") && (data_arr.get("end_date") != "")) {
+			String startdt = (String) data_arr.get("start_date");
+			startdt += " 00:00:00";
+			data_arr.put("start_date", startdt); 
+			
+			String enddt = (String) data_arr.get("end_date");
+			enddt += " 23:59:59";
+			data_arr.put("end_date", enddt);
+		}
+		
+		List<ex_receiving_joined_dto> exrecv_list = iorepo.select_ex_receiving(data_arr);
 		return exrecv_list;
 	}
 	

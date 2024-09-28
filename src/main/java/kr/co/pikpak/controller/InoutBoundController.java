@@ -505,14 +505,32 @@ public class InoutBoundController {
 		return null;
 	}
 
+	//입고등록 서치 리스트
+	@PostMapping("/receiving_search")
+	public ResponseEntity<List<ex_receiving_joined_dto>> receiving_search(
+			@RequestBody Map<String, Object> data_arr){
+		try {
+			
+
+			List<ex_receiving_joined_dto> exrecv_list = ioservice.select_ex_receiving(data_arr);
+			
+			return ResponseEntity.ok(exrecv_list);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+	
+	
 	// 입고 등록 이동
 	@GetMapping("inoutbound/recvenroll")
 	public String recvenroll(Model m) {
 		// 입고 모달에 위치코드 정보 불러오기
 
 		// 가입고 리스트 불러오기
-		List<ex_receiving_joined_dto> exrecv_list = ioservice.select_ex_receiving();
-		m.addAttribute("exrecv_list", exrecv_list);
+		//List<ex_receiving_joined_dto> exrecv_list = ioservice.select_ex_receiving();
+		//m.addAttribute("exrecv_list", exrecv_list);
 
 		return null;
 	}

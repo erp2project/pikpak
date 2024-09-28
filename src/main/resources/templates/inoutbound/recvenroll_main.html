@@ -25,9 +25,9 @@
 								class="menu-item active" id="go_recvenroll">입고등록</span>
 						</p>
 						<span style="float: right; height: 40px;">
-							<button type="button" class="btn btn-success">초기화</button>
+							<button type="button" class="btn btn-success" id="recv_reset">초기화</button>
 							<button type="button" class="btn btn-danger">EXCEL</button>
-							<button type="button" class="btn btn-warning">조회</button>
+							<button type="button" class="btn btn-warning" id="recv_search">조회</button>
 						</span>
 						<p style="font-size: 12px; height: 25px; line-height: 30px;">※
 							조회옵션</p>
@@ -39,12 +39,11 @@
 									<td style="width: 10%; height: 34px; line-height: 34px;">종류</td>
 									<td style="width: 15%; line-height: 34px;"><select 
 										class="form-control" id="type_select"
-										style="width: 60%; float: left; margin-right: 5px;" id="recv_type">
-											<option value="">종류 선택</option>
+										style="width: 60%; float: left; margin-right: 5px;">
 											<option value="납품">납품</option>
 											<option value="반품">반품</option>
 									</select></td>
-									<td id="date_header" style="width: 10%; height: 34px; line-height: 34px;" id="recv_date_type">일자</td>
+									<td id="date_header" style="width: 10%; height: 34px; line-height: 34px;">배송일자</td>
 									<td style="width: 20%; line-height: 34px;">
 										<div style="display: flex; align-items: center;">
 											<input type="date" class="form-control" style="width: 40%;" id="recv_start_date">&nbsp;&nbsp;
@@ -57,7 +56,7 @@
 										<div style="display: flex; align-items: center;">
 											<input type="text" class="form-control" style="width: 40%;" id="recv_spcd">&nbsp;&nbsp;
 											<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
-											<button class="btn btn-primary" type="button" id="cp_search">검색</button>
+											<button class="btn btn-primary" type="button" id="cp_search_recv">검색</button>
 										</div>
 									</td>
 									
@@ -70,9 +69,17 @@
 										<div style="display: flex; align-items: center;">
 											<input type="text" class="form-control" style="width: 40%;" id="recv_pdcd">&nbsp;&nbsp;
 											<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
-											<button class="btn btn-primary" type="button" id="pd_search">검색</button>
+											<button class="btn btn-primary" type="button" id="pd_search-recv">검색</button>
 										</div>
 									</td>	
+									<td style="width: 10%; height: 34px; line-height: 34px;">상태</td>
+									<td style="width: 15%; line-height: 34px;"><select 
+										class="form-control" id="recv_st"
+										style="width: 60%; float: left; margin-right: 5px;">
+											<option value="">상태 선택</option>
+											<option value="대기">대기</option>
+											<option value="입고">입고</option>
+									</select></td>
 								</tr>
 							</tbody>
 						</table>
@@ -87,14 +94,15 @@
 										<th style="text-align: center; width: 3%;">NO.</th>
 										<th style="text-align: center; width: 9%;">회사명</th>
 										<th style="text-align: center; width: 9%;">상품코드</th>
-										<th style="text-align: center; width: 12%;">상품명</th>
-										<th style="text-align: center; width: 7%;">상품크기</th>
-										<th style="text-align: center; width: 6%;">종류</th>
-										<th style="text-align: center; width: 6%;">납품수량</th>
-										<th style="text-align: center; width: 6%;">반품수량</th>
-										<th style="text-align: center; width: 10%;">반품 일자</th>
-										<th style="text-align: center; width: 10%;">배송 일자</th>
+										<th style="text-align: center; width: 9%;">상품명</th>
+										<th style="text-align: center; width: 6%;">상품크기</th>
+										<th style="text-align: center; width: 5%;">종류</th>
+										<th style="text-align: center; width: 5%;">납품수량</th>
+										<th style="text-align: center; width: 5%;">반품수량</th>
+										<th style="text-align: center; width: 9%;">반품일자</th>
+										<th style="text-align: center; width: 9%;">배송일자</th>
 										<th style="text-align: center; width: 7%;">상태</th>
+										<th style="text-align: center; width: 9%;">입고등록일자</th>
 										<th style="text-align: center; width: 15%;">관리</th>
 									</tr>
 
@@ -103,7 +111,8 @@
 						</div>
 						<div class="panel-body" style="height: 400px; overflow-y: auto;">
 							<table class="table table-hover">
-								<tbody>
+								<tbody id="rv_tbody">
+								<!-- 
 									<tr th:each="exrecv, stat : ${exrecv_list}">
 										<td
 											style="text-align: center; padding-right: 25px; width: 3%;"
@@ -148,7 +157,7 @@
 												th:data-deliver-cd="${exrecv.getDeliver_cd()}"
 												th:data-exrecv-cd="${exrecv.getExreceiving_cd()}"
 												th:data-supplier-cd="${exrecv.getSupplier_cd()}"
-												th:data-exrecv-size="${exrecv.getExreceiving_size()}">입고</button>
+												>입고</button>
 
 											<button class="btn btn-danger decide_return"
 												style="padding-right: 5px; padding-left: 5px; width: 40%;"
@@ -164,7 +173,7 @@
 												type="button">반송</button>
 										</td>
 									</tr>
-
+									 -->
 
 								</tbody>
 							</table>
