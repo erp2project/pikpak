@@ -29,7 +29,7 @@ delete from warehouse where wh_warehouse_idx=#{wh_warehouse_idx}
 
 <!-- 출고 확정 -->
 <update id="update_outenroll_decide">
-update outgoing_enroll set outenroll_st='확정' where outenroll_cd=#{outenroll_cd}
+update outgoing_enroll set outenroll_st='확정', update_id=#{update_id} where outenroll_cd=#{outenroll_cd}
 </update>
 
 <!-- 재고로그기록 테이블에서 '출고'로 타입지정 업데이트 -->

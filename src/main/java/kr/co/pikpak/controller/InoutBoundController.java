@@ -98,7 +98,7 @@ public class InoutBoundController {
 			@RequestParam(defaultValue = "", required = true) String order_cd,
 			@RequestParam(defaultValue = "", required = true) String wh_warehouse_idx_datas[]) {
 		res.setContentType("text/html;charset=utf-8");
-		String operator_id = "ad_leehw_1234";
+		String update_id = "ad_leehw_1234";
 		
 		System.out.println(outenroll_cd); //출고 등록 상태 업데이트용
 		System.out.println(order_cd); //주문 상태 업데이트용
@@ -108,35 +108,39 @@ public class InoutBoundController {
 		try {
 			this.pw = res.getWriter();
 			// outgoing_ernoll 상태 업데이트
-			int out_state = ioservice.update_outenroll_decide(outenroll_cd);
+			int out_state = ioservice.update_outenroll_decide(outenroll_cd, update_id);
 			
 			if (out_state > 0) { // 상태가 승인이 되면
 				//삭제되어야할 재고 idx를 삭제시킴
 				int w = 0;
 				int delete_result = 0;
+				int delete_count = 0;
+				
 				while(w < wh_warehouse_idx_datas.length) {
 					String datas[] = wh_warehouse_idx_datas[w].split("&");
 					if(datas[1].equals("Y")) {
 						String wh_warehouse_idx = datas[0];
+						delete_count++;
 						//재고 전체 빠진거 삭제
 						delete_result = ioservice.delete_warehouse_out(wh_warehouse_idx);	
 					}
 					w++;
 				}
 	
-				if(delete_result == wh_warehouse_idx_datas.length) {
-					//주문테이블 완료
+				
+				if(delete_result == delete_count) { // 잘 delete 되면
 					int order_result = ioservice.update_odstate_ended(order_cd);
+					
 					if(order_result > 0) {
 						this.pw.print("<script>" + "alert('배송 확정이 완료되었습니다.');" + "location.href = './outstate';" + "</script>");
 					}
 					
-				}	
+				}
+				
 			}
 			
 
 		} catch (Exception e) {
-			System.out.println(e);
 			this.pw.print(
 					"<script>" + "alert('데이터베이스 문제로 배송 확정에 실패했습니다.');" + "location.href = './outstate';" + "</script>");
 		} finally {

@@ -54,7 +54,7 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	//출고 확정 시 전체 재고 뺸 것에 대해 capacity 자동감소를 위해 delete
 	@Override
 	public int delete_warehouse_out(String wh_warehouse_idx) {
-		int result = delete_warehouse_out(wh_warehouse_idx);
+		int result = iorepo.delete_warehouse_out(wh_warehouse_idx); //iorepo를 빠뜨리고 그냥 하면 무한루프
 		return result;
 	}
 	
@@ -69,8 +69,8 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	
 	//출고 확정
 	@Override
-	public int update_outenroll_decide(String outenroll_cd) {
-		int result = iorepo.update_outenroll_decide(outenroll_cd);
+	public int update_outenroll_decide(String outenroll_cd, String update_id) {
+		int result = iorepo.update_outenroll_decide(outenroll_cd, update_id);
 		return result;
 	}
 	

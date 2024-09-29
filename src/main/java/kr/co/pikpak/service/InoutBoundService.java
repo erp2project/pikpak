@@ -118,7 +118,7 @@ public interface InoutBoundService {
 	public int update_warehouse_out(String subtractive_qty, String update_by, String wh_warehouse_idx);
 	
 	//출고 확정
-	public int update_outenroll_decide(String outenroll_cd);
+	public int update_outenroll_decide(String outenroll_cd, String update_id);
 		
 	//출고확정 시 원래 주문 상태 완료 변경
 	public int update_odstate_ended(String order_cd);

@@ -125,7 +125,7 @@ public interface InoutBoundRepo {
 	int delete_warehouse_out(String wh_warehouse_idx);
 	
 	//출고 확정
-	int update_outenroll_decide(String outenroll_cd);
+	int update_outenroll_decide(String outenroll_cd, String update_id);
 	
 	//출고확정 시 원래 주문 상태 완료 변경
 	int update_odstate_ended(String order_cd);
