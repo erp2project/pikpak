@@ -35,7 +35,7 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 		int result = iorepo.update_accepted_back(order_cd);
 		return result;
 	}
-	
+	 
 	
 	//출고피킹 정보 삭제
 	@Override
@@ -50,6 +50,30 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 		int result = iorepo.delete_outenroll(outenroll_cd);
 		return result;
 	}
+	
+	//출고 확정 시 전체 재고 뺸 것에 대해 capacity 자동감소를 위해 delete
+	@Override
+	public int delete_warehouse_out(String wh_warehouse_idx) {
+		int result = delete_warehouse_out(wh_warehouse_idx);
+		return result;
+	}
+	
+	
+	//출고 확정 시 주문 상태 완료 변경
+	@Override
+	public int update_odstate_ended(String order_cd) {
+		int result = iorepo.update_odstate_ended(order_cd);
+		return result;
+	}
+	
+	
+	//출고 확정
+	@Override
+	public int update_outenroll_decide(String outenroll_cd) {
+		int result = iorepo.update_outenroll_decide(outenroll_cd);
+		return result;
+	}
+	
 	
 	//재고차감
 	@Override
@@ -138,12 +162,6 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 		return result;
 	}
 	
-	//warehouse update
-	@Override
-	public int update_wwarehouse(Map<String, Object> wh_update) {
-		int result = iorepo.update_wwarehouse(wh_update);
-		return result;
-	}
 	
 	//warehouse insert
 	@Override
@@ -151,25 +169,17 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 		int result = iorepo.insert_warehouse(wh_dto);
 		return result;
 	}
-	
-	//warehosue 데이터 확인
-	@Override
-	public List<String> check_warehouse(String location_cd, String product_cd) {
-		List<String> idx = iorepo.check_warehouse(location_cd, product_cd);
-		return idx;
-	}
-	
+
 	//입고등록 receiving
 	@Override
 	public int insert_receiving(receiving_dto dto) {
 		int final_result = 0;
 		
 		//lot_no 생성 => 반품과 납품이 달라야함
-		System.out.println(dto.getExreceiving_type());
 		/*
 		  상품코드 + 제조일자 + 입고일자 
 		 */
-		String lot_no = this.make_lotno(dto.getProduct_cd(), dto.getMake_dt(), dto.getInventory_dt());
+		String lot_no = this.make_lotno(dto.getProduct_cd(), dto.getMake_dt(), dto.getInventory_dt(),dto.getExreceiving_type());
 		dto.setLot_no(lot_no);
 		
 		//고유번호 넣기
@@ -190,11 +200,30 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 		    if(update_locations_result > 0) {
 		    	/*
 				[warehouse 테이블에서 업데이트]
-				1) 테이블 안에 해당 위치에 상품코드가 없으면 그대로 insert
-				2) 테이블 안에 해당 위치에 상품코드가 있으면 product_qty만 증가
+				테이블 안에 해당 위치에 상품코드가 없으면 그대로 insert
 				*/
+		    	//insert	
+				//Map 만들기
+				Map<String, Object> wh_dto = new HashMap<String, Object>();
+				wh_dto.put("location_cd", dto.getLocation_cd());
+				wh_dto.put("product_cd", dto.getProduct_cd());
+				wh_dto.put("product_nm", dto.getProduct_nm());
+				wh_dto.put("supplier_nm", dto.getSupplier_nm());
+				wh_dto.put("supplier_cd", dto.getSupplier_cd());
+				wh_dto.put("product_qty", dto.getReceiving_qty());
+				wh_dto.put("inventory_log", dto.getReceiving_log());
+				wh_dto.put("update_by", operator_id);
+				
+			    int insert_result = this.insert_warehouse(wh_dto);   
+			    
+			    if(insert_result > 0) {
+			    	final_result = 1;
+			    }	
+		    	
+		    	/*
 		    	List<String> idx = this.check_warehouse(dto.getLocation_cd(), dto.getProduct_cd());
-				if (idx.size() > 0) {	// 테이블 안에 해당 위치에 상품코드가 있으면 product_qty만 증가
+				
+		    	if (idx.size() > 0) {	// 테이블 안에 해당 위치에 상품코드가 있으면 product_qty만 증가
 					//update    
 					//Map 만들기
 					Map<String, Object> wh_update = new HashMap<String, Object>();
@@ -209,24 +238,9 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 					}
 				} 
 				else {
-				   //insert	
-					//Map 만들기
-					Map<String, Object> wh_dto = new HashMap<String, Object>();
-					wh_dto.put("location_cd", dto.getLocation_cd());
-					wh_dto.put("product_cd", dto.getProduct_cd());
-					wh_dto.put("product_nm", dto.getProduct_nm());
-					wh_dto.put("supplier_nm", dto.getSupplier_nm());
-					wh_dto.put("supplier_cd", dto.getSupplier_cd());
-					wh_dto.put("product_qty", dto.getReceiving_qty());
-					wh_dto.put("inventory_log", dto.getReceiving_log());
-					wh_dto.put("update_by", operator_id);
-					
-				    int insert_result = this.insert_warehouse(wh_dto);   
-				    
-				    if(insert_result > 0) {
-				    	final_result = 1;
-				    }	
+				   
 				}
+				*/
 			}
 		    else {
 		    	System.out.println("위치코드 업데이트 실패");
@@ -444,7 +458,7 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 			w++;
 		}
 		
-		String code = "IR "+ server_time + "-" + randnum;
+		String code = "IR-"+ server_time + randnum;
 		
 		return code;
 	}
@@ -464,7 +478,7 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 			w++;
 		}
 			
-		String code = "DR "+ server_time + "-" + randnum;
+		String code = "DR-"+ server_time + randnum;
 			
 		return code;
 	}
@@ -484,7 +498,7 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 				w++;
 			}
 				
-			String code = "RE "+ "-" + randnum;
+			String code = "RE-" +  server_time +randnum;
 				
 			return code;
 		}
@@ -504,19 +518,36 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 				w++;
 			}
 				
-			String code = "OE"+ "-" + randnum;
+			String code = "OE-" + server_time + randnum;
 				
 			return code;
 		}
-		
-		
+	
+	//로트번호 중복 카운트
+	@Override
+	public String select_lot_count(String lot_no) {
+		String lot_count = iorepo.select_lot_count(lot_no);
+		return lot_count;
+	}	
+	
 	//입고 시 로트번호 생성하기
-	public String make_lotno(String product_cd, String make_dt, String inventory_dt) {
+	public String make_lotno(String product_cd, String make_dt, String inventory_dt, String type) {
 		String makedate = make_dt.replaceAll("-", "");
 		String ivdate = inventory_dt.replaceAll("-", "");
+		String lot_no = "";
+		if(type.equals("납품")) {
+			lot_no = product_cd + "-" + "M" + makedate.substring(2) + "-" + "R" + ivdate.substring(2);
+		}
+		else if(type.equals("반품")){
+			lot_no = product_cd + "-" + "M" + makedate.substring(2) + "-" + "R" + ivdate.substring(2) + "-RT";
+		}
 		
-		String lot_no = product_cd + "-" + "M" + makedate + "-" + "R" + ivdate;
+		int count = Integer.parseInt(this.select_lot_count(lot_no));
 		
+		if (count > 0) {
+		       lot_no += "-" + String.format("%03d", count + 1);  // 카운트가 있으면 "-001", "-002" 형태로 추가
+		}
+	
 		return lot_no;
 	}
 	

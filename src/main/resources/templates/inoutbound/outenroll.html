@@ -208,6 +208,7 @@ import {page_move_outbound, outbound_enroll} from "../resources/js/inoutbound/ou
 
 window.selectedLots = {}; //전역변수
    	/* 출고등록 모달 */
+
 	// 출고수량 UI 추가 버튼
     document.querySelector("#add_button").addEventListener('click', function() {
         
@@ -234,7 +235,7 @@ window.selectedLots = {}; //전역변수
             window.selectedLots[lotNo] = (window.selectedLots[lotNo] || 0) + quantity;
 
             // 여기서 lotNo를 함께 넘겨줍니다.
-            new outbound_enroll().qty_ui(location, lot_details, quantity, whWarehouseIdx, receivingCd, lotNo);
+            new outbound_enroll().qty_ui(location, lot_details, quantity, whWarehouseIdx, receivingCd, lotNo); //
             qty_input.value = ''; // 입력 필드 초기화
         }
     } else if (quantity > maxQty) {

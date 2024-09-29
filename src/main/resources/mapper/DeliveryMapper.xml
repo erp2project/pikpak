@@ -3,6 +3,43 @@
 <mapper namespace="kr.co.pikpak.repo.DeliveryRepo">
 
 <!-- 납품반송현황 join해서 가져오기 -->
+<select id="select_return_joined" resultType="kr.co.pikpak.dto.deliver_return_joined_dto" parameterType="Map">
+SELECT 
+    a.d_return_idx,
+    b.deliver_cd, 
+    b.supplier_cd, 
+    b.product_cd, 
+    c.product_nm, 
+    b.exreceiving_qty, 
+    a.d_return_qty, 
+    a.d_return_type, 
+    b.departure_dt,
+    a.d_return_dt 
+FROM 
+    deliver_return AS a 
+JOIN 
+    ex_receiving AS b ON a.exreceiving_cd = b.exreceiving_cd 
+JOIN 
+    product AS c ON b.product_cd = c.product_cd 
+JOIN 
+    supplier_info AS d ON b.supplier_cd = d.supplier_cd 
+WHERE 1=1
+
+<if test="product_cd != null and product_cd != ''">
+and b.product_cd=#{product_cd} 
+</if>
+<if test="supplier_cd != null and supplier_cd != ''">
+and b.supplier_cd=#{supplier_cd} 
+</if>
+<if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
+and a.d_return_dt BETWEEN #{start_date} AND #{end_date}
+</if>
+ORDER BY
+    a.d_return_idx DESC;
+</select>
+
+
+<!-- 
 <select id="select_return_joined" resultType="kr.co.pikpak.dto.deliver_return_joined_dto">
 SELECT 
     a.d_return_idx,
@@ -28,7 +65,7 @@ WHERE
 ORDER BY 
     a.d_return_idx DESC;
 </select>
-
+ -->
 
 <!-- 납품 모두 완료된 입고요청 상태 '완료'변경 -->
 <update id="update_finished_inreq">
@@ -160,4 +197,9 @@ select * from input_request_state where supplier_cd=#{supplier_cd} order by requ
 select * from input_request where supplier_cd=#{supplier_cd} order by request_idx desc
 </select>
 -->
+
+<!-- 데이터베이스 서버시간 가져오기 -->
+<select id="get_time_deli" resultType="String">
+SELECT DATE_FORMAT(NOW(), '%y%m%d') AS server_time
+</select>
 </mapper>

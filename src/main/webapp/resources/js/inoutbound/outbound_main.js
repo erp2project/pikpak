@@ -65,7 +65,7 @@ export class outbound_decide {
 			}
 
 			frm_out_list.outenroll_cd.value = this.idx_data.join(",");
-			
+			console.log(frm_out_list.outenroll_cd.value);
 			frm_out_list.method = "post";
 			frm_out_list.action = "./delete_outenrollok";
 			frm_out_list.submit();
@@ -82,6 +82,7 @@ export class outbound_decide {
 
 
 export class outaccept_modal {
+	//출고확정(승인버튼 클릭시)
 	decide_outgoing() {
 		frm_out_accept.method = "post";
 		frm_out_accept.action = "./decide_outgoingok";
@@ -92,6 +93,18 @@ export class outaccept_modal {
 
 export class outbound_enroll {
 	qty_ui(location, lotDetails, quantity, whWarehouseIdx, receivingCd, lotNo) {
+		
+		
+		var lot_qty = lotDetails.split("/");
+		var id_deleted = ""; //선택한 수량이 전체 수량과 같은지 여부를 보내기 위한 변수		
+		
+		if(quantity == lot_qty[1]){
+			id_deleted = 'Y';
+		}
+		else{
+			id_deleted = 'N';
+		}
+			
 		
 		var container = document.getElementById('item_container');
 
@@ -107,7 +120,7 @@ export class outbound_enroll {
 		var input = document.createElement('input');
 		input.type = 'hidden';
 		input.name = 'item_data';
-		input.value = `${location}&${quantity}&${whWarehouseIdx}&${receivingCd}`;
+		input.value = `${location}&${quantity}&${whWarehouseIdx}&${receivingCd}&${id_deleted}`;
 		item.appendChild(input);
 
 		// 삭제 버튼
@@ -183,8 +196,8 @@ export class outbound_enroll {
 					filteredItems.forEach(function(item) {
 						var option = document.createElement('option');
 						option.value = item.lot_no;  // 로트번호를 값으로 사용
-						option.textContent = item.lot_no + "/" + item.receiving_qty;  // 텍스트 형식 정의
-						option.setAttribute('data-max_qty', item.receiving_qty);  // 최대 수량 데이터 추가
+						option.textContent = item.lot_no + "/" + item.product_qty;  // 텍스트 형식 정의
+						option.setAttribute('data-max_qty', item.product_qty);  // 최대 수량 데이터 추가
 						option.setAttribute('data-wh_warehouse_idx', item.wh_warehouse_idx);  // hidden으로 추가할 값
 						option.setAttribute('data-receiving_cd', item.receiving_cd);  // hidden으로 추가할 값
 						lotSelect.appendChild(option);
@@ -228,7 +241,7 @@ export class outbound_enroll {
 	
 		//item_data = 위치코드&수량&idx&입고코드
 		/* 수량체크
-		1. 각 로트번호에 있는 수량보다 넘치게 하지 않았는지 => 앞에서 ok
+		1. 각 로트번호에 있는 수량과 선택한 수량이 같은지
 		
 		2. 모든 로트번호에서 가져온 수량의 합이 요청수량과 같은지 (적거나 넘쳐선 안됨)
 		*/

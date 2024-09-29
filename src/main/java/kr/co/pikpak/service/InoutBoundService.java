@@ -29,6 +29,10 @@ public interface InoutBoundService {
 	//mysql 서버시간 불러오기
 	public String get_time();
 	
+	//로트번호 중복 방지 count
+	public String select_lot_count(String lot_no);
+	
+	
 	//운영자 조회용 아이디 검색하기
 	public List<String> search_operator_nm(String operator_nm);
 	
@@ -80,15 +84,9 @@ public interface InoutBoundService {
 	//입고등록 (receiving 테이블)
 	public int insert_receiving(receiving_dto dto);
 	
-	//warehouse 데이터 확인
-	public List<String> check_warehouse(String location_cd, String product_cd);
-	
 	//warehouse insert
 	public int insert_warehouse(Map<String, Object> wh_dto);
-		
-	//warehouse update
-	public int update_wwarehouse(Map<String, Object> wh_update);
-		
+	
 	//warehouse_locations update
 	public int update_warehouse_locations(String location_cd);
 	
@@ -116,8 +114,17 @@ public interface InoutBoundService {
 	//출고등록 테이블 업데이트
 	public int update_outenroll(String outenroll_cd);
 	
-	//출고확정과 동시에 데이터 차감
+	//출고등록과 동시에 데이터 차감
 	public int update_warehouse_out(String subtractive_qty, String update_by, String wh_warehouse_idx);
+	
+	//출고 확정
+	public int update_outenroll_decide(String outenroll_cd);
+		
+	//출고확정 시 원래 주문 상태 완료 변경
+	public int update_odstate_ended(String order_cd);
+	
+	//출고확정 시 해당 idx 삭제
+	public int delete_warehouse_out(String wh_warehouse_idx);
 	
 	//출고등록정보 삭제
 	public int delete_outenroll(String outenroll_cd);
@@ -127,4 +134,6 @@ public interface InoutBoundService {
 	
 	//주문승인 상태 원복
 	public int update_accepted_back(String order_cd);
+	
+	
 }

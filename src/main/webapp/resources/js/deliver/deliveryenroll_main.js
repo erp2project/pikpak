@@ -140,6 +140,73 @@ export class inreq_list {
 
 }
 
+export class returnstate_list{
+	return_list_search(){
+		const return_start_dt = document.getElementById("return_start_dt").value;
+		const return_end_dt = document.getElementById("return_end_dt").value;
+		const return_pdcd = document.getElementById("return_pdcd").value;
+		
+		console.log(return_start_dt);
+		console.log(return_end_dt);
+		console.log(return_pdcd);
+		
+		if (return_start_dt > return_end_dt) {
+			alert('정상적인 일자를 입력해주세요');
+		}
+		else if ((return_start_dt != "" && return_end_dt == "") || (return_start_dt == "" && return_end_dt != "")) {
+			alert('등록일자로 검색 시 모두 입력되어야합니다.');
+		}
+		else {
+			var returnstate_data = {
+				"start_date": return_start_dt,
+				"end_date": return_end_dt,
+				"product_cd": return_pdcd
+			};
+
+			this.return_search = JSON.stringify(returnstate_data);
+			console.log(this.return_search);
+			
+			fetch("/returnstate_search", {
+				method: "post",
+				headers: { "Content-type": "application/json" },
+				body: this.return_search
+			})
+				.then(function(result_data) {
+					return result_data.json();
+				})
+				.then(function(result_res) {
+					const tbody = document.querySelector("#return_tbody");
+					console.log(result_res);
+					
+					tbody.innerHTML = '';
+					
+					result_res.forEach(function(relist) {
+
+						const list = `<tr  class="tooltip-target" data-tooltip="데이터 코드: ${relist.deliver_cd}">
+        			<td style="text-align: center; width: 3%;">1</td>
+            		<td style="text-align: center; width: 11%;">${relist.product_cd}</td>
+            		<td style="text-align: center; width: 12%;">${relist.product_nm}</td>
+            		<td style="text-align: center; width: 9%;">${relist.exreceiving_qty}</td>
+            		<td style="text-align: center; width: 9%;">${relist.d_return_qty}</td>
+            		<td style="text-align: center; width: 30%;">${relist.d_return_type}</td>
+            		<td style="text-align: center; width: 13%;">${relist.departure_dt.substring(0,10)}</td>
+            		<td style="text-align: center; width: 13%;">${relist.d_return_dt.substring(0,10)}</td>
+					</tr>`;
+
+						tbody.innerHTML += list;
+					});
+				})
+				.catch(function(error) {
+					console.log(error);
+					alert('데이터 조회에 문제가 발생하였습니다.');
+				});
+				
+				
+		}
+	}
+		
+}
+
 
 export class delivery_list {
 	////검색어 조회 ajax

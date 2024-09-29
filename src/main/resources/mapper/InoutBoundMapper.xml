@@ -12,21 +12,31 @@ delete from outgoing_picking where FIND_IN_SET(outenroll_cd,#{outenroll_cd})
 update accepted_order_enroll set acceptedorder_st='대기' where FIND_IN_SET(order_cd, #{order_cd}) > 0;
 </update>
 
-
 <!-- 출고등록정보 삭제 -->
 <delete id="delete_outenroll">
 delete from outgoing_enroll where FIND_IN_SET(outenroll_cd,#{outenroll_cd})
 </delete>
 
-<!-- 배송 확정과 동시에 주문테이블 상태 완료로 변경 -->
-<update id="">
+<!-- 출고 확정과 동시에 주문테이블 상태 완료로 변경 -->
+<update id="update_odstate_ended">
+update order_enroll set process_st='완료' where order_cd=#{order_cd}
+</update>
 
+<!-- warehouse 해당 idx 전체 수량 차감 경우 삭제 -->
+<delete id="delete_warehouse_out">
+delete from warehouse where wh_warehouse_idx=#{wh_warehouse_idx}
+</delete>
+
+<!-- 출고 확정 -->
+<update id="update_outenroll_decide">
+update outgoing_enroll set outenroll_st='확정' where outenroll_cd=#{outenroll_cd}
 </update>
 
 <!-- 재고로그기록 테이블에서 '출고'로 타입지정 업데이트 -->
 <update id="update_stock_log_out">
-update stock_log_record set  action_type = '출고' where wh_warehouse_idx=#{wh_warehouse_idx} order by log_dt desc limit 1
+update stock_log_record set  action_type='출고' where wh_warehouse_idx=#{wh_warehouse_idx} order by log_dt desc limit 1
 </update>
+
 
 <!-- 상태 업데이트와 동시에 재고 차감 -->
 <update id="update_warehouse_out">
@@ -55,6 +65,8 @@ update outgoing_enroll set outenroll_st='확정' where outenroll_cd=#{outenroll_
             <result property="wh_warehouse_idx" column="wh_warehouse_idx"/>
             <result property="lot_no" column="lot_no"/>
             <result property="outpick_qty" column="outpick_qty"/>
+            <result property="is_deleted" column="is_deleted"/>
+            <result property="location_cd" column="location_cd"/>
         </collection>
     </resultMap>
 
@@ -68,10 +80,12 @@ update outgoing_enroll set outenroll_st='확정' where outenroll_cd=#{outenroll_
             a.total_qty, 
             a.expect_dt, 
             a.exoutgoing_area, 
+            b.location_cd,
             a.outenroll_log, 
             a.outenroll_st,
             b.wh_warehouse_idx, 
             b.outpick_qty,
+            b.is_deleted,
             c.lot_no 
         FROM 
             outgoing_enroll a 
@@ -100,9 +114,11 @@ insert into outgoing_picking values
          #{item.product_cd},
          #{item.location_cd},
          #{item.receiving_cd},
-         #{item.outpick_qty})
+         #{item.outpick_qty},
+         #{item.is_deleted})
  </foreach>
 </insert>
+
 
 <!-- 출고 정보 등록과 동시에 acceptd_order 상태 업데이트 -->
 <update id="update_acceptedorder_st">
@@ -127,20 +143,22 @@ select * from outgoing_select_view where product_cd=#{product_cd}
 update warehouse_locations set current_capacity=current_capacity+1 where location_cd=#{location_cd}
 </update>
 
-<!-- 입고와 동시에 warehouse update -->
+<!-- 입고와 동시에 warehouse update = 필요없어짐 걍 무조건 insert
 <update id="update_wwarehouse" parameterType="Map">
 update warehouse set product_qty = product_qty + #{additional_qty}, update_by=#{update_by} where wh_warehouse_idx=#{wh_warehouse_idx}
 </update>
-
+ -->
+ 
 <!-- 입고와 동시에 warehouse insert -->
 <insert id="insert_warehouse" parameterType="Map">
 insert into warehouse (location_cd, product_cd, product_nm, supplier_nm, supplier_cd, product_qty, inventory_log, update_dt, update_by) values (#{location_cd},#{product_cd},#{product_nm},#{supplier_nm},#{supplier_cd},#{product_qty},#{inventory_log},#{update_dt},#{update_by})
 </insert>
 
-<!-- warehouse에 데이터가 있는 지 없는 지 확인 -->
+<!-- warehouse에 데이터가 있는 지 없는 지 확인 
 <select id="check_warehouse" resultType="String">
 select wh_warehouse_idx from warehouse where location_cd=#{location_cd} and product_cd=#{product_cd}
 </select>
+-->
 
 <!-- receiving 테이블 입고 등록 -->
 <insert id="insert_receiving">
@@ -328,8 +346,13 @@ insert into input_request values ('0',#{request_cd},#{supplier_cd},#{supplier_nm
 #{product_qty},#{operator_id},#{request_st},#{add_req},#{hope_dt},now(),#{update_dt},#{update_id})
 </insert>
 
+<!-- 로트번호 중복방지 -->
+<select id="select_lot_count" resultType="String">
+SELECT COUNT(*) FROM receiving WHERE lot_no LIKE CONCAT(#{lot_no}, '%');
+</select>
+
 <!-- 데이터베이스 서버시간 가져오기 -->
 <select id="get_time" resultType="String">
-select date_format(now(), '%Y%m%d%H%i%s') as server_time
+SELECT DATE_FORMAT(NOW(), '%y%m%d') AS server_time
 </select>
 </mapper>

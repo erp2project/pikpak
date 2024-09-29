@@ -25,6 +25,9 @@ public interface InoutBoundRepo {
 	//서버시간
 	String get_time();
 	
+	//로트번호 중복 방지 count
+	String select_lot_count(String lot_no);
+	
 	//운영자 이름으로 id검색(사용자 조회용)
 	List<String> search_operator_nm(String operator_nm);
 	
@@ -85,14 +88,8 @@ public interface InoutBoundRepo {
 	//입고등록하기 receiving테이블
 	int insert_receiving(receiving_dto dto);
 	
-	//입고 관련하여 warehouse에 같은 데이터가 있는 지 확인
-	List<String> check_warehouse(String location_cd, String product_cd);
-	
 	//warehouse insert
 	int insert_warehouse(Map<String, Object> wh_dto);
-	
-	//warehouse update
-	int update_wwarehouse(Map<String, Object> wh_update);
 	
 	//warehouse_locations update
 	int update_warehouse_locations(String location_cd);
@@ -121,8 +118,17 @@ public interface InoutBoundRepo {
 	//출고등록 시 로그테이블 타입 '출고' 지정
 	int update_stock_log_out(String wh_warehouse_idx);
 	
-	//출고확정과 동시에 데이터 차감
+	//출고등록과 동시에 데이터 차감
 	int update_warehouse_out(String subtractive_qty, String update_by, String wh_warehouse_idx);
+	
+	//출고등록 데이터 차감시 전체 제고 빠진 경우 idx 삭제
+	int delete_warehouse_out(String wh_warehouse_idx);
+	
+	//출고 확정
+	int update_outenroll_decide(String outenroll_cd);
+	
+	//출고확정 시 원래 주문 상태 완료 변경
+	int update_odstate_ended(String order_cd);
 	
 	//출고등록정보 삭제
 	int delete_outenroll(String outenroll_cd);
@@ -130,8 +136,8 @@ public interface InoutBoundRepo {
 	//출고피킹정보 삭제
 	int delete_outpiking(String outenroll_cd);
 	
-	
 	//출고정보 삭제시 주문승인 상태 원복
 	int update_accepted_back(String order_cd);
 
+	/*출고정보 삭제할 떄 재고에서 차감된것 & 삭제된 것 다 시 원복시켜야함*/
 }

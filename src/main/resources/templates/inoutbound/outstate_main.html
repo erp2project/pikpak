@@ -80,12 +80,11 @@
 												style="border: 1px solid #ccc;"></th>
 											<th style="text-align: center; width: 12%;">주문번호</th>
 											<th style="text-align: center; width: 12%;">상품코드</th>
-											<th style="text-align: center; width: 9%;">상품명</th>
+											<th style="text-align: center; width: 12%;">상품명</th>
 											<th style="text-align: center; width: 10%;">출고예정수량</th>
-											<th style="text-align: center; width: 9%;">가출고 위치</th>
 											<th style="text-align: center; width: 8%;">상태</th>
-											<th style="text-align: center; width: 19%;">비고</th>
-											<th style="text-align: center; width: 9%;">출고예정일자</th>
+											<th style="text-align: center; width: 21%;">비고</th>
+											<th style="text-align: center; width: 13%;">출고예정일자</th>
 
 											<th style="text-align: center; width: 7%;">승인</th>
 										</tr>
@@ -114,17 +113,16 @@
 												th:text="${outgoing.getOrder_cd()}"></td>
 											<td style="text-align: center; width: 12%;"
 												th:text="${outgoing.getProduct_cd()}">상품코드</td>
-											<td style="text-align: center; width: 9%;"
+											<td style="text-align: center; width: 12%;"
 												th:text="${outgoing.getProduct_nm()}">상품명</td>
 											<td style="text-align: center; width: 10%;"
 												th:text="${outgoing.getTotal_qty()}">출고예정수량</td>
-											<td style="text-align: center; width: 9%;"
-												th:text="${outgoing.getExoutgoing_area()}">가출고 위치</td>
+											
 											<td style="text-align: center; width: 8%;"
 												th:text="${outgoing.getOutenroll_st()}">상태</td>
-											<td style="text-align: center; width: 19%;"
+											<td style="text-align: center; width: 21%;"
 												th:text="${outgoing.getOutenroll_log()}">비고</td>
-											<td style="text-align: center; width: 9%;"
+											<td style="text-align: center; width: 13%;"
 												th:text="${outgoing.getExpect_dt()}">출고예정일자</td>
 
 											<td style="text-align: center; width: 7%;">

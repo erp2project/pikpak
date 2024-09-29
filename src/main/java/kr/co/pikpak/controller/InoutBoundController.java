@@ -67,8 +67,7 @@ public class InoutBoundController {
 		try {
 			this.pw = res.getWriter();
 			// foreign 키 때문에 피킹을 먼저 삭제하고 등록을 삭제해야함
-
-			// 출고피킹정보삭제 => 재고 복원시키는 트리거 걸 예정
+			// 출고피킹 정보 삭제 -> 삭제 되고 관련 수량 warehouse 복원 트리거 걸음
 			int picking_result = ioservice.delete_outpiking(outenroll_cd);
 
 			if (picking_result > 0) {
@@ -80,7 +79,7 @@ public class InoutBoundController {
 
 				if (enroll_result > 0 && state_result > 0) {
 					this.pw.print(
-							"<script>" + "alert('정상적으로 삭제되었습니다.');" + "location.href = './outstate';" + "</script>");
+							"<script>" + "alert('정상적으로 삭제되었습니다.');" + "location.href = './outenroll';" + "</script>");
 				}
 			}
 		} catch (Exception e) {
@@ -95,23 +94,46 @@ public class InoutBoundController {
 	// 출고확정
 	@PostMapping("/inoutbound/decide_outgoingok")
 	public String decide_outgoingok(ServletResponse res,
-			@RequestParam(defaultValue = "", required = true) String outenroll_cd) {
+			@RequestParam(defaultValue = "", required = true) String outenroll_cd,
+			@RequestParam(defaultValue = "", required = true) String order_cd,
+			@RequestParam(defaultValue = "", required = true) String wh_warehouse_idx_datas[]) {
 		res.setContentType("text/html;charset=utf-8");
-
-		// 배송일시 선택 받기
-		// System.out.println(outenroll_cd); //내 테이블 상태 업데이트용 ok
-
+		String operator_id = "ad_leehw_1234";
+		
+		System.out.println(outenroll_cd); //출고 등록 상태 업데이트용
+		System.out.println(order_cd); //주문 상태 업데이트용
+		System.out.println(wh_warehouse_idx_datas.length); //전체 재고 빠진 idx 삭제용   66&Y
+		
+		
 		try {
 			this.pw = res.getWriter();
 			// outgoing_ernoll 상태 업데이트
-			// int out_state = ioservice.update_outenroll(outenroll_cd);
-			int out_state = 1; // 강제로 때리고
-			int subtract_count = 0;
-
-			String operator_id = "ad_leehw_1234";
+			int out_state = ioservice.update_outenroll_decide(outenroll_cd);
+			
 			if (out_state > 0) { // 상태가 승인이 되면
-				this.pw.print("<script>" + "alert('배송 확정이 완료되었습니다.');" + "location.href = './outstate';" + "</script>");
+				//삭제되어야할 재고 idx를 삭제시킴
+				int w = 0;
+				int delete_result = 0;
+				while(w < wh_warehouse_idx_datas.length) {
+					String datas[] = wh_warehouse_idx_datas[w].split("&");
+					if(datas[1].equals("Y")) {
+						String wh_warehouse_idx = datas[0];
+						//재고 전체 빠진거 삭제
+						delete_result = ioservice.delete_warehouse_out(wh_warehouse_idx);	
+					}
+					w++;
+				}
+	
+				if(delete_result == wh_warehouse_idx_datas.length) {
+					//주문테이블 완료
+					int order_result = ioservice.update_odstate_ended(order_cd);
+					if(order_result > 0) {
+						this.pw.print("<script>" + "alert('배송 확정이 완료되었습니다.');" + "location.href = './outstate';" + "</script>");
+					}
+					
+				}	
 			}
+			
 
 		} catch (Exception e) {
 			System.out.println(e);
@@ -137,6 +159,8 @@ public class InoutBoundController {
 			String operator_id = "ad_leehw_1234";
 
 			// 출고고유번호 생성
+			String server_time = ioservice.get_time();
+			
 			int i = 0;
 			String randnum = "";
 
@@ -146,7 +170,7 @@ public class InoutBoundController {
 				i++;
 			}
 
-			String code = "OE" + "-" + randnum;
+			String code = "OE-" + server_time + randnum;
 
 			dto.setOutenroll_cd(code);
 
@@ -159,7 +183,8 @@ public class InoutBoundController {
 			int w = 0;
 
 			int subtract_count = 0; //피킹등록 정보 전부 차감 됐는 지 확인하는 변수
-
+			int type_count = 0; //로그기록 다 변경헀는지 확인하는 변수
+			
 			while (w < picking_data.length) { //로트번호 개수(피킹 개수)
 				String datas[] = picking_data[w].split("&");
 				total_qty += Integer.parseInt(datas[1]);
@@ -171,6 +196,7 @@ public class InoutBoundController {
 				outgoing_picking_data.put("location_cd", datas[0]);
 				outgoing_picking_data.put("receiving_cd", datas[3]);
 				outgoing_picking_data.put("outpick_qty", datas[1]);
+				outgoing_picking_data.put("is_deleted", datas[4]);
 				w++;
 				outgoing_picking.add(outgoing_picking_data);
 
@@ -178,6 +204,11 @@ public class InoutBoundController {
 				int subtract_result = ioservice.update_warehouse_out(datas[1], operator_id, datas[2]);
 				if (subtract_result > 0) {
 					subtract_count++;
+				}
+				// 여기서 재고테이블 type변경
+				int type_result = ioservice.update_stock_log_out(datas[2]);
+				if(type_result > 0) {
+					type_count++;
 				}
 			}
 
@@ -193,8 +224,8 @@ public class InoutBoundController {
 					// 상태도 변경
 					int st_result = ioservice.update_acceptedorder_st(operator_id, dto.getOrder_cd());
 					
-					if (st_result > 0 && subtract_count == picking_data.length) { //상태변경하고, 재고차감도 다 완료되면
-						this.pw.print("<script>" + "alert('정상적으로 등록되었습니다.');" + "location.href = './outenroll';"
+					if (st_result > 0 && subtract_count == picking_data.length && type_count == picking_data.length) { //상태변경하고, 재고차감도 다 완료되고, 로그 타입 수정도 되면
+						this.pw.print("<script>" + "alert('정상적으로 등록되었습니다.');" + "location.href = './outstate';"
 								+ "</script>");
 					}
 				}
@@ -264,6 +295,7 @@ public class InoutBoundController {
 	@ResponseBody
 	public ResponseEntity<?> inventory_locations(@RequestParam(defaultValue = "", required = true) String supplier_cd) {
 		try {
+			System.out.println("입고모달 위치코드: " + supplier_cd);
 			List<warehouse_locations_dto_lhwtemp> locations = ioservice.select_locations(supplier_cd);
 			return ResponseEntity.ok(locations); // JSON으로 변환되어 전송
 		} catch (Exception e) {
@@ -539,7 +571,7 @@ public class InoutBoundController {
 	@GetMapping("inoutbound/outstate")
 	public String outstate(Model m) {
 		List<outgoing_info_joined_dto> out_info = ioservice.select_outgoing_view();
-
+		
 		ObjectMapper objectMapper = new ObjectMapper();
 		out_info.forEach(dto -> {
 			try {

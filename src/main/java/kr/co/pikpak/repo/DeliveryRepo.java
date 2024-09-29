@@ -13,6 +13,10 @@ import kr.co.pikpak.dto.input_request_state_dto;
 
 @Mapper
 public interface DeliveryRepo {
+	
+	//서버시간
+	String get_time_deli();
+	
 	//입고요청 현황
 	//List<input_request_state_dto> select_inreq_deliv(String supplier_cd);
 	List<input_request_state_dto> select_inreq_deliv(Map<String, Object> data_arr);
@@ -46,5 +50,5 @@ public interface DeliveryRepo {
 	int update_finished_inreq(String request_cd);
 	
 	//반송 현황 select
-	List<deliver_return_joined_dto> select_return_joined(String supplier_cd);
+	List<deliver_return_joined_dto> select_return_joined(Map<String, Object> data_arr);
 }

@@ -20,10 +20,28 @@ public class DeliveryServiceImpl implements DeliveryService{
 	@Autowired
 	DeliveryRepo delrepo;
 	
+	
+	//서버시간
+	@Override
+	public String get_time_deli() {
+		String server_time = delrepo.get_time_deli();
+		return server_time;
+	}
+	
 	//반송현황
 	@Override
-	public List<deliver_return_joined_dto> select_return_joined(String supplier_cd) {
-		List<deliver_return_joined_dto> d_return = delrepo.select_return_joined(supplier_cd);
+	public List<deliver_return_joined_dto> select_return_joined(Map<String, Object> data_arr) {
+		if((data_arr.get("start_date") != "") && (data_arr.get("end_date") != "")) {
+			String startdt = (String) data_arr.get("start_date");
+			startdt += " 00:00:00";
+			data_arr.put("start_date", startdt); 
+			
+			String enddt = (String) data_arr.get("end_date");
+			enddt += " 23:59:59";
+			data_arr.put("end_date", enddt);
+		}
+
+		List<deliver_return_joined_dto> d_return = delrepo.select_return_joined(data_arr);
 		return d_return;
 	}
 	
@@ -190,8 +208,8 @@ public class DeliveryServiceImpl implements DeliveryService{
 	//납품등록 데이터 등록시 납품등록코드 랜덤생성
 	public String make_delienrollcode() {
 	//서버 시간
-	//String server_time = this.get_time();
-		
+	String server_time = this.get_time_deli();
+	
 	//랜덤숫자 4개 생성
 	int w = 0;
 	String randnum = "";
@@ -202,7 +220,7 @@ public class DeliveryServiceImpl implements DeliveryService{
 		w++;
 	}
 			
-	String code = "DE "+ "-" + randnum;
+	String code = "DE-"+ server_time + randnum;
 			
 	return code;
 	}
@@ -210,7 +228,7 @@ public class DeliveryServiceImpl implements DeliveryService{
 	//가입고 등록시 가입고코드 랜덤생성
 	public String make_exreceiving_code() {
 		//서버 시간
-		//String server_time = this.get_time();
+		String server_time = this.get_time_deli();
 			
 		//랜덤숫자 4개 생성
 		int w = 0;
@@ -222,7 +240,7 @@ public class DeliveryServiceImpl implements DeliveryService{
 			w++;
 		}
 				
-		String code = "ER "+ "-" + randnum;
+		String code = "ER-"+ server_time + randnum;
 				
 		return code;
 	}

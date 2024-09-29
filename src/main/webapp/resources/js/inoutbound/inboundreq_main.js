@@ -55,17 +55,16 @@ export class receiving_enroll {
 						if (type_select == "납품") {
 						const list_deliver = `<tr>
         			<td style="text-align: center; width: 3%;">1</td>
-            		<td style="text-align: center; width: 9%;">${exrecv.supplier_nm}</td>
-            		<td style="text-align: center; width: 9%;">${exrecv.product_cd}</td>
-            		<td style="text-align: center; width: 9%;">${exrecv.product_nm}</td>
+            		<td style="text-align: center; width: 10%;">${exrecv.supplier_nm}</td>
+            		<td style="text-align: center; width: 10%;">${exrecv.product_cd}</td>
+            		<td style="text-align: center; width: 10%;">${exrecv.product_nm}</td>
             		<td style="text-align: center; width: 6%;">${exrecv.exreceiving_size}</td>
             		<td style="text-align: center; width: 5%;">${exrecv.exreceiving_type}</td>
             		<td style="text-align: center; width: 5%;">${exrecv.exreceiving_qty}</td>
             		<td style="text-align: center; width: 5%;">${exrecv.return_qty}</td>
-            		<td style="text-align: center; width: 5%;"></td>
-            		<td style="text-align: center; width: 9%;">${exrecv.departure_dt.substring(0, 10)}</td>
+            		<td style="text-align: center; width: 12%;">${exrecv.departure_dt.substring(0, 10)}</td>
 					<td style="text-align: center; width: 7%;">${exrecv.exreceiving_st}</td>					
-					<td style="text-align: center; width: 9%;">${(exrecv.update_dt != null) ? exrecv.update_dt.substring(0, 10) : ''}</td>
+					<td style="text-align: center; width: 12%;">${(exrecv.update_dt != null) ? exrecv.update_dt.substring(0, 10) : ''}</td>
 										
             		<td style="text-align: center; width: 15%;">
             		
@@ -102,18 +101,16 @@ export class receiving_enroll {
 					else {
 					const list_return = `<tr>
         			<td style="text-align: center; width: 3%;">1</td>
-            		<td style="text-align: center; width: 9%;">${exrecv.supplier_nm}</td>
-            		<td style="text-align: center; width: 9%;">${exrecv.product_cd}</td>
-            		<td style="text-align: center; width: 9%;">${exrecv.product_nm}</td>
+            		<td style="text-align: center; width: 10%;">${exrecv.supplier_nm}</td>
+            		<td style="text-align: center; width: 10%;">${exrecv.product_cd}</td>
+            		<td style="text-align: center; width: 10%;">${exrecv.product_nm}</td>
             		<td style="text-align: center; width: 6%;">${exrecv.exreceiving_size}</td>
             		<td style="text-align: center; width: 5%;">${exrecv.exreceiving_type}</td>
             		<td style="text-align: center; width: 5%;">${exrecv.exreceiving_qty}</td>
             		<td style="text-align: center; width: 5%;"></td>
-            		<td style="text-align: center; width: 5%;">${exrecv.processing_dt.substring(0, 10)}</td>
-            		<td style="text-align: center; width: 9%;"></td>
+            		<td style="text-align: center; width: 12%;">${exrecv.processing_dt.substring(0, 10)}</td>		
 					<td style="text-align: center; width: 7%;">${exrecv.exreceiving_st}</td>					
-					<td style="text-align: center; width: 9%;">${(exrecv.update_dt != null) ? exrecv.update_dt.substring(0, 10) : ''}</td>
-										
+					<td style="text-align: center; width: 12%;">${(exrecv.update_dt != null) ? exrecv.update_dt.substring(0, 10) : ''}</td>									
             		<td style="text-align: center; width: 15%;">
             		
             		<button style="padding-right: 5px; padding-left: 5px; width: 40%;" class="btn btn-primary decide_inbound" ${manageButtonDisabled}
@@ -151,6 +148,8 @@ export class receiving_enroll {
 
 	//위치정보 가져오기 위한 ajax
 	bring_locations(sp_cd) {
+		console.log("회사코드: " + sp_cd);
+		
 		if (frm_decide_recv.total_qty != frm_decide_recv.return_qty) {
 			//supplier_cd에 대한 위치코드 긁어오기
 			fetch("/inventory_locations?supplier_cd=" + sp_cd, {
@@ -160,6 +159,8 @@ export class receiving_enroll {
 					return result_data.json();
 				})
 				.then(function(locations) {
+					console.log(locations);
+					
 					var exrecv_size = document.getElementById('exrecv_size');
 					var location_select = document.getElementById("location_select");
 

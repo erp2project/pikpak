@@ -190,7 +190,7 @@ $(document).ready(function() {
 		var product_qty = $(this).data("product-qty");
 		
 		var exrecv_dt = $(this).data("exrecv-dt");
-		var deliver_cd = $(this).data("deliver-cd");
+		var deliver_cd = $(this).data("deliver_cd");
 		var exrecv_cd = $(this).data("exrecv-cd");
 		
 		// 입력 필드에 값 설정
@@ -274,32 +274,33 @@ $(document).ready(function() {
 </script>
  <script type="module">
     import {page_move, receiving_enroll} from "../resources/js/inoutbound/inboundreq_main.js?v=4";
-	/* 페이지 처음 로드 */
+	/* 페이지 처음 로드 */ 
 	document.addEventListener('DOMContentLoaded', function() {
 		const today = new Date();
-        const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+		const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+		const nextWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7); // 오늘에서 7일 후
 
-        const formatDate = (date) => {
-            let d = new Date(date),
-                month = '' + (d.getMonth() + 1),
-                day = '' + d.getDate(),
-                year = d.getFullYear();
+		const formatDate = (date) => {
+    	let d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
 
-            if (month.length < 2) 
-                month = '0' + month;
-            if (day.length < 2) 
-                day = '0' + day;
+    	if (month.length < 2) 
+        month = '0' + month;
+    	if (day.length < 2) 
+        day = '0' + day;
 
-            return [year, month, day].join('-');
-        };
+    	return [year, month, day].join('-');
+		};
 
-        document.getElementById("recv_start_date").value = formatDate(lastWeek);
-        document.getElementById("recv_end_date").value = formatDate(today);
+		document.getElementById("recv_start_date").value = formatDate(lastWeek);
+		document.getElementById("recv_end_date").value = formatDate(nextWeek); // end_dt에 7일 후 날짜 할당
 		document.getElementById("type_select").value = '납품';
 		new receiving_enroll().recv_enroll_list(); //페이지 리스트를 위한 ajax
 	});	
 
-
+/*
 	//반품, 납품 여부 select 시 일자변경
  	document.getElementById('type_select').addEventListener('change', function() {
 		var selectedType = this.value;
@@ -315,7 +316,7 @@ $(document).ready(function() {
         	dateHeader.textContent = '일자'; // 초기 상태로 리셋
     	}
 });
-
+*/
 	//초기화 버튼 클릭시
 	document.querySelector("#recv_reset").addEventListener("click",function(){
 	location.reload();

@@ -172,10 +172,31 @@ public class DeliveryController {
 		return null;
 	}
 	
+	//반송현황 서치
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@PostMapping("/returnstate_search")
+	public ResponseEntity<List<deliver_return_joined_dto>> returnstate_search(
+			@RequestBody Map<String, Object> data_arr){
+		//세션에서 회사 정보 가져왔다고 가정
+		String supplier_cd = "C001";
+		data_arr.put("supplier_cd", supplier_cd);
+		try {
+			List<deliver_return_joined_dto> return_search = delservice.select_return_joined(data_arr);
+			return ResponseEntity.ok(return_search);
+		}
+		catch(Exception e) {
+			System.out.println(e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+	
+	
+	
 	//반송현황
 	@GetMapping("delivery/returnstate")
 	public String returnstate(Model m) {
 		//세션에서 회사 정보 가져왔다고 가정
+		/*
 		String supplier_cd = "C001";
 		
 		try {
@@ -185,6 +206,7 @@ public class DeliveryController {
 		catch(Exception e) {
 			System.out.println(e);
 		}
+		*/
 		return null;
 	}
 	
