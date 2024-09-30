@@ -342,7 +342,7 @@ public class InoutBoundController {
 		// System.out.println(pd_nm);
 		// System.out.println(pd_cd);
 
-		int page_size = 10; // 한 페이지당 보여줄 리스트 개수
+		int page_size = 8; // 한 페이지당 보여줄 리스트 개수
 		int startpg = (page - 1) * page_size;
 
 		Map<String, Object> product = new HashMap<>();
@@ -378,7 +378,7 @@ public class InoutBoundController {
 		// System.out.println(comp_nm);
 		// System.out.println(comp_cd);
 
-		int page_size = 7; // 한 페이지당 보여줄 리스트 개수
+		int page_size = 8; // 한 페이지당 보여줄 리스트 개수
 		int startpg = (page - 1) * page_size;
 
 		Map<String, Object> supplier = new HashMap<>();
@@ -571,9 +571,25 @@ public class InoutBoundController {
 		return null;
 	}
 
+	//출고현황 검색
+	@PostMapping("/outstate_search")
+	public ResponseEntity<List<outgoing_info_joined_dto>> outstate_search(
+			@RequestBody Map<String, Object> data_arr){
+		try {
+			List<outgoing_info_joined_dto> out_info = ioservice.select_outgoing_view(data_arr);
+			return ResponseEntity.ok(out_info);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+	
+	
 	// 출고현황 이동
 	@GetMapping("inoutbound/outstate")
 	public String outstate(Model m) {
+		/*
 		List<outgoing_info_joined_dto> out_info = ioservice.select_outgoing_view();
 		
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -586,6 +602,7 @@ public class InoutBoundController {
 		});
 
 		m.addAttribute("out_info", out_info);
+		*/
 		/*
 		 * List<outgoing_enroll_dto> outlist = ioservice.select_outgoing();
 		 * m.addAttribute("outlist",outlist);
@@ -593,11 +610,27 @@ public class InoutBoundController {
 		return null;
 	}
 
+	
+	//출고등록 리스트 검색
+	@PostMapping("/outenroll_search")
+	public ResponseEntity<List<accepted_order_enroll_dto>> outenroll_search(
+			@RequestBody Map<String, Object> data_arr){
+		try {
+			List<accepted_order_enroll_dto> orderlist = ioservice.select_order_enroll(data_arr);
+			return ResponseEntity.ok(orderlist);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+	
+	
 	// 출고 등록 이동
 	@GetMapping("inoutbound/outenroll")
 	public String outenroll(Model m) {
-		List<accepted_order_enroll_dto> orderlist = ioservice.select_order_enroll();
-		m.addAttribute("orderlist", orderlist);
+		//List<accepted_order_enroll_dto> orderlist = ioservice.select_order_enroll();
+		//m.addAttribute("orderlist", orderlist);
 		return null;
 	}
 

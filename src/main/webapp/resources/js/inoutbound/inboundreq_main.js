@@ -7,10 +7,10 @@ export class receiving_enroll {
 		const type_select = document.getElementById("type_select").value;
 		const recv_start_date = document.getElementById("recv_start_date").value;
 		const recv_end_date = document.getElementById("recv_end_date").value;
-		const recv_spcd = document.getElementById("recv_spcd").value;
-		const recv_pdcd = document.getElementById("recv_pdcd").value;
+		const recv_spcd = document.getElementById("search_cp_cd").value;
+		const recv_pdcd = document.getElementById("search_pd_cd").value;
 		const recv_st = document.getElementById("recv_st").value;
-
+		
 		if (recv_start_date > recv_end_date) {
 			alert('정상적인 일자를 입력해주세요');
 		}
@@ -41,20 +41,25 @@ export class receiving_enroll {
 					return result_data.json();
 				})
 				.then(function(result_res) {
-					console.log(result_res);
+					
 
 					const tbody = document.querySelector("#rv_tbody");
 
 					tbody.innerHTML = '';
-					window.active_ck = 0; // 활성화된 체크박스 수를 리셋
+					//window.active_ck = 0; // 활성화된 체크박스 수를 리셋
 
-					result_res.forEach(function(exrecv) {
+					let totalItems = result_res.length; // result_res는 반복되는 exrecv 배열
+					
+					result_res.forEach(function(exrecv, index) {
 						const disabled = ['입고'].includes(exrecv.exreceiving_st) ? 'disabled' : '';
 						const manageButtonDisabled = disabled ? 'disabled' : '';
 						
+						  // 내림차순으로 숫자를 계산
+    					let number = totalItems - index;
+    
 						if (type_select == "납품") {
 						const list_deliver = `<tr>
-        			<td style="text-align: center; width: 3%;">1</td>
+        			<td style="text-align: center; width: 3%;">${number}</td>
             		<td style="text-align: center; width: 10%;">${exrecv.supplier_nm}</td>
             		<td style="text-align: center; width: 10%;">${exrecv.product_cd}</td>
             		<td style="text-align: center; width: 10%;">${exrecv.product_nm}</td>
@@ -100,7 +105,7 @@ export class receiving_enroll {
 					}
 					else {
 					const list_return = `<tr>
-        			<td style="text-align: center; width: 3%;">1</td>
+        			<td style="text-align: center; width: 3%;">${number}</td>
             		<td style="text-align: center; width: 10%;">${exrecv.supplier_nm}</td>
             		<td style="text-align: center; width: 10%;">${exrecv.product_cd}</td>
             		<td style="text-align: center; width: 10%;">${exrecv.product_nm}</td>
@@ -148,7 +153,7 @@ export class receiving_enroll {
 
 	//위치정보 가져오기 위한 ajax
 	bring_locations(sp_cd) {
-		console.log("회사코드: " + sp_cd);
+		
 		
 		if (frm_decide_recv.total_qty != frm_decide_recv.return_qty) {
 			//supplier_cd에 대한 위치코드 긁어오기
@@ -159,7 +164,7 @@ export class receiving_enroll {
 					return result_data.json();
 				})
 				.then(function(locations) {
-					console.log(locations);
+					
 					
 					var exrecv_size = document.getElementById('exrecv_size');
 					var location_select = document.getElementById("location_select");

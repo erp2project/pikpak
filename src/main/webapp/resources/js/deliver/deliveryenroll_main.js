@@ -3,7 +3,7 @@ export class inreq_list {
 	inreqstate_list() {
 		const inreqst_start_date = document.getElementById("inreqst_start_date").value;
 		const inreqst_end_date = document.getElementById("inreqst_end_date").value;
-		const inreqst_search_pdcd = document.getElementById("inreqst_search_pdcd").value;
+		const inreqst_search_pdcd = document.getElementById("search_pd_cd").value;
 		const inreqst_search_state = document.getElementById("inreqst_search_state").value;
 
 		if (inreqst_start_date > inreqst_end_date) {
@@ -34,9 +34,10 @@ export class inreq_list {
 					const tbody = document.querySelector("#irst_tbody");
 
 					tbody.innerHTML = '';
+					
+					let totalItems = result_res.length;
 
-
-					result_res.forEach(function(irstate) {
+					result_res.forEach(function(irstate, index) {
 						const disabled = ['완료', '거절'].includes(irstate.request_st) ? 'disabled' : '';
 						const manageButtonDisabled = disabled ? 'disabled' : '';
 
@@ -44,11 +45,13 @@ export class inreq_list {
 						const processing = ['진행'].includes(irstate.request_st) ? 'disabled' : '';
 						const manageProcessingDisabled = processing ? 'disabled' : '';
 
+						 // 내림차순으로 숫자를 계산
+    					let number = totalItems - index;
 
 						const list = `<tr>
-        			
+        			<td style="text-align: center; width: 3%;">${number}</td>
             		<td style="text-align: center; width: 9%;">${irstate.product_cd}</td>
-            		<td style="text-align: center; width: 17%;">${irstate.product_nm}</td>
+            		<td style="text-align: center; width: 14%;">${irstate.product_nm}</td>
             		<td style="text-align: center; width: 7%;">${irstate.total_requested_qty}</td>
             		<td style="text-align: center; width: 7%;">${irstate.remaining_qty}</td>
             		<td style="text-align: center; width: 17%;">${irstate.add_req}</td>
@@ -144,7 +147,7 @@ export class returnstate_list{
 	return_list_search(){
 		const return_start_dt = document.getElementById("return_start_dt").value;
 		const return_end_dt = document.getElementById("return_end_dt").value;
-		const return_pdcd = document.getElementById("return_pdcd").value;
+		const return_pdcd = document.getElementById("search_pd_cd").value;
 		
 		console.log(return_start_dt);
 		console.log(return_end_dt);
@@ -180,10 +183,12 @@ export class returnstate_list{
 					
 					tbody.innerHTML = '';
 					
-					result_res.forEach(function(relist) {
-
+					let totalItems = result_res.length;
+					
+					result_res.forEach(function(relist, index) {
+					let number = totalItems - index;
 						const list = `<tr  class="tooltip-target" data-tooltip="데이터 코드: ${relist.deliver_cd}">
-        			<td style="text-align: center; width: 3%;">1</td>
+        			<td style="text-align: center; width: 3%;">${number}</td>
             		<td style="text-align: center; width: 11%;">${relist.product_cd}</td>
             		<td style="text-align: center; width: 12%;">${relist.product_nm}</td>
             		<td style="text-align: center; width: 9%;">${relist.exreceiving_qty}</td>
@@ -214,7 +219,7 @@ export class delivery_list {
 		
 		const delenroll_start_date = document.getElementById("delenroll_start_date").value;
 		const delenroll_end_date = document.getElementById("delenroll_end_date").value;
-		const delenroll_pdcd = document.getElementById("delenroll_pdcd").value;
+		const delenroll_pdcd = document.getElementById("search_pd_cd").value;
 		const delenroll_state = document.getElementById("delenroll_state").value;
 
 		
@@ -291,27 +296,7 @@ export class delivery_list {
 
 						tbody.innerHTML += list;
 					});
-					/*
-					// 동적 HTML이 렌더링된 후에 바로 접근
-					const list_inreqst = document.getElementsByClassName("list_inreqst");
-
-					// 배열로 변환하여 각 요소에 대해 색상 처리
-					Array.from(list_inreqst).forEach(function(state) {
-						switch (state.innerText) {
-							case "대기":
-								state.style.color = "#808080"; // 회색
-								break;
-							case "진행":
-								state.style.color = "#007BFF"; // 파란색
-								break;
-							case "거절":
-								state.style.color = "#DC3545"; // 빨간색
-								break;
-							case "완료":
-								state.style.color = "#28A745"; // 초록색
-								break;
-						}
-					});*/
+					
 					
 				})
 				.catch(function(error) {
@@ -322,21 +307,6 @@ export class delivery_list {
 		}
 	}
 	
-	
-	//상태 가져와서 '배송' 이면 버튼 비활성화
-	/*
-	delivery_btn() {
-		const current_st = document.querySelectorAll(".current_st"); //상태 컬럼
-		const deliver_manage = document.querySelectorAll(".deliver_manage"); //배송 버튼
-
-		current_st.forEach(function(st, index) {
-			if (st.innerText == "배송") {  // 상태가 '배송'이면
-				deliver_manage[index].disabled = true;  // 해당 인덱스의 배송 버튼 비활성화
-			}
-
-		});
-	}
-	*/
 
 	//납품등록 관리 버튼 클릭시
 	decide_delivery() {

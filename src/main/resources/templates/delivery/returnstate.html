@@ -149,10 +149,10 @@
 		<section
 			th:replace="~{delivery/returnstate_main :: main_returnstate}"></section>
 		<!-- 모달 -->	
-		<!--
-		<section th:replace="~{delivery/deliver_manage_popup :: deliver_mng_popup}"></section> 
-		<section th:replace="~{inoutbound/add_exreceiving_popup :: add_exrecv_popup}"></section>
-		-->
+		
+		<section
+			th:replace="~{inoutbound/product_search :: product_search_popup}"></section>
+		
 		<!-- MAIN 끝-->
 
 	</div>
@@ -171,10 +171,28 @@
 		src="../resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
 	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
 	<script src="../resources/assets/scripts/klorofil-common.js"></script>
+<script>
+$(document).ready(
+	function() {	
+		
+		// 상품코드/상품명 모달 검색 버튼 클릭 시
+		$("#pd_search_rs").on("click", function() {
+			$("#productModal").modal('show');
 
+			// 모달이 열릴 때 첫 번째 페이지 로드
+			$('#productModal').on('shown.bs.modal', function() {
+				new product_search_modal().pd_paging(1); // 페이지 1을 로드
+			});
+		});
+	
+	}
+);
+					
+</script>
 </body>
 <script type="module">
 import {delivery_page_move, delivery_list, returnstate_list} from "../resources/js/deliver/deliveryenroll_main.js?v=4";
+import {product_search_modal} from "../resources/js/inoutbound/inboundreq_main.js?v=6";
 
 /* 페이지 처음 로드 */
 	document.addEventListener('DOMContentLoaded', function() {
@@ -200,6 +218,14 @@ document.getElementById("return_start_dt").value = formatDate(lastWeek);
 document.getElementById("return_end_dt").value = formatDate(nextWeek); // end_dt에 7일 후 날짜 할당
 		new returnstate_list().return_list_search();
 	});	
+
+
+/* 상품 찾기 모달 */
+	window.product_search_modal = product_search_modal; //jquery에서 사용할 수 있도록
+
+	document.querySelector("#mod_pd_search").addEventListener("click",function(){
+		new product_search_modal().pd_paging(1);
+	});
 
 
 //초기화 버튼 눌렀을 때

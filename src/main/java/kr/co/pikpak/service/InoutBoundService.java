@@ -76,7 +76,7 @@ public interface InoutBoundService {
 	public int update_exrecv_return(String return_qty, String exreceiving_cd);
 	
 	//주문현황 보여주기
-	public List<accepted_order_enroll_dto> select_order_enroll();
+	public List<accepted_order_enroll_dto> select_order_enroll(Map<String, Object> data_arr);
 	
 	//위치코드
 	public List<warehouse_locations_dto_lhwtemp> select_locations(String supplier_cd);
@@ -109,7 +109,7 @@ public interface InoutBoundService {
 	public List<outgoing_enroll_dto> select_outgoing();
 	
 	//출고 상세 정보
-	public List<outgoing_info_joined_dto> select_outgoing_view();
+	public List<outgoing_info_joined_dto> select_outgoing_view(Map<String, Object> data_arr);
 	
 	//출고등록 테이블 업데이트
 	public int update_outenroll(String outenroll_cd);

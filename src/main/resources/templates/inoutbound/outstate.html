@@ -16,11 +16,11 @@
 <link rel="stylesheet"
 	href="/resources/assets/vendor/chartist/css/chartist-custom.css">
 <!-- MAIN CSS -->
-<link rel="stylesheet" href="../resources/assets/css/main.css">
-<link rel="stylesheet" href="../resources/assets/css/demo.css">
+<link rel="stylesheet" href="/resources/assets/css/main.css">
+<link rel="stylesheet" href="/resources/assets/css/demo.css">
 <link rel="stylesheet"
 	href="/resources/css/inoutbound/inboundreq_main.css">
-<link rel="stylesheet" href="../resources/css/inoutbound/pd_search.css">
+<link rel="stylesheet" href="/resources/css/inoutbound/pd_search.css">
 <link href="/resources/css/inoutbound/add_popup.css" rel="stylesheet">
 <!-- 팝업창 css도 여기로 -->
 <!-- Select2 CSS -->
@@ -79,9 +79,10 @@
 		
 		<!-- 모달 -->
 		<section th:replace="~{inoutbound/outbound_accept_popup :: out_accept_popup}"></section> 
-		<!--
+		
 		<section
 			th:replace="~{inoutbound/product_search :: product_search_popup}"></section>
+<!--
 		<section
 			th:replace="~{inoutbound/company_search :: company_search_popup}"></section>
 		
@@ -111,6 +112,18 @@
 
 	<script>
 	$(document).ready(function() {
+		
+		//console.log("Document is ready");
+		// 상품코드/상품명 모달 검색 버튼 클릭 시
+		$("#pd_search_os").on("click", function() {
+			$("#productModal").modal('show');
+
+			// 모달이 열릴 때 첫 번째 페이지 로드
+			$('#productModal').on('shown.bs.modal', function() {
+				new product_search_modal().pd_paging(1); // 페이지 1을 로드
+			});
+		});
+		
 		//출고 버튼 클릭시
 		// 문서 전체에 대해 이벤트 위임 설정
 		$(document).on("click", ".outbound_decide", function(event) {
@@ -133,15 +146,12 @@
 			$("#expect_dt_ac").val(expect_dt);
 			$("#outenroll_cd_ac").val(outenroll_cd); 
             
-			//배열 가져오기
-           	var pickings_json = $(this).data("pickings-json");
-            //console.log(pickings_json[0].lot_no);
-           
-            console.log(pickings_json);
-            
+			 // 배열 가져오기 (문자열을 객체로 파싱)
+	        var pickings_json = JSON.parse($(this).attr("data-pickings-json"));
+	     
             //로트번호, 수량 개수
             var $detail_info_size = pickings_json.length;
-            
+          
             var $tbody = $('#modal_tbody');
             $tbody.empty();
             var $w = 0;
@@ -152,7 +162,7 @@
             			    '<td style="width: 20%;"><input type="text" style="width:100%;" value="' + pickings_json[$w].location_cd + '" readonly="readonly"></td>' +
             			    '<td style="width: 15%;">로트번호</td>' +
             			    '<td style="width: 45%;"><input type="text" style="width:100%;" value="' + pickings_json[$w].lot_no + '" readonly="readonly"></td>' +  // 로트번호의 너비 증가
-            			    '<td style="width: 5%;">수량</td>' +  // 수량의 헤더 너비 줄이기
+            			    '<td style="width: 5%;">수량</td>' +  
             			    '<td style="width: 5%;"><input type="text" style="width:50px;" value="' + pickings_json[$w].outpick_qty + '" readonly="readonly">' + // 수량 입력의 너비 줄이기
             			    '<input type="hidden" name="wh_warehouse_idx_datas" value=' + pickings_json[$w].wh_warehouse_idx + "&" + pickings_json[$w].is_deleted + 
             			    '></td></tr>'
@@ -170,18 +180,73 @@
 
 	<script type="module">
    import {page_move_outbound, outaccept_modal, outbound_decide} from "../resources/js/inoutbound/outbound_main.js?v=4";
-	//전체 체크박스를 클릭했을 때
+import {product_search_modal} from "../resources/js/inoutbound/inboundreq_main.js?v=6";
+
+
+window.active_ck_out = 0;
+/* 페이지 처음 로드 */
+
+document.addEventListener('DOMContentLoaded', function() {
+  
+	// 페이지 로드 시 기본 날짜 설정
+       const today = new Date();
+		const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+		const nextWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7); // 오늘에서 7일 후
+
+		const formatDate = (date) => {
+    	let d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    	if (month.length < 2) 
+        month = '0' + month;
+    	if (day.length < 2) 
+        day = '0' + day;
+
+    	return [year, month, day].join('-');
+		};
+
+		document.getElementById("outdec_start_dt").value = formatDate(lastWeek);
+		document.getElementById("outdec_end_dt").value = formatDate(nextWeek); // end_dt에 7일 후 날짜 할당
+	
+
+		new outbound_decide().outdecide_search(); //ajax 검색 리스트 불러오기
+});	
+
+//초기화
+document.querySelector("#os_list_reset").addEventListener("click",function(){
+		location.reload();
+	});
+
+
+//조회
+document.querySelector("#os_list_search").addEventListener("click",function(){
+		new outbound_decide().outdecide_search(); //ajax 검색 리스트 불러오기
+});
+
+/* 상품 찾기 모달 */
+	window.product_search_modal = product_search_modal; //jquery에서 사용할 수 있도록
+
+	document.querySelector("#mod_pd_search").addEventListener("click",function(){
+		new product_search_modal().pd_paging(1);
+	});
+
+
+//전체 체크박스를 클릭했을 때
 	document.querySelector("#all_ck_out").addEventListener("click",function(){
 		new outbound_decide().out_all_ckbox();
 	});
 
-	//개별 체크박스를 클릭했을 때
-	document.querySelectorAll('[name="each_ck_out"]').forEach(function(ck){
-		ck.addEventListener('click', function() {
-        	new outbound_decide().out_each_ckbox();
-		});
-    });
-    
+
+//개별 체크박스 이벤트 위임
+document.querySelector("#os_tbody").addEventListener('click', function(event) {
+    // 이벤트가 발생한 요소가 체크박스인지 확인
+    if (event.target.name === 'each_ck_out') {
+        new outbound_decide().out_each_ckbox();
+    }
+});
+  
 	//삭제 버튼 클릭했을 때
 	document.querySelector("#del_out").addEventListener("click",function(){
 		new outbound_decide().out_delete_data();

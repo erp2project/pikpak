@@ -71,7 +71,40 @@ update outgoing_enroll set outenroll_st='확정' where outenroll_cd=#{outenroll_
     </resultMap>
 
   <!-- 새로운 Select 쿼리 정의 -->
-    <select id="select_outgoing_view" resultMap="OutgoingEnrollViewResultMap">
+   <select id="select_outgoing_view" resultMap="OutgoingEnrollViewResultMap" parameterType="Map">
+    SELECT 
+        a.outenroll_cd, 
+        a.order_cd, 
+        a.product_cd, 
+        a.product_nm, 
+        a.total_qty, 
+        a.expect_dt, 
+        a.exoutgoing_area, 
+        b.location_cd,
+        a.outenroll_log, 
+        a.outenroll_st,
+        b.wh_warehouse_idx, 
+        b.outpick_qty,
+        b.is_deleted,
+        c.lot_no 
+    FROM 
+        outgoing_enroll a 
+    LEFT JOIN 
+        outgoing_picking b ON a.outenroll_cd = b.outenroll_cd 
+    LEFT JOIN 
+        receiving c ON b.receiving_cd = c.receiving_cd
+    WHERE 1=1
+    <if test="product_cd != null and product_cd != ''">
+        AND a.product_cd = #{product_cd}
+    </if>
+    <if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
+        AND a.expect_dt BETWEEN #{start_date} AND #{end_date}
+    </if>
+    ORDER BY a.outenroll_cd DESC
+</select>
+
+<!-- 
+ <select id="select_outgoing_view" resultMap="OutgoingEnrollViewResultMap">
         SELECT 
             a.outenroll_cd, 
             a.order_cd, 
@@ -96,8 +129,7 @@ update outgoing_enroll set outenroll_st='확정' where outenroll_cd=#{outenroll_
         ORDER BY 
             a.outenroll_cd DESC
     </select>
-
-
+ -->
 
 <!-- 출고 정보 가져오기 -->
 <select id="select_outgoing" resultType="kr.co.pikpak.dto.outgoing_enroll_dto">
@@ -172,9 +204,39 @@ select * from warehouse_locations where supplier_cd=#{supplier_cd}
 </select>
 
 <!-- 주문현황 보여주기 -->
+<select id="select_order_enroll" resultType="kr.co.pikpak.dto.accepted_order_enroll_dto" parameterType="Map">
+select * from accepted_order_enroll
+  WHERE 1=1
+ 
+  <if test="product_cd != null and product_cd != ''">
+    AND product_cd = #{product_cd}
+  </if>
+ 
+  <if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
+    <choose>
+      <!-- date_type이 '착수일자'인 경우 -->
+      <when test="date_type == '착수일자'">
+        AND start_dt BETWEEN #{start_date} AND #{end_date}
+      </when>
+      <!-- date_type이 '납기일자'인 경우 -->
+      <when test="date_type == '납기일자'">
+        AND due_dt BETWEEN #{start_date} AND #{end_date}
+      </when>
+      <!-- 그 외의 경우 -->
+      <otherwise>
+        AND start_dt BETWEEN #{start_date} AND #{end_date} <!-- 기본적으로 start_dt 기준으로 검색 -->
+      </otherwise>
+    </choose>
+  </if>
+  order by acceptedorder_idx desc
+</select>
+
+<!-- 
 <select id="select_order_enroll" resultType="kr.co.pikpak.dto.accepted_order_enroll_dto">
 select * from accepted_order_enroll order by acceptedorder_idx desc
 </select>
+ -->
+
 
 <!-- 반송 등록할 때 가입고 테이블 반송수량 업데이트 -->
 <update id="update_exrecv_return">

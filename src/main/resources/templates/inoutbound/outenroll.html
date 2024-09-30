@@ -143,12 +143,9 @@
 		<section th:replace="~{inoutbound/outenroll_main :: main_outenroll}"></section>
 		<!-- MAIN 끝-->
 
-		<!-- 모달
+		<!-- 모달 -->
 		<section
 			th:replace="~{inoutbound/product_search :: product_search_popup}"></section>
-		<section
-			th:replace="~{inoutbound/company_search :: company_search_popup}"></section>
-		 -->
 		<section
 			th:replace="~{inoutbound/add_outbound_popup :: add_out_popup}"></section>
 
@@ -175,6 +172,19 @@
 
 	<script>
 		$(document).ready(function() {
+			
+			//console.log("Document is ready");
+			// 상품코드/상품명 모달 검색 버튼 클릭 시
+			$("#pd_search_oe").on("click", function() {
+				$("#productModal").modal('show');
+
+				// 모달이 열릴 때 첫 번째 페이지 로드
+				$('#productModal').on('shown.bs.modal', function() {
+					new product_search_modal().pd_paging(1); // 페이지 1을 로드
+				});
+			});
+
+			
 			//출고 버튼 클릭시
 			// 문서 전체에 대해 이벤트 위임 설정
 			$(document).on("click", ".outbound_enroll2", function(event) {
@@ -204,9 +214,59 @@
 	</script>
 
 	<script type="module">
-import {page_move_outbound, outbound_enroll} from "../resources/js/inoutbound/outbound_main.js?v=2";
+import {page_move_outbound, outbound_enroll} from "../resources/js/inoutbound/outbound_main.js?v=3";
+import {product_search_modal} from "../resources/js/inoutbound/inboundreq_main.js?v=6";
 
 window.selectedLots = {}; //전역변수
+
+	/* 페이지 처음 로드 */ 
+	document.addEventListener('DOMContentLoaded', function() {
+		 const today = new Date();
+        const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+
+        const formatDate = (date) => {
+            let d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) 
+                month = '0' + month;
+            if (day.length < 2) 
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        };
+
+        document.getElementById("outen_start_dt").value = formatDate(lastWeek);
+        document.getElementById("outen_end_dt").value = formatDate(today);
+		
+		document.getElementById("outen_date_type").value = '착수일자';
+		
+		new outbound_enroll().outenroll_search_list(); //페이지 리스트를 위한 ajax
+	});	
+
+//초기화 버튼 
+	document.querySelector("#outen_list_reset").addEventListener("click",function(){
+		location.reload();
+	});
+
+
+
+
+//조회버튼 
+	document.querySelector("#outen_list_search").addEventListener("click",function(){
+		new outbound_enroll().outenroll_search_list(); //페이지 리스트를 위한 ajax
+	});
+
+/* 상품 찾기 모달 */
+	window.product_search_modal = product_search_modal; //jquery에서 사용할 수 있도록
+
+	document.querySelector("#mod_pd_search").addEventListener("click",function(){
+		new product_search_modal().pd_paging(1);
+	});
+
+	
    	/* 출고등록 모달 */
 
 	// 출고수량 UI 추가 버튼
@@ -245,12 +305,26 @@ window.selectedLots = {}; //전역변수
     }
     });
 
+/*
 	//출고등록 버튼 눌렀을 시 출고수량 정보 가져오기
 	document.querySelectorAll('.outbound_enroll2').forEach(function(button) {
     	button.addEventListener('click', function(event) {
 			new outbound_enroll().qty_info(button.dataset.productCd);
 		});
 	});
+*/
+
+
+	// 출고등록 버튼 클릭 이벤트를 tbody에 위임
+document.querySelector("#oe_tbody").addEventListener('click', function(event) {
+    // 클릭된 요소가 outbound_enroll2 클래스인지 확인
+    if (event.target.classList.contains('outbound_enroll2')) {
+        const button = event.target;
+        new outbound_enroll().qty_info(button.dataset.productCd);
+    }
+});
+
+
 
 	//출고등록 모달에서 등록버튼 눌러서 백엔드 제출 
 	document.querySelector("#out_enroll").addEventListener("click",function(){

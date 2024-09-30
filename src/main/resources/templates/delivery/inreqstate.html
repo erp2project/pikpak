@@ -147,8 +147,10 @@
 			th:replace="~{delivery/inreqstate_main :: main_inreqstate}"></section>
 		<!-- 모달 -->
 		<section th:replace="~{delivery/add_deliveryenroll_popup :: add_delivery_popup}"></section>
-		<!-- 
-		<section th:replace="~{inoutbound/product_search :: product_search_popup}"></section>
+		
+		<section
+			th:replace="~{inoutbound/product_search :: product_search_popup}"></section>
+			<!-- 
 		<section th:replace="~{inoutbound/company_search :: company_search_popup}"></section> 
 		<section th:replace="~{inoutbound/add_exreceiving_popup :: add_exrecv_popup}"></section>
 		-->
@@ -172,7 +174,18 @@
 	<script src="../resources/assets/scripts/klorofil-common.js"></script>
 <script>
 $(document).ready(
-	function() {			
+	function() {	
+		
+		// 상품코드/상품명 모달 검색 버튼 클릭 시
+		$("#pd_search_is").on("click", function() {
+			$("#productModal").modal('show');
+
+			// 모달이 열릴 때 첫 번째 페이지 로드
+			$('#productModal').on('shown.bs.modal', function() {
+				new product_search_modal().pd_paging(1); // 페이지 1을 로드
+			});
+		});
+		
 		//납품 버튼 클릭 시
 		//관리 버튼 클릭시
 		// 문서 전체에 대해 이벤트 위임 설정
@@ -207,6 +220,7 @@ $(document).ready(
 </body>
 <script type="module">
 import {delivery_page_move, delivery_modal, delivery_list, inreq_list} from "../resources/js/deliver/deliveryenroll_main.js?v=6";
+import {product_search_modal} from "../resources/js/inoutbound/inboundreq_main.js?v=6";
 /* 페이지 처음 로드 */
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -235,6 +249,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	new inreq_list().inreqstate_list(); //ajax 검색 리스트 불러오기
 });
+
+
+/* 상품 찾기 모달 */
+	window.product_search_modal = product_search_modal; //jquery에서 사용할 수 있도록
+
+	document.querySelector("#mod_pd_search").addEventListener("click",function(){
+		new product_search_modal().pd_paging(1);
+	});
 
 
 /* 검색 조회 버튼 클릭 시 */

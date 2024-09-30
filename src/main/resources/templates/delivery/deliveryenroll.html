@@ -150,9 +150,8 @@
 			th:replace="~{delivery/deliveryenroll_main :: main_deliveryenroll}"></section>
 		<!-- 모달 -->	
 		<section th:replace="~{delivery/decide_delivery_popup :: decide_deliver_popup}"></section> 
-		<!--
-		<section th:replace="~{inoutbound/add_exreceiving_popup :: add_exrecv_popup}"></section>
-		-->
+		<section
+			th:replace="~{inoutbound/product_search :: product_search_popup}"></section>
 		<!-- MAIN 끝-->
 
 	</div>
@@ -173,7 +172,15 @@
 	<script src="../resources/assets/scripts/klorofil-common.js"></script>
 <script>
 $(document).ready(function() {
-	
+	// 상품코드/상품명 모달 검색 버튼 클릭 시
+	$("#pd_search_de").on("click", function() {
+		$("#productModal").modal('show');
+
+		// 모달이 열릴 때 첫 번째 페이지 로드
+		$('#productModal').on('shown.bs.modal', function() {
+			new product_search_modal().pd_paging(1); // 페이지 1을 로드
+		});
+	});
 	//배송 버튼 클릭시
 	$(document).on("click", ".deliver_manage", function(event) {
 		event.preventDefault();  // 기본 동작 중단
@@ -216,7 +223,7 @@ $(document).ready(function() {
 </body>
 <script type="module">
 import {delivery_page_move, delivery_list} from "../resources/js/deliver/deliveryenroll_main.js?v=4";
-
+import {product_search_modal} from "../resources/js/inoutbound/inboundreq_main.js?v=6";
 /* 페이지 처음 로드 */
 document.addEventListener('DOMContentLoaded', function() {
     // 페이지 로드 시 기본 날짜 설정
@@ -243,6 +250,15 @@ document.addEventListener('DOMContentLoaded', function() {
 	//ajax로 리스트 요청
 	new delivery_list().delivery_go_list();
 });
+
+/* 상품 찾기 모달 */
+	window.product_search_modal = product_search_modal; //jquery에서 사용할 수 있도록
+
+	document.querySelector("#mod_pd_search").addEventListener("click",function(){
+		new product_search_modal().pd_paging(1);
+	});
+
+
 
 //초기화 버튼 클릭시 deli_enroll_reset
 document.querySelector("#deli_enroll_reset").addEventListener("click",function(){

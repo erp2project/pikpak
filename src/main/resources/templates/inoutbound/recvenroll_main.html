@@ -26,7 +26,6 @@
 						</p>
 						<span style="float: right; height: 40px;">
 							<button type="button" class="btn btn-success" id="recv_reset">초기화</button>
-							<button type="button" class="btn btn-danger">EXCEL</button>
 							<button type="button" class="btn btn-warning" id="recv_search">조회</button>
 						</span>
 						<p style="font-size: 12px; height: 25px; line-height: 30px;">※
@@ -54,8 +53,8 @@
 										회사명</td>
 									<td style="width: 15%; line-height: 34px;">
 										<div style="display: flex; align-items: center;">
-											<input type="text" class="form-control" style="width: 40%;" id="recv_spcd">&nbsp;&nbsp;
-											<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
+											<input type="text" class="form-control" style="width: 40%;" id="search_cp_cd" readonly="readonly">&nbsp;&nbsp;
+											<input type="text" class="form-control" style="width: 40%;" id="search_cp_nm" readonly="readonly">&nbsp;&nbsp;
 											<button class="btn btn-primary" type="button" id="cp_search_recv">검색</button>
 										</div>
 									</td>
@@ -67,9 +66,9 @@
 										/ 명</td>
 									<td style="width: 15%; line-height: 34px;">
 										<div style="display: flex; align-items: center;">
-											<input type="text" class="form-control" style="width: 40%;" id="recv_pdcd">&nbsp;&nbsp;
-											<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
-											<button class="btn btn-primary" type="button" id="pd_search-recv">검색</button>
+											<input type="text" class="form-control" style="width: 40%;" id="search_pd_cd" readonly="readonly">&nbsp;&nbsp;
+											<input type="text" class="form-control" style="width: 40%;" id="search_pd_nm" readonly="readonly">&nbsp;&nbsp;
+											<button class="btn btn-primary" type="button" id="pd_search_recv">검색</button>
 										</div>
 									</td>	
 									<td style="width: 10%; height: 34px; line-height: 34px;">상태</td>

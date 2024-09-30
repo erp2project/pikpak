@@ -101,8 +101,18 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	
 	//출고상세정보 가져오기
 	@Override
-	public List<outgoing_info_joined_dto> select_outgoing_view() {
-		List<outgoing_info_joined_dto> outgoing_info = iorepo.select_outgoing_view();
+	public List<outgoing_info_joined_dto> select_outgoing_view(Map<String, Object> data_arr) {
+		if((data_arr.get("start_date") != "") && (data_arr.get("end_date") != "")) {
+			String startdt = (String) data_arr.get("start_date");
+			startdt += " 00:00:00";
+			data_arr.put("start_date", startdt); 
+			
+			String enddt = (String) data_arr.get("end_date");
+			enddt += " 23:59:59";
+			data_arr.put("end_date", enddt);
+		}
+		
+		List<outgoing_info_joined_dto> outgoing_info = iorepo.select_outgoing_view(data_arr);
 		return outgoing_info;
 	}
 	
@@ -269,8 +279,18 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	
 	//출고등록에서 주문현황 보여주기
 	@Override
-	public List<accepted_order_enroll_dto> select_order_enroll() {
-		List<accepted_order_enroll_dto> orderlist = iorepo.select_order_enroll();
+	public List<accepted_order_enroll_dto> select_order_enroll(Map<String, Object> data_arr) {
+		if((data_arr.get("start_date") != "") && (data_arr.get("end_date") != "")) {
+			String startdt = (String) data_arr.get("start_date");
+			startdt += " 00:00:00";
+			data_arr.put("start_date", startdt); 
+			
+			String enddt = (String) data_arr.get("end_date");
+			enddt += " 23:59:59";
+			data_arr.put("end_date", enddt);
+		}
+		
+		List<accepted_order_enroll_dto> orderlist = iorepo.select_order_enroll(data_arr);
 		return orderlist;
 	}
 	

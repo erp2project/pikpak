@@ -151,8 +151,8 @@
 		<section th:replace="~{inoutbound/recvenroll_main :: main_recvenroll}"></section>
 		
 		<!-- 모달 -->
-		<section th:replace="~{inoutbound/test_popup :: inventory_popup}"></section>
-		<section th:replace="~{inoutbound/company_search :: company_search_popup}"></section> 
+		<section th:replace="~{inoutbound/product_search :: product_search_popup}"></section>
+		<section th:replace="~{inoutbound/company_search :: company_search_popup}"></section>
 		<section th:replace="~{inoutbound/decide_recvenroll_popup:: decide_recv_popup}"></section>
 		<section th:replace="~{inoutbound/decide_return_popup:: decide_rt_popup}"></section>
 		<!-- MAIN 끝-->
@@ -178,6 +178,27 @@
 </body>
 <script>
 $(document).ready(function() {
+		//console.log("Document is ready");
+		// 상품코드/상품명 모달 검색 버튼 클릭 시
+		$("#pd_search_recv").on("click", function() {
+			$("#productModal").modal('show');
+
+			// 모달이 열릴 때 첫 번째 페이지 로드
+			$('#productModal').on('shown.bs.modal', function() {
+				new product_search_modal().pd_paging(1); // 페이지 1을 로드
+			});
+		});
+
+		//매입처 회사명 모달 검색 버튼 클릭 시 (새로 추가)
+		$("#cp_search_recv").on("click", function() {
+			$("#companyModal").modal('show');
+
+			// 모달이 열릴 때 첫 번째 페이지 로드
+			$('#companyModal').on('shown.bs.modal', function() {
+				new company_search_modal().paging(1); // 페이지 1을 로드
+			});
+		});
+	
 	
 	//반송 버튼 클릭시
 	$(document).on("click", ".decide_return", function(event) {
@@ -253,18 +274,7 @@ $(document).ready(function() {
 		$("#decideRecvModal").modal('show');
 		
 	});
-	
-	
-    // 상품코드/상품명 모달 검색 버튼 클릭 시
-    $("#pd_search").on("click", function() {
-        $("#productModal").modal('show');
-    });
-   
-    
- 	//매입처 회사명 모달 검색 버튼 클릭 시 (새로 추가)
-    $("#cp_search").on("click", function() {
-        $("#inventoryModal").modal('show');
-    });
+
  	
   //등록버튼 클릭 시
     $("#add_recv").on("click", function() {
@@ -273,7 +283,7 @@ $(document).ready(function() {
 });
 </script>
  <script type="module">
-    import {page_move, receiving_enroll} from "../resources/js/inoutbound/inboundreq_main.js?v=4";
+    import {page_move, receiving_enroll, product_search_modal, company_search_modal} from "../resources/js/inoutbound/inboundreq_main.js?v=4";
 	/* 페이지 처음 로드 */ 
 	document.addEventListener('DOMContentLoaded', function() {
 		const today = new Date();
@@ -300,23 +310,6 @@ $(document).ready(function() {
 		new receiving_enroll().recv_enroll_list(); //페이지 리스트를 위한 ajax
 	});	
 
-/*
-	//반품, 납품 여부 select 시 일자변경
- 	document.getElementById('type_select').addEventListener('change', function() {
-		var selectedType = this.value;
-    	var dateHeader = document.getElementById('date_header');
-
-    	if (selectedType == "납품") {
-        	dateHeader.textContent = '배송일자';
-    	} 
-		else if (selectedType == "반품") {
-        	dateHeader.textContent = '반품일자';
-    	} 
-		else {
-        	dateHeader.textContent = '일자'; // 초기 상태로 리셋
-    	}
-});
-*/
 	//초기화 버튼 클릭시
 	document.querySelector("#recv_reset").addEventListener("click",function(){
 	location.reload();
@@ -326,6 +319,22 @@ $(document).ready(function() {
 	document.querySelector("#recv_search").addEventListener("click",function(){
 	new receiving_enroll().recv_enroll_list(); //페이지 리스트를 위한 ajax
 	});
+
+/* 상품 찾기 모달 */
+	window.product_search_modal = product_search_modal; //jquery에서 사용할 수 있도록
+
+	document.querySelector("#mod_pd_search").addEventListener("click",function(){
+		new product_search_modal().pd_paging(1);
+	});
+
+	/* 매입처 찾기 모달 */	
+	window.company_search_modal = company_search_modal; //jquery에서 사용할 수 있도록
+
+	document.querySelector("#mod_cp_search").addEventListener("click",function(){
+		new company_search_modal().paging(1);
+	});
+
+
 
 
 	//개별 입고등록 -> 동적생성해서 이벤트 위임을 따로 해줘야함

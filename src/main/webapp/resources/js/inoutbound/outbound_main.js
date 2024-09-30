@@ -1,21 +1,138 @@
 export class outbound_decide {
-	//전체 체크 누르고 끌 때
-	out_all_ckbox() {
-		this.all_ck_checked = document.getElementById("all_ck_out").checked;
-		this.each_ck = document.getElementsByName("each_ck_out");
+	//검색
+	outdecide_search(){
+		const outdec_start_dt = document.getElementById("outdec_start_dt").value;
+		const outdec_end_dt = document.getElementById("outdec_end_dt").value;
+		const outdec_pd_cd = document.getElementById("search_pd_cd").value;
+		
 
-		if (this.each_ck.length == 1) { //name값이 한개면 
-			frm_out_list.each_ck_out.checked = this.all_ck_checked;
+		if (outdec_start_dt > outdec_end_dt) {
+			alert('정상적인 일자를 입력해주세요');
+		}
+		else if ((outdec_start_dt != "" && outdec_end_dt == "") || (outdec_start_dt == "" && outdec_end_dt != "")) {
+			alert('일자로 검색 시 모두 입력되어야합니다.');
 		}
 		else {
-			for (this.f = 0; this.f < frm_out_list.each_ck_out.length; this.f++) {
-				frm_out_list.each_ck_out[this.f].checked = this.all_ck_checked;
-			}
+			var outdec_data = {
+				"start_date": outdec_start_dt,
+				"end_date": outdec_end_dt,		
+				"product_cd": outdec_pd_cd				
+			};
+
+			this.search_data = JSON.stringify(outdec_data);
+			
+
+			fetch("/outstate_search", {
+				method: "post",
+				headers: { "Content-type": "application/json" },
+				body: this.search_data
+			})
+				.then(function(result_data) {
+					return result_data.json();
+				})
+				.then(function(result_res) {
+					console.log(result_res);
+
+					const tbody = document.querySelector("#os_tbody");
+
+					tbody.innerHTML = '';
+					window.active_ck_out = 0; // 활성화된 체크박스 수를 리셋
+
+					result_res.forEach(function(outgoing) {
+						const disabled = ['확정'].includes(outgoing.outenroll_st) ? 'disabled' : '';
+						const manageButtonDisabled = disabled ? 'disabled' : '';
+						
+						const checkboxDisabled = outgoing.outenroll_st === '확정' ? 'disabled' : '';
+						if (!checkboxDisabled) {
+							window.active_ck_out++; // 활성화된 체크박스 카운트
+						}
+						
+						const list = `<tr>
+        			<td style="text-align: center; width: 5%;"><input type="checkbox" name="each_ck_out" value="${outgoing.outenroll_cd}"  ${checkboxDisabled}>
+        			<input type="hidden" name="order_cd" value="${outgoing.order_cd}"
+        			</td>
+            		<td style="text-align: center; width: 12%;">${outgoing.order_cd}</td>
+            		<td style="text-align: center; width: 12%;">${outgoing.product_cd}</td>
+            		<td style="text-align: center; width: 12%;">${outgoing.product_nm}</td>
+            		<td style="text-align: center; width: 10%;">${outgoing.total_qty}</td>
+            		<td style="text-align: center; width: 8%;">${outgoing.outenroll_st}</td>
+            		<td style="text-align: center; width: 21%;">${outgoing.outenroll_log}</td>
+            		<td style="text-align: center; width: 13%;">${outgoing.expect_dt.substring(0,10)}</td>
+										
+            		<td style="text-align: center; width: 7%;">
+            		<button style="padding-right: 10px; padding-left: 10px;" class="btn btn-primary outbound_decide" ${manageButtonDisabled}
+            		data-order-cd="${outgoing.order_cd}"
+            		data-product-cd="${outgoing.product_cd}"
+					data-product-nm="${outgoing.product_nm}"
+					data-total-qty="${outgoing.total_qty}"
+					data-outenroll-st="${outgoing.outenroll_st}"
+					data-outenroll-log="${outgoing.outenroll_log}"
+					data-expect-dt="${outgoing.expect_dt}"
+					data-pickings-json='${JSON.stringify(outgoing.pickings)}'
+					data-outenroll-cd="${outgoing.outenroll_cd}"
+					>승인</button>
+            		</td>
+					</tr>`;
+
+						tbody.innerHTML += list;			
+					});
+				})
+				.catch(function(error) {
+					console.log(error);
+					alert('데이터 조회에 문제가 발생하였습니다.');
+				});
 		}
+	}
+	
+	
+	
+	//전체 체크 누르고 끌 때
+	out_all_ckbox() {
+		
+		 this.all_ck_checked = document.getElementById("all_ck_out").checked;
+    this.each_ck = document.getElementsByName("each_ck_out");
+
+    if (this.each_ck.length == 1) { // name값이 한 개면
+        if (!this.each_ck[0].disabled) {
+            this.each_ck[0].checked = this.all_ck_checked;
+        }
+    } else { // name값이 여러 개일 때
+        for (this.f = 0; this.f < this.each_ck.length; this.f++) {
+            if (!this.each_ck[this.f].disabled) {
+                this.each_ck[this.f].checked = this.all_ck_checked;
+            }
+        }
+    }
 	}
 
 	//개별 체크 누르고 끌 때
 	out_each_ckbox() {
+		this.each_ck = document.getElementsByName("each_ck_out"); // 리스트 개수 세기 위함
+    this.ck_count = 0; // 체크된 개별 체크박스 수
+
+    // 체크박스가 하나인 경우
+    if (this.each_ck.length === 1) {
+        if (!this.each_ck[0].disabled && this.each_ck[0].checked) {
+            this.ck_count++;
+        }
+    } else {
+        // 체크박스가 여러 개인 경우
+        this.each_ck.forEach(checkbox => {
+            if (!checkbox.disabled && checkbox.checked) {
+                this.ck_count++; // 체크된 체크박스 수 증가
+            }
+        });
+    }
+
+    // 전체 체크박스와 비교
+    if (this.ck_count === window.active_ck_out) {
+        document.getElementById("all_ck_out").checked = true;
+    } else {
+        document.getElementById("all_ck_out").checked = false;
+    }
+
+    return this.ck_count;
+		/*
 		this.each_ck = document.getElementsByName("each_ck_out"); // 리스트 개수 세기 위함
 		this.ck_count = 0;
 
@@ -24,23 +141,25 @@ export class outbound_decide {
 			this.ck_count++;
 		}
 		else {
-			//전체 체크박스 체크된 개수 세기
-			for (this.f = 0; this.f < frm_out_list.each_ck_out.length; this.f++) {
-				if (frm_out_list.each_ck_out[this.f].checked == true) {
-					this.ck_count++;
+			// 모든 체크박스를 반복하면서 활성화된 체크박스의 수와 체크된 체크박스의 수를 센다.
+			this.each_ck.forEach(checkbox => {
+				if (!checkbox.disabled && checkbox.checked) { // 체크박스가 비활성화되지 않았을 경우
+					this.ck_count++; // 체크된 체크박스 수 증가
 				}
 
-			}
 
-			if (this.ck_count == frm_out_list.each_ck_out.length) {
-				document.getElementById("all_ck_out").checked = true;
-			}
-			else {
-				document.getElementById("all_ck_out").checked = false;
-			}
-
+			});
+				
+		}
+		
+		if (ck_count == window.active_ck_out) {
+			document.getElementById("all_ck_out").checked = true;
+		}
+		else {
+			document.getElementById("all_ck_out").checked = false;
 		}
 		return this.ck_count;
+		*/
 	}
 
 	out_delete_data() {
@@ -92,6 +211,88 @@ export class outaccept_modal {
 
 
 export class outbound_enroll {
+	//리스트 서치
+	outenroll_search_list(){
+		const outen_date_type = document.getElementById("outen_date_type").value;
+		const outen_start_dt = document.getElementById("outen_start_dt").value;
+		const outen_end_dt = document.getElementById("outen_end_dt").value;
+		const outen_pd_cd = document.getElementById("search_pd_cd").value;
+		
+
+		if (outen_start_dt > outen_end_dt) {
+			alert('정상적인 일자를 입력해주세요');
+		}
+		else if ((outen_start_dt != "" && outen_end_dt == "") || (outen_start_dt == "" && outen_end_dt != "")) {
+			alert('일자로 검색 시 모두 입력되어야합니다.');
+		}
+		else {
+			var outenroll_data = {
+				"date_type" : outen_date_type,
+				"start_date": outen_start_dt,
+				"end_date": outen_end_dt,
+				"product_cd": outen_pd_cd
+
+			};
+
+			this.search_data = JSON.stringify(outenroll_data);
+
+			fetch("/outenroll_search", {
+				method: "post",
+				headers: { "Content-type": "application/json" },
+				body: this.search_data
+			})
+				.then(function(result_data) {
+					return result_data.json();
+				})
+				.then(function(result_res) {
+					
+					const tbody = document.querySelector("#oe_tbody");
+
+					tbody.innerHTML = '';
+					
+					let totalItems = result_res.length;
+
+					result_res.forEach(function(orderlist, index) {
+						const disabled = ['등록'].includes(orderlist.acceptedorder_st) ? 'disabled' : '';
+						const manageButtonDisabled = disabled ? 'disabled' : '';
+						
+						let number = totalItems - index;
+						
+						const list = `<tr>
+        			<td style="text-align: center; width: 4%;">${number}</td>
+            		<td style="text-align: center; width: 10%;">${orderlist.order_cd}</td>
+            		<td style="text-align: center; width: 9%;">${orderlist.product_cd}</td>
+            		<td style="text-align: center; width: 16%;">${orderlist.product_nm}</td>
+            		<td style="text-align: center; width: 8%;">${orderlist.order_qty}</td>
+            		<td style="text-align: center; width: 13%;">${orderlist.start_dt}</td>
+            		<td style="text-align: center; width: 13%;">${orderlist.due_dt}</td>
+            		<td style="text-align: center; width: 6%;">${orderlist.acceptedorder_st}</td>					
+            		<td style="text-align: center; width: 11%;">
+            		<button style="padding-right: 10px; padding-left: 10px;" class="btn btn-primary outbound_enroll2" ${manageButtonDisabled}
+					data-order-cd="${orderlist.order_cd}"
+            		data-product-cd="${orderlist.product_cd}"
+					data-product-nm="${orderlist.product_nm}"
+					data-order-qty="${orderlist.order_qty}"
+					data-start-dt="${orderlist.start_dt}"
+					data-due-dt="${orderlist.due_dt}"
+					>출고</button>
+            		</td>
+					</tr>`;
+
+						tbody.innerHTML += list;
+						
+					});
+				})
+				.catch(function(error) {
+					console.log(error);
+					alert('데이터 조회에 문제가 발생하였습니다.');
+				});
+		}
+		
+		
+	}
+	
+	
 	qty_ui(location, lotDetails, quantity, whWarehouseIdx, receivingCd, lotNo) {
 		
 		

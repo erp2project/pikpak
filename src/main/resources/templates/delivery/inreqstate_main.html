@@ -54,9 +54,9 @@
 									<td style="width: 20%; line-height: 34px;">
 										<div style="display: flex; align-items: center;">
 											<input type="text" class="form-control" style="width: 40%;"
-											id="inreqst_search_pdcd">&nbsp;&nbsp;
-											<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
-											<button class="btn btn-primary" type="button" id="pd_search">검색</button>
+											id="search_pd_cd" readonly="readonly">&nbsp;&nbsp;
+											<input type="text" class="form-control" style="width: 40%;" id="search_pd_nm" readonly="readonly">&nbsp;&nbsp;
+											<button class="btn btn-primary" type="button" id="pd_search_is">검색</button>
 										</div>
 									</td>
 									
@@ -82,8 +82,9 @@
 							<table class="table">
 								<thead style="background-color: rgb(130, 210, 213);">
 									<tr>
+										<th style="text-align: center; width: 3%;">NO.</th>
 										<th style="text-align: center; width: 9%;">상품코드</th>
-										<th style="text-align: center; width: 17%;">상품명</th>
+										<th style="text-align: center; width: 14%;">상품명</th>
 										<th style="text-align: center; width: 7%;">요청수량</th>
 										<th style="text-align: center; width: 7%;">남은수량</th>
 										<th style="text-align: center; width: 17%;">추가 요청사항</th>
