@@ -94,7 +94,7 @@
 									</div>
 									<div class="input-group">
 										<label for="productPrice">출고 가격:</label> <c
-											th:text="${return_cklist.purchase_pr}"></c>
+											th:text="${#numbers.formatInteger(return_cklist.purchase_pr, 3, 'COMMA')}"></c>
 									</div>
 								</div>
 								<div class="input-row">
@@ -104,7 +104,7 @@
 									</div>
 									<div class="input-group">
 										<label for="totalPrice">반품 가격:</label> <c
-											th:text="${return_cklist.return_price}"></c>
+											th:text="${#numbers.formatInteger(return_cklist.return_price, 3, 'COMMA')}"></c>
 									</div>
 								</div>
 								<br>

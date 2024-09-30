@@ -35,7 +35,7 @@
                         <div class="input-group">
                             <label for="customerId">아이디:</label>
                             <c th:text="${activeUserID}"></c>
-                            <input type="hidden" name="user_id" th:value="${activeUserID}">
+                            <input type="hidden" name="order_id" th:value="${activeUserID}">
                         </div>
                     </div>
                     <div class="input-row">
@@ -86,7 +86,8 @@
                         </div>
                         <div class="input-group">
                             <label for="productPrice">입고 가격:</label>
-                            <input type="text" id="productPrice" value="" readonly/>원
+                            <input type="text" id="v_productPrice" value="" readonly/>원
+                            <input type="hidden" id="productPrice" value="">
                         </div>
                     </div>
                     <div class="input-row">
@@ -96,7 +97,8 @@
                         </div>
                         <div class="input-group">
                             <label for="totalPrice">총 가격:</label>
-                            <input type="text" id="totalPrice" name="order_price" value="" readonly/>원
+                            <input type="text" id="v_totalPrice" value="" readonly/>원
+                            <input type="hidden" id="totalPrice" name="order_price" value="">
                         </div>
                     </div>
                     <div class="input-row">

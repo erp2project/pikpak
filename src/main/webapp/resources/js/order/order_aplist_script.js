@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	//초기화 버튼
 	oal_reset_btn.addEventListener('click', function() {
-		location.href = '/order_aplist';
+		location.href = '/order/order_aplist';
 	});
 
 	//조회 버튼
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				table.removeChild(existingNoDataRow);
 			}
 
-			for (let i = 1; i < tr.length; i++) {
+			for (let i = 0; i < tr.length; i++) {
 				const tdSt = tr[i].getElementsByTagName("td")[8];
 				const tdCd = tr[i].getElementsByTagName("td")[3];
 				const tdNm = tr[i].getElementsByTagName("td")[4];

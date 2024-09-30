@@ -93,7 +93,7 @@
 									</div>
 									<div class="input-group">
 										<label for="productPrice">입고 가격:</label> <c
-											th:text="${order_aplist.purchase_pr}"></c>
+											th:text="${#numbers.formatInteger(order_aplist.purchase_pr, 3, 'COMMA')}"></c>
 									</div>
 								</div>
 								<div class="input-row">
@@ -103,7 +103,7 @@
 									</div>
 									<div class="input-group">
 										<label for="totalPrice">총 가격:</label> <c
-											th:text="${order_aplist.order_price}"></c>
+											th:text="${#numbers.formatInteger(order_aplist.order_price, 3, 'COMMA')}"></c>
 									</div>
 								</div>
 								<div class="input-row">
@@ -123,47 +123,39 @@
 									</div>
 								</div>
 								<!-- 수정 내역 존재시에만 -->
-								<div th:if="${order_aplist.order_dt != order_aplist.update_dt}">
-									<div class="input-row">
-										<div class="input-group">
-											<label for="modifyDate">주문 수정자 : </label> <c
-												th:text="${order_aplist.update_by}"></c>
-										</div>
-										<div class="input-group">
-											<label for="modifyName">소속:</label> <c
-												th:text="${order_aplist.user_company}"></c>
-										</div>
+								<div class="input-row" th:if="${order_aplist.order_dt != order_aplist.update_dt}">
+									<div class="input-group">
+										<label for="modifyDate">주문 수정자 : </label> <c
+											th:text="${order_aplist.update_by}"></c>
+									</div>
+									<div class="input-group">
+										<label for="modifyName">소속:</label> <c
+											th:text="${order_aplist.user_company}"></c>
 									</div>
 								</div>
 								<!-- 대기 상태 -->
-								<div th:if="${order_aplist.process_st == '대기'}">
-									<div class="input-row">
-										<div class="input-group-text">
-											<label for="approval_log">비고란: </label>
-											<textarea class="approval_log"
-												th:data-index_2="${order_aplist.order_idx}"></textarea>
-										</div>
+								<div class="input-row" th:if="${order_aplist.process_st == '대기'}">
+									<div class="input-group-text">
+										<label for="approval_log">비고란: </label>
+										<textarea class="approval_log"
+											th:data-index_2="${order_aplist.order_idx}"></textarea>
 									</div>
 								</div>
-								<div th:if="${order_aplist.process_st != '대기'}">
-									<div class="input-row">
-										<div class="input-group-text">
-											<label for="approval_log">비고란: </label>
-											<div th:if="${order_aplist.approval_log != ''}">
-												<c th:text="${order_aplist.approval_log}"></c>
-											</div>
-											<div
-												th:if="${order_aplist.approval_log == '' || order_aplist.approval_log == null}">
-												없음</div>
+								<div class="input-row" th:if="${order_aplist.process_st != '대기'}">
+									<div class="input-group-text">
+										<label for="approval_log">비고란: </label>
+										<div th:if="${order_aplist.approval_log != ''}">
+											<c th:text="${order_aplist.approval_log}"></c>
 										</div>
+										<div
+											th:if="${order_aplist.approval_log == '' || order_aplist.approval_log == null}">
+											없음</div>
 									</div>
 								</div>
-								<div th:if="${order_aplist.process_st == '완료'}">
-									<div class="input-row">
-										<div class="input-group-text">
-											<label for="approval_dt">완료일자: </label> <c
-												th:text="${order_aplist.approval_dt}"></c>
-										</div>
+								<div class="input-row" th:if="${order_aplist.process_st == '완료'}">
+									<div class="input-group-text">
+										<label for="approval_dt">완료일자: </label> <c
+											th:text="${order_aplist.approval_dt}"></c>
 									</div>
 								</div>
 							</div>

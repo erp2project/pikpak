@@ -110,6 +110,15 @@ button {
     gap: 10px; /* 행 내부의 요소 사이에 여백 */
 }
 
+.productTypeGroup{
+    display: flex;
+    justify-content: flex-start; /* 왼쪽 정렬 */
+    margin-bottom: 15px; /* 각 행 아래에 여백 */
+    width: 100%; /* 전체 너비 사용 */
+    gap: 10px; /* 행 내부의 요소 사이에 여백 */
+}
+
+
 /* Input group styling */
 .input-group {
     display: flex;
@@ -160,7 +169,7 @@ button {
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    width: 480px;
+    width: 450px;
     height: 100px;
     box-sizing: border-box; /* Include padding and border in the width */
 }

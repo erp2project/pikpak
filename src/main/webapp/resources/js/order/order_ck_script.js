@@ -44,9 +44,10 @@ document.querySelectorAll('.productCode').forEach(function(inputField) {
 	var productPrice = document.querySelector('.productPrice[data-index="' + class_idx + '"]');
 	var productQuantity = document.querySelector('.productQuantity[data-index="' + class_idx + '"]');
 	var totalPrice = document.querySelector('.totalPrice[data-index="' + class_idx + '"]');
+	var v_totalPrice = document.querySelector('.v_totalPrice[data-index="' + class_idx + '"]');
 	var startDate = document.querySelector('.startDate[data-index="' + class_idx + '"]');
 	var endDate = document.querySelector('.endDate[data-index="' + class_idx + '"]');
-
+	
 	//수량 체크
 	function qtyck() {
 		if (productPrice.value == "") {
@@ -66,6 +67,7 @@ document.querySelectorAll('.productCode').forEach(function(inputField) {
 
 		//총 가격
 		totalPrice.value = qty * productPrice.value;
+		v_totalPrice.value = (qty * productPrice.value).toLocaleString();
 	}
 
 	productQuantity.addEventListener('input', qtyck);
@@ -78,7 +80,7 @@ document.querySelectorAll('.productCode').forEach(function(inputField) {
 				alert('상품 코드를 입력해 주세요.');
 			}
 			else {
-				fetch('/product_cd_searchck', {
+				fetch('/order/product_cd_searchck', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/x-www-form-urlencoded'
@@ -121,7 +123,7 @@ document.querySelectorAll('.productCode').forEach(function(inputField) {
 			}
 			else {
 				updateCKValues();
-				order_ck_frm.action = "/order_modify";
+				order_ck_frm.action = "/order/order_modify";
 				order_ck_frm.method = "post";
 				order_ck_frm.submit();
 			}
@@ -134,7 +136,7 @@ document.querySelectorAll('.productCode').forEach(function(inputField) {
 		deleteButton.addEventListener('click', function() {
 			if(confirm("주문 취소 후에는 복구가 불가능합니다. 주문 취소를 진행하시겠습니까?")){
 				updateCKValues();
-				order_ck_frm.action = "/order_delete";
+				order_ck_frm.action = "/order/order_delete";
 				order_ck_frm.method = "post";
 				order_ck_frm.submit();
 			}

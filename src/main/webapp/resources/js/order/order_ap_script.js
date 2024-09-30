@@ -49,7 +49,7 @@ document.querySelectorAll('.openPopupBtn').forEach(function(button){
 		approvalButton.addEventListener('click',function(){
 			ap_process_st = "승인";
 			updateAPValues();
-			order_ap_frm.action = "/order_approval_change";
+			order_ap_frm.action = "/order/order_approval_change";
 			order_ap_frm.method = "post";
 			order_ap_frm.submit();	
 		});
@@ -61,7 +61,7 @@ document.querySelectorAll('.openPopupBtn').forEach(function(button){
 		rejectButton.addEventListener('click',function(){
 			ap_process_st = "거절";
 			updateAPValues();
-			order_ap_frm.action = "/order_approval_change";
+			order_ap_frm.action = "/order/order_approval_change";
 			order_ap_frm.method = "post";
 			order_ap_frm.submit();
 		});

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -25,6 +26,7 @@ import kr.co.pikpak.dto.product_cd_dto;
 import kr.co.pikpak.service.order_service;
 
 @Controller
+@RequestMapping("/order")
 public class OrderController {
 	
 	@Autowired
@@ -50,12 +52,21 @@ public class OrderController {
 		List<order_list_dto> member_list = order_service.search_login(activeUserID);
 		String user_company = member_list.get(0).getUser_company();
 		
-		List<order_list_dto> order_cklist = order_service.order_list(user_company);
+		//물류사일 경우 전체 리스트 출력
+		if(user_company.equals("PikPak")) {
+			List<order_list_dto> order_alllist = order_service.order_list_all();
+			m.addAttribute("order_cklist",order_alllist);
+		}
+		//물류사가 아닐 경우 자신의 회사 리스트만 출력
+		else {
+			List<order_list_dto> order_cklist = order_service.order_list(user_company);
+			m.addAttribute("order_cklist",order_cklist);			
+		}
+		
 		List<order_list_dto> product_list = order_service.product_search();
 		
 		m.addAttribute("activeUserID",activeUserID);
 		m.addAttribute("member_list",member_list);
-		m.addAttribute("order_cklist",order_cklist);
 		m.addAttribute("product_list",product_list);
 		
 		return "/order/order_list";
@@ -72,19 +83,19 @@ public class OrderController {
 			if(result > 0) {
 				this.pw.print("<script>"
 						+ "alert('주문 승인 정보가 변경되었습니다.');"
-						+ "location='/order_aplist';"
+						+ "location='/order/order_aplist';"
 						+ "</script>");
 			}
 			else {
 				this.pw.print("<script>"
 						+ "alert('오류로 인하여 주문 승인 정보 변경을 실패하였습니다.');"
-						+ "location='/order_aplist';"
+						+ "location='/order/order_aplist';"
 						+ "</script>");
 			}
 		}catch(Exception e) {
 			this.pw.print("<script>"
 					+ "alert('오류로 인하여 주문 승인 정보 변경을 실패하였습니다.');"
-					+ "location='/order_aplist';"
+					+ "location='/order/order_aplist';"
 					+ "</script>");
 		}
 		finally {
@@ -105,19 +116,19 @@ public class OrderController {
 			if(result > 0) {
 				this.pw.print("<script>"
 						+ "alert('정상적으로 주문이 취소되었습니다.');"
-						+ "location='/order_list';"
+						+ "location='/order/order_list';"
 						+ "</script>");
 			}
 			else {
 				this.pw.print("<script>"
 						+ "alert('오류로 인하여 주문 취소를 실패하였습니다.');"
-						+ "location='/order_list';"
+						+ "location='/order/order_list';"
 						+ "</script>");
 			}
 		}catch(Exception e) {
 			this.pw.print("<script>"
 					+ "alert('오류로 인하여 주문 취소를 실패하였습니다.');"
-					+ "location='/order_list';"
+					+ "location='/order/order_list';"
 					+ "</script>");
 		}
 		finally {
@@ -141,19 +152,19 @@ public class OrderController {
 			if(result > 0) {
 				this.pw.print("<script>"
 						+ "alert('주문 수정이 완료되었습니다.');"
-						+ "location='/order_list';"
+						+ "location='/order/order_list';"
 						+ "</script>");
 			}
 			else {
 				this.pw.print("<script>"
 						+ "alert('수정된 부분이 존재하지 않습니다.');"
-						+ "location='/order_list';"
+						+ "location='/order/order_list';"
 						+ "</script>");
 			}
 		}catch(Exception e) {
 			this.pw.print("<script>"
 					+ "alert('오류로 인하여 주문 수정을 실패하였습니다.');"
-					+ "location='/order_list';"
+					+ "location='/order/order_list';"
 					+ "</script>");
 		}
 		finally {
@@ -211,19 +222,19 @@ public class OrderController {
 			if(result > 0) {
 				this.pw.print("<script>"
 						+ "alert('주문 등록이 완료되었습니다.');"
-						+ "location='/order_list';"
+						+ "location='/order/order_list';"
 						+ "</script>");
 			}
 			else {
 				this.pw.print("<script>"
 						+ "alert('오류로 인하여 주문 등록을 실패하였습니다.');"
-						+ "location='/order_list';"
+						+ "location='/order/order_list';"
 						+ "</script>");
 			}
 		}catch(Exception e) {
 			this.pw.print("<script>"
 					+ "alert('오류로 인하여 주문 등록을 실패하였습니다.');"
-					+ "location='/order_list';"
+					+ "location='/order/order_list';"
 					+ "</script>");
 		}
 		finally {

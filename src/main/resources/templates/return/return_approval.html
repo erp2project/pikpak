@@ -26,9 +26,9 @@
 						<hr class="popup-divider">
 						<div class="order-container">
 							<span style="font-size: 13px;">반품 상태 : <c
-								th:text="${return_cklist.return_st}"></c></span> <span
+									th:text="${return_cklist.return_st}"></c></span> <span
 								style="font-size: 13px;">반품 코드 : <c
-								th:text="${return_cklist.return_cd}"></c></span> <input type="hidden"
+									th:text="${return_cklist.return_cd}"></c></span> <input type="hidden"
 								class="apc_return_cd" th:value="${return_cklist.return_cd}"
 								th:data-index="${return_cklist.return_idx}">
 						</div>
@@ -39,22 +39,24 @@
 							<div class="box-content">
 								<div class="input-row">
 									<div class="input-group">
-										<label for="customerName">이름:</label> <c
-											th:text="${return_cklist.user_nm}"></c>
+										<label for="customerName">이름:</label>
+										<c th:text="${return_cklist.user_nm}"></c>
 									</div>
 									<div class="input-group">
-										<label for="customerId">아이디:</label> <c class="ra_user_id"
-											th:text="${return_cklist.return_id}"></c>
+										<label for="customerId">아이디:</label>
+										<c th:text="${return_cklist.return_id}"></c>
+										<input type="hidden" class="ra_user_id"
+											th:value="${return_cklist.return_id}" th:data-index="${return_cklist.return_idx}">
 									</div>
 								</div>
 								<div class="input-row">
 									<div class="input-group">
-										<label for="customerAffiliation">소속:</label> <c
-											th:text="${return_cklist.user_company}"></c>
+										<label for="customerAffiliation">소속:</label>
+										<c th:text="${return_cklist.user_company}"></c>
 									</div>
 									<div class="input-group">
-										<label for="customerPhone">전화번호:</label> <c
-											th:text="${return_cklist.user_tel}"></c>
+										<label for="customerPhone">전화번호:</label>
+										<c th:text="${return_cklist.user_tel}"></c>
 									</div>
 								</div>
 							</div>
@@ -64,128 +66,131 @@
 							<div class="box-content">
 								<div class="input-row">
 									<div class="input-group">
-										<label for="productCode">출고 코드:</label> <c
-											th:text="${return_cklist.outgoing_cd}"></c>
+										<label for="productCode">출고 코드:</label>
+										<c th:text="${return_cklist.outgoing_cd}"></c>
 									</div>
 								</div>
 								<div class="input-row">
 									<div class="input-group">
-										<label for="productCode">상품 코드:</label> <c class="ra_product_cd"
-											th:text="${return_cklist.product_cd}"></c>
+										<label for="productCode">상품 코드:</label>
+										<c th:text="${return_cklist.product_cd}"></c>
+										<input type="hidden" class="ra_product_cd"
+											th:value="${return_cklist.product_cd}" th:data-index="${return_cklist.return_idx}">
 									</div>
 									<div class="input-group">
-										<label for="productName">상품명:</label> <c
-											th:text="${return_cklist.product_nm}"></c>
-									</div>
-								</div>
-								<div class="input-row">
-									<div class="input-group">
-										<label for="productManufacturer">제조사:</label> <c class="ra_supplier"
-											th:text="${return_cklist.supplier_nm}"></c>
-									</div>
-									<div class="input-group">
-										<label for="outDate">출고날짜:</label> <c
-											th:text="${return_cklist.outgoing_dt}"></c>
-									</div>
-								</div>
-
-								<div class="input-row">
-									<div class="input-group">
-										<label for="productWeight">주문 개수:</label> <c
-											th:text="${return_cklist.total_qty}"></c>
-									</div>
-									<div class="input-group">
-										<label for="productPrice">출고 가격:</label> <c
-											th:text="${return_cklist.purchase_pr}"></c>
+										<label for="productName">상품명:</label>
+										<c th:text="${return_cklist.product_nm}"></c>
 									</div>
 								</div>
 								<div class="input-row">
 									<div class="input-group">
-										<label for="productQuantity">반품 개수:</label> <c
-											th:text="${return_cklist.return_qty}"></c>
+										<label for="productManufacturer">제조사:</label>
+										<c class="ra_supplier" th:text="${return_cklist.supplier_nm}"></c>
+										<input type="hidden" class="ra_supplier"
+											th:value="${return_cklist.supplier_nm}" th:data-index="${return_cklist.return_idx}">
 									</div>
 									<div class="input-group">
-										<label for="totalPrice">반품 가격:</label> <c
-											th:text="${return_cklist.return_price}"></c>
+										<label for="outDate">출고날짜:</label>
+										<c th:text="${return_cklist.outgoing_dt}"></c>
+									</div>
+								</div>
+								<div class="input-row">
+									<div class="input-group">
+										<label for="productWeight">주문 개수:</label>
+										<c th:text="${return_cklist.total_qty}"></c>
+									</div>
+									<div class="input-group">
+										<label for="productPrice">출고 가격:</label>
+										<c th:text="${#numbers.formatInteger(return_cklist.purchase_pr, 3, 'COMMA')}"></c>
+									</div>
+								</div>
+								<div class="input-row">
+									<div class="input-group">
+										<label for="productQuantity">반품 개수:</label>
+										<c th:text="${return_cklist.return_qty}"></c>
+										<input type="hidden" class="ra_productQuantity"
+											th:value="${return_cklist.return_qty}" th:data-index="${return_cklist.return_idx}">
+									</div>
+									<div class="input-group">
+										<label for="totalPrice">반품 가격:</label>
+										<c th:text="${#numbers.formatInteger(return_cklist.return_price, 3, 'COMMA')}"></c>
 									</div>
 								</div>
 								<br>
 								<div class="input-row">
 									<div class="input-group">
-										<label for="returnReason">반품 사유:</label> <c
-											th:text="${return_cklist.return_type}"></c>
+										<label for="returnReason">반품 사유:</label>
+										<c th:text="${return_cklist.return_type}"></c>
 									</div>
 								</div>
 								<div class="input-row">
 									<div class="input-group-text">
 										<label for="approval_log">기타 사유: </label>
-										<div th:if="${return_cklist.return_type2 != ''}">
-											<c th:text="${return_cklist.return_type2}"></c>
-										</div>
-										<div th:if="${return_cklist.return_type2 == ''}">없음</div>
+										<c th:text="${return_cklist.return_type2}"
+											th:if="${return_cklist.return_type2 != ''}"></c>
+										<c th:if="${return_cklist.return_type2 == ''}">없음</c>
 									</div>
 								</div>
-								<div th:if="${return_cklist.return_st == '대기'}">
-									<div class="input-row">
-										<div class="input-group-text">
-											<label for="reprocess_log">비고란: </label>
-											<textarea class="reprocess_log"
-												th:data-index="${return_cklist.return_idx}"></textarea>
-										</div>
+								<div class="input-row"
+									th:if="${return_cklist.return_st == '대기'}">
+									<div class="input-group-text">
+										<label for="reprocess_log">비고란: </label>
+										<textarea class="reprocess_log"
+											th:data-index="${return_cklist.return_idx}"></textarea>
 									</div>
 								</div>
-								<div th:if="${return_cklist.return_st != '대기'}">
-									<div class="input-row">
-										<div class="input-group-text">
-											<label for="reprocess_log">비고란: </label>
-											<div th:if="${return_cklist.reprocess_log != ''}">
-												<c th:text="${return_cklist.reprocess_log}"></c>
-											</div>
-											<div
-												th:if="${return_cklist.reprocess_log == '' || return_cklist.reprocess_log == null}">
-												없음</div>
+								<div class="input-row"
+									th:if="${return_cklist.return_st != '대기'}">
+									<div class="input-group-text">
+										<label for="reprocess_log">비고란: </label>
+										<div th:if="${return_cklist.reprocess_log != ''}">
+											<c th:text="${return_cklist.reprocess_log}"></c>
 										</div>
+										<div
+											th:if="${return_cklist.reprocess_log == '' || return_cklist.reprocess_log == null}">
+											없음</div>
 									</div>
 								</div>
-								<div th:if="${return_cklist.return_st == '승인'}">
-									<div class="input-row">
-										<div class="input-group-text">
-											<label for="returnReason">상품 처리:</label> <select
-												class="reprocess_wk"
-												th:data-index="${return_cklist.return_idx}">
-												<option value="재입고">재입고</option>
-												<option value="폐기">폐기</option>
-											</select>
-										</div>
+								<div class="input-row"
+									th:if="${return_cklist.return_st == '승인'}">
+									<div class="input-group-text">
+										<label for="returnReason">상품 처리:</label> <select
+											class="reprocess_wk"
+											th:data-index="${return_cklist.return_idx}">
+											<option value="재입고">재입고</option>
+											<option value="폐기">폐기</option>
+										</select>
 									</div>
-									<div class="productTypeGroup">
-									<div class="input-row" style="display: none;">
-										<div class="input-group">
-											<label for="returnReason">상품 유형:</label> 
-												<select	class="product_type" th:data-index="${return_cklist.return_idx}">
-													<option value="1유형">1유형</option>
-													<option value="2유형">2유형</option>
-													<option value="3유형">3유형</option>
-												</select>
-										</div>
-										<div class="input-group">
-											<label for="restock">재입고 수:</label>
-											<input type="text" class="ra_restock" th:data-index="${return_cklist.return_idx}"/>
-										</div>
+								</div>
+								<div class="productTypeGroup"
+									th:data-index="${return_cklist.return_idx}"
+									th:if="${return_cklist.return_st == '승인'}">
+									<div class="input-group">
+										<label for="returnReason">상품 유형:</label> <select
+											class="product_type"
+											th:data-index="${return_cklist.return_idx}">
+											<option value="1유형">1유형</option>
+											<option value="2유형">2유형</option>
+											<option value="3유형">3유형</option>
+										</select>
 									</div>
+									<div class="input-group">
+										<label for="restock">재입고 수:</label> <input type="text"
+											class="ra_restock" value=""
+											th:data-index="${return_cklist.return_idx}" />
 									</div>
 								</div>
 								<div th:if="${return_cklist.return_st == '완료'}">
 									<div class="input-row">
 										<div class="input-group-text">
-											<label for="returnReason">상품 처리:</label> <c
-												th:text="${return_cklist.reprocess_wk}"></c>
+											<label for="returnReason">상품 처리:</label>
+											<c th:text="${return_cklist.reprocess_wk}"></c>
 										</div>
 									</div>
 									<div class="input-row">
 										<div class="input-group-text">
-											<label for="processing_dt">완료일자: </label> <c
-												th:text="${return_cklist.processing_dt}"></c>
+											<label for="processing_dt">완료일자: </label>
+											<c th:text="${return_cklist.processing_dt}"></c>
 										</div>
 									</div>
 								</div>

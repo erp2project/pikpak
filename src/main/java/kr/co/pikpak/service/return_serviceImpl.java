@@ -16,6 +16,12 @@ public class return_serviceImpl implements return_service{
 	private kr.co.pikpak.repo.return_repo return_repo;
 	
 	@Override
+	public String supplier_cd_search(String supplier_nm) {
+		String supplier_cd = return_repo.supplier_cd_search(supplier_nm);
+		return supplier_cd;
+	}
+	
+	@Override
 	public int return_restock(return_dto return_dto) {
 		int result = return_repo.return_restock(return_dto);
 		return result;
@@ -62,8 +68,8 @@ public class return_serviceImpl implements return_service{
 	}
 	
 	@Override
-	public int outgoing_cd_check(String outgoing_cd) {
-		int result = return_repo.outgoing_cd_check(outgoing_cd);
+	public Integer outgoing_cd_check(String outgoing_cd) {
+		Integer result = return_repo.outgoing_cd_check(outgoing_cd);
 		return result;
 	}
 	
