@@ -97,6 +97,9 @@ update outgoing_enroll set outenroll_st='확정' where outenroll_cd=#{outenroll_
     <if test="product_cd != null and product_cd != ''">
         AND a.product_cd = #{product_cd}
     </if>
+    <if test="outenroll_st != null and outenroll_st != ''">
+        AND a.outenroll_st = #{outenroll_st}
+    </if>
     <if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
         AND a.expect_dt BETWEEN #{start_date} AND #{end_date}
     </if>
@@ -210,6 +213,10 @@ select * from accepted_order_enroll
  
   <if test="product_cd != null and product_cd != ''">
     AND product_cd = #{product_cd}
+  </if>
+  
+  <if test="acceptedorder_st != null and acceptedorder_st != ''">
+    AND acceptedorder_st = #{acceptedorder_st}
   </if>
  
   <if test="start_date != null and start_date != '' and end_date != null and end_date != ''">

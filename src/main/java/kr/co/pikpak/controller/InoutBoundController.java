@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.util.HtmlUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,11 +58,7 @@ public class InoutBoundController {
 			@RequestParam(defaultValue = "", required = false) String[] each_ck_out,
 			@RequestParam(defaultValue = "", required = false) String outenroll_cd,
 			@RequestParam(defaultValue = "", required = false) String order_cd) {
-		// System.out.println(each_ck_out.length);
-		// System.out.println(outenroll_cd); //이거 잘라서 picking 테이블에 존재하는 outenroll_cd 다
-		// 찾아서 지워야함
-		// System.out.println(order_cd); //OD-2409254642,OD-2409255963
-
+		
 		res.setContentType("text/html;charset=utf-8");
 
 		try {
@@ -99,12 +96,7 @@ public class InoutBoundController {
 			@RequestParam(defaultValue = "", required = true) String wh_warehouse_idx_datas[]) {
 		res.setContentType("text/html;charset=utf-8");
 		String update_id = "ad_leehw_1234";
-		
-		System.out.println(outenroll_cd); //출고 등록 상태 업데이트용
-		System.out.println(order_cd); //주문 상태 업데이트용
-		System.out.println(wh_warehouse_idx_datas.length); //전체 재고 빠진 idx 삭제용   66&Y
-		
-		
+			
 		try {
 			this.pw = res.getWriter();
 			// outgoing_ernoll 상태 업데이트
@@ -153,15 +145,13 @@ public class InoutBoundController {
 	@PostMapping("/inoutbound/outgoing_enrollok")
 	public String outgoing_enrollok(ServletResponse res, 
 			@ModelAttribute("outenroll") outgoing_enroll_dto dto,
-			@RequestParam(defaultValue = "", required = true) String item_data) {
+			@RequestParam(defaultValue = "", required = true) String item_data,
+			@SessionAttribute(name = "activeUserID", required = false) String operator_id) {
 		res.setContentType("text/html;charset=utf-8");
 		try {
 			this.pw = res.getWriter();
 
 			/* *****원래는 이걸 모듈로 빼야함***** */
-			// 세션에서 id가져옴
-			String operator_id = "ad_leehw_1234";
-
 			// 출고고유번호 생성
 			String server_time = ioservice.get_time();
 			
@@ -219,6 +209,8 @@ public class InoutBoundController {
 			dto.setTotal_qty(total_qty); //dto 에 총 수량 넣기
 
 			// 출고정보 등록하는 쿼리 실행
+			dto.setOperator_id(operator_id);
+			
 			int result = ioservice.insert_outgoing_enroll(dto);
 			if (result > 0) { //출고등록이 성공하면
 				// 출고피킹 등록하는 쿼리 실행
@@ -250,7 +242,7 @@ public class InoutBoundController {
 	@GetMapping("/outgoing_locations")
 	@ResponseBody
 	public ResponseEntity<?> outgoing_locations(@RequestParam(defaultValue = "", required = true) String product_cd) {
-		// System.out.println(product_cd); //ok 잘날아왔고
+		
 		try {
 			List<outgoing_select_view_dto> stock_info = ioservice.select_stock(product_cd);
 			return ResponseEntity.ok(stock_info); // JSON으로 변환되어 전송
@@ -263,7 +255,8 @@ public class InoutBoundController {
 	@PostMapping("inoutbound/inbound_enrollok")
 	public String inbound_enrollok(ServletResponse res, @ModelAttribute("receiving") receiving_dto dto,
 			@RequestParam(defaultValue = "", required = true) String total_qty,
-			@RequestParam(defaultValue = "", required = false) String return_qty) {
+			@RequestParam(defaultValue = "", required = false) String return_qty,
+			@SessionAttribute(name = "activeUserID", required = false) String operator_id) {
 		res.setContentType("text/html;charset=utf-8");
 		// 넘어오는 값 : deliver_cd, exreceiving_cd, supplier_nm, supplier_cd, proudct_cd,
 		// product_nm, receiving_qty, receiving_size, location_cd, inventory_dt,
@@ -275,7 +268,10 @@ public class InoutBoundController {
 
 			// 납품수량, 반품수량 계산
 			dto.setReceiving_qty(Integer.parseInt(total_qty) - Integer.parseInt(return_qty));
-
+			
+			//세션
+			dto.setOperator_id(operator_id);
+			
 			int result = ioservice.insert_receiving(dto);
 			if (result > 0) {
 				this.pw.print(
@@ -310,13 +306,18 @@ public class InoutBoundController {
 
 	// 납품 반송
 	@PostMapping("/inoutbound/deliver_returnok")
-	public String deliver_returnok(ServletResponse res, @ModelAttribute("deliver_return") deliver_return_dto dto) {
+	public String deliver_returnok(ServletResponse res, @ModelAttribute("deliver_return") deliver_return_dto dto,
+			@SessionAttribute(name = "activeUserID", required = false) String operator_id) {
 		res.setContentType("text/html;charset=utf-8");
 		try {
 			// 넘어오는 값 : deliver_cd, exreceiving_cd, d_return_type, d_return_dt, d_return_qty
 			// 만들어야하는 값 : d_return_cd, operator_id
 			// 자동 들어가는 값 : d_return_idx, d_enroll_dt
 			this.pw = res.getWriter();
+			
+			//사용자 세션
+			dto.setOperator_id(operator_id);
+			
 			int result = ioservice.insert_deliver_return(dto);
 			if (result > 0) {
 				this.pw.print("<script>" + "alert('정상적으로 등록되었습니다.');" + "location.href='./recvenroll';" + "</script>");
@@ -338,10 +339,7 @@ public class InoutBoundController {
 	public Map<String, Object> product_paging(@RequestParam(defaultValue = "", required = false) int page,
 			@RequestParam(defaultValue = "", required = false) String pd_nm,
 			@RequestParam(defaultValue = "", required = false) String pd_cd) {
-		// System.out.println(page);
-		// System.out.println(pd_nm);
-		// System.out.println(pd_cd);
-
+	
 		int page_size = 8; // 한 페이지당 보여줄 리스트 개수
 		int startpg = (page - 1) * page_size;
 
@@ -374,9 +372,6 @@ public class InoutBoundController {
 	public Map<String, Object> company_paging(@RequestParam(defaultValue = "", required = false) int page,
 			@RequestParam(defaultValue = "", required = false) String comp_nm,
 			@RequestParam(defaultValue = "", required = false) String comp_cd) {
-		// System.out.println(page);
-		// System.out.println(comp_nm);
-		// System.out.println(comp_cd);
 
 		int page_size = 8; // 한 페이지당 보여줄 리스트 개수
 		int startpg = (page - 1) * page_size;
@@ -437,21 +432,21 @@ public class InoutBoundController {
 			@RequestParam(defaultValue = "", required = false) int product_qty,
 			@RequestParam(defaultValue = "", required = false) String add_req,
 			@RequestParam(defaultValue = "", required = false) String hope_dt,
-			@RequestParam(defaultValue = "", required = false) String request_idx) {
+			@RequestParam(defaultValue = "", required = false) String request_idx,
+			@SessionAttribute(name = "activeUserID", required = false) String update_id) {
 
 		res.setContentType("text/html;charset=utf-8");
 		Map<String, Object> inrequest = new HashMap<>();
 		inrequest.put("product_qty", product_qty);
 		inrequest.put("add_req", add_req);
+		
 		inrequest.put("hope_dt", hope_dt);
 
-		String update_id = "ad_leehw_1234"; // 세션에서 가지고 왔다고 가정
-		inrequest.put("update_id", "ad_leehw_1234"); // 업데이트 id
+		//activeUserID
+		inrequest.put("update_id", update_id); // 업데이트 id
 
 		String update_nm = ioservice.search_one_id(update_id);
-		// inrequest.put("update_nm", update_nm); //업데이트 등록자 => 직접 쿼리문으로 들고와야함
-		// 이건...어떻
-
+	
 		inrequest.put("request_idx", request_idx);
 		try {
 			this.pw = res.getWriter();
@@ -463,10 +458,11 @@ public class InoutBoundController {
 		} catch (Exception e) {
 			this.pw.print(
 					"<script>" + "alert('데이터베이스 문제로 수정되지 못하였습니다.');" + "location.href='./inboundreq';" + "</script>");
-			System.out.println(e);
+			
 		} finally {
 			this.pw.close();
 		}
+		
 		return null;
 	}
 
@@ -513,7 +509,6 @@ public class InoutBoundController {
 			return ResponseEntity.ok(ir_search);
 
 		} catch (Exception e) {
-			System.out.println(e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 
@@ -524,7 +519,6 @@ public class InoutBoundController {
 	public String inboundreq(Model m) {
 
 		// 등록 모달에 상품리스트 출력
-		// List<product_dto_lhwtemp> pdlist = ioservice.select_pdlist();
 		List<Map<String, Object>> pdlist = ioservice.select_product();
 		m.addAttribute("pdlist", pdlist);
 
@@ -532,28 +526,21 @@ public class InoutBoundController {
 		List<input_request_dto> ir_list = ioservice.select_inreq();
 		m.addAttribute("ir_list", ir_list);
 
-		/*
-		 * //매입처 모달에 회사 리스트 출력 List<supplier_info_dto_lhwtemp> splist =
-		 * ioservice.select_supplier(); int sp_total = splist.size();
-		 * m.addAttribute("splist",splist); m.addAttribute("sp_total", sp_total);
-		 */
 
 		return null;
 	}
 
 	//입고등록 서치 리스트
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@PostMapping("/receiving_search")
 	public ResponseEntity<List<ex_receiving_joined_dto>> receiving_search(
 			@RequestBody Map<String, Object> data_arr){
 		try {
-			
-
 			List<ex_receiving_joined_dto> exrecv_list = ioservice.select_ex_receiving(data_arr);
 			
 			return ResponseEntity.ok(exrecv_list);
 		}
 		catch(Exception e){
-			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
@@ -572,6 +559,7 @@ public class InoutBoundController {
 	}
 
 	//출고현황 검색
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@PostMapping("/outstate_search")
 	public ResponseEntity<List<outgoing_info_joined_dto>> outstate_search(
 			@RequestBody Map<String, Object> data_arr){
@@ -603,15 +591,12 @@ public class InoutBoundController {
 
 		m.addAttribute("out_info", out_info);
 		*/
-		/*
-		 * List<outgoing_enroll_dto> outlist = ioservice.select_outgoing();
-		 * m.addAttribute("outlist",outlist);
-		 */
 		return null;
 	}
 
 	
 	//출고등록 리스트 검색
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@PostMapping("/outenroll_search")
 	public ResponseEntity<List<accepted_order_enroll_dto>> outenroll_search(
 			@RequestBody Map<String, Object> data_arr){
@@ -629,20 +614,9 @@ public class InoutBoundController {
 	// 출고 등록 이동
 	@GetMapping("inoutbound/outenroll")
 	public String outenroll(Model m) {
-		//List<accepted_order_enroll_dto> orderlist = ioservice.select_order_enroll();
-		//m.addAttribute("orderlist", orderlist);
+	
 		return null;
 	}
 
-	/*
-	 * // 상품코드/상품명 찾기 팝업
-	 * 
-	 * @GetMapping("/inoutbound/pd_search_popup") public String pd_search_popup() {
-	 * return "inoutbound/pd_search_popup"; // Thymeleaf 템플릿 경로 }
-	 * 
-	 * // 매입처 회사명 찾기 팝업
-	 * 
-	 * @GetMapping("/inoutbound/cp_search_popup") public String cp_search_popup() {
-	 * return "inoutbound/cp_search_popup"; }
-	 */
+	
 }

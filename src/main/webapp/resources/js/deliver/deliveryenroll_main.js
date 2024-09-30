@@ -149,10 +149,6 @@ export class returnstate_list{
 		const return_end_dt = document.getElementById("return_end_dt").value;
 		const return_pdcd = document.getElementById("search_pd_cd").value;
 		
-		console.log(return_start_dt);
-		console.log(return_end_dt);
-		console.log(return_pdcd);
-		
 		if (return_start_dt > return_end_dt) {
 			alert('정상적인 일자를 입력해주세요');
 		}
@@ -167,7 +163,6 @@ export class returnstate_list{
 			};
 
 			this.return_search = JSON.stringify(returnstate_data);
-			console.log(this.return_search);
 			
 			fetch("/returnstate_search", {
 				method: "post",
@@ -274,7 +269,7 @@ export class delivery_list {
             		<td style="text-align: center; width: 6%;">${delienroll.deliver_size}</td>
             		<td style="text-align: center; width: 10%;">${delienroll.make_dt}</td>
             		<td style="text-align: center; width: 10%;">${delienroll.deliver_dt.substring(0,10)}</td>
-            		<td style="text-align: center; width: 7%;">${delienroll.deliver_st}</td>
+            		<td style="text-align: center; width: 7%;" class="list_delienroll">${delienroll.deliver_st}</td>
             		<td style="text-align: center; width: 10%;">${delienroll.departure_dt != null ? delienroll.departure_dt.substring(0, 10) : ''}</td>
 													
             		<td style="text-align: center; width: 15%;">
@@ -296,7 +291,20 @@ export class delivery_list {
 
 						tbody.innerHTML += list;
 					});
-					
+					// 동적 HTML이 렌더링된 후에 바로 접근
+					const list_delienroll = document.getElementsByClassName("list_delienroll");
+
+					// 배열로 변환하여 각 요소에 대해 색상 처리
+					Array.from(list_delienroll).forEach(function(state) {
+						switch (state.innerText) {
+							case "대기":
+								state.style.color = "#808080"; // 회색
+								break;
+							case "배송":
+								state.style.color = "#28A745"; // 초록색
+								break;
+						}
+					});
 					
 				})
 				.catch(function(error) {

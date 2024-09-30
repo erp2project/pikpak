@@ -20,6 +20,11 @@ public class DeliveryServiceImpl implements DeliveryService{
 	@Autowired
 	DeliveryRepo delrepo;
 	
+	@Override
+	public String select_current_supplier(String trader_id) {
+		String supplier_cd = delrepo.select_current_supplier(trader_id);
+		return supplier_cd;
+	}
 	
 	//서버시간
 	@Override
@@ -92,10 +97,6 @@ public class DeliveryServiceImpl implements DeliveryService{
 		//랜덤 고유번호 넣기
 		dto.setExreceiving_cd(this.make_exreceiving_code());
 		
-		//사용자 이름 세션에서 가져온다고 가정
-		String operator_id = "ad_leehw_1234"; //제조사 측 납품등록이자, 물류회사측 가입고 목록에 보일 것
-		dto.setOperator_id(operator_id);
-		
 		//상태 기본 데이터
 		dto.setExreceiving_st("대기");
 		
@@ -110,7 +111,7 @@ public class DeliveryServiceImpl implements DeliveryService{
 		if(result > 0) {
 			try {
 				
-				int update_delienroll = this.deliver_update_nm(dto.getDeparture_dt(), operator_id, dto.getDeliver_cd());
+				int update_delienroll = this.deliver_update_nm(dto.getDeparture_dt(), dto.getOperator_id(), dto.getDeliver_cd());
 				
 				
 				//납품등록 업데이트도 성공시
@@ -176,14 +177,7 @@ public class DeliveryServiceImpl implements DeliveryService{
 		dto.setDeliver_cd(this.make_delienrollcode());
 		
 		dto.setDeliver_st("대기");
-		
-		//세션에서 현재 회원 정보를 가져왔다고 가정
-		String operator_id = "ad_leehw_1234";
-		
-		dto.setOperator_id(operator_id);
-	
-	
-		
+				
 		int result = delrepo.insert_deliver_enroll(dto);
 		return result;
 	}

@@ -4,7 +4,7 @@ export class outbound_decide {
 		const outdec_start_dt = document.getElementById("outdec_start_dt").value;
 		const outdec_end_dt = document.getElementById("outdec_end_dt").value;
 		const outdec_pd_cd = document.getElementById("search_pd_cd").value;
-		
+		const outdc_state = document.getElementById("outdc_state").value;
 
 		if (outdec_start_dt > outdec_end_dt) {
 			alert('정상적인 일자를 입력해주세요');
@@ -16,7 +16,8 @@ export class outbound_decide {
 			var outdec_data = {
 				"start_date": outdec_start_dt,
 				"end_date": outdec_end_dt,		
-				"product_cd": outdec_pd_cd				
+				"product_cd": outdec_pd_cd,
+				"outenroll_st":	outdc_state	
 			};
 
 			this.search_data = JSON.stringify(outdec_data);
@@ -31,8 +32,6 @@ export class outbound_decide {
 					return result_data.json();
 				})
 				.then(function(result_res) {
-					console.log(result_res);
-
 					const tbody = document.querySelector("#os_tbody");
 
 					tbody.innerHTML = '';
@@ -55,7 +54,7 @@ export class outbound_decide {
             		<td style="text-align: center; width: 12%;">${outgoing.product_cd}</td>
             		<td style="text-align: center; width: 12%;">${outgoing.product_nm}</td>
             		<td style="text-align: center; width: 10%;">${outgoing.total_qty}</td>
-            		<td style="text-align: center; width: 8%;">${outgoing.outenroll_st}</td>
+            		<td style="text-align: center; width: 8%;" class="list_outdec">${outgoing.outenroll_st}</td>
             		<td style="text-align: center; width: 21%;">${outgoing.outenroll_log}</td>
             		<td style="text-align: center; width: 13%;">${outgoing.expect_dt.substring(0,10)}</td>
 										
@@ -75,6 +74,21 @@ export class outbound_decide {
 					</tr>`;
 
 						tbody.innerHTML += list;			
+					});
+					
+					// 동적 HTML이 렌더링된 후에 바로 접근
+					const list_outdec = document.getElementsByClassName("list_outdec");
+
+					// 배열로 변환하여 각 요소에 대해 색상 처리
+					Array.from(list_outdec).forEach(function(state) {
+						switch (state.innerText) {
+							case "대기":
+								state.style.color = "#808080"; // 회색
+								break;
+							case "확정":
+								state.style.color = "#28A745"; // 초록색
+								break;
+						}
 					});
 				})
 				.catch(function(error) {
@@ -217,7 +231,7 @@ export class outbound_enroll {
 		const outen_start_dt = document.getElementById("outen_start_dt").value;
 		const outen_end_dt = document.getElementById("outen_end_dt").value;
 		const outen_pd_cd = document.getElementById("search_pd_cd").value;
-		
+		const outen_state = document.getElementById("outen_state").value;
 
 		if (outen_start_dt > outen_end_dt) {
 			alert('정상적인 일자를 입력해주세요');
@@ -230,8 +244,8 @@ export class outbound_enroll {
 				"date_type" : outen_date_type,
 				"start_date": outen_start_dt,
 				"end_date": outen_end_dt,
-				"product_cd": outen_pd_cd
-
+				"product_cd": outen_pd_cd,
+				"acceptedorder_st" : outen_state
 			};
 
 			this.search_data = JSON.stringify(outenroll_data);
@@ -266,7 +280,7 @@ export class outbound_enroll {
             		<td style="text-align: center; width: 8%;">${orderlist.order_qty}</td>
             		<td style="text-align: center; width: 13%;">${orderlist.start_dt}</td>
             		<td style="text-align: center; width: 13%;">${orderlist.due_dt}</td>
-            		<td style="text-align: center; width: 6%;">${orderlist.acceptedorder_st}</td>					
+            		<td style="text-align: center; width: 6%;" class="list_outden">${orderlist.acceptedorder_st}</td>					
             		<td style="text-align: center; width: 11%;">
             		<button style="padding-right: 10px; padding-left: 10px;" class="btn btn-primary outbound_enroll2" ${manageButtonDisabled}
 					data-order-cd="${orderlist.order_cd}"
@@ -281,6 +295,20 @@ export class outbound_enroll {
 
 						tbody.innerHTML += list;
 						
+					});
+					// 동적 HTML이 렌더링된 후에 바로 접근
+					const list_outden = document.getElementsByClassName("list_outden");
+
+					// 배열로 변환하여 각 요소에 대해 색상 처리
+					Array.from(list_outden).forEach(function(state) {
+						switch (state.innerText) {
+							case "대기":
+								state.style.color = "#808080"; // 회색
+								break;
+							case "등록":
+								state.style.color = "#28A745"; // 초록색
+								break;
+						}
 					});
 				})
 				.catch(function(error) {

@@ -198,6 +198,11 @@ select * from input_request where supplier_cd=#{supplier_cd} order by request_id
 </select>
 -->
 
+<!-- 해당 id supplier_cd 가져오기 -->
+<select id="select_current_supplier" resultType="String">
+select company_cd from login_trader where trader_id=#{trader_id}
+</select>
+
 <!-- 데이터베이스 서버시간 가져오기 -->
 <select id="get_time_deli" resultType="String">
 SELECT DATE_FORMAT(NOW(), '%y%m%d') AS server_time

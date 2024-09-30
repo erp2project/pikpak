@@ -145,10 +145,6 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	public int insert_outgoing_enroll(outgoing_enroll_dto dto) {
 		//dto.setOutenroll_cd(this.make_outenrollcode());
 		
-		//세션에서 가져왔다고 가정
-		String operator_id = "ad_leehw_1234";
-		dto.setOperator_id(operator_id);
-		
 		dto.setOutenroll_st("대기");
 		
 		int result = iorepo.insert_outgoing_enroll(dto);
@@ -195,11 +191,6 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 		//고유번호 넣기
 		dto.setReceiving_cd(this.make_recvcode());
 		
-		
-		//세션에서 id가져왔다고 가정
-		String operator_id = "ad_leehw_1234";
-		dto.setOperator_id(operator_id);
-		
 		int result = iorepo.insert_receiving(dto);
 		if(result > 0) { //입고 먼저 하고
 			/* 
@@ -222,7 +213,8 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 				wh_dto.put("supplier_cd", dto.getSupplier_cd());
 				wh_dto.put("product_qty", dto.getReceiving_qty());
 				wh_dto.put("inventory_log", dto.getReceiving_log());
-				wh_dto.put("update_by", operator_id);
+				wh_dto.put("update_dt", dto.getReceiving_dt());
+				wh_dto.put("update_by", dto.getOperator_id());
 				
 			    int insert_result = this.insert_warehouse(wh_dto);   
 			    
@@ -307,9 +299,6 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	public int insert_deliver_return(deliver_return_dto dto) {
 		//고유번호 랜덤 생성
 		dto.setD_return_cd(this.make_returncode());
-		
-		//사용자 세션
-		dto.setOperator_id("ad_leehw_1234");
 		
 		//가입고 반품수량업데이트도 해야함
 		int final_result = 0;

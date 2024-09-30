@@ -1,6 +1,3 @@
-export var active_ck;
-
-
 export class receiving_enroll {
 	//처음 리스트를 띄우기 위한 ajax
 	recv_enroll_list() {
@@ -30,8 +27,6 @@ export class receiving_enroll {
 
 			this.search_data = JSON.stringify(data);
 
-
-
 			fetch("/receiving_search", {
 				method: "post",
 				headers: { "Content-type": "application/json" },
@@ -42,11 +37,9 @@ export class receiving_enroll {
 				})
 				.then(function(result_res) {
 					
-
 					const tbody = document.querySelector("#rv_tbody");
 
 					tbody.innerHTML = '';
-					//window.active_ck = 0; // 활성화된 체크박스 수를 리셋
 
 					let totalItems = result_res.length; // result_res는 반복되는 exrecv 배열
 					
@@ -68,7 +61,7 @@ export class receiving_enroll {
             		<td style="text-align: center; width: 5%;">${exrecv.exreceiving_qty}</td>
             		<td style="text-align: center; width: 5%;">${exrecv.return_qty}</td>
             		<td style="text-align: center; width: 12%;">${exrecv.departure_dt.substring(0, 10)}</td>
-					<td style="text-align: center; width: 7%;">${exrecv.exreceiving_st}</td>					
+					<td style="text-align: center; width: 7%;" class="list_recvenroll">${exrecv.exreceiving_st}</td>					
 					<td style="text-align: center; width: 12%;">${(exrecv.update_dt != null) ? exrecv.update_dt.substring(0, 10) : ''}</td>
 										
             		<td style="text-align: center; width: 15%;">
@@ -114,7 +107,7 @@ export class receiving_enroll {
             		<td style="text-align: center; width: 5%;">${exrecv.exreceiving_qty}</td>
             		<td style="text-align: center; width: 5%;"></td>
             		<td style="text-align: center; width: 12%;">${exrecv.processing_dt.substring(0, 10)}</td>		
-					<td style="text-align: center; width: 7%;">${exrecv.exreceiving_st}</td>					
+					<td style="text-align: center; width: 7%;" class="list_recvenroll">${exrecv.exreceiving_st}</td>					
 					<td style="text-align: center; width: 12%;">${(exrecv.update_dt != null) ? exrecv.update_dt.substring(0, 10) : ''}</td>									
             		<td style="text-align: center; width: 15%;">
             		
@@ -138,10 +131,24 @@ export class receiving_enroll {
 					}
 
 					});
+					
+					// 동적 HTML이 렌더링된 후에 바로 접근
+					const list_recvenroll = document.getElementsByClassName("list_recvenroll");
+
+					// 배열로 변환하여 각 요소에 대해 색상 처리
+					Array.from(list_recvenroll).forEach(function(state) {
+						switch (state.innerText) {
+							case "대기":
+								state.style.color = "#808080"; // 회색
+								break;
+							case "입고":
+								state.style.color = "#28A745"; // 초록색
+								break;
+						}
+					});
 
 				})
 				.catch(function(error) {
-					console.log(error);
 					alert('데이터 조회에 문제가 발생하였습니다.');
 				});
 
@@ -536,12 +543,6 @@ export class company_search_modal {
 export class inboundreq_list {
 	//관리 눌렀을 때
 	inreq_management() {
-		/*
-		const product_qty = frm_inreq_manage.product_qty.value;
-		const request_idx = frm_inreq_manage.request_idx.value;
-		const hope_dt = frm_inreq_manage.hope_dt.value;
-		const add_req = frm_inreq_manage.add_req.value;
-		*/
 		frm_inreq_manage.method = "post";
 		frm_inreq_manage.action = "./inreq_modifyok";
 		frm_inreq_manage.submit();
@@ -586,8 +587,7 @@ export class inboundreq_list {
 					return result_data.json();
 				})
 				.then(function(result_res) {
-					//console.log(result_res);
-
+					
 					const tbody = document.querySelector("#ir_tbody");
 
 					tbody.innerHTML = '';
@@ -608,7 +608,7 @@ export class inboundreq_list {
             		<td style="text-align: center; width: 7%;">${inputreq.product_qty}</td>
             		<td style="text-align: center; width: 25%;">${inputreq.add_req}</td>
             		<td style="text-align: center; width: 12%;">${inputreq.hope_dt}</td>
-            		<td style="text-align: center; width: 5%;">${inputreq.request_st}</td>
+            		<td style="text-align: center; width: 5%;" class="list_inboundreq">${inputreq.request_st}</td>
             		<td style="text-align: center; width: 9%;">${inputreq.request_dt.substring(0, 10)}</td>
 										
 					<td style="text-align: center; width: 9%;">${(inputreq.update_dt != null) ? inputreq.update_dt.substring(0, 10) : ''}</td>
@@ -627,9 +627,29 @@ export class inboundreq_list {
 
 						tbody.innerHTML += list;
 					});
+					
+					// 동적 HTML이 렌더링된 후에 바로 접근
+					const list_inboundreq = document.getElementsByClassName("list_inboundreq");
+
+					// 배열로 변환하여 각 요소에 대해 색상 처리
+					Array.from(list_inboundreq).forEach(function(state) {
+						switch (state.innerText) {
+							case "대기":
+								state.style.color = "#808080"; // 회색
+								break;
+							case "진행":
+								state.style.color = "#007BFF"; // 파란색
+								break;
+							case "거절":
+								state.style.color = "#DC3545"; // 빨간색
+								break;
+							case "완료":
+								state.style.color = "#28A745"; // 초록색
+								break;
+						}
+					});
 				})
 				.catch(function(error) {
-					//console.log(error);
 					alert('데이터 조회에 문제가 발생하였습니다.');
 				});
 		}
@@ -674,17 +694,6 @@ export class inboundreq_list {
 
 
 			});
-
-
-
-			/*
-			for (this.f = 0; this.f <  this.each_ea.length; this.f++) {
-				
-				if (this.each_ea[this.f].checked == true && !this.each_ea[this.f].disabled) {
-					this.ck_count++;
-				}
-			}
-			*/
 
 		}
 		if (ck_count == window.active_ck) {

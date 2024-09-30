@@ -17,6 +17,9 @@ public interface DeliveryRepo {
 	//서버시간
 	String get_time_deli();
 	
+	//회사코드 가져오기
+	String select_current_supplier(String trader_id);
+	
 	//입고요청 현황
 	//List<input_request_state_dto> select_inreq_deliv(String supplier_cd);
 	List<input_request_state_dto> select_inreq_deliv(Map<String, Object> data_arr);
