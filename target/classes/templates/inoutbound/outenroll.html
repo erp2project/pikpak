@@ -91,6 +91,11 @@
 	<script>
 		$(document).ready(function() {
 			
+			// 상품코드/상품명 모달 닫힐 때
+		    $('#productModal').on('hide.bs.modal', function () {
+		        $(this).find('input:not([readonly])').val(''); // readonly 제외한 입력 필드 초기화
+		    });
+			
 			//console.log("Document is ready");
 			// 상품코드/상품명 모달 검색 버튼 클릭 시
 			$("#pd_search_oe").on("click", function() {
@@ -102,6 +107,15 @@
 				});
 			});
 
+			
+		    $('#outboundModal').on('hide.bs.modal', function () {
+		        $(this).find('input:not([readonly])').val(''); // readonly 제외한 입력 필드 초기화
+		        $(this).find('select:not([readonly])').val(''); // readonly 제외한 입력 필드 초기화
+		        $(this).find('textarea:not([readonly])').val(''); // readonly 제외한 입력 필드 초기화
+		        
+		        window.selectedLots = {}; 
+		        $('#item_container').empty();
+		    });
 			
 			//출고 버튼 클릭시
 			// 문서 전체에 대해 이벤트 위임 설정
@@ -140,24 +154,27 @@ window.selectedLots = {}; //전역변수
 	/* 페이지 처음 로드 */ 
 	document.addEventListener('DOMContentLoaded', function() {
 		 const today = new Date();
-        const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+		const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 10);
+		const nextWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 10);
 
-        const formatDate = (date) => {
-            let d = new Date(date),
-                month = '' + (d.getMonth() + 1),
-                day = '' + d.getDate(),
-                year = d.getFullYear();
+		const formatDate = (date) => {
+    	let d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
 
-            if (month.length < 2) 
-                month = '0' + month;
-            if (day.length < 2) 
-                day = '0' + day;
+    	if (month.length < 2) 
+        month = '0' + month;
+    	if (day.length < 2) 
+        day = '0' + day;
 
-            return [year, month, day].join('-');
-        };
+    	return [year, month, day].join('-');
+		};
+
+
 
         document.getElementById("outen_start_dt").value = formatDate(lastWeek);
-        document.getElementById("outen_end_dt").value = formatDate(today);
+        document.getElementById("outen_end_dt").value = formatDate(nextWeek);
 		
 		document.getElementById("outen_date_type").value = '착수일자';
 		
@@ -222,15 +239,6 @@ window.selectedLots = {}; //전역변수
         alert('유효한 출고 수량을 입력해주세요.');
     }
     });
-
-/*
-	//출고등록 버튼 눌렀을 시 출고수량 정보 가져오기
-	document.querySelectorAll('.outbound_enroll2').forEach(function(button) {
-    	button.addEventListener('click', function(event) {
-			new outbound_enroll().qty_info(button.dataset.productCd);
-		});
-	});
-*/
 
 
 	// 출고등록 버튼 클릭 이벤트를 tbody에 위임
