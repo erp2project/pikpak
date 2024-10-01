@@ -9,29 +9,33 @@
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <!-- VENDOR CSS -->
 <link rel="stylesheet"
-	href="resources/assets/vendor/bootstrap/css/bootstrap.min.css">
+	href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet"
-	href="resources/assets/vendor/font-awesome/css/font-awesome.min.css">
+	href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet"
-	href="resources/assets/vendor/linearicons/style.css">
+	href="/resources/assets/vendor/linearicons/style.css">
 <link rel="stylesheet"
-	href="resources/assets/vendor/chartist/css/chartist-custom.css">
+	href="/resources/assets/vendor/chartist/css/chartist-custom.css">
 <!-- MAIN CSS -->
-<link rel="stylesheet" href="resources/assets/css/main.css">
-<link rel="stylesheet" href="resources/assets/css/demo.css">
+<link rel="stylesheet" href="/resources/assets/css/main.css">
+<link rel="stylesheet" href="/resources/assets/css/demo.css">
+<link rel="stylesheet" href="/resources/css/shared/custom_style.css">
+<link rel="stylesheet"
+	href="/resources/css/shared/custom_components_style.css">
 <!-- GOOGLE FONTS -->
 <link
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700"
 	rel="stylesheet">
 <!-- ICONS -->
 <link rel="apple-touch-icon" sizes="76x76"
-	href="resources/assets/img/apple-icon.png">
+	href="/resources/assets/img/apple-icon.png">
 <link rel="icon" type="image/png" sizes="96x96"
-	href="resources/assets/img/favicon.png">
+	href="/resources/assets/img/favicon.png">
 
-<link rel="stylesheet"
-	href="../resources/css/order/order_styles.css?v=2">
-<link rel="stylesheet" href="../resources/css/order/vars.css">
+<link rel="stylesheet" href="/resources/css/order/order_styles.css?v=2">
+<link rel="stylesheet" href="/resources/css/order/vars.css">
+
+<link rel="stylesheet" href="/resources/css/order/psearch_popup.css?v=2">
 
 </head>
 
@@ -61,11 +65,17 @@
 					<div class="panel panel-headline">
 						<div class="panel-heading">
 							<p class="panel-subtitle">
-								홈 > 주문/반품 > <span style="color: black;">주문현황</span>
+								홈 > 주문/반품 > <span style="color: black;">주문 관리</span>
 							</p>
 						</div>
 						<div class="panel-body">
-							<p style="border-bottom: 1px solid black; height: 30px;">주문현황</p>
+							<p style="border-bottom: 1px solid black; height: 30px;">
+								<a href="/order/order_list"
+									style="cursor: pointer; text-decoration: none; color: black !important;">주문
+									현황</a> | <a href="/order/order_aplist"
+									style="cursor: pointer; text-decoration: none; font-weight: bold; color: black !important;">주문
+									승인</a>
+							</p>
 							<section>
 								<span style="float: right; height: 40px;">
 									<button type="button" class="btn btn-success"
@@ -80,8 +90,8 @@
 										<tbody>
 											<tr>
 												<td style="height: 34px; line-height: 34px;">주문 상태</td>
-												<td><select class="form-control" id="oal_process_st"
-													name="process_st">
+												<td><select class="form-control" id="oal_process_st">
+														<option value="">전체</option>
 														<option value="대기">대기</option>
 														<option value="승인">승인</option>
 														<option value="거절">거절</option>
@@ -91,18 +101,20 @@
 												<td
 													style="display: flex; flex-direction: row; line-height: 34px;">
 													<input type="date" class="form-control" style="width: 35%;"
-													id="oal_start_dt" name="start_dt">&nbsp;&nbsp; ~
-													&nbsp;&nbsp;<input type="date" class="form-control"
-													style="width: 35%;" id="oal_end_dt" name="end_dt">
+													id="oal_start_dt">&nbsp;&nbsp; ~ &nbsp;&nbsp;<input
+													type="date" class="form-control" style="width: 35%;"
+													id="oal_end_dt">
 												</td>
 												<td style="width: 10%; height: 34px; line-height: 34px;">상품코드
 													/ 명</td>
 												<td
 													style="display: flex; flex-direction: row; line-height: 34px;">
-													<input type="text" class="form-control" style="width: 25%;" id="oal_product_cd" name="product_cd">&nbsp;&nbsp;
-													<input type="text" class="form-control" style="width: 25%;" id="oal_product_nm" name="product_nm">&nbsp;&nbsp;
-													<span><button class="btn btn-primary" type="button">검
-															색</button></span>
+													<input type="text" class="form-control" style="width: 25%;"
+													id="oal_product_cd" placeholder="상품코드" value="" readonly>&nbsp;&nbsp;
+													<input type="text" class="form-control" style="width: 25%;"
+													id="oal_product_nm" placeholder="상품명" value="" readonly>&nbsp;&nbsp;
+													<nav
+														th:replace="~{/order/psearch_popup.html :: psearch_popup}"></nav>
 												</td>
 											</tr>
 										</tbody>
@@ -113,43 +125,52 @@
 									<p style="font-size: 12px; height: 25px; line-height: 30px;">※
 										조회결과</p>
 								</div>
-								<div class="panel-body" style="height: 400px; overflow-y: auto;">
-									<table class="table table-hover">
+								<div class="panel-body" style="padding-bottom: 0px !important;">
+									<table class="table" style="margin-bottom: 0px !important;">
 										<thead style="background-color: rgb(130, 210, 213);">
 											<tr>
-												<th style="text-align: center;">NO.</th>
-												<th style="text-align: center;">회사명</th>
-												<th style="text-align: center;">주문 코드</th>
-												<th style="text-align: center;">상품 코드</th>
-												<th style="text-align: center;">상품명</th>
-												<th style="text-align: right;">상품 수량</th>
-												<th style="text-align: right;">입고 가격(총 가격)</th>
-												<th style="text-align: center;">주문 날짜</th>
-												<th style="text-align: center;">주문 상태</th>
-												<th style="text-align: center;">관리</th>
+												<th style="text-align: center; width:5%;">NO.</th>
+												<th style="text-align: center; width:8%;">회사명</th>
+												<th style="text-align: center; width:10%;">주문 코드</th>
+												<th style="text-align: center; width:10%;">상품 코드</th>
+												<th style="text-align: center; width:10%;">상품명</th>
+												<th style="text-align: right; width:10%;">상품 수량</th>
+												<th style="text-align: right; width:15%;">입고 가격(총 가격)</th>
+												<th style="text-align: center; width:15%;">주문 날짜</th>
+												<th style="text-align: center; width:8%;">주문 상태</th>
+												<th style="text-align: center; width:9%;">관리</th>
 											</tr>
 										</thead>
+									</table>
+								</div>
+								<div class="panel-body" style="height: 400px; overflow-y: auto;">
+									<table class="table table-hover" id="ol_table">
 										<tbody>
-											<tr th:each="order_aplist : ${order_aplist}">
-												<td style="text-align: center;">NO.</td>
-												<td style="text-align: left;"><a
-													th:text="${order_aplist.user_company}"></a></td>
-												<td style="text-align: center;"><a
-													th:text="${order_aplist.order_cd}"></a></td>
-												<td style="text-align: center;"><a
-													th:text="${order_aplist.product_cd}"></a></td>
-												<td style="text-align: left;"><a
-													th:text="${order_aplist.product_nm}"></a></td>
-												<td style="text-align: right;"><a
-													th:text="${order_aplist.order_qty}"></a></td>
-												<td style="text-align: right;"><a
-													th:text="${order_aplist.purchase_pr}"></a>원(<a
-													th:text="${order_aplist.order_price}"></a>원)</td>
-												<td style="text-align: center;"><a
-													th:text="${order_aplist.order_dt}"></a></td>
-												<td style="text-align: center;"><a
-													th:text="${order_aplist.process_st}"></a></td>
-												<td style="text-align: center;"><nav
+											<tr th:if="${#lists.isEmpty(order_aplist)}">
+												<td colspan="9" style="text-align: center;">등록된 주문이
+													없습니다.</td>
+											</tr>
+											<tr th:each="order_aplist, no : ${order_aplist}">
+												<td style="text-align: center; width:5%;" th:text="${no.index+1}"></td>
+												<td style="text-align: left; width:8%;"><c
+														th:text="${order_aplist.user_company}"></c></td>
+												<td style="text-align: center; width:10%;"><c
+														th:text="${order_aplist.order_cd}"></c></td>
+												<td style="text-align: center; width:10%;"><c
+														th:text="${order_aplist.product_cd}"></c></td>
+												<td style="text-align: left; width:10%;"><c
+														th:text="${order_aplist.product_nm}"></c></td>
+												<td style="text-align: right; width:10%;"><c
+														th:text="${order_aplist.order_qty}"></c></td>
+												<td style="text-align: right; width:15%;"><c class="a_purchase_pr"
+														th:text="${order_aplist.purchase_pr}"></c>원(<c
+														class="a_order_price"
+														th:text="${order_aplist.order_price}"></c>원)</td>
+												<td style="text-align: center; width:15%;"><c
+														th:text="${order_aplist.order_dt}"></c></td>
+												<td style="text-align: center; width:8%;"><c
+														th:text="${order_aplist.process_st}"></c></td>
+												<td style="text-align: center; width:9%;"><nav
 														th:replace="~{/order/order_approval.html :: order_approval}"></nav></td>
 											</tr>
 										</tbody>
@@ -177,8 +198,9 @@
 		<script src="/resources/assets/vendor/chartist/js/chartist.min.js"></script>
 		<script src="/resources/assets/scripts/klorofil-common.js"></script>
 
-		<script src="../resources/js/order/order_ap_script.js?v=8"></script>
-		<script src="../resources/js/order/order_aplist_script.js?v=1"></script>
+		<script src="/resources/js/order/order_ap_script.js?v=8"></script>
+		<script src="/resources/js/order/order_aplist_script.js?v=1"></script>
+		<script src="/resources/js/order/psearch_popup_script.js?v=1"></script>
 </body>
 
 </html>

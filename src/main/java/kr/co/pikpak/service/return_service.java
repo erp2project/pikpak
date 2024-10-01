@@ -14,6 +14,9 @@ public interface return_service {
 	//출고 코드 조회
 	public List<outgoing_cd_dto> outgoing_cd_search(String outgoing_cd);
 	
+	//출고 코드 중복 조회
+	public Integer outgoing_cd_check(String outgoing_cd);
+	
 	//반품 목록
 	public List<return_list_dto> return_list(String user_company);
 	
@@ -28,4 +31,10 @@ public interface return_service {
 	
 	//반품 삭제
 	public int return_delete(int return_idx);
+	
+	//재입고
+	public int return_restock(return_dto return_dto);
+	
+	//회사 코드 조회
+	public String supplier_cd_search(String supplier_nm);
 }

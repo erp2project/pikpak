@@ -47,7 +47,7 @@ document.querySelectorAll('.openPopupBtn').forEach(function(button){
 		deleteButton.addEventListener('click', function() {
 			if(confirm("반품 취소 후에는 복구가 불가능합니다. 반품 취소를 진행하시겠습니까?")){
 				document.getElementById('ck_return_idx').value = class_idx;
-				return_ck_frm.action = "/return_delete";
+				return_ck_frm.action = "/return/return_delete";
 				return_ck_frm.method = "post";
 				return_ck_frm.submit();
 			}

@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			alert('출고 코드를 입력해 주세요.');
 		}
 		else{
-			fetch('/outgoing_cd_searchck', {
+			fetch('/return/outgoing_cd_searchck', {
 	            method: 'POST',
 	            headers: {
 	                'Content-Type': 'application/x-www-form-urlencoded'
@@ -46,7 +46,11 @@ document.addEventListener('DOMContentLoaded', function() {
 	        })
 	        .then(response => response.text())
 	        .then(data => {
-	            if(data == "no"){
+				if(data == "overlap"){
+					outgoingCode.value="";
+					alert("해당 출고 코드는 이미 반품 신청이 완료되었습니다.");
+				}
+	            else if(data == "no"){
 					outgoingCode.value="";
 					alert("해당 출고 코드는 미등록된 코드입니다.");
 				}
@@ -59,6 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					document.getElementById('outgoingDate').value = outgoing_list[3];
 					productQuantity.value = outgoing_list[4];
 					productPrice.value = outgoing_list[5];
+					document.getElementById('v_productPrice').value = parseInt(outgoing_list[5]).toLocaleString();
 				}
 	            
 	        })
@@ -97,7 +102,8 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 		//총 가격
 		if(execute == "yes"){
-			totalPrice.value = qty*productPrice.value;			
+			totalPrice.value = qty*productPrice.value;
+			document.getElementById('v_productPrice').value = (qty*productPrice.value).toLocaleString();
 		}
 		else{
 			totalPrice.value = "";
@@ -112,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			alert('입력하지 않은 값이 존재합니다.');
 		}
 		else{
-			return_frm.action = "/return_enroll";
+			return_frm.action = "/return/return_enroll";
 			return_frm.method = "post";
 			return_frm.submit();
 		}
