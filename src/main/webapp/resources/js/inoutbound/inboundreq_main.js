@@ -205,7 +205,7 @@ export class receiving_enroll {
 					update_location_option();
 				})
 				.catch(function(error) {
-					console.log(error);
+					alert('데이터 조회에 문제가 발생하였습니다.');
 				});
 
 		}
@@ -402,7 +402,7 @@ export class product_search_modal {
 
 			})
 			.catch(function(error) {
-				console.log(error);
+				alert('데이터 조회에 문제가 발생하였습니다.');
 			});
 
 	}
@@ -534,7 +534,7 @@ export class company_search_modal {
 				}
 			})
 			.catch(function(error) {
-				console.log(error);
+				alert('데이터 조회에 문제가 발생하였습니다.');
 			});
 	}
 }
@@ -706,21 +706,28 @@ export class inboundreq_list {
 	}
 
 	delete_data() {
-
+		const each_ck = document.getElementsByName("each_ck"); //리스트 개수
+			
 		if (this.each_ckbox() == 0) {
 			alert('삭제할 데이터를 선택해주세요');
 		}
 		else if (confirm("정말로 삭제하시겠습니까?")) {
 			this.idx_data = new Array();
-
-			for (this.f = 0; this.f < frm_inreq_list.each_ck.length; this.f++) {
+			
+			if(each_ck.length == 1 && frm_inreq_list.each_ck.checked == true){
+				this.idx_data.push(frm_inreq_list.each_ck.value);
+			}
+			else{
+				for (this.f = 0; this.f < frm_inreq_list.each_ck.length; this.f++) {
 				if (frm_inreq_list.each_ck[this.f].checked == true) {
 					this.idx_data.push(frm_inreq_list.each_ck[this.f].value);
 				}
 			}
+			}
+			
 
 			frm_inreq_list.request_idx.value = this.idx_data.join(",");
-
+			
 			frm_inreq_list.method = "post";
 			frm_inreq_list.action = "./delete_inreqok";
 			frm_inreq_list.submit();

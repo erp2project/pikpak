@@ -123,7 +123,7 @@ public class DeliveryServiceImpl implements DeliveryService{
 				}
 			}
 			catch(Exception e) {
-				System.out.println("납품등록 업데이트: " + e);
+				//System.out.println("납품등록 업데이트: " + e);
 				e.printStackTrace();
 			}
 		}
