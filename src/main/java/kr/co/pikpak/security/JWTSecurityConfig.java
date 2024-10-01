@@ -57,6 +57,7 @@ public class JWTSecurityConfig {
 					.requestMatchers("/client/**").hasAnyAuthority("operator","admin")
 					.requestMatchers("/product/**").hasAnyAuthority("operator","admin")
 					.requestMatchers("/stocklogrecord/**").hasAuthority("admin")
+					.requestMatchers("/notice/list").hasAnyAuthority("admin","operator","supplier","vendor")
 					.requestMatchers("/notice/**").hasAuthority("admin")
 					// LHH
 					.requestMatchers("/order/order_aplist").hasAnyAuthority("operator","admin")
