@@ -148,7 +148,7 @@
 							<section>
 								<span style="float: right; height: 40px;">
 								<button type="button" class="btn btn-success"onclick="location.reload();" >초기화</button>
-								<button type="button" class="btn btn-danger">EXCEL</button>
+								<button type="button" class="btn btn-danger" id="excelButton">EXCEL</button>
 								<button type="submit" class="btn btn-warning" id="searchButton">조회</button>
 								</span>
 								
@@ -212,12 +212,12 @@
 											<td style="width: 10%; height: 34px; line-height: 34px;">상품코드 / 상품명</td>
 											<td style="display: flex; flex-direction: row; align-items: center; width: 100%;">
 												<!-- 상품 코드 -->
-												<select class="form-control" id="product_cd" name="product_cd" onchange="fetchProductDataByCode(this.value)" style="flex: 4; margin-right: 5px; min-width: 100px;">
+												<select class="form-control" id="product_cd" name="product_cd" onchange="fetchProductData(this.value,1)" style="flex: 4; margin-right: 5px; min-width: 100px;">
 													<option value="">상품코드 선택</option>
 													<option th:each="code : ${product_cd}" th:value="${code}" th:text="${code}"></option>
 												</select>
 												<!-- 상품명 -->
-												<select class="form-control" id="product_nm" name="product_nm" onchange="fetchProductDataByName(this.value)" style="flex: 4; margin-right: 5px; min-width: 100px;">
+												<select class="form-control" id="product_nm" name="product_nm" onchange="fetchProductData(this.value,2)" style="flex: 4; margin-right: 5px; min-width: 100px;">
 													<option value="">상품명 선택</option>
 													<option th:each="name : ${product_nm}" th:value="${name}" th:text="${name}"></option>
 												</select>
@@ -228,13 +228,13 @@
 											<td style="width: 10%; height: 34px; line-height: 34px;">회사명</td>
 											<td style="display: flex; flex-direction: row; align-items: center; width: 100%;">
 												<!-- 회사명 -->
-												<select class="form-control" id="supplier_cd" name="supplier_cd" onchange="fetchCompanyDataByCode(this.value)" style="width: 100%;">
+												<select class="form-control" id="supplier_cd" name="supplier_cd" onchange="fetchCompanyData(this.value, 2)" style="width: 100%;">
 													<option value="">회사코드 선택</option>
 													<option th:each="Code : ${getAllsupplier_cd}" th:value="${Code.supplier_cd}" th:text="${Code.supplier_cd}"></option>
 												</select>
-												<select class="form-control" id="supplier_nm" name="supplier_nm" onchange="fetchCompanyDataByName(this.value)"style="width: 100%;">
+												<select class="form-control" id="supplier_nm" name="supplier_nm" onchange="fetchCompanyData(this.value, 1)"style="width: 100%;">
 													<option value="">회사명 선택</option>
-													<option th:each="name : ${supplier_nm}" th:value="${name}" th:text="${name}"></option>
+													<option th:each="name : ${supplier_nm}" th:value="${name.supplier_nm}" th:text="${name.supplier_nm}"></option>
 												</select>
 											</td>
 										</tr>
@@ -257,28 +257,26 @@
 												<th>상품명</th>
 												<th style="text-align: center;">안전 재고 수량</th>
 												<th style="text-align: center;">재고수량(단위)</th>
-												<th style="text-align: center;">재고 유형</th>
-												<th>입고 날짜</th>
-												<th style="text-align: center;">출고 날짜</th>
+												<th style="text-align: center;">재고(상품 유형) 유형</th>
+												<th style="text-align: center;">상품 가격</th>
 												<th style="text-align: center;">관리</th>
 											</tr>
 										</thead>
 										<tbody id="results">
-											<tr onclick="toggleCheckbox(this)" th:each="info : ${all}">
+											<tr onclick="toggleCheckbox(this)" th:each="info : ${inventoryData}">
 												<td><input type="checkbox" onclick="event.stopPropagation();"></td>
 												<td th:text="${info.location_cd}"></td>
 												<td th:text="${info.product_cd}"></td>
-												<td th:text="${info.supplier_nm}"></td>
+												<td th:text="${info.company_name}"></td>
 												<td th:text="${info.product_nm}"></td>
-												<td></td>
+												<td th:text="${info['safetyinventory_qty']}"></td>
 												<td th:text="${info.product_qty}">-</td>
-												<td style="text-align: center;"></td>
-												<td></td>
-												<td style="text-align: center;">미정</td>
+												<td style="text-align: center;"th:text="${info['product_type']}"></td>
+												<td style="text-align: center;" th:text="${info['product_price']}"></td>
 												<td style="text-align: center;">
 													<button class="btn btn-info"
 													 th:onclick="event.stopPropagation(); openModal([[${info.wh_warehouse_idx}]])"
-													data-toggle="modal" 
+													data-toggle="modal"
 													data-target="#inventoryModal">관리</button>
 												</td>
 											</tr>

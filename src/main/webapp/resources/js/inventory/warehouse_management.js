@@ -4,7 +4,7 @@ document.addEventListener('click', function(event){
 	if(event.target.classList.contains('view-details')){
 		event.preventDefault();
 		const a_check_idx = event.target.getAttribute('data-id');
-		fetch(`/getCheckRecordDetails/${a_check_idx}`)
+		fetch(`/inventory/getCheckRecordDetails/${a_check_idx}`)
 		.then(response => response.json())
 		.then(data => {
 			document.getElementById('StockCheckZoneDetails').value=data.area_cd;
@@ -76,7 +76,7 @@ document.getElementById("wareck_enroll").addEventListener('click',function(){
         }
     }          
             	
-	fetch('/insertInspectData',{
+	fetch('/inventory/insertInspectData',{
 		method : "POST",
 		body :formdata
 	})
@@ -108,7 +108,7 @@ document.getElementById("checkButton").addEventListener('click',function(){
         return;
     }	
 	
-	fetch('/getZoneStockData',{
+	fetch('/inventory/getZoneStockData',{
 		method : 'POST',
 		headers : {
 			'content-type':'application/json'

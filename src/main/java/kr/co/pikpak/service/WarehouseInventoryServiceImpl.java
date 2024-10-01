@@ -1,11 +1,13 @@
 package kr.co.pikpak.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.co.pikpak.dto.InventoryListDTO;
 import kr.co.pikpak.dto.LocationDTO;
 import kr.co.pikpak.dto.WarehouseInspection_dto;
 import kr.co.pikpak.dto.WarehouseInventory_dto;
@@ -24,55 +26,27 @@ public class WarehouseInventoryServiceImpl implements WarehouseInventoryService{
 	
 	//창고별 재고 현황 페이지 - 구역 정보 출력
 	@Override
-	public Map<String, Object> getAreaData(String area_cd) {
+	public Map<String, Object> getAreaData(String total_location, int keyType) {
 		
-		return wr.getAreaData(area_cd);
+		return wr.getAreaData(total_location,keyType);
 	}
 	
-	//창고별 재고 현황 페이지 - 구역의 재고 정보 출력
+	//창고별 재고 현황 페이지 - 
 	@Override
-	public List<Map<String, Object>> getAreaStockData(String area_cd) {
-
-		return wr.getAreaStockData(area_cd);
+	public List<Map<String, Object>> getMultiAreaStockData(String total_location, int keyType) {
+		return wr.getMultiAreaStockData(total_location, keyType);
 	}
 	
-	//창고별 재고 현황 페이지 - 구역 + 랙의 재고 정보 출력
+	//재고 리스트 출력 페이지 - 최초 리스트 출력 (안전재고 , ...)
 	@Override
-	public List<Map<String, Object>> getAreaRackData(String Zone_Rack) {
-		
-		return wr.getAreaRackData(Zone_Rack);
+	public List<InventoryListDTO> getCombinedInventoryData(String area_cd, String rack_number, String level, String part, String product_cd, String product_nm, String supplier_nm) {
+		return wr.getCombinedInventoryData(area_cd, rack_number, level, part, product_cd, product_nm, supplier_nm);
 	}
 	
-	//창고별 재고 현황 페이지 - 구역 + 랙 + 단 + 열의 재고 정보 출력
-	@Override
-	public List<Map<String, Object>> getTotalLocationData(String total_location) {
-		return wr.getTotalLocationData(total_location);
-	}
-	
-	
-	
-	//재고 현황 페이지 - 재고 전체 리스트 출력
-	@Override
-	public List<WarehouseInventory_dto> getAllinventory() {
-		return wr.getAllinventory();
-	}
-	
-	//재고 현황 페이지 - 조회한 리스트 출력
-	@Override
-	public List<WarehouseInventory_dto> searchInventory(String area_cd, String rack_number, String level, String part, String product_cd, String product_nm, String supplier_nm) {
-		return wr.searchInventory(area_cd, rack_number, level, part, product_cd, product_nm, supplier_nm);
-	}
-	
-	//재고 현황 페이지 - 검색 옵션 / 전체 회사 코드 출력
-	@Override
-	public List<Map<String, Object>> getAllsupplier_cd() {
-		List<Map<String, Object>> result = wr.getAllsupplier_cd();
-		return result;
-	}
 	//재고 현황 페이지 - 관리 버튼 / idx 값으로 재고 데이터 조회
 	@Override
-	public WarehouseInventory_dto getDetailsByIdx(Integer wh_warehouse_idx) {
-		return wr.getDetailsByIdx(wh_warehouse_idx);
+	public List<WarehouseInventory_dto> getWarehouseInfo(Integer wh_warehouse_idx,int keyType) {
+		return wr.getWarehouseInfo(wh_warehouse_idx,keyType);
 	}
 	//재고 현황 페이지 - 관리 버튼 팝업 / 상품코드로 상품테이블에서 안전재고 조회
 	@Override
@@ -80,37 +54,57 @@ public class WarehouseInventoryServiceImpl implements WarehouseInventoryService{
 		
 		return wr.getSafetyInventory_qty(product_cd);
 	}
-	
-	
-	
-	
-	//재고 현황 페이지 검색 옵션 - 상품코드 선택 시  (상품코드로 상품 조회)
+
+	//재고 리스트 출력 페이지 - 관리 버튼 팝업 / 재고 전체 폐기
 	@Override
-	public WarehouseInventory_dto findByProduct_cd(String product_cd) {
-		
-		return wr.findByProduct_cd(product_cd);
+	public int deleteWarehouseByIdx(Integer wh_warehouse_idx) {
+		return wr.deleteWarehouseByIdx(wh_warehouse_idx);
 	}
 	
-	//재고 현황 페이지 검색 옵션 - 상품명 선택 시(상품명으로 상품 조회)
+	//재고 리스트 출력 페이지 - 관리 버튼 팝업 / 재고 일부 폐기
 	@Override
-	public WarehouseInventory_dto findByProduct_nm(String product_nm) {
-		
-		return wr.findByProduct_nm(product_nm);
+	public int updateWarehouseQuantity(Integer wh_warehouse_idx, Integer disposeQuantity) {
+		return wr.updateWarehouseQuantity(wh_warehouse_idx, disposeQuantity);
 	}
 	
-	//재고 현황 페이지 검색 옵션 - 회사코드 선택시
+	//재고 리스트 출력 페이지 - 관리 버튼 팝업 / 비고란 수정
 	@Override
-	public Map<String, Object> findByCompany_cd(String supplier_cd) {
-		
-		return wr.findByCompany_cd(supplier_cd);
-	}
-	//재고 현황 페이지 검색 옵션 - 회사명 선택 시
-	@Override
-	public Map<String, Object> findByCompany_nm(String supplier_nm) {
-		
-		return wr.findByCompany_nm(supplier_nm);
+	public int updateWarehouseNotes(Integer wh_warehouse_idx, String notes) {
+		return wr.updateWarehouseNotes(wh_warehouse_idx, notes);
 	}
 
+	
+	//폐기사유 업데이트
+	@Override
+	public int updateDisposeReason(Integer wh_warehouse_idx, String disposeReason) {
+		return wr.updateDisposeReason(wh_warehouse_idx, disposeReason);
+	}
+	
+	
+	//입고 예정 수량
+	@Override
+	public Integer getIncomingStock(String product_cd) {
+		return wr.getIncomingStock(product_cd);
+	}
+	
+	//출고 예정 수량
+	@Override
+	public Integer getOutgoingStock(String product_cd) {
+		return wr.getOutgoingStock(product_cd);
+	}
+	
+	/* product 조회 */
+	@Override
+	public WarehouseInventory_dto getProductInfo(int keyType, String data) {
+		return wr.getProductInfo(keyType, data);
+	}
+	
+	/* supplier_info 조회*/
+	@Override
+	public List<Map<String, Object>> getSupplierInfo(int keyType, String data) {
+		return wr.getSupplierInfo(keyType, data);
+	}
+	
 	
 	//창고 위치 관리 페이지
 	@Override
@@ -123,13 +117,6 @@ public class WarehouseInventoryServiceImpl implements WarehouseInventoryService{
 	@Override
 	public LocationDTO findLocationByCode(String location_cd) {
 		return wr.findLocationByCode(location_cd);
-	}
-	
-	//창고 위치 관리 페이지
-	@Override
-	public List<Map<String, String>> getAllSupplierInfo() {
-
-		return wr.getAllSupplierInfo();
 	}
 	
 	//창고 위치 관리 페이지 - 위치 지정
