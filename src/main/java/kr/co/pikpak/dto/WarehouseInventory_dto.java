@@ -10,15 +10,15 @@ import lombok.Setter;
 @Setter
 @Repository("inventory_dto")
 public class WarehouseInventory_dto {
-	Integer wh_warehouse_idx ;
-	String location_cd;
-	String location_sz;
-	String product_cd;
-	String product_nm;
-	String product_qty;
-	String supplier_nm;
-	String inventory_log;
-	String update_by;
-	String update_dt;
+	private Integer wh_warehouse_idx ;
+	private String location_cd;
+	private String location_sz;
+	private String product_cd;
+	private String product_nm;
+	private String product_qty;
+	private String supplier_nm;
+	private String inventory_log;
+	private String update_by;
+	private String update_dt;
 	
 }

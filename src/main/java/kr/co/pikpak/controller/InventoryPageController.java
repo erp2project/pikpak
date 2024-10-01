@@ -9,13 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.pikpak.dto.InventoryListDTO;
 import kr.co.pikpak.dto.WarehouseInspection_dto;
 import kr.co.pikpak.dto.WarehouseInventory_dto;
 import kr.co.pikpak.service.WarehouseInventoryService;
 @Controller
+@RequestMapping("/inventory")
 public class InventoryPageController {
 	@Autowired
 	private WarehouseInventoryService wis;
@@ -23,23 +26,27 @@ public class InventoryPageController {
 	//재고 현황 페이지 - 재고 리스트 페이지 출력
 	@GetMapping("/inventorylist")
 	public String loginPage(Model m) {
-		//최초 접속 시 재고 리스트 전체 출력
-		List<WarehouseInventory_dto> all = wis.getAllinventory();
+		//supplier_info 조회
+		int keyType =3;
+		List<Map<String, Object>> supplierInfo = wis.getSupplierInfo(keyType, null);
 		
-		//검색 옵션 - 회사코드 출력
-		List<Map<String, Object>> getAllsupplier_cd = wis.getAllsupplier_cd();
+		//warehouse 조회
+		keyType = 2;
+		List<WarehouseInventory_dto> all = (List<WarehouseInventory_dto>) wis.getWarehouseInfo(null,keyType);
+		//supplier_info 조회
+		List<Map<String, Object>> supplier_nm = wis.getSupplierInfo(keyType, null);
+		//최초 페이지 로드시 데이터 리스트 출력
+		List<InventoryListDTO> inventoryData = wis.getCombinedInventoryData(null, null, null, null, null, null, null);
 		
-		//상품코드 옵션 출력
-		Set<String> product_cd = all.stream().map(WarehouseInventory_dto::getProduct_cd).collect(Collectors.toSet());
-		//상품명 옵션 출력
-		Set<String> product_nm = all.stream().map(WarehouseInventory_dto::getProduct_nm).collect(Collectors.toSet());
-		//회사명 옵션 출력
-		Set<String> supplier_nm = all.stream().map(WarehouseInventory_dto::getSupplier_nm).collect(Collectors.toSet());
-		m.addAttribute("all",all);
-		m.addAttribute("product_cd",product_cd);
-		m.addAttribute("product_nm",product_nm);
-		m.addAttribute("supplier_nm",supplier_nm);
-		m.addAttribute("getAllsupplier_cd",getAllsupplier_cd);
+	    // inventoryData에서 상품코드와 상품명을 추출
+	    Set<String> product_cd = inventoryData.stream().map(InventoryListDTO::getProduct_cd).collect(Collectors.toSet());
+	    Set<String> product_nm = inventoryData.stream().map(InventoryListDTO::getProduct_nm).collect(Collectors.toSet());
+
+		m.addAttribute("inventoryData", inventoryData);
+		m.addAttribute("product_cd",product_cd);	//검색 옵션
+		m.addAttribute("product_nm",product_nm);	//검색 옵션
+		m.addAttribute("supplier_nm",supplier_nm);	//검색 옵션
+		m.addAttribute("getAllsupplier_cd",supplierInfo);	//검색 옵션
 		
 		return "/Inventory/inventorylist";
 	}
@@ -47,7 +54,6 @@ public class InventoryPageController {
 	//재고 현황 페이지 - 관리 버튼 팝업창
 	@GetMapping("/inventory_popup")
 	public String inventory_popup(@RequestParam("wh_warehouse_idx") String wh_warehouse_idx, Model m) {
-		System.out.println(wh_warehouse_idx);
 		return "/Inventory/inventory_popup";
 	}
 	
@@ -83,7 +89,8 @@ public class InventoryPageController {
 	//재고 창고 위치 관리 페이지
 	@GetMapping("/warehouse_location")
 	public String warehouse_location(Model m) {
-		List<Map<String, String>> result = wis.getAllSupplierInfo();
+		int keyType = 3;
+		List<Map<String, Object>> result = wis.getSupplierInfo(keyType, null);
 		m.addAttribute("suppliers",result);
 		return "/Inventory/warehouse_grid";
 	}

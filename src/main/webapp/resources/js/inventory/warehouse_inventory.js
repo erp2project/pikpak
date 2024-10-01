@@ -42,10 +42,12 @@ function selectZone(zoneId) {
     });
 
     // ajax로 구역 정보 + 재고 정보 가져오기
-    fetch('/getAreadata', {
+    fetch('/inventory/getMultiAreaData', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ "area_cd": zoneId })
+        body: JSON.stringify({
+			keyType : 1,
+			total_location: zoneId })
     })
     .then(response => response.json())
     .then(data => {
@@ -126,14 +128,17 @@ function selectRack(areaId) {
     });
 
     // ajax로 랙 정보 가져오기
-    fetch('/getReckdata', {
+    fetch('/inventory/getMultiAreaData', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ "Zone_Rack": selectedZone + areaId })
+        body: JSON.stringify({ 
+			keyType : 2,
+			total_location: selectedZone + areaId })
     })
     .then(response => response.json())
     .then(data => {
         const { getAreaRackData } = data;
+        console.log(getAreaRackData);
         updateStockList(getAreaRackData); // 재고 리스트 업데이트
 
         // 선택된 랙에 클래스 추가
@@ -164,13 +169,16 @@ function inventory_specific_position(level_part) {
     // 열번호 선택 처리
     selectRackStatus(level, rackPosition);
     
-    fetch('/getLPdata',{
+    fetch('/inventory/getMultiAreaData',{
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body : JSON.stringify({total_location : selectedZone+selectedRack+level+rackPosition})		
+        body : JSON.stringify({
+			keyType : 3,
+			total_location : selectedZone+selectedRack+level+rackPosition})		
 	})
 	.then(response => response.json())
 	.then(data => {
+		console.log("된거임?");
 		const { getTotalLocationData } = data;
 		updateStockList(getTotalLocationData);
 	})

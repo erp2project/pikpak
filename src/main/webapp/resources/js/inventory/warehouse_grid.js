@@ -26,7 +26,7 @@ $(document).ready(function () {
 
         // 서버에 조회 요청 보내기 (AJAX)
         $.ajax({
-            url: '/checkLocation',
+            url: '/inventory/checkLocation',
             method: 'POST',
             data: JSON.stringify({ location_cd: locationCode }),
             contentType: 'application/json',
@@ -64,7 +64,7 @@ $(document).ready(function () {
 		if(confirm(confirmationMessage)){
 	        // 위치 등록 요청 (AJAX)
 	        $.ajax({
-	            url: '/assignLocation',
+	            url: '/inventory/assignLocation',
 	            method: 'POST',
 	            data: JSON.stringify({
 	                location_cd: locationCode,
@@ -117,7 +117,7 @@ function loadZoneData(zoneId){
     resetRackColors();	
 	
 	//데이터 로드
-	fetch('/getZoneData',{
+	fetch('/inventory/getZoneData',{
 		method : 'post',
 		headers :{
 			'content-type' : 'application/json'},
@@ -226,7 +226,7 @@ document.addEventListener('click', function(event) {
         const locationCd = event.target.getAttribute('data-location');
         if (confirm('정말 이 위치를 삭제하시겠습니까?')) {
             // AJAX 요청 보내기 (fetch 사용)
-            fetch('/deleteLocation', {
+            fetch('/inventory/deleteLocation', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
