@@ -16,7 +16,7 @@
 		select count(*) as ctn from login_view where user_id = #{userId} and user_pw = #{userPw}
 	</select>
 	
-	<!--  -->
+	<!-- 회원 이메일 조회 -->
 	<select id="ctnEmailFromView" resultType="Integer">
 		select count(*) as ctn from login_view where user_id = #{userId} and user_mail = #{userMail}
 	</select>
@@ -83,7 +83,8 @@
 		update
 		${target_table}
 		set
-		${target_pw} = init_pw
+		${target_pw} = init_pw,
+		modified_dt = now()
 		where
 		${target_id} = #{user_id}
 	</update>
@@ -92,7 +93,8 @@
 		update
 		${target_table}
 		set
-		${target_pw} = #{new_user_pw}
+		${target_pw} = #{new_user_pw},
+		modified_dt = now()
 		where
 		${target_id} = #{user_id}
 	</update>

@@ -48,34 +48,33 @@ public class JWTSecurityConfig {
 			.csrf(csrf -> csrf.disable())
 			.authorizeHttpRequests(
 					(auth) -> auth
-					/*
 					.requestMatchers("/login", "/login/**").permitAll()
 					.requestMatchers("/logout", "/logout/**").permitAll()
+					.requestMatchers("/auth/**").permitAll()
 					.requestMatchers("/resources/**").permitAll()
 					.requestMatchers("/favicon.ico").permitAll()
-					*/
-					//.requestMatchers("/home").authenticated()
-					//.requestMatchers("/supplier/**").hasAuthority("supplier")
-					//.requestMatchers("/vendor/**").hasAuthority("vendor")
-					.requestMatchers("/admin/users","/admin/users/**","/admin/user/**","/admin/check/**").hasAuthority("admin")
-					//.requestMatchers("/admin","/admin/**").hasAuthority("admin")
-					//.requestMatchers("/test").has
-					.requestMatchers("/auth/**").permitAll()
-					.anyRequest().permitAll())
+					// HBK
+					.requestMatchers("/client/**").hasAnyAuthority("operator","admin")
+					.requestMatchers("/product/**").hasAnyAuthority("operator","admin")
+					.requestMatchers("/stocklogrecord/**").hasAuthority("admin")
+					.requestMatchers("/notice/**").hasAuthority("admin")
+					// LHH
+					.requestMatchers("/order/order_aplist").hasAnyAuthority("operator","admin")
+					.requestMatchers("/return/return_aplist").hasAnyAuthority("operator","admin")
+					// KMJ
+					.requestMatchers("/inventory/**").hasAnyAuthority("operator","admin")
+					// LHW
+					.requestMatchers("/inoutbound/**").hasAnyAuthority("operator","admin")
+					.requestMatchers("/delivery/**").hasAnyAuthority("supplier","admin")
+					// PSH
+					.requestMatchers("/admin/**").hasAuthority("admin")
+					.anyRequest().authenticated())
 			.exceptionHandling(auth -> auth.accessDeniedHandler(accessDeniedHandler()).authenticationEntryPoint(authEntryPoint()))
 			.formLogin(auth -> auth.loginPage("/login").permitAll())
-			/*
-			.formLogin(auth -> auth
-					.loginPage("/login")
-					.permitAll()
-					)
-			*/
 			.httpBasic(auth -> auth.disable())
 			.authenticationProvider(authenticationProvider())
-			.logout(config -> config.deleteCookies("accessToken").invalidateHttpSession(true))
+			.logout(config -> config.logoutSuccessUrl("/logout/end").deleteCookies("accessToken").invalidateHttpSession(true))
 			.addFilterBefore(JWTRequestFilter, UsernamePasswordAuthenticationFilter.class);
-			//.addFilterBefore(JWTRequestFilter, BasicAuthenticationFilter.class);
-
 		return http.build();
 	}
 	
