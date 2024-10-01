@@ -1,5 +1,6 @@
 package kr.co.pikpak.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import kr.co.pikpak.dto.InfoTraderSimpleDTO;
 import kr.co.pikpak.dto.LoginDTO;
 import kr.co.pikpak.dto.UserDetailsDTO;
 import kr.co.pikpak.dto.UserOperatorDTO;
@@ -24,8 +26,25 @@ public class UserPageController {
 	@GetMapping("/admin/users")
 	public String userListPage(Model m) {
 		List<LoginDTO> userList = us.userListFromView();
+		List<InfoTraderSimpleDTO> companyList = us.companyListFromView();
 		m.addAttribute("userList",userList);
 		m.addAttribute("userListSize",userList.size());
+		//m.addAttribute("companyList",companyList);
+		
+		List<InfoTraderSimpleDTO> supplierList = new ArrayList<>();
+		List<InfoTraderSimpleDTO> vendorList = new ArrayList<>();
+		
+		for (InfoTraderSimpleDTO dto : companyList) {
+			if (dto.getTrader_cd().startsWith("C")) {
+				supplierList.add(dto);
+			}
+			else {
+				vendorList.add(dto);
+			}
+		}
+		m.addAttribute("supplierList",supplierList);
+		m.addAttribute("vendorList",vendorList);
+		
 		return "/user/users";
 	}
 	

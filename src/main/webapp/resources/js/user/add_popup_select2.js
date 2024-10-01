@@ -9,13 +9,34 @@ $("[name='user_type']").select2({
 	allowClear : true
 });
 
-$("[name='user_co']").select2({
+$("#supplier_select").select2({
 	theme: 'bootstrap',
 	dropdownParent : $('#addUserModal'),
 	placeholder : '회사 검색',
 	//closeOnSelect : true
 	//dropdownAutoWidth : true
 	allowClear : true
+});
+
+$('#supplier_select').on('change',function() {
+	var selectedOption =  $(this).find('option:selected');
+	let cdValue = selectedOption.data('trader-cd');
+	$('input[name="company_cd"]').val(cdValue);
+});
+
+$("#vendor_select").select2({
+	theme: 'bootstrap',
+	dropdownParent : $('#addUserModal'),
+	placeholder : '회사 검색',
+	//closeOnSelect : true
+	//dropdownAutoWidth : true
+	allowClear : true
+});
+
+$('#vendor_select').on('change',function() {
+	var selectedOption =  $(this).find('option:selected');
+	let cdValue = selectedOption.data('trader-cd');
+	$('input[name="company_cd"]').val(cdValue);
 });
 
 

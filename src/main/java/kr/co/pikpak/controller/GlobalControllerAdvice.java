@@ -20,32 +20,13 @@ public class GlobalControllerAdvice {
 	
 	@ModelAttribute("activeUserName")
 	public String getNameFromContext() {
-		String result = "";
-		result = userDetailsService.userNameFromContext();	
-		
-		/*
-		String accessToken = CookieUtility.getCookie(req, "accessToken");
-		System.out.println(accessToken);
-		*/
-		
-		
-		//JWT Expired 상황에는 500. 에러만 뜸 --> try security context holder but i need to add username...only id left (NOT TRUE)
-		//System.out.println(JWTUtil.isTokenExpired(accessToken));
-		/*
-		if(JWTUtil.isTokenExpired(accessToken)!=true) {
-			Map<String, String> activeUserData = JWTUtil.extractUserData(accessToken);
-			result = activeUserData.get("uname");
-		}
-		*/
+		String result = userDetailsService.userNameFromContext();
 		return result;
 	};
 	
 	@ModelAttribute("activeUserType")
 	public String getTypeFromContext() {
-		String result = "";
-		result = userDetailsService.userTypeFromContext();
+		String result = userDetailsService.userTypeFromContext();
 		return result;
 	}
-	
-	
 }

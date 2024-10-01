@@ -2,7 +2,7 @@
 .brand-custom {
 	float:left;
 	height: 82px;
-	width: 180px;
+	width: 150px;
 	text-align:center;
     display: flex;
     flex-direction: row;
@@ -26,4 +26,10 @@
 	.custom-hide {
 		display: none;
 	}
+}
+
+.custom-ul-menu {
+  background: #D5D5D5;
+  padding: 20px;
+  border-radius: 10px;
 }

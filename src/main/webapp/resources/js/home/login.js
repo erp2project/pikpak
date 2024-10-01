@@ -22,22 +22,22 @@ document.getElementById("loginForm").addEventListener("submit",
 			})
 			.then(result => {
 				const responseMsg = result.responseMsg;
-				const expiryTime = result.expiryTime;
 				
 				if (responseMsg=="Y") {
+					const expiryTime = result.expiryTime;
 					alert("로그인 성공 하였습니다");
 					localStorage.setItem("expiryTime",expiryTime);
 					location.href="/home";
 				}
 				else{
-					responseArea.innerHTML = `<p>${result}</p>`;
+					responseArea.innerHTML = `<p>${responseMsg}</p>`;
 					responseArea.style.visibility = "visible";
 					responseArea.style.opacity = "1";
 				}
 			})
 			.catch(error => {
-				//document.getElementById("response").innerHTML = `<p>${error}</p>`;
-				responseArea.innerHTML = `<p>"알 수 없는 이유로 로그인에 실패하였습니다. 관리자에게 문의하세요"</p>`;
+				responseArea.innerHTML = `<p>${error}</p>`;
+				//responseArea.innerHTML = `<p>알 수 없는 이유로 로그인에 실패하였습니다. 관리자에게 문의하세요</p>`;
 				responseArea.style.visibility = "visible";
 				responseArea.style.opacity = "1";
 			});

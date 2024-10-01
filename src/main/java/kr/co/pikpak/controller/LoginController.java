@@ -32,7 +32,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import kr.co.pikpak.device.CookieUtility;
+import kr.co.pikpak.dto.LoginAccessDTO;
 import kr.co.pikpak.dto.LoginDTO;
+import kr.co.pikpak.repo.LoginAccessRepo;
 import kr.co.pikpak.security.CustomUserDetails;
 import kr.co.pikpak.security.CustomUserDetailsService;
 import kr.co.pikpak.security.JWTUtility;
@@ -51,6 +53,9 @@ public class LoginController {
 	
     @Autowired
     private AuthenticationManager authenticationManager;
+	
+	@Autowired
+	private LoginAccessRepo lar;
     
     @Autowired 
     private JWTUtility JWTUtil;
@@ -60,10 +65,11 @@ public class LoginController {
 	
 	// 회원 로그인 및 토큰 생성
 	@PostMapping("/login/auth")
-	public ResponseEntity<?> createAuthenticationToken(LoginDTO logindto, HttpServletResponse res, HttpSession sess) throws Exception {
+	public ResponseEntity<?> createAuthenticationToken(LoginDTO logindto, HttpServletRequest req, HttpServletResponse res, HttpSession sess) throws Exception {
 		// Fetch API 결과 핸들링
 		String responseMsg = "";
 		Date expiryDate = null;
+		Map<String, Object> authResponse = new HashMap<>();
 		
 		try {
 			// 회원 정보 확인
@@ -87,15 +93,28 @@ public class LoginController {
 				token = JWTUtil.generateToken(userDetails);
 			}
 			
+			// 로그인 유호기간
 			expiryDate = JWTUtil.extractExpiration(token);
+			
+			if (expiryDate != null) {
+				authResponse.put("expiryTime", expiryDate.getTime());
+			}
+			else {
+				throw new BadCredentialsException("Expiry Date is null");
+			}
 			
 			// 클라이언트 사이드 토큰 저장 (Request 해더 미사용시 대신 사용)
 			CookieUtility.setCookie(res, "accessToken", token, "/");
 			
 			// 세션에 아이디 정보 저장
 			sess.setAttribute("activeUserID", logindto.getUser_id());
-			sess.setMaxInactiveInterval(60*60*24+7);
+			sess.setMaxInactiveInterval(60*60);
 			
+			// 로그인 로그기록 등록
+			LoginAccessDTO ldto = new LoginAccessDTO();
+			ldto.setUser_id(logindto.getUser_id());
+			ldto.setJsession_id(sess.getId());
+			lar.addAccessLog(ldto);
 			
 			responseMsg = "Y";
 		} catch (BadCredentialsException e) {
@@ -104,9 +123,7 @@ public class LoginController {
 			responseMsg = "서버 문제로 로그인이 실패하였습니다. 관리자에게 문의하세요";
 		}
 		
-		Map<String, Object> authResponse = new HashMap<>();
 		authResponse.put("responseMsg", responseMsg);
-		authResponse.put("expiryTime", expiryDate.getTime());
 		
 		return ResponseEntity.ok(authResponse);
 	}

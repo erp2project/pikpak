@@ -10,9 +10,15 @@ public class HomePageController {
 	
 	@GetMapping("/home")
 	public String homePage() {
-		return "/home/home";
-		//return "/notice/noticeTable";
+		//return "/home/home";
+		return "/notice/noticeTable"; 
 	}
+	
+	@GetMapping("/home/user/cred") 
+	public String passwordChangePage() {
+		return "/user/cred_change";
+	}
+	
 	
 	@GetMapping("/auth/access-denied")
 	public String accessDeniedPage() {

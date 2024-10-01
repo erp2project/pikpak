@@ -19,12 +19,6 @@ public class UserController {
 	@Autowired
 	private SHA256Encoder stringEncoder;
 	
-	@GetMapping("/admin/users/search/{search}")
-	public String userListFilter() {
-		
-		return null;
-	}
-	
 	@PostMapping("/admin/check/id")
 	public String checkUserId(@RequestParam(value="user_id", required = false) String userId) {
 		String responseText = "";
@@ -109,7 +103,7 @@ public class UserController {
 		}
 		else {
 			userModDto.setTarget_table("login_trader");
-			userModDto.setTarget_id("trader_id");
+			userModDto.setTarget_id("trader_id"); 
 			userModDto.setTarget_pw("trader_pw");
 			userModDto.setTarget_tel("trader_tel");
 			userModDto.setTarget_mail("trader_mail");
