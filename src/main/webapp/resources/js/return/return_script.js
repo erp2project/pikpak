@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		//총 가격
 		if(execute == "yes"){
 			totalPrice.value = qty*productPrice.value;
-			document.getElementById('v_productPrice').value = (qty*productPrice.value).toLocaleString();
+			document.getElementById('v_totalPrice').value = (qty*productPrice.value).toLocaleString();
 		}
 		else{
 			totalPrice.value = "";
