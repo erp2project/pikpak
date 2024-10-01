@@ -49,7 +49,7 @@ document.querySelectorAll('.openPopupBtn').forEach(function(button){
 		approvalButton.addEventListener('click',function(){
 			ap_process_st = "승인";
 			updateAPValues();
-			order_ap_frm.action = "/order_approval_change";
+			order_ap_frm.action = "/order/order_approval_change";
 			order_ap_frm.method = "post";
 			order_ap_frm.submit();	
 		});
@@ -61,19 +61,7 @@ document.querySelectorAll('.openPopupBtn').forEach(function(button){
 		rejectButton.addEventListener('click',function(){
 			ap_process_st = "거절";
 			updateAPValues();
-			order_ap_frm.action = "/order_approval_change";
-			order_ap_frm.method = "post";
-			order_ap_frm.submit();
-		});
-	}
-	
-	//완료 버튼
-	var completeButton = document.querySelector('.button-4[data-index_2="' + ap_idx + '"]');
-	if(completeButton){
-		completeButton.addEventListener('click',function(){
-			ap_process_st = "완료";
-			updateAPValues();
-			order_ap_frm.action = "/order_approval_change";
+			order_ap_frm.action = "/order/order_approval_change";
 			order_ap_frm.method = "post";
 			order_ap_frm.submit();
 		});
@@ -84,9 +72,7 @@ document.querySelectorAll('.openPopupBtn').forEach(function(button){
 		document.getElementById('ap_order_idx').value = ap_idx;
 		document.getElementById('ap_order_cd').value = apc_order_cd.value;
 		document.getElementById('ap_process_st').value = ap_process_st;
-		if(ap_process_st == ''){
-			document.getElementById('ap_approval_log').value = approval_log.value;			
-		}
+		document.getElementById('ap_approval_log').value = approval_log.value;			
 	}
 	
 });

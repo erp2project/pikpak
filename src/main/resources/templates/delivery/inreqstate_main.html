@@ -26,8 +26,8 @@
 							<span class="menu-item" id="go_delreturn">납품반송현황</span>
 						</p>
 						<span style="float: right; height: 40px;">
-							<button type="button" class="btn btn-success">초기화</button>
-							<button type="button" class="btn btn-warning">조회</button>
+							<button type="button" class="btn btn-success" id="irst_list_reset">초기화</button>
+							<button type="button" class="btn btn-warning" id="irst_list_search">조회</button>
 						</span>
 						<p style="font-size: 12px; height: 25px; line-height: 30px;">※
 							조회옵션</p>
@@ -36,29 +36,33 @@
 						<table class="table table-bordered">
 							<tbody>
 								<tr>
-									<td style="width: 10%; height: 34px; line-height: 34px;">등록 일자</td>
-									<td style="width: 20%; line-height: 34px;">
+									<td style="width: 10%; height: 34px; line-height: 34px;">등록일자</td>
+									<td style="width: 30%; line-height: 34px;">
 										<div style="display: flex; align-items: center;">
-											<input type="date" class="form-control" style="width: 40%;">&nbsp;&nbsp;
-											~ &nbsp;&nbsp; <input type="date" class="form-control"
-												style="width: 40%;">
+											<input type="date" class="form-control" 
+											id="inreqst_start_date"
+											style="width: 40%;">&nbsp;&nbsp;
+											~ &nbsp;&nbsp; 
+											<input type="date" class="form-control"
+											id="inreqst_end_date"	style="width: 40%;">
 										</div>
 									</td>
 									
 									
-									<td style="width: 15%; height: 34px; line-height: 34px;">상품코드
-										/ 상품명</td>
-									<td style="width: 30%; line-height: 34px;">
+									<td style="width: 10%; height: 34px; line-height: 34px;">상품코드
+										/ 명</td>
+									<td style="width: 20%; line-height: 34px;">
 										<div style="display: flex; align-items: center;">
-											<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
-											<input type="text" class="form-control" style="width: 40%;">&nbsp;&nbsp;
-											<button class="btn btn-primary" type="button" id="pd_search">검색</button>
+											<input type="text" class="form-control" style="width: 40%;"
+											id="search_pd_cd" readonly="readonly">&nbsp;&nbsp;
+											<input type="text" class="form-control" style="width: 40%;" id="search_pd_nm" readonly="readonly">&nbsp;&nbsp;
+											<button class="btn btn-primary" type="button" id="pd_search_is">검색</button>
 										</div>
 									</td>
 									
 									<td style="width: 10%; height: 34px; line-height: 34px;">상태</td>
 									<td style="width: 25%; line-height: 34px;"><select
-										class="form-control"
+										class="form-control" id="inreqst_search_state"
 										style="width: 70%; float: left; margin-right: 5px;">
 											<option value="">상태 선택</option>
 											<option value="대기">대기</option>
@@ -78,16 +82,17 @@
 							<table class="table">
 								<thead style="background-color: rgb(130, 210, 213);">
 									<tr>
+										<th style="text-align: center; width: 3%;">NO.</th>
 										<th style="text-align: center; width: 9%;">상품코드</th>
-										<th style="text-align: center; width: 12%;">상품명</th>
+										<th style="text-align: center; width: 14%;">상품명</th>
 										<th style="text-align: center; width: 7%;">요청수량</th>
 										<th style="text-align: center; width: 7%;">남은수량</th>
 										<th style="text-align: center; width: 17%;">추가 요청사항</th>
 										<th style="text-align: center; width: 11%;">희망 납기일자</th>
 										<th style="text-align: center; width: 6%;">상태</th>
 										<th style="text-align: center; width: 11%;">등록일자</th>
-										<th style="text-align: center; width: 10%;">등록 관리자</th>
-										<th style="text-align: center; width: 10%;">납품</th>
+				
+										<th style="text-align: center; width: 15%;">납품</th>
 										
 									</tr>
 								</thead>
@@ -95,11 +100,12 @@
 						</div>
 						<div class="panel-body" style="height: 400px; overflow-y: auto;">
 							<table class="table table-hover">
-								<tbody>
+								<tbody id="irst_tbody">
+								<!-- 
 									<tr th:each="inputreq : ${ir_list}">
 										<td style="text-align: center; width: 9%;"
 										th:text="${inputreq.getProduct_cd()}"></td>
-										<td style="text-align: center; width: 12%;"
+										<td style="text-align: center; width: 17%;"
 										th:text="${inputreq.getProduct_nm()}"></td>
 										<td style="text-align: center; width: 7%;"
 										th:text="${inputreq.getTotal_requested_qty()}">
@@ -115,10 +121,9 @@
 										th:text="${inputreq.getRequest_st()}"></td>
 										<td style="text-align: center; width: 11%;"
 										th:text="${inputreq.getRequest_dt().substring(0,10)}"></td>
-										<td style="text-align: center; width: 10%;"
-										th:text="${inputreq.getOperator_nm() + '(' + inputreq.getOperator_id() + ')'}"></td>
+										
 						
-										<td style="text-align: center; width: 10%;">
+										<td style="text-align: center; width: 15%;">
 										<button class="btn btn-primary inreq_delivery" 
 										th:data-supplier-cd="${inputreq.getSupplier_cd()}"
 										th:data-product-cd="${inputreq.getProduct_cd()}"
@@ -129,6 +134,7 @@
 										th:data-request-cd="${inputreq.getRequest_cd()}"
 										style="padding-right:5px; padding-left:5px; width:40%;"
 										type="button">납품</button>
+										
 										<button class="btn btn-danger inreq_reject" 
 										style="padding-right:5px; padding-left:5px; width:40%;"
 										th:data-product-qty="${inputreq.getTotal_requested_qty()}"
@@ -138,6 +144,7 @@
 										type="button">거절</button>
 										</td>
 									</tr>
+									 -->
 								</tbody>
 							</table>
 						</div>

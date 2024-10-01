@@ -10,14 +10,22 @@ import kr.co.pikpak.dto.input_request_dto;
 import kr.co.pikpak.dto.input_request_state_dto;
 
 public interface DeliveryService {
+	//서버시간
+	public String get_time_deli();
+	
+	//회사 코드 가져오기
+	public String select_current_supplier(String trader_id);
+	
 	//입고요청 현황
-	public List<input_request_state_dto> select_inreq_deliv(String supplier_cd);
-
+	//public List<input_request_state_dto> select_inreq_deliv(String supplier_cd);
+	public List<input_request_state_dto> select_inreq_deliv(Map<String, Object> data_arr);
+	
 	//납품등록
 	public int insert_deliver_enroll(deliver_enroll_dto dto);
 	
 	//납품등록 현황
-	public List<deliver_enroll_dto> select_deliver_enroll(String supplier_cd);
+	//public List<deliver_enroll_dto> select_deliver_enroll(String supplier_cd);
+	public List<deliver_enroll_dto> select_deliver_enroll(Map<String, Object> data_arr);
 	
 	//납품등록 삭제
 	public int delete_deliver_enroll(String deliver_idx);
@@ -41,5 +49,5 @@ public interface DeliveryService {
 	public int update_finished_inreq(String request_cd);
 	
 	//반송현황
-	public List<deliver_return_joined_dto> select_return_joined(String supplier_cd);
+	public List<deliver_return_joined_dto> select_return_joined(Map<String, Object> data_arr);
 }

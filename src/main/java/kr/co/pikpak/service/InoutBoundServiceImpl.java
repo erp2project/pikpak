@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.co.pikpak.dto.accepted_order_enroll_dto;
 import kr.co.pikpak.dto.deliver_return_dto;
 import kr.co.pikpak.dto.ex_receiving_dto;
 import kr.co.pikpak.dto.ex_receiving_joined_dto;
@@ -28,10 +29,90 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	@Autowired
 	InoutBoundRepo iorepo;
 	
+	//주문 승인 상태 원복
+	@Override
+	public int update_accepted_back(String order_cd) {
+		int result = iorepo.update_accepted_back(order_cd);
+		return result;
+	}
+	 
+	
+	//출고피킹 정보 삭제
+	@Override
+	public int delete_outpiking(String outenroll_cd) {
+		int result = iorepo.delete_outpiking(outenroll_cd);
+		return result;
+	}
+	
+	//출고등록 정보 삭제
+	@Override
+	public int delete_outenroll(String outenroll_cd) {
+		int result = iorepo.delete_outenroll(outenroll_cd);
+		return result;
+	}
+	
+	//출고 확정 시 전체 재고 뺸 것에 대해 capacity 자동감소를 위해 delete
+	@Override
+	public int delete_warehouse_out(String wh_warehouse_idx) {
+		int result = iorepo.delete_warehouse_out(wh_warehouse_idx); //iorepo를 빠뜨리고 그냥 하면 무한루프
+		return result;
+	}
+	
+	
+	//출고 확정 시 주문 상태 완료 변경
+	@Override
+	public int update_odstate_ended(String order_cd) {
+		int result = iorepo.update_odstate_ended(order_cd);
+		return result;
+	}
+	
+	
+	//출고 확정
+	@Override
+	public int update_outenroll_decide(String outenroll_cd, String update_id) {
+		int result = iorepo.update_outenroll_decide(outenroll_cd, update_id);
+		return result;
+	}
+	
+	
+	//재고차감
+	@Override
+	public int update_warehouse_out(String subtractive_qty, String update_by, String wh_warehouse_idx) {
+		int result = iorepo.update_warehouse_out(subtractive_qty, update_by, wh_warehouse_idx);
+		return result;
+	}
+	
+	
+	//출고등록 시 재고기록 '출고' 타입 지정
+	@Override
+	public int update_stock_log_out(String wh_warehouse_idx) {
+		int result = iorepo.update_stock_log_out(wh_warehouse_idx);
+		return result;
+	}
+	
+	
+	//출고등록 테이블 업데이트
+	@Override
+	public int update_outenroll(String outenroll_cd) {
+		int result = iorepo.update_outenroll(outenroll_cd);
+		return result;
+	}
+	
+	
 	//출고상세정보 가져오기
 	@Override
-	public List<outgoing_info_joined_dto> select_outgoing_view() {
-		List<outgoing_info_joined_dto> outgoing_info = iorepo.select_outgoing_view();
+	public List<outgoing_info_joined_dto> select_outgoing_view(Map<String, Object> data_arr) {
+		if((data_arr.get("start_date") != "") && (data_arr.get("end_date") != "")) {
+			String startdt = (String) data_arr.get("start_date");
+			startdt += " 00:00:00";
+			data_arr.put("start_date", startdt); 
+			
+			String enddt = (String) data_arr.get("end_date");
+			enddt += " 23:59:59";
+			data_arr.put("end_date", enddt);
+		}
+		
+		List<outgoing_info_joined_dto> outgoing_info = iorepo.select_outgoing_view(data_arr);
 		return outgoing_info;
 	}
 	
@@ -42,6 +123,15 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 		List<outgoing_enroll_dto> outgoing = iorepo.select_outgoing();
 		return outgoing;
 	}
+	
+	//출고등록시 주문승인 상태변경
+	@Override
+	public int update_acceptedorder_st(String operator_id, String order_cd) {
+		int result = iorepo.update_acceptedorder_st(operator_id, order_cd); //인자명이 달라도 되나..??
+		return result;
+	}
+	
+	
 	
 	//출고피킹 정보 등록
 	@Override
@@ -54,10 +144,6 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	@Override
 	public int insert_outgoing_enroll(outgoing_enroll_dto dto) {
 		//dto.setOutenroll_cd(this.make_outenrollcode());
-		
-		//세션에서 가져왔다고 가정
-		String operator_id = "ad_leehw_1234";
-		dto.setOperator_id(operator_id);
 		
 		dto.setOutenroll_st("대기");
 		
@@ -82,12 +168,6 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 		return result;
 	}
 	
-	//warehouse update
-	@Override
-	public int update_wwarehouse(Map<String, Object> wh_update) {
-		int result = iorepo.update_wwarehouse(wh_update);
-		return result;
-	}
 	
 	//warehouse insert
 	@Override
@@ -95,33 +175,21 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 		int result = iorepo.insert_warehouse(wh_dto);
 		return result;
 	}
-	
-	//warehosue 데이터 확인
-	@Override
-	public List<String> check_warehouse(String location_cd, String product_cd) {
-		List<String> idx = iorepo.check_warehouse(location_cd, product_cd);
-		return idx;
-	}
-	
+
 	//입고등록 receiving
 	@Override
 	public int insert_receiving(receiving_dto dto) {
 		int final_result = 0;
 		
-		//lot_no 생성
+		//lot_no 생성 => 반품과 납품이 달라야함
 		/*
 		  상품코드 + 제조일자 + 입고일자 
 		 */
-		String lot_no = this.make_lotno(dto.getProduct_cd(), dto.getMake_dt(), dto.getInventory_dt());
+		String lot_no = this.make_lotno(dto.getProduct_cd(), dto.getMake_dt(), dto.getInventory_dt(),dto.getExreceiving_type());
 		dto.setLot_no(lot_no);
 		
 		//고유번호 넣기
 		dto.setReceiving_cd(this.make_recvcode());
-		
-		
-		//세션에서 id가져왔다고 가정
-		String operator_id = "ad_leehw_1234";
-		dto.setOperator_id(operator_id);
 		
 		int result = iorepo.insert_receiving(dto);
 		if(result > 0) { //입고 먼저 하고
@@ -133,11 +201,31 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 		    if(update_locations_result > 0) {
 		    	/*
 				[warehouse 테이블에서 업데이트]
-				1) 테이블 안에 해당 위치에 상품코드가 없으면 그대로 insert
-				2) 테이블 안에 해당 위치에 상품코드가 있으면 product_qty만 증가
+				테이블 안에 해당 위치에 상품코드가 없으면 그대로 insert
 				*/
+		    	//insert	
+				//Map 만들기
+				Map<String, Object> wh_dto = new HashMap<String, Object>();
+				wh_dto.put("location_cd", dto.getLocation_cd());
+				wh_dto.put("product_cd", dto.getProduct_cd());
+				wh_dto.put("product_nm", dto.getProduct_nm());
+				wh_dto.put("supplier_nm", dto.getSupplier_nm());
+				wh_dto.put("supplier_cd", dto.getSupplier_cd());
+				wh_dto.put("product_qty", dto.getReceiving_qty());
+				wh_dto.put("inventory_log", dto.getReceiving_log());
+				wh_dto.put("update_dt", dto.getReceiving_dt());
+				wh_dto.put("update_by", dto.getOperator_id());
+				
+			    int insert_result = this.insert_warehouse(wh_dto);   
+			    
+			    if(insert_result > 0) {
+			    	final_result = 1;
+			    }	
+		    	
+		    	/*
 		    	List<String> idx = this.check_warehouse(dto.getLocation_cd(), dto.getProduct_cd());
-				if (idx.size() > 0) {	// 테이블 안에 해당 위치에 상품코드가 있으면 product_qty만 증가
+				
+		    	if (idx.size() > 0) {	// 테이블 안에 해당 위치에 상품코드가 있으면 product_qty만 증가
 					//update    
 					//Map 만들기
 					Map<String, Object> wh_update = new HashMap<String, Object>();
@@ -152,25 +240,9 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 					}
 				} 
 				else {
-				   //insert
-					//Map 만들기
-					System.out.println(dto.getReceiving_qty());
-					
-					Map<String, Object> wh_dto = new HashMap<String, Object>();
-					wh_dto.put("location_cd", dto.getLocation_cd());
-					wh_dto.put("product_cd", dto.getProduct_cd());
-					wh_dto.put("product_nm", dto.getProduct_nm());
-					wh_dto.put("supplier_nm", dto.getSupplier_nm());
-					wh_dto.put("product_qty", dto.getReceiving_qty());
-					wh_dto.put("inventory_log", dto.getReceiving_log());
-					wh_dto.put("supplier_cd", dto.getSupplier_cd());
-					
-				    int insert_result = this.insert_warehouse(wh_dto);   
-				    
-				    if(insert_result > 0) {
-				    	final_result = 1;
-				    }	
+				   
 				}
+				*/
 			}
 		    else {
 		    	System.out.println("위치코드 업데이트 실패");
@@ -183,7 +255,7 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 		
 		/*	
 		3. stock_log_record
-		Trigger 걸어놓기
+		Trigger 걸어놓기 ok
 		*/
 		
 		return final_result;
@@ -199,8 +271,18 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	
 	//출고등록에서 주문현황 보여주기
 	@Override
-	public List<order_enroll_dto_lhwtemp> select_order_enroll() {
-		List<order_enroll_dto_lhwtemp> orderlist = iorepo.select_order_enroll();
+	public List<accepted_order_enroll_dto> select_order_enroll(Map<String, Object> data_arr) {
+		if((data_arr.get("start_date") != "") && (data_arr.get("end_date") != "")) {
+			String startdt = (String) data_arr.get("start_date");
+			startdt += " 00:00:00";
+			data_arr.put("start_date", startdt); 
+			
+			String enddt = (String) data_arr.get("end_date");
+			enddt += " 23:59:59";
+			data_arr.put("end_date", enddt);
+		}
+		
+		List<accepted_order_enroll_dto> orderlist = iorepo.select_order_enroll(data_arr);
 		return orderlist;
 	}
 	
@@ -217,9 +299,6 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	public int insert_deliver_return(deliver_return_dto dto) {
 		//고유번호 랜덤 생성
 		dto.setD_return_cd(this.make_returncode());
-		
-		//사용자 세션
-		dto.setOperator_id("ad_leehw_1234");
 		
 		//가입고 반품수량업데이트도 해야함
 		int final_result = 0;
@@ -243,8 +322,18 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	
 	//가입고 리스트
 	@Override
-	public List<ex_receiving_joined_dto> select_ex_receiving() {
-		List<ex_receiving_joined_dto> exrecv_list = iorepo.select_ex_receiving();
+	public List<ex_receiving_joined_dto> select_ex_receiving(Map<String, Object> data_arr) {
+		if((data_arr.get("start_date") != "") && (data_arr.get("end_date") != "")) {
+			String startdt = (String) data_arr.get("start_date");
+			startdt += " 00:00:00";
+			data_arr.put("start_date", startdt); 
+			
+			String enddt = (String) data_arr.get("end_date");
+			enddt += " 23:59:59";
+			data_arr.put("end_date", enddt);
+		}
+		
+		List<ex_receiving_joined_dto> exrecv_list = iorepo.select_ex_receiving(data_arr);
 		return exrecv_list;
 	}
 	
@@ -378,7 +467,7 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 			w++;
 		}
 		
-		String code = "IR "+ server_time + "-" + randnum;
+		String code = "IR-"+ server_time + randnum;
 		
 		return code;
 	}
@@ -398,7 +487,7 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 			w++;
 		}
 			
-		String code = "DR "+ server_time + "-" + randnum;
+		String code = "DR-"+ server_time + randnum;
 			
 		return code;
 	}
@@ -418,7 +507,7 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 				w++;
 			}
 				
-			String code = "RE "+ "-" + randnum;
+			String code = "RE-" +  server_time +randnum;
 				
 			return code;
 		}
@@ -438,19 +527,36 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 				w++;
 			}
 				
-			String code = "OE"+ "-" + randnum;
+			String code = "OE-" + server_time + randnum;
 				
 			return code;
 		}
-		
-		
+	
+	//로트번호 중복 카운트
+	@Override
+	public String select_lot_count(String lot_no) {
+		String lot_count = iorepo.select_lot_count(lot_no);
+		return lot_count;
+	}	
+	
 	//입고 시 로트번호 생성하기
-	public String make_lotno(String product_cd, String make_dt, String inventory_dt) {
+	public String make_lotno(String product_cd, String make_dt, String inventory_dt, String type) {
 		String makedate = make_dt.replaceAll("-", "");
 		String ivdate = inventory_dt.replaceAll("-", "");
+		String lot_no = "";
+		if(type.equals("납품")) {
+			lot_no = product_cd + "-" + "M" + makedate.substring(2) + "-" + "R" + ivdate.substring(2);
+		}
+		else if(type.equals("반품")){
+			lot_no = product_cd + "-" + "M" + makedate.substring(2) + "-" + "R" + ivdate.substring(2) + "-RT";
+		}
 		
-		String lot_no = product_cd + "-" + "M" + makedate + "-" + "R" + ivdate;
+		int count = Integer.parseInt(this.select_lot_count(lot_no));
 		
+		if (count > 0) {
+		       lot_no += "-" + String.format("%03d", count + 1);  // 카운트가 있으면 "-001", "-002" 형태로 추가
+		}
+	
 		return lot_no;
 	}
 	

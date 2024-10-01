@@ -15,14 +15,18 @@
 	href="/resources/assets/vendor/linearicons/style.css">
 <link rel="stylesheet"
 	href="/resources/assets/vendor/chartist/css/chartist-custom.css">
+	
 <!-- MAIN CSS -->
-<link rel="stylesheet" href="../resources/assets/css/main.css">
-<link rel="stylesheet" href="../resources/assets/css/demo.css">
-<link rel="stylesheet"
-	href="/resources/css/inoutbound/inboundreq_main.css">
-	<link rel="stylesheet"
-	href="/resources/css/inoutbound/pd_search.css">
-	<link href="/resources/css/inoutbound/add_popup.css" rel="stylesheet">
+<link rel="stylesheet" href="/resources/assets/css/main.css">
+<link rel="stylesheet" href="/resources/assets/css/demo.css">
+<link rel="stylesheet" href="/resources/css/inoutbound/inboundreq_main.css">
+<link rel="stylesheet" href="/resources/css/inoutbound/pd_search.css">
+<link href="/resources/css/inoutbound/add_popup.css" rel="stylesheet">
+
+<!-- nav -->
+<link rel="stylesheet" href="/resources/css/shared/custom_style.css">
+<link rel="stylesheet" href="/resources/css/shared/custom_components_style.css">
+
 <!-- GOOGLE FONTS -->
 <link
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700"
@@ -39,111 +43,11 @@
 	<!-- WRAPPER -->
 	<div id="wrapper">
 		<!-- 최상단 -->
-		<div id="wrapper">
-		<!-- 최상단 -->
-		<nav class="navbar navbar-default navbar-fixed-top">
-			<div class="brand" style="height: 30px;">
-				<a href="index.html"> <span class="fa fa-paper-plane-o"
-					style="font-size: 23px; margin-right: 5px;"></span> <span
-					style="font-size: 23px;">PikPak</span>
-				</a>
-			</div>
-			<div class="container-fluid">
-				<div class="navbar-btn">
-					<button type="button" class="btn-toggle-fullwidth">
-						<i class="lnr lnr-arrow-left-circle"></i>
-					</button>
-				</div>
-
-				<div class="navbar-btn navbar-btn-right">
-					<span style="vertical-align: -3px;"> <i class="lnr lnr-user"></i>
-						<span>관리자님 환영합니다.</span>
-					</span> <a class="btn btn-success update-pro" href=""><span>로그아웃</span></a>
-				</div>
-			</div>
-		</nav>
+		<nav th:replace="~{/shared/components.html :: top}"></nav>
 		<!-- 최상단 끝 -->
 		
 		<!-- 왼쪽 SIDEBAR -->
-		<div id="sidebar-nav" class="sidebar">
-			<div class="sidebar-scroll">
-				<nav>
-					<ul class="nav">
-						<li>
-							<a href="#subPages" data-toggle="collapse" class="collapsed active">
-							<i class="lnr lnr-file-empty"></i> <span>기준정보 관리</span> 
-							<i class="icon-submenu lnr lnr-chevron-left"></i>
-							</a>
-							<div id="subPages" class="collapse ">
-								<ul class="nav">
-									<li><a href="" class="">거래처 관리</a></li>
-									<li><a href="" class="">품목 관리</a></li>
-								</ul>
-							</div>
-						</li>
-						<li>
-							<a href="#subPages2" data-toggle="collapse" class="collapsed">
-							<i class="lnr lnr-dice"></i> <span>주문 | 반품</span> 
-							<i class="icon-submenu lnr lnr-chevron-left"></i>
-							</a>
-							<div id="subPages2" class="collapse ">
-								<ul class="nav">
-									<li><a href="" class="">주문 관리</a></li>
-									<li><a href="" class="">반품 관리</a></li>
-								</ul>
-							</div>
-						</li>
-						<li>
-							<a href="#subPages3" data-toggle="collapse" class="collapsed">
-							<i class="lnr lnr-inbox"></i> <span>재고</span> 
-							<i class="icon-submenu lnr lnr-chevron-left"></i>
-							</a>
-							<div id="subPages3" class="collapse ">
-								<ul class="nav">
-									<li><a href="" class="">재고 현황</a></li>
-									<li><a href="" class="">창고 관리</a></li>
-								</ul>
-							</div>
-						</li>
-						<li>
-							<a href="#subPages4" data-toggle="collapse" class="collapsed">
-							<i class="lnr lnr-download"></i> <span>입고 | 출고</span> 
-							<i class="icon-submenu lnr lnr-chevron-left"></i>
-							</a>
-							<div id="subPages4" class="collapse ">
-								<ul class="nav">
-									<li><a href="" class="">입고 관리</a></li>
-									<li><a href="" class="">출고 관리</a></li>
-								</ul>
-							</div>
-						</li>
-						<li>
-							<a href="#subPages5" data-toggle="collapse" class="collapsed">
-							<i class="lnr lnr-chart-bars"></i> <span>납품</span> 
-							<i class="icon-submenu lnr lnr-chevron-left"></i>
-							</a>
-							<div id="subPages5" class="collapse ">
-								<ul class="nav">
-									<li><a href="" class="">납품 관리</a></li>
-								</ul>
-							</div>
-						</li>
-						<li>
-							<a href="#subPages6" data-toggle="collapse" class="collapsed">
-							<i class="lnr lnr-cog"></i> <span>사이트 설정</span> 
-							<i class="icon-submenu lnr lnr-chevron-left"></i>
-							</a>
-							<div id="subPages6" class="collapse ">
-								<ul class="nav">
-									<li><a href="" class="">재고기록 관리</a></li>
-									<li><a href="" class="">인사 관리</a></li>
-								</ul>
-							</div>
-						</li>
-					</ul>
-				</nav>
-			</div>
-		</div>
+		<div th:replace="~{/shared/components.html :: sidebar}"></div>
 		<!-- 왼쪽 SIDEBAR -->
 		
 		<!-- MAIN -->
@@ -151,8 +55,8 @@
 		<section th:replace="~{inoutbound/recvenroll_main :: main_recvenroll}"></section>
 		
 		<!-- 모달 -->
-		<section th:replace="~{inoutbound/test_popup :: inventory_popup}"></section>
-		<section th:replace="~{inoutbound/company_search :: company_search_popup}"></section> 
+		<section th:replace="~{inoutbound/product_search :: product_search_popup}"></section>
+		<section th:replace="~{inoutbound/company_search :: company_search_popup}"></section>
 		<section th:replace="~{inoutbound/decide_recvenroll_popup:: decide_recv_popup}"></section>
 		<section th:replace="~{inoutbound/decide_return_popup:: decide_rt_popup}"></section>
 		<!-- MAIN 끝-->
@@ -161,8 +65,7 @@
 		<div class="clearfix"></div>
 		
 		<!-- footer 시작 -->
-		<footer>
-		</footer>
+		<footer th:replace="~{/shared/components.html :: footer}"></footer>
 		<!-- footer 끝 -->
 	<!-- END WRAPPER -->
 	<!-- Javascript -->
@@ -178,6 +81,27 @@
 </body>
 <script>
 $(document).ready(function() {
+		//console.log("Document is ready");
+		// 상품코드/상품명 모달 검색 버튼 클릭 시
+		$("#pd_search_recv").on("click", function() {
+			$("#productModal").modal('show');
+
+			// 모달이 열릴 때 첫 번째 페이지 로드
+			$('#productModal').on('shown.bs.modal', function() {
+				new product_search_modal().pd_paging(1); // 페이지 1을 로드
+			});
+		});
+
+		//매입처 회사명 모달 검색 버튼 클릭 시 (새로 추가)
+		$("#cp_search_recv").on("click", function() {
+			$("#companyModal").modal('show');
+
+			// 모달이 열릴 때 첫 번째 페이지 로드
+			$('#companyModal').on('shown.bs.modal', function() {
+				new company_search_modal().paging(1); // 페이지 1을 로드
+			});
+		});
+	
 	
 	//반송 버튼 클릭시
 	$(document).on("click", ".decide_return", function(event) {
@@ -188,9 +112,9 @@ $(document).ready(function() {
 		var supplier_nm = $(this).data("supplier-nm");
 		var supplier_cd = $(this).data("supplier-cd");
 		var product_qty = $(this).data("product-qty");
-		var exrecv_area = $(this).data("exrecv-area");
+		
 		var exrecv_dt = $(this).data("exrecv-dt");
-		var deliver_cd = $(this).data("deliver-cd");
+		var deliver_cd = $(this).data("deliver_cd");
 		var exrecv_cd = $(this).data("exrecv-cd");
 		
 		// 입력 필드에 값 설정
@@ -198,7 +122,7 @@ $(document).ready(function() {
 		$("#product_nm_return").val(product_nm);
 		$("#supplier_nm_return").val(supplier_nm);
 		$("#product_qty_return").val(product_qty);
-		$("#exrecv_area_return").val(exrecv_area);
+		
 		$("#exrecv_dt_return").val(exrecv_dt.substring(0,10));
 		$("#deliver_cd_return").val(deliver_cd);
 		$("#exrecv_cd_return").val(exrecv_cd);
@@ -216,8 +140,8 @@ $(document).ready(function() {
 		var product_cd = $(this).data("product-cd");
 		var product_nm = $(this).data("product-nm");
 		var supplier_nm = $(this).data("supplier-nm");		
-		var product_qty = $(this).data("product-qty");
-		var exrecv_area = $(this).data("exrecv-area");
+		var product_qty = $(this).data("product-qty").toString().trim();
+		
 		var exrecv_size = $(this).data("exrecv-size");
 		var exrecv_dt = $(this).data("exrecv-dt");
 		
@@ -227,7 +151,8 @@ $(document).ready(function() {
 		var supplier_cd = $(this).data("supplier-cd");
 		var return_qty = $(this).data("return-qty");
 		var make_dt = $(this).data("make-dt");
-		
+		var exrecv_type = $(this).data("exrecv-type");
+	
 		if (parseInt(product_qty) == parseInt(return_qty)) {
 		   alert("모두 반송 처리된 데이터입니다.");
 		   return; // 반송 수량과 납품 수량이 같다면 모달을 띄우지 않음
@@ -239,30 +164,20 @@ $(document).ready(function() {
 		$("#supplier_cd_recv").val(supplier_cd);
 		$("#supplier_nm_recv").val(supplier_nm);
 		$("#product_qty_recv").val(product_qty);
-		$("#exrecv_area").val(exrecv_area);
+		
 		$("#exrecv_dt").val(exrecv_dt.substring(0,10));
 		$("#deliver_cd_recv").val(deliver_cd);
 		$("#exrecv_cd").val(exrecv_cd);
 		$("#exrecv_size").val(exrecv_size);
 		$("#return_qty").val(return_qty);
 		$("#make_dt_recv").val(make_dt);
+		$("#exrecv_type_recv").val(exrecv_type);
 		
 		// 모달 보여주기
 		$("#decideRecvModal").modal('show');
 		
 	});
-	
-	
-    // 상품코드/상품명 모달 검색 버튼 클릭 시
-    $("#pd_search").on("click", function() {
-        $("#productModal").modal('show');
-    });
-   
-    
- 	//매입처 회사명 모달 검색 버튼 클릭 시 (새로 추가)
-    $("#cp_search").on("click", function() {
-        $("#inventoryModal").modal('show');
-    });
+
  	
   //등록버튼 클릭 시
     $("#add_recv").on("click", function() {
@@ -271,20 +186,79 @@ $(document).ready(function() {
 });
 </script>
  <script type="module">
-    import {page_move, receiving_enroll} from "../resources/js/inoutbound/inboundreq_main.js?v=4";
-	/* 페이지 처음 로드 */
+    import {page_move, receiving_enroll, product_search_modal, company_search_modal} from "../resources/js/inoutbound/inboundreq_main.js?v=4";
+	/* 페이지 처음 로드 */ 
 	document.addEventListener('DOMContentLoaded', function() {
-		//'입고' 상태 변화된 리스트 버튼 비활성화
-		new receiving_enroll().no_button();
+		const today = new Date();
+		const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+		const nextWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7); // 오늘에서 7일 후
+
+		const formatDate = (date) => {
+    	let d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    	if (month.length < 2) 
+        month = '0' + month;
+    	if (day.length < 2) 
+        day = '0' + day;
+
+    	return [year, month, day].join('-');
+		};
+
+		document.getElementById("recv_start_date").value = formatDate(lastWeek);
+		document.getElementById("recv_end_date").value = formatDate(nextWeek); // end_dt에 7일 후 날짜 할당
+		document.getElementById("type_select").value = '납품';
+		new receiving_enroll().recv_enroll_list(); //페이지 리스트를 위한 ajax
 	});	
 
+	//초기화 버튼 클릭시
+	document.querySelector("#recv_reset").addEventListener("click",function(){
+	location.reload();
+	});
+
+	//조회버튼 클릭시
+	document.querySelector("#recv_search").addEventListener("click",function(){
+	new receiving_enroll().recv_enroll_list(); //페이지 리스트를 위한 ajax
+	});
+
+/* 상품 찾기 모달 */
+	window.product_search_modal = product_search_modal; //jquery에서 사용할 수 있도록
+
+	document.querySelector("#mod_pd_search").addEventListener("click",function(){
+		new product_search_modal().pd_paging(1);
+	});
+
+	/* 매입처 찾기 모달 */	
+	window.company_search_modal = company_search_modal; //jquery에서 사용할 수 있도록
+
+	document.querySelector("#mod_cp_search").addEventListener("click",function(){
+		new company_search_modal().paging(1);
+	});
+
+
+
+
+	//개별 입고등록 -> 동적생성해서 이벤트 위임을 따로 해줘야함
+document.getElementById('rv_tbody').addEventListener('click', function(event) {
+    // 클릭한 요소가 decide_inbound 클래스를 가진 버튼인지 확인
+    if (event.target.classList.contains('decide_inbound')) {
+        const supplierCd = event.target.dataset.supplierCd;
+        
+        // receiving_enroll 객체의 bring_locations 메서드 호출
+        new receiving_enroll().bring_locations(supplierCd);
+    }
+});
+
+/*
     //가입고 리스트 입고등록시, 입고 등록버튼 decide_inbound	
 	document.querySelectorAll('.decide_inbound').forEach(function(button) {
     	button.addEventListener('click', function(event) {
 			new receiving_enroll().bring_locations(button.dataset.supplierCd);
 		});
 	});
-
+*/
 	//가입고 리스트 입고등록하기 go_recv_enroll
 	document.querySelector("#recv_enroll").addEventListener("click",function(){
 		new receiving_enroll().go_recv_enroll();

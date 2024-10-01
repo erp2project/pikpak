@@ -13,5 +13,5 @@ public class outgoing_info_joined_dto {
 	
 	List<Map<String, Object>> pickings;
 	String pickings_json;
-	//wh_warehouse_idx, receivig_cd, lot_no, outpick_qty
+	//wh_warehouse_idx, receivig_cd, lot_no, outpick_qty, is_deleted, location_cd
 }

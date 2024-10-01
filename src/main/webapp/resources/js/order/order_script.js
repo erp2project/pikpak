@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	var productQuantity = document.getElementById('productQuantity');
 	var productPrice = document.getElementById('productPrice');
     var totalPrice = document.getElementById('totalPrice');
+    var v_totalPrice = document.getElementById('v_totalPrice');
     var enrollBtn = document.getElementById('enrollBtn');
     var startDate = document.getElementById('startDate');
     var endDate = document.getElementById('endDate');
@@ -55,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			alert('상품 코드를 입력해 주세요.');
 		}
 		else{
-			fetch('/product_cd_searchck', {
+			fetch('/order/product_cd_searchck', {
 	            method: 'POST',
 	            headers: {
 	                'Content-Type': 'application/x-www-form-urlencoded'
@@ -76,6 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					document.getElementById("productSize").value = product_list[2];
 					document.getElementById("productWeight").value = product_list[3];
 					document.getElementById("productPrice").value = product_list[4];
+					document.getElementById("v_productPrice").value = parseInt(product_list[4]).toLocaleString();
 				}
 	            
 	        })
@@ -108,12 +110,13 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 		//총 가격
 		if(execute == "yes"){
-			totalPrice.value = qty*productPrice.value;			
+			totalPrice.value = qty*productPrice.value;
+			v_totalPrice.value= (qty*productPrice.value).toLocaleString();
 		}
 		else{
 			totalPrice.value = "";
 		}
-	}
+	}	
 	
 	productQuantity.addEventListener('input',qtyck);
 	
@@ -126,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			alert('착수일과 납기일을 확인해 주세요.');
 		}
 		else{
-			order_frm.action = "/order_enroll";
+			order_frm.action = "/order/order_enroll";
 			order_frm.method = "post";
 			order_frm.submit();
 		}
