@@ -104,7 +104,7 @@ export class inreq_list {
 					});
 				})
 				.catch(function(error) {
-					console.log(error);
+					//console.log(error);
 					alert('데이터 조회에 문제가 발생하였습니다.');
 				});
 		}
@@ -132,7 +132,8 @@ export class inreq_list {
 					}
 				})
 				.catch(function(error) {
-					console.log(error);
+					//console.log(error);
+					alert('데이터 조회에 문제가 발생하였습니다.');
 				});
 		}
 
@@ -174,7 +175,7 @@ export class returnstate_list{
 				})
 				.then(function(result_res) {
 					const tbody = document.querySelector("#return_tbody");
-					console.log(result_res);
+					//console.log(result_res);
 					
 					tbody.innerHTML = '';
 					
@@ -197,7 +198,7 @@ export class returnstate_list{
 					});
 				})
 				.catch(function(error) {
-					console.log(error);
+					//console.log(error);
 					alert('데이터 조회에 문제가 발생하였습니다.');
 				});
 				
@@ -245,7 +246,7 @@ export class delivery_list {
 				})
 				.then(function(result_res) {
 					const tbody = document.querySelector("#denroll_tbody");
-					console.log(result_res);
+					//console.log(result_res);
 					
 					tbody.innerHTML = '';
 					window.deli_active_ck = 0; // 활성화된 체크박스 수를 리셋
@@ -308,7 +309,7 @@ export class delivery_list {
 					
 				})
 				.catch(function(error) {
-					console.log(error);
+					//console.log(error);
 					alert('데이터 조회에 문제가 발생하였습니다.');
 				});
 				

@@ -93,9 +93,9 @@ public class InoutBoundController {
 	public String decide_outgoingok(ServletResponse res,
 			@RequestParam(defaultValue = "", required = true) String outenroll_cd,
 			@RequestParam(defaultValue = "", required = true) String order_cd,
-			@RequestParam(defaultValue = "", required = true) String wh_warehouse_idx_datas[]) {
+			@RequestParam(defaultValue = "", required = true) String wh_warehouse_idx_datas[],
+			@SessionAttribute(name = "activeUserID", required = false) String update_id) {
 		res.setContentType("text/html;charset=utf-8");
-		String update_id = "ad_leehw_1234";
 			
 		try {
 			this.pw = res.getWriter();
@@ -295,7 +295,6 @@ public class InoutBoundController {
 	@ResponseBody
 	public ResponseEntity<?> inventory_locations(@RequestParam(defaultValue = "", required = true) String supplier_cd) {
 		try {
-			System.out.println("입고모달 위치코드: " + supplier_cd);
 			List<warehouse_locations_dto_lhwtemp> locations = ioservice.select_locations(supplier_cd);
 			return ResponseEntity.ok(locations); // JSON으로 변환되어 전송
 		} catch (Exception e) {
@@ -359,7 +358,7 @@ public class InoutBoundController {
 			response.put("pd_total", pd_total); // 총 리스트 개수
 			response.put("page_size", page_size); // 페이징 사이즈
 		} catch (Exception e) {
-			System.out.println(e);
+			//System.out.println(e);
 		}
 
 		return response;
@@ -393,7 +392,7 @@ public class InoutBoundController {
 			response.put("sp_total", sp_total); // 총 리스트 개수
 			response.put("page_size", page_size); // 페이징 사이즈
 		} catch (Exception e) {
-			System.out.println(e);
+			//System.out.println(e);
 		}
 
 		return response;
@@ -468,7 +467,8 @@ public class InoutBoundController {
 
 	// 입고요청 등록
 	@PostMapping("inoutbound/inreq_enrollok")
-	public String inreq_enrollok(@ModelAttribute("ir") input_request_dto dto, ServletResponse res) {
+	public String inreq_enrollok(@ModelAttribute("ir") input_request_dto dto, ServletResponse res,
+			@SessionAttribute(name = "activeUserID", required = false) String operator_id) {
 		res.setContentType("text/html;charset=utf-8");
 		// System.out.println(dto.getProduct_nm());
 		// 넘어온 값 : supplier_cd, supplier_nm, product_cd, product_nm, product_qty,
@@ -477,13 +477,14 @@ public class InoutBoundController {
 		// 안 넘어와도 되는 값(쿼리문 처리 or null값): request_idx, request_dt, update_dt
 		try {
 			this.pw = res.getWriter();
+			dto.setOperator_id(operator_id);
+			
 			int result = ioservice.input_req_insert(dto);
 
 			if (result > 0) {
 				this.pw.print("<script>" + "alert('정상적으로 등록되었습니다.');" + "location.href='./inboundreq';" + "</script>");
 			}
 		} catch (Exception e) {
-			System.out.println(e);
 			this.pw.print("<script>" + "alert('데이터베이스 문제로 인해 등록되지 못하였습니다.');" + "location.href='./inboundreq';"
 					+ "</script>");
 		} finally {

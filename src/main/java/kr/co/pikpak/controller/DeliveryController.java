@@ -130,7 +130,7 @@ public class DeliveryController {
 			}	
 		}
 		catch(Exception e) {
-			System.out.println(e);
+			//System.out.println(e);
 			this.pw.print("<script>"
 					+ "alert('데이터베이스 문제로 삭제되지 못하였습니다.');"
 					+ "location.href='./deliveryenroll';"
@@ -170,8 +170,6 @@ public class DeliveryController {
 			
 		}
 		catch(Exception e) {
-			e.printStackTrace();
-			System.out.println(e);
 			this.pw.print("<script>"
 					+ "alert('데이터베이스 문제로 등록되지 못하였습니다');"
 					+ "location.href='./inreqstate';"
@@ -201,7 +199,7 @@ public class DeliveryController {
 			return ResponseEntity.ok(return_search);
 		}
 		catch(Exception e) {
-			System.out.println(e);
+			//System.out.println(e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
@@ -237,7 +235,7 @@ public class DeliveryController {
 			return ResponseEntity.ok(ir_state_search);
 		}
 		catch(Exception e) {
-			System.out.println(e);
+			//System.out.println(e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
@@ -273,7 +271,7 @@ public class DeliveryController {
 			return ResponseEntity.ok(deli_enroll_search);
 		}
 		catch(Exception e) {
-			System.out.println(e);
+			//System.out.println(e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}

@@ -92,7 +92,7 @@ export class outbound_decide {
 					});
 				})
 				.catch(function(error) {
-					console.log(error);
+					//console.log(error);
 					alert('데이터 조회에 문제가 발생하였습니다.');
 				});
 		}
@@ -198,7 +198,7 @@ export class outbound_decide {
 			}
 
 			frm_out_list.outenroll_cd.value = this.idx_data.join(",");
-			console.log(frm_out_list.outenroll_cd.value);
+			//console.log(frm_out_list.outenroll_cd.value);
 			frm_out_list.method = "post";
 			frm_out_list.action = "./delete_outenrollok";
 			frm_out_list.submit();
@@ -312,7 +312,7 @@ export class outbound_enroll {
 					});
 				})
 				.catch(function(error) {
-					console.log(error);
+					//console.log(error);
 					alert('데이터 조회에 문제가 발생하였습니다.');
 				});
 		}
@@ -434,7 +434,7 @@ export class outbound_enroll {
 				});
 			})
 			.catch(function(error) {
-				console.log(error);
+				//console.log(error);
 			});
 
 	}
