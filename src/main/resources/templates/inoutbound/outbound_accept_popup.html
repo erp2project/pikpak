@@ -26,36 +26,36 @@
 				</div>
 				<div class="modal-body">
 					<!-- 검색 바 -->
-					<form id="frm_out_enroll">
+					<form id="frm_out_accept">
 						<div class="form-group">
 							<span>※출고등록정보</span>
 							<table class="table table-bordered" style="margin-top: 20px;">
 								<tbody>
 									<tr>
-										<td style="width: 30%;">주문번호</td>
-										<td colspan="3"><input type="text" id="order_cd_ac" name="order_cd"
-											readonly="readonly">
-											<input type="hidden" id="outenroll_cd_ac">
+										<td style="width: 15%;">주문번호</td>
+										<td colspan="5"><input type="text" id="order_cd_ac"
+											readonly="readonly" name="order_cd">
+											<input type="hidden" id="outenroll_cd_ac" name="outenroll_cd">
 											</td>
 									</tr>
 									<tr>
-										<td style="width: 30%;">상품코드</td>
-										<td colspan="3"><input type="text" id="product_cd_ac"
-											name="product_cd" readonly="readonly"></td>
+										<td style="width: 15%;">상품코드</td>
+										<td colspan="5"><input type="text" id="product_cd_ac"
+											 readonly="readonly"></td>
 									</tr>
 									<tr>
-										<td style="width: 30%;">상품명</td>
-										<td colspan="3"><input type="text" id="product_nm_ac"
-											name="product_nm" readonly="readonly"></td>
+										<td style="width: 15%;">상품명</td>
+										<td colspan="5"><input type="text" id="product_nm_ac"
+											 readonly="readonly"></td>
 									</tr>
 									<tr>
-										<td style="width: 30%;">출고예정수량</td>
-										<td colspan="3"><input type="text" id="total_qty_ac"
+										<td style="width: 15%;">출고예정수량</td>
+										<td colspan="5"><input type="text" id="total_qty_ac"
 											readonly="readonly"></td>
 									</tr>
 									<tr>
-										<td style="width: 30%;">출고예정일자</td>
-										<td colspan="3">
+										<td style="width: 15%;">출고예정일자</td>
+										<td colspan="5">
 											<div style="display: flex; align-items: center;">
 												<input type="date" class="form-control" style="width: 40%;"
 													id="expect_dt_ac" readonly="readonly">&nbsp;&nbsp;
@@ -63,21 +63,12 @@
 
 										</td>
 									</tr>
-									<tr>
-										<td style="width: 30%;">가출고 위치</td>
-										<td colspan="3"><input type="text" id="exoutgoing_area_ac"
-											readonly="readonly"></td>
-									</tr>	
+									
 								</tbody>
 								
 								<tbody style="border:10px;" id="modal_tbody">
 								<tr> <!-- 여기서 pickings 개수만큼 반복 -->
-										<td style="width: 30%;">로트번호</td>
-										<td><input type="text" id="order_qty_out"
-											readonly="readonly"></td>
-											<td style="width: 30%;">수량</td>
-										<td><input type="text" id="order_qty_out"
-											readonly="readonly"></td>
+										
 									</tr>
 								
 								</tbody>

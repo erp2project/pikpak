@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import jakarta.servlet.ServletResponse;
 import kr.co.pikpak.dto.deliver_enroll_dto;
@@ -34,7 +37,8 @@ public class DeliveryController {
 	//납품등록에서 배송 버튼 클릭 시 가입고 등록
 	@PostMapping("delivery/insert_exreceiving")
 	public String insert_exreceiving(ServletResponse res,
-			@ModelAttribute("exreceiving") ex_receiving_dto dto) {
+			@ModelAttribute("exreceiving") ex_receiving_dto dto,
+			@SessionAttribute(name = "activeUserID", required = false) String operator_id) {
 		//넘어오는 값 : request_cd, deliver_cd, supplier_cd, product_cd, exreceiving_qty, exreceiving_size, exreceiving_area, departure_dt(배송일시), make_dt
 		//만들어야하는 값 : exreceiving_cd, exreceiving_st, exreceiving_id , operator_id, operator_nm
 		//DB에서 들어가는 값 or null 값 : exreceiving_idx, update_dt, update_id, update_nm 
@@ -42,6 +46,11 @@ public class DeliveryController {
 		
 		try {
 			this.pw = res.getWriter();
+			
+			//사용자 이름 세션
+			//제조사 측 납품등록이자, 물류회사측 가입고 목록에 보일 것
+			dto.setOperator_id(operator_id);
+			
 			int result = delservice.insert_ex_receiving(dto);
 			
 			if(result > 0) {
@@ -57,7 +66,6 @@ public class DeliveryController {
 					String request_cd = dto.getRequest_cd();
 					
 					int update = delservice.update_finished_inreq(request_cd);
-					//프론트로 넘겨서 사용자에게 해당 관련 요청사항이 완료되었다고 알려줄지 고민
 				}
 			}
 			
@@ -78,6 +86,7 @@ public class DeliveryController {
 	
 	
 	//입고요청 거절 => 세션가지고 와
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@PostMapping("/reject_deliverylist")
 	public String reject_deliverylist(ServletResponse res, 
 			@RequestParam(defaultValue = "", required = false) String request_idx) {
@@ -98,7 +107,7 @@ public class DeliveryController {
 	}
 	
 	
-	//납품등록 삭제 => 세션가지고 와
+	//납품등록 삭제 => 세션가지고 와?
 	@PostMapping("/delivery/delete_deliveryok")
 	public String delete_deliveryok(ServletResponse res,
 			@RequestParam(defaultValue = "", required = false) String del_each_ck[],
@@ -137,14 +146,19 @@ public class DeliveryController {
 	
 	//납품등록
 	@PostMapping("/delivery/delivery_enrollok")
-	public String delivery_enrollok(ServletResponse res, @ModelAttribute("deliver") deliver_enroll_dto dto) {
-		//프론트에서 넘어오는 값 : request_cd, prodcut_cd, product_nm, deliver_qty, make_dt, expect_dt, deliver_size, deliver_area,supplier_cd
+	public String delivery_enrollok(ServletResponse res, @ModelAttribute("deliver") deliver_enroll_dto dto,
+			@SessionAttribute(name = "activeUserID", required = false) String operator_id) {
+		//프론트에서 넘어오는 값 : request_cd, prodcut_cd, product_nm, deliver_qty, make_dt, expect_dt, deliver_size,supplier_cd =>deliver_area 없앨 예정(일단 null)
 		//여기서 넣어야하는 값 : deliver_cd, deliver_st, operator_nm, operator_id
 		//쿼리문에서 넣는 값 or null 값 : deliver_idx, deliver_dt, update_id, update_nm, update_dt
 		res.setContentType("text/html;charset=utf-8");
 		
 		try {
 			this.pw = res.getWriter();
+			
+			//세션 id
+			dto.setOperator_id(operator_id);
+		
 			int result = delservice.insert_deliver_enroll(dto);
 			
 			if(result > 0) {
@@ -170,53 +184,104 @@ public class DeliveryController {
 		return null;
 	}
 	
-	//반송현황
-	@GetMapping("delivery/returnstate")
-	public String returnstate(Model m) {
-		//세션에서 회사 정보 가져왔다고 가정
-		String supplier_cd = "C009";
+	//반송현황 서치
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@PostMapping("/returnstate_search")
+	public ResponseEntity<List<deliver_return_joined_dto>> returnstate_search(
+			@RequestBody Map<String, Object> data_arr,
+			@SessionAttribute(name = "activeUserID", required = false) String trader_id){
 		
+		//해당 id가 어디 소속인지 가져와야함
+		String supplier_cd = delservice.select_current_supplier(trader_id);
+		
+		
+		data_arr.put("supplier_cd", supplier_cd);
 		try {
-			List<deliver_return_joined_dto> d_return = delservice.select_return_joined(supplier_cd);
-			m.addAttribute("d_return",d_return);
+			List<deliver_return_joined_dto> return_search = delservice.select_return_joined(data_arr);
+			return ResponseEntity.ok(return_search);
 		}
 		catch(Exception e) {
 			System.out.println(e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
+	}
+	
+	
+	
+	//반송현황
+	@GetMapping("delivery/returnstate")
+	public String returnstate() {
+		
 		return null;
 	}
+	
+	//입고요청현황 리스트 검색
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@PostMapping("/inreqstate_search")
+	public ResponseEntity<List<input_request_state_dto>> inreqstate_search(
+			@RequestBody Map<String, Object> data_arr,
+			@SessionAttribute(name = "activeUserID", required = false) String trader_id) {
+		List<input_request_state_dto> ir_state_search = null;
+		
+		//세션에서 회사정보
+		String supplier_cd = delservice.select_current_supplier(trader_id);
+
+		try {
+			//data_arr : start_date, end_date, request_st, product_cd
+			
+			//회사정보를 넣어주기
+			data_arr.put("supplier_cd", supplier_cd);
+			
+			//쿼리 실행
+			ir_state_search = delservice.select_inreq_deliv(data_arr);
+			return ResponseEntity.ok(ir_state_search);
+		}
+		catch(Exception e) {
+			System.out.println(e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+	
+	
 	
 	//입고요청현황
 	@GetMapping("/delivery/inreqstate")
-	public String inreqstate(Model m) {
-		//세션에서 회사정보를 가져왔다고 가정 -> 지금은 supplier_cd 사용
-		//String supplier_nm = "LG전자";
-		String supplier_cd = "C009";
-		try {
-			List<input_request_state_dto> ir_list = delservice.select_inreq_deliv(supplier_cd);
-			//System.out.println(ir_list.size());
-			m.addAttribute("ir_list", ir_list);
-		}	
-		catch(Exception e) {
-			System.out.println(e);
-		}
+	public String inreqstate() {
+		
 		return null;
 	}
 	
-	//납품 등록
-	@GetMapping("/delivery/deliveryenroll")
-	public String deliveryenroll(Model m) {
-		//여기도 세션에서 가지고 와야지
-		String supplier_cd = "C009";
+	//납품등록 배송확정 페이지 리스트 동적 생성
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@PostMapping("/deliverenroll_search")
+	public ResponseEntity<List<deliver_enroll_dto>> deliverenroll_search(@RequestBody Map<String, Object> data_arr,
+			@SessionAttribute(name = "activeUserID", required = false) String trader_id) {
+		//배열 파싱해서 잘 받으려면 RequestBody 필수..
+		List<deliver_enroll_dto> deli_enroll_search = null;
+		
+		//세션 id로 회사코드 검색
+		String supplier_cd = delservice.select_current_supplier(trader_id);
+		
 		try {
-			List<deliver_enroll_dto> deliver_list = delservice.select_deliver_enroll(supplier_cd);
-			System.out.println(deliver_list.get(0).getDeliver_cd());
-			//System.out.println(deliver_list.get(0).getProduct_nm());
-			m.addAttribute("deliver_list",deliver_list);
+			//data_arr : start_date, end_date, deliver_st, product_cd
+			
+			//회사정보를 넣어주기
+			data_arr.put("supplier_cd", supplier_cd);
+			
+			//쿼리 실행
+			deli_enroll_search = delservice.select_deliver_enroll(data_arr);
+			return ResponseEntity.ok(deli_enroll_search);
 		}
 		catch(Exception e) {
 			System.out.println(e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
+	}
+	
+	
+	//납품 등록
+	@GetMapping("/delivery/deliveryenroll")
+	public String deliveryenroll() {
 		
 		return null;
 	}

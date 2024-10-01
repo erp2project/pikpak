@@ -16,12 +16,16 @@
 <link rel="stylesheet"
 	href="/resources/assets/vendor/chartist/css/chartist-custom.css">
 <!-- MAIN CSS -->
-<link rel="stylesheet" href="../resources/assets/css/main.css">
-<link rel="stylesheet" href="../resources/assets/css/demo.css">
-<link rel="stylesheet"
-	href="/resources/css/inoutbound/inboundreq_main.css">
-<link rel="stylesheet" href="../resources/css/inoutbound/pd_search.css">
+<link rel="stylesheet" href="/resources/assets/css/main.css">
+<link rel="stylesheet" href="/resources/assets/css/demo.css">
+<link rel="stylesheet" href="/resources/css/inoutbound/inboundreq_main.css">
+<link rel="stylesheet" href="/resources/css/inoutbound/pd_search.css">
 <link href="/resources/css/inoutbound/add_popup.css" rel="stylesheet">
+
+<!-- nav 두 개 추가 -->
+<link rel="stylesheet" href="/resources/css/shared/custom_style.css">
+<link rel="stylesheet" href="/resources/css/shared/custom_components_style.css">
+
 <!-- deliver_main 툴팁 위한 css -->
 <link href="/resources/css/delivery/deliveryenroll_main.css" rel="stylesheet">
 
@@ -41,124 +45,26 @@
 	<!-- WRAPPER -->
 	<div id="wrapper">
 		<!-- 최상단 -->
-		<nav class="navbar navbar-default navbar-fixed-top">
-			<div class="brand" style="height: 30px;">
-				<a href="index.html"> <span class="fa fa-paper-plane-o"
-					style="font-size: 23px; margin-right: 5px;"></span> <span
-					style="font-size: 23px;">PikPak</span>
-				</a>
-			</div>
-			<div class="container-fluid">
-				<div class="navbar-btn">
-					<button type="button" class="btn-toggle-fullwidth">
-						<i class="lnr lnr-arrow-left-circle"></i>
-					</button>
-				</div>
-
-				<div class="navbar-btn navbar-btn-right">
-					<span style="vertical-align: -3px;"> <i class="lnr lnr-user"></i>
-						<span>관리자님 환영합니다.</span>
-					</span> <a class="btn btn-success update-pro" href=""><span>로그아웃</span></a>
-				</div>
-			</div>
-		</nav>
+		<nav th:replace="~{/shared/components.html :: top}"></nav>
 		<!-- 최상단 끝 -->
 		<!-- 왼쪽 SIDEBAR -->
-		<div id="sidebar-nav" class="sidebar">
-			<div class="sidebar-scroll">
-				<nav>
-					<ul class="nav">
-						<li>
-							<a href="#subPages" data-toggle="collapse" class="collapsed active">
-							<i class="lnr lnr-file-empty"></i> <span>기준정보 관리</span> 
-							<i class="icon-submenu lnr lnr-chevron-left"></i>
-							</a>
-							<div id="subPages" class="collapse ">
-								<ul class="nav">
-									<li><a href="" class="">거래처 관리</a></li>
-									<li><a href="" class="">품목 관리</a></li>
-								</ul>
-							</div>
-						</li>
-						<li>
-							<a href="#subPages2" data-toggle="collapse" class="collapsed">
-							<i class="lnr lnr-dice"></i> <span>주문 | 반품</span> 
-							<i class="icon-submenu lnr lnr-chevron-left"></i>
-							</a>
-							<div id="subPages2" class="collapse ">
-								<ul class="nav">
-									<li><a href="" class="">주문 관리</a></li>
-									<li><a href="" class="">반품 관리</a></li>
-								</ul>
-							</div>
-						</li>
-						<li>
-							<a href="#subPages3" data-toggle="collapse" class="collapsed">
-							<i class="lnr lnr-inbox"></i> <span>재고</span> 
-							<i class="icon-submenu lnr lnr-chevron-left"></i>
-							</a>
-							<div id="subPages3" class="collapse ">
-								<ul class="nav">
-									<li><a href="" class="">재고 현황</a></li>
-									<li><a href="" class="">창고 관리</a></li>
-								</ul>
-							</div>
-						</li>
-						<li>
-							<a href="#subPages4" data-toggle="collapse" class="collapsed">
-							<i class="lnr lnr-download"></i> <span>입고 | 출고</span> 
-							<i class="icon-submenu lnr lnr-chevron-left"></i>
-							</a>
-							<div id="subPages4" class="collapse ">
-								<ul class="nav">
-									<li><a href="" class="">입고 관리</a></li>
-									<li><a href="" class="">출고 관리</a></li>
-								</ul>
-							</div>
-						</li>
-						<li>
-							<a href="#subPages5" data-toggle="collapse" class="collapsed">
-							<i class="lnr lnr-chart-bars"></i> <span>납품</span> 
-							<i class="icon-submenu lnr lnr-chevron-left"></i>
-							</a>
-							<div id="subPages5" class="collapse ">
-								<ul class="nav">
-									<li><a href="" class="">납품 관리</a></li>
-								</ul>
-							</div>
-						</li>
-						<li>
-							<a href="#subPages6" data-toggle="collapse" class="collapsed">
-							<i class="lnr lnr-cog"></i> <span>사이트 설정</span> 
-							<i class="icon-submenu lnr lnr-chevron-left"></i>
-							</a>
-							<div id="subPages6" class="collapse ">
-								<ul class="nav">
-									<li><a href="" class="">재고기록 관리</a></li>
-									<li><a href="" class="">인사 관리</a></li>
-								</ul>
-							</div>
-						</li>
-					</ul>
-				</nav>
-			</div>
-		</div>
+		<div th:replace="~{/shared/components.html :: sidebar}"></div>
 		<!-- 왼쪽 SIDEBAR -->
 
 		<!-- MAIN -->
 		<section
 			th:replace="~{delivery/returnstate_main :: main_returnstate}"></section>
 		<!-- 모달 -->	
-		<!--
-		<section th:replace="~{delivery/deliver_manage_popup :: deliver_mng_popup}"></section> 
-		<section th:replace="~{inoutbound/add_exreceiving_popup :: add_exrecv_popup}"></section>
-		-->
+		
+		<section
+			th:replace="~{inoutbound/product_search :: product_search_popup}"></section>
+		
 		<!-- MAIN 끝-->
 
 	</div>
 	<div class="clearfix"></div>
 	<!-- footer 시작 -->
-	<footer> </footer>
+	<footer th:replace="~{/shared/components.html :: footer}"></footer>
 	<!-- footer 끝 -->
 
 	<!-- END WRAPPER -->
@@ -171,10 +77,75 @@
 		src="../resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
 	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
 	<script src="../resources/assets/scripts/klorofil-common.js"></script>
+<script>
+$(document).ready(
+	function() {	
+		
+		// 상품코드/상품명 모달 검색 버튼 클릭 시
+		$("#pd_search_rs").on("click", function() {
+			$("#productModal").modal('show');
 
+			// 모달이 열릴 때 첫 번째 페이지 로드
+			$('#productModal').on('shown.bs.modal', function() {
+				new product_search_modal().pd_paging(1); // 페이지 1을 로드
+			});
+		});
+	
+	}
+);
+					
+</script>
 </body>
 <script type="module">
-import {delivery_page_move, delivery_list} from "../resources/js/deliver/deliveryenroll_main.js?v=3";
+import {delivery_page_move, delivery_list, returnstate_list} from "../resources/js/deliver/deliveryenroll_main.js?v=4";
+import {product_search_modal} from "../resources/js/inoutbound/inboundreq_main.js?v=6";
+
+/* 페이지 처음 로드 */
+	document.addEventListener('DOMContentLoaded', function() {
+		const today = new Date();
+const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+const nextWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7); // 오늘에서 7일 후
+
+const formatDate = (date) => {
+    let d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+};
+
+document.getElementById("return_start_dt").value = formatDate(lastWeek);
+document.getElementById("return_end_dt").value = formatDate(nextWeek); // end_dt에 7일 후 날짜 할당
+		new returnstate_list().return_list_search();
+	});	
+
+
+/* 상품 찾기 모달 */
+	window.product_search_modal = product_search_modal; //jquery에서 사용할 수 있도록
+
+	document.querySelector("#mod_pd_search").addEventListener("click",function(){
+		new product_search_modal().pd_paging(1);
+	});
+
+
+//초기화 버튼 눌렀을 때
+document.querySelector("#rtstate_reset").addEventListener("click",function(){
+		location.reload();
+});
+
+
+//조회버튼 눌렀을 때 
+document.querySelector("#rtstate_search").addEventListener("click",function(){
+		new returnstate_list().return_list_search();
+});
+
+
 
 
 /* 페이지 이동 */

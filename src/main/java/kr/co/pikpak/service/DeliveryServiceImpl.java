@@ -20,10 +20,33 @@ public class DeliveryServiceImpl implements DeliveryService{
 	@Autowired
 	DeliveryRepo delrepo;
 	
+	@Override
+	public String select_current_supplier(String trader_id) {
+		String supplier_cd = delrepo.select_current_supplier(trader_id);
+		return supplier_cd;
+	}
+	
+	//서버시간
+	@Override
+	public String get_time_deli() {
+		String server_time = delrepo.get_time_deli();
+		return server_time;
+	}
+	
 	//반송현황
 	@Override
-	public List<deliver_return_joined_dto> select_return_joined(String supplier_cd) {
-		List<deliver_return_joined_dto> d_return = delrepo.select_return_joined(supplier_cd);
+	public List<deliver_return_joined_dto> select_return_joined(Map<String, Object> data_arr) {
+		if((data_arr.get("start_date") != "") && (data_arr.get("end_date") != "")) {
+			String startdt = (String) data_arr.get("start_date");
+			startdt += " 00:00:00";
+			data_arr.put("start_date", startdt); 
+			
+			String enddt = (String) data_arr.get("end_date");
+			enddt += " 23:59:59";
+			data_arr.put("end_date", enddt);
+		}
+
+		List<deliver_return_joined_dto> d_return = delrepo.select_return_joined(data_arr);
 		return d_return;
 	}
 	
@@ -74,12 +97,11 @@ public class DeliveryServiceImpl implements DeliveryService{
 		//랜덤 고유번호 넣기
 		dto.setExreceiving_cd(this.make_exreceiving_code());
 		
-		//사용자 이름 세션에서 가져온다고 가정
-		String operator_id = "ad_leehw_1234"; //제조사 측 납품등록이자, 물류회사측 가입고 목록에 보일 것
-		dto.setOperator_id(operator_id);
-		
 		//상태 기본 데이터
 		dto.setExreceiving_st("대기");
+		
+		//타입 기본 데이터
+		dto.setExreceiving_type("납품");
 		
 		int final_result = 0;
 		
@@ -89,7 +111,7 @@ public class DeliveryServiceImpl implements DeliveryService{
 		if(result > 0) {
 			try {
 				
-				int update_delienroll = this.deliver_update_nm(dto.getDeparture_dt(), operator_id, dto.getDeliver_cd());
+				int update_delienroll = this.deliver_update_nm(dto.getDeparture_dt(), dto.getOperator_id(), dto.getDeliver_cd());
 				
 				
 				//납품등록 업데이트도 성공시
@@ -129,8 +151,18 @@ public class DeliveryServiceImpl implements DeliveryService{
 	
 	//납품등록 현황
 	@Override
-	public List<deliver_enroll_dto> select_deliver_enroll(String supplier_cd) {
-		List<deliver_enroll_dto> deliver_list = delrepo.select_deliver_enroll(supplier_cd);
+	public List<deliver_enroll_dto> select_deliver_enroll(Map<String, Object> data_arr) {
+		if((data_arr.get("start_date") != "") && (data_arr.get("end_date") != "")) {
+			String startdt = (String) data_arr.get("start_date");
+			startdt += " 00:00:00";
+			data_arr.put("start_date", startdt); 
+			
+			String enddt = (String) data_arr.get("end_date");
+			enddt += " 23:59:59";
+			data_arr.put("end_date", enddt);
+		}
+		
+		List<deliver_enroll_dto> deliver_list = delrepo.select_deliver_enroll(data_arr);
 		return deliver_list;
 	}
 	
@@ -145,30 +177,33 @@ public class DeliveryServiceImpl implements DeliveryService{
 		dto.setDeliver_cd(this.make_delienrollcode());
 		
 		dto.setDeliver_st("대기");
-		
-		//세션에서 현재 회원 정보를 가져왔다고 가정
-		String operator_id = "ad_leehw_1234";
-		
-		dto.setOperator_id(operator_id);
-	
-	
-		
+				
 		int result = delrepo.insert_deliver_enroll(dto);
 		return result;
 	}
 	
 	//현재 입고요청된 리스트 특정 회사에 대해서 가져오기
 	@Override
-	public List<input_request_state_dto> select_inreq_deliv(String supplier_cd) {
-		List<input_request_state_dto> ir_list = delrepo.select_inreq_deliv(supplier_cd);
+	public List<input_request_state_dto> select_inreq_deliv(Map<String, Object> data_arr) { //String supplier_cd
+		if((data_arr.get("start_date") != "") && (data_arr.get("end_date") != "")) {
+			String startdt = (String) data_arr.get("start_date");
+			startdt += " 00:00:00";
+			data_arr.put("start_date", startdt); 
+			
+			String enddt = (String) data_arr.get("end_date");
+			enddt += " 23:59:59";
+			data_arr.put("end_date", enddt);
+		}
+		
+		List<input_request_state_dto> ir_list = delrepo.select_inreq_deliv(data_arr);
 		return ir_list;
 	}
 
 	//납품등록 데이터 등록시 납품등록코드 랜덤생성
 	public String make_delienrollcode() {
 	//서버 시간
-	//String server_time = this.get_time();
-		
+	String server_time = this.get_time_deli();
+	
 	//랜덤숫자 4개 생성
 	int w = 0;
 	String randnum = "";
@@ -179,7 +214,7 @@ public class DeliveryServiceImpl implements DeliveryService{
 		w++;
 	}
 			
-	String code = "DE "+ "-" + randnum;
+	String code = "DE-"+ server_time + randnum;
 			
 	return code;
 	}
@@ -187,7 +222,7 @@ public class DeliveryServiceImpl implements DeliveryService{
 	//가입고 등록시 가입고코드 랜덤생성
 	public String make_exreceiving_code() {
 		//서버 시간
-		//String server_time = this.get_time();
+		String server_time = this.get_time_deli();
 			
 		//랜덤숫자 4개 생성
 		int w = 0;
@@ -199,7 +234,7 @@ public class DeliveryServiceImpl implements DeliveryService{
 			w++;
 		}
 				
-		String code = "ER "+ "-" + randnum;
+		String code = "ER-"+ server_time + randnum;
 				
 		return code;
 	}

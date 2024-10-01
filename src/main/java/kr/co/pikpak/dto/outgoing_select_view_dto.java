@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class outgoing_select_view_dto {
-	String wh_warehouse_idx, receiving_cd, product_cd, product_nm, receiving_qty, lot_no, location_cd, product_qty;
+	String wh_warehouse_idx, receiving_cd, product_cd, product_nm, lot_no, location_cd, product_qty,is_deleted;
 }

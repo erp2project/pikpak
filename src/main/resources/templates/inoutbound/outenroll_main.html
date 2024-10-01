@@ -25,9 +25,8 @@
 								class="menu-item" id="go_outstate">출고현황</span>
 						</p>
 						<span style="float: right; height: 40px;">
-							<button type="button" class="btn btn-success" id="list_reset">초기화</button>
-							<button type="button" class="btn btn-danger">EXCEL</button>
-							<button type="button" class="btn btn-warning" id="list_search">조회</button>
+							<button type="button" class="btn btn-success" id="outen_list_reset">초기화</button>
+							<button type="button" class="btn btn-warning" id="outen_list_search">조회</button>
 						</span>
 						<p style="font-size: 12px; height: 25px; line-height: 30px;">※
 							조회옵션</p>
@@ -38,28 +37,41 @@
 								<tr>
 									<td style="width: 10%; height: 34px; line-height: 34px;">
 									<select class="form-control"
-										style="width: 90%; float: left; margin-right: 5px;">
-											<option value="start_date">착수일자</option>
-											<option value="end_date">납기일자</option>
+										style="width: 90%; float: left; margin-right: 5px;" id="outen_date_type">
+											<option value="착수일자">착수일자</option>
+											<option value="납기일자">납기일자</option>
 									</select>
 									<td style="width: 20%; line-height: 34px;">
 										<div style="display: flex; align-items: center;">
 											<input type="date" class="form-control" style="width: 40%;"
-												id="start_date">&nbsp;&nbsp; ~ &nbsp;&nbsp; <input
+												id="outen_start_dt">&nbsp;&nbsp; ~ &nbsp;&nbsp; <input
 												type="date" class="form-control" style="width: 40%;"
-												id="end_date">
+												id="outen_end_dt">
 										</div>
 									</td>
 									
-									<td style="width: 7%; height: 34px; line-height: 34px;">상품코드/명</td>
-									<td style="width: 18%; line-height: 34px;">
+									<td style="width: 10%; height: 34px; line-height: 34px;">상품코드/명</td>
+									<td style="width: 30%; line-height: 34px;">
 										<div style="display: flex; align-items: center;">
 											<input type="text" class="form-control" style="width: 40%;"
 												id="search_pd_cd" readonly="readonly">&nbsp;&nbsp; <input
 												type="text" class="form-control" style="width: 40%;"
 												id="search_pd_nm" readonly="readonly">&nbsp;&nbsp;
-											<button class="btn btn-primary" type="button" id="pd_search">검색</button>
+											<button class="btn btn-primary" type="button" id="pd_search_oe">검색</button>
 										</div>
+									</td>
+									
+									<td style="width: 10%; height: 34px; line-height: 34px;">
+									상태
+									</td>
+								
+									<td style="width: 20%; line-height: 34px;">
+										<select class="form-control"
+										style="width: 90%; float: left; margin-right: 5px;" id="outen_state">
+											<option value="">상태 선택</option>
+											<option value="대기">대기</option>
+											<option value="등록">등록</option>
+									</select>
 									</td>
 								</tr>
 							</tbody>
@@ -82,7 +94,7 @@
 											<th style="text-align: center; width: 8%;">상품수량</th>
 											<th style="text-align: center; width: 13%;">착수일자</th>
 											<th style="text-align: center; width: 13%;">납기일자</th>
-											<td style="text-align: center; width: 6%;">상태</td>
+											<th style="text-align: center; width: 6%;">상태</th>
 											<th style="text-align: center; width: 11%;">출고</th>
 										</tr>
 									</thead>
@@ -90,13 +102,13 @@
 							</div>
 							<div class="panel-body" style="height: 400px; overflow-y: auto;">
 								<table class="table table-hover">
-									<tbody id="ir_tbody">
+									<tbody id="oe_tbody">
 										<!-- 
 										<tr>
 											<td colspan="11" style="text-align: center;">조회된 정보가
 												없습니다.</td>
 										</tr>
-										 -->
+										
 										<tr th:each="order, status : ${orderlist}">
 											<td style="text-align: center; width: 4%;"
 											th:text="${status.count}"></td>
@@ -112,9 +124,10 @@
 												th:text="${order.getStart_dt()}"></td>
 											<td style="text-align: center; width: 13%;"
 												th:text="${order.getDue_dt()}"></td>
-											<td style="text-align: center; width: 6%;"></td>
+											<td style="text-align: center; width: 6%;"
+											th:text="${order.getAcceptedorder_st()}"></td>
 											<td style="text-align: center; width: 11%;">
-												<button class="btn btn-primary outbound_enroll"
+												<button class="btn btn-primary outbound_enroll2"
 													th:data-order-cd="${order.getOrder_cd()}"
 													th:data-product-cd="${order.getProduct_cd()}"
 													th:data-product-nm="${order.getProduct_nm()}"
@@ -125,6 +138,7 @@
 													type="button">출고</button>
 											</td>
 										</tr>
+										 -->
 									</tbody>
 								</table>
 							</div>
