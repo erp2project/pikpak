@@ -25,27 +25,31 @@
 					<!-- Box for content -->
 					<div class="popup-box">
 						<form id="return_frm">
-							<div style="font-size: 13px; text-align: right;">*반품 신청 등록시
-								수정이 불가합니다.</div>
+							<a style="font-size: 13px; text-align: center;">*한 출고 코드에 한해 한 번의 반품 신청만 가능하며, 반품 신청 등록시
+								수정이 불가합니다.</a>
 							<!-- 반품자 정보 Section -->
 							<h2 class="box-title">반품자 정보</h2>
 							<div class="box-content">
 								<div class="input-row">
 									<div class="input-group">
-										<label for="customerName">이름:</label> 홍길동
+										<label for="customerName">이름:</label>
+										<c th:text="${member_list[0].user_nm}"></c>
 									</div>
 									<div class="input-group">
-										<label for="customerId">아이디:</label> <a>ve_parksh_1111</a> <input
-											type="hidden" name="return_id" value="ve_parksh_1111">
+										<label for="customerId">아이디:</label>
+										<c th:text="${activeUserID}"></c> 
+										<input type="hidden" name="return_id" th:value="${activeUserID}">
 									</div>
 								</div>
 								<div class="input-row">
 									<div class="input-group">
-										<label for="customerAffiliation">소속:</label> <a>PikPak</a> <input
-											type="hidden" name="vendor_nm" value="PikPak">
+										<label for="customerAffiliation">소속:</label>
+										<c th:text="${member_list[0].user_company}"></c>
+										<input type="hidden" name="vendor_nm" th:value="${member_list[0].user_company}">
 									</div>
 									<div class="input-group">
-										<label for="customerPhone">전화번호:</label> 010-0000-0000
+										<label for="customerPhone">전화번호:</label>
+										<c th:text="${member_list[0].user_tel}"></c>
 									</div>
 								</div>
 							</div>
@@ -90,7 +94,8 @@
 									</div>
 									<div class="input-group">
 										<label for="productPrice">출고 가격:</label> <input type="text"
-											id="productPrice" value="" readonly />원
+											id="v_productPrice" value="" readonly />원
+											<input type="hidden" id="productPrice" value="">
 									</div>
 								</div>
 								<div class="input-row">
@@ -100,7 +105,8 @@
 									</div>
 									<div class="input-group">
 										<label for="totalPrice">반품 가격:</label> <input type="text"
-											id="totalPrice" name="return_price" value="" readonly />원
+											id="v_totalPrice" value="" readonly />원
+											<input type="hidden" id="totalPrice" name="return_price" value="">
 									</div>
 								</div>
 								<br>

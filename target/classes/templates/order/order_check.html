@@ -25,10 +25,10 @@
 						<hr class="popup-divider">
 						<!-- 주문 상태, 코드 -->
 						<div class="order-container">
-							<span style="font-size: 13px;">주문 상태 : <a
-								th:text="${order_cklist.process_st}"></a></span> <span
-								style="font-size: 13px;">주문 코드 : <a
-								th:text="${order_cklist.order_cd}"></a></span>
+							<span style="font-size: 13px;">주문 상태 : <c
+								th:text="${order_cklist.process_st}"></c></span> <span
+								style="font-size: 13px;">주문 코드 : <c
+								th:text="${order_cklist.order_cd}"></c></span>
 						</div>
 						<!-- Box for content -->
 						<div class="popup-box">
@@ -37,23 +37,23 @@
 							<div class="box-content">
 								<div class="input-row">
 									<div class="input-group">
-										<label for="customerName">이름:</label> <a
-											th:text="${order_cklist.user_nm}"></a>
+										<label for="customerName">이름:</label> <c
+											th:text="${order_cklist.user_nm}"></c>
 									</div>
 									<div class="input-group">
-										<label for="customerId">아이디:</label> <a
-											th:text="${order_cklist.order_id}"></a>
+										<label for="customerId">아이디:</label> <c
+											th:text="${order_cklist.order_id}"></c>
 									</div>
 								</div>
 								<div class="input-row">
 									<div class="input-group">
 										<label for="customerAffiliation">소속:</label>
 										<!-- 수정 필요함 -->
-										<a th:text="${order_cklist.user_company}"></a>
+										<c th:text="${order_cklist.user_company}"></c>
 									</div>
 									<div class="input-group">
-										<label for="customerPhone">전화번호:</label> <a
-											th:text="${order_cklist.user_tel}"></a>
+										<label for="customerPhone">전화번호:</label> <c
+											th:text="${order_cklist.user_tel}"></c>
 									</div>
 								</div>
 							</div>
@@ -108,8 +108,10 @@
 										<div class="input-group">
 											<label for="productPrice">입고 가격:</label> <input type="text"
 												th:data-index="${order_cklist.order_idx}"
-												class="productPrice" th:value="${order_cklist.purchase_pr}"
+												class="v_productPrice" th:value="${#numbers.formatInteger(order_cklist.purchase_pr, 3, 'COMMA')}"
 												readonly />원
+												<input type="hidden" th:data-index="${order_cklist.order_idx}"
+												class="productPrice" th:value="${order_cklist.purchase_pr}">
 										</div>
 									</div>
 									<div class="input-row">
@@ -120,8 +122,10 @@
 										</div>
 										<div class="input-group">
 											<label for="totalPrice">총 가격:</label> <input type="text"
-												th:data-index="${order_cklist.order_idx}" class="totalPrice"
-												th:value="${order_cklist.order_price}" readonly />원
+												th:data-index="${order_cklist.order_idx}" class="v_totalPrice"
+												th:value="${#numbers.formatInteger(order_cklist.order_price, 3, 'COMMA')}" readonly />원
+												<input type="hidden" th:data-index="${order_cklist.order_idx}" class="totalPrice"
+												th:value="${order_cklist.order_price}">
 										</div>
 									</div>
 									<div class="input-row">
@@ -138,40 +142,19 @@
 									</div>
 									<div class="input-row">
 										<div class="input-group">
-											<label for="orderDate">주문 날짜:</label> <a
-												th:text="${order_cklist.order_dt}"></a>
+											<label for="orderDate">주문 날짜:</label> <c
+												th:text="${order_cklist.order_dt}"></c>
 										</div>
 									</div>
 									<!-- 수정 내역 존재 -->
-									<div th:if="${order_cklist.order_dt != order_cklist.update_dt}">
-										<div class="input-row">
-											<div class="input-group">
-												<label for="modifyDate">수정 날짜:</label> <a
-													th:text="${order_cklist.update_dt}"></a>
-											</div>
-											<div class="input-group">
-												<label for="modifyName">수정자:</label> <a
-													th:text="${order_cklist.update_by}"></a>
-											</div>
+									<div class="input-row" th:if="${order_cklist.order_dt != order_cklist.update_dt}">
+										<div class="input-group">
+											<label for="modifyDate">수정 날짜:</label> <c
+												th:text="${order_cklist.update_dt}"></c>
 										</div>
-									</div>
-									<div class="input-row">
-										<div class="input-group-text">
-											<label for="approval_log">비고란: </label>
-											<div th:if="${order_cklist.approval_log != ''}">
-												<a th:text="${order_cklist.approval_log}"></a>
-											</div>
-											<div
-												th:if="${order_cklist.approval_log == '' || order_cklist.approval_log == null}">
-												없음</div>
-										</div>
-									</div>
-									<div th:if="${order_cklist.process_st == '완료'}">
-										<div class="input-row">
-											<div class="input-group-text">
-												<label for="approval_dt">완료일자: </label> <a
-													th:text="${order_cklist.approval_dt}"></a>
-											</div>
+										<div class="input-group">
+											<label for="modifyName">수정자:</label> <c
+												th:text="${order_cklist.update_by}"></c>
 										</div>
 									</div>
 								</div>
@@ -183,92 +166,88 @@
 								<div class="box-content">
 									<div class="input-row">
 										<div class="input-group">
-											<label for="productCode">상품코드:</label> <a
-												th:text="${order_cklist.product_cd}"></a>
+											<label for="productCode">상품코드:</label> <c
+												th:text="${order_cklist.product_cd}"></c>
 										</div>
 									</div>
 									<div class="input-row">
 										<div class="input-group">
-											<label for="productName">상품명:</label> <a
-												th:text="${order_cklist.product_nm}"></a>
+											<label for="productName">상품명:</label> <c
+												th:text="${order_cklist.product_nm}"></c>
 										</div>
 									</div>
 									<div class="input-row">
 										<div class="input-group">
-											<label for="productManufacturer">제조사:</label> <a
-												th:text="${order_cklist.supplier_nm}"></a>
+											<label for="productManufacturer">제조사:</label> <c
+												th:text="${order_cklist.supplier_nm}"></c>
 										</div>
 										<div class="input-group">
-											<label for="productSize">크기:</label> <a
-												th:text="${order_cklist.product_sz}"></a>
-										</div>
-									</div>
-									<div class="input-row">
-										<div class="input-group">
-											<label for="productWeight">무게:</label> <a
-												th:text="${order_cklist.product_wt}"></a>
-										</div>
-										<div class="input-group">
-											<label for="productPrice">입고 가격:</label> <a
-												th:text="${order_cklist.purchase_pr}"></a>
+											<label for="productSize">크기:</label> <c
+												th:text="${order_cklist.product_sz}"></c>
 										</div>
 									</div>
 									<div class="input-row">
 										<div class="input-group">
-											<label for="productQuantity">상품 수량:</label> <a
-												th:text="${order_cklist.order_qty}"></a>
+											<label for="productWeight">무게:</label> <c
+												th:text="${order_cklist.product_wt}"></c>
 										</div>
 										<div class="input-group">
-											<label for="totalPrice">총 가격:</label> <a
-												th:text="${order_cklist.order_price}"></a>
-										</div>
-									</div>
-									<div class="input-row">
-										<div class="input-group">
-											<label for="startDate">착수일:</label> <a
-												th:text="${order_cklist.start_dt}"></a>
-										</div>
-										<div class="input-group">
-											<label for="endDate">납기일:</label> <a
-												th:text="${order_cklist.due_dt}"></a>
+											<label for="productPrice">입고 가격:</label> <span
+												th:text="${#numbers.formatInteger(order_cklist.purchase_pr, 3, 'COMMA')}"></span>
 										</div>
 									</div>
 									<div class="input-row">
 										<div class="input-group">
-											<label for="orderDate">주문 날짜:</label> <a
-												th:text="${order_cklist.order_dt}"></a>
+											<label for="productQuantity">상품 수량:</label> <c
+												th:text="${order_cklist.order_qty}"></c>
+										</div>
+										<div class="input-group">
+											<label for="totalPrice">총 가격:</label> <span
+												th:text="${#numbers.formatInteger(order_cklist.order_price, 3, 'COMMA')}"></span>
+										</div>
+									</div>
+									<div class="input-row">
+										<div class="input-group">
+											<label for="startDate">착수일:</label> <c
+												th:text="${order_cklist.start_dt}"></c>
+										</div>
+										<div class="input-group">
+											<label for="endDate">납기일:</label> <c
+												th:text="${order_cklist.due_dt}"></c>
+										</div>
+									</div>
+									<div class="input-row">
+										<div class="input-group">
+											<label for="orderDate">주문 날짜:</label> <c
+												th:text="${order_cklist.order_dt}"></c>
 										</div>
 									</div>
 									<!-- 수정 내역 존재 -->
-									<div th:if="${order_cklist.order_dt != order_cklist.update_dt}">
-										<div class="input-row">
-											<div class="input-group">
-												<label for="modifyDate">수정 날짜:</label> <a
-													th:text="${order_cklist.update_dt}"></a>
-											</div>
-											<div class="input-group">
-												<label for="modifyName">수정자:</label> <a
-													th:text="${order_cklist.update_by}"></a>
-											</div>
+									<div class="input-row" th:if="${order_cklist.order_dt != order_cklist.update_dt}">
+										<div class="input-group">
+											<label for="modifyDate">수정 날짜:</label> <c
+												th:text="${order_cklist.update_dt}"></c>
+										</div>
+										<div class="input-group">
+											<label for="modifyName">수정자:</label> <c
+												th:text="${order_cklist.update_by}"></c>
 										</div>
 									</div>
 									<div class="input-row">
 										<div class="input-group-text">
 											<label for="approval_log">비고란: </label>
 											<div th:if="${order_cklist.approval_log != ''}">
-												<a th:text="${order_cklist.approval_log}"></a>
+												<c th:text="${order_cklist.approval_log}"></c>
 											</div>
 											<div th:if="${order_cklist.approval_log == '' || order_cklist.approval_log == null}">
 												없음
 											</div>
 										</div>
 									</div>
-									<div th:if="${order_cklist.process_st == '완료'}">
-										<div class="input-row">
-											<div class="input-group-text">
-												<label for="approval_dt">완료일자: </label> <a
-													th:text="${order_cklist.approval_dt}"></a>
-											</div>
+									<div class="input-row" th:if="${order_cklist.process_st == '완료'}">
+										<div class="input-group-text">
+											<label for="approval_dt">완료일자: </label> <c
+												th:text="${order_cklist.approval_dt}"></c>
 										</div>
 									</div>
 								</div>
