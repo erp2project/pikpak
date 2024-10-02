@@ -53,11 +53,11 @@
     <h2 class="mb-4">공지사항</h2>
 
     <div class="form-group">
-        <div class="form-text-display" id="notice_sb"><span th:text="${notice.notice_sb}"></span></div>
+        <div class="form-text-display sb-info" id="notice_sb"><span th:text="${notice.notice_sb}"></span></div>
     </div>
     
     <div class="form-group author-info">
-      <div class="form-text-display">
+      <div class="form-text-display nm-info">
     	작성자: <span th:text="${notice.get('operator_nm')}"></span>
 	</div>
         <div class="meta-info">
@@ -139,6 +139,12 @@
         small {
             font-size: 0.85em;
             color: #6c757d;
+        }
+        .sb-info {
+            font-size: 22px;
+        }
+        .nm-info {
+            font-size: 13px;
         }
         .author-info {
             display: flex;
