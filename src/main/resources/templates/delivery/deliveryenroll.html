@@ -79,6 +79,11 @@
 	<script src="../resources/assets/scripts/klorofil-common.js"></script>
 <script>
 $(document).ready(function() {
+	// 상품코드/상품명 모달 닫힐 때
+    $('#productModal').on('hide.bs.modal', function () {
+        $(this).find('input:not([readonly])').val(''); // readonly 제외한 입력 필드 초기화
+    });
+	
 	// 상품코드/상품명 모달 검색 버튼 클릭 시
 	$("#pd_search_de").on("click", function() {
 		$("#productModal").modal('show');
@@ -88,6 +93,13 @@ $(document).ready(function() {
 			new product_search_modal().pd_paging(1); // 페이지 1을 로드
 		});
 	});
+	
+	
+	$('#decidedeliModal').on('hide.bs.modal', function () {
+	      $(this).find('input:not([readonly])').val(''); // readonly 제외한 입력 필드 초기화
+	       
+	});
+	
 	//배송 버튼 클릭시
 	$(document).on("click", ".deliver_manage", function(event) {
 		event.preventDefault();  // 기본 동작 중단
@@ -135,7 +147,7 @@ import {product_search_modal} from "../resources/js/inoutbound/inboundreq_main.j
 document.addEventListener('DOMContentLoaded', function() {
     // 페이지 로드 시 기본 날짜 설정
         const today = new Date();
-        const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+        const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 10);
 
         const formatDate = (date) => {
             let d = new Date(date),

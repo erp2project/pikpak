@@ -222,35 +222,14 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 			    	final_result = 1;
 			    }	
 		    	
-		    	/*
-		    	List<String> idx = this.check_warehouse(dto.getLocation_cd(), dto.getProduct_cd());
-				
-		    	if (idx.size() > 0) {	// 테이블 안에 해당 위치에 상품코드가 있으면 product_qty만 증가
-					//update    
-					//Map 만들기
-					Map<String, Object> wh_update = new HashMap<String, Object>();
-					wh_update.put("additional_qty", dto.getReceiving_qty());				
-					wh_update.put("update_by", operator_id);
-					wh_update.put("wh_warehouse_idx", idx.get(0));	
-					
-					int update_result = this.update_wwarehouse(wh_update);
-					
-					if(update_result > 0) {
-						final_result = 1;
-					}
-				} 
-				else {
-				   
-				}
-				*/
 			}
 		    else {
-		    	System.out.println("위치코드 업데이트 실패");
+		    	//System.out.println("위치코드 업데이트 실패");
 		    }
 		}
 		else {
 			final_result = -1;
-			System.out.println("입고 실패");
+			//System.out.println("입고 실패");
 		}
 		
 		/*	
@@ -416,7 +395,6 @@ public class InoutBoundServiceImpl implements InoutBoundService{
 	@Override
 	public int input_req_insert(input_request_dto dto) {
 		dto.setRequest_cd(this.make_inreqcode());
-		dto.setOperator_id("ad_leehw_1234");
 		
 		dto.setRequest_st("대기"); //dto에 값이 없으면 오류남
 		int result = iorepo.input_req_insert(dto);

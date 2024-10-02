@@ -42,34 +42,23 @@
 													th:data-supplier-name="${product.supplier_nm}"
 													th:text="${product.product_cd}"></option>
 										</select> 
-										<!-- 
-										<input type="text" list="products" id="pd"
-											name="product_cd" placeholder="상품코드 선택"> <datalist
-												id="products">
-												<option th:each="product : ${pdlist}"
-													th:value="${product.product_cd}"
-													th:text="${product.product_cd}"
-													th:data-product-name="${product.product_nm}" 
-                									th:data-supplier-name="${product.supplier_nm}"
-													></option>
-										</datalist> 
-										 -->
+									
 										</td>
 									</tr>
 									<tr>
 										<td style="width: 30%;">상품명</td>
-										<td><input type="text" readonly="readonly"
+										<td><input type="text"  readonly="readonly"
 											name="product_nm"></td>
 									</tr>
 									<tr>
 										<td style="width: 30%;">회사명</td>
-										<td><input type="text" readonly="readonly"
+										<td><input type="text"  readonly="readonly"
 											name="supplier_nm">
 											<input type="hidden" name="supplier_cd"></td>
 									</tr>
 									<tr>
 										<td style="width: 30%;">상품수량</td>
-										<td><input type="text" maxlength="3" name="product_qty"></td>
+										<td><input type="text"  maxlength="3" name="product_qty"></td>
 									</tr>
 									<tr>
 
@@ -82,7 +71,7 @@
 									</tr>
 									<tr>
 										<td style="width: 30%;">추가 요청사항</td>
-										<td><textarea rows="3" cols="60" maxlength="30"
+										<td><textarea rows="3" cols="60" maxlength="30"  
 												placeholder="30자까지 입력 가능합니다."
 												name="add_req"></textarea></td>
 									</tr>

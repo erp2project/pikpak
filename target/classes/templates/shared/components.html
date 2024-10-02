@@ -13,7 +13,7 @@
 			<div class="custom-flex custom-fixed-width-150">
 				<a href="/home" class="brand-custom">
 					<img src="/resources/assets/img/apple-icon.png" class="brand-logo">
-					<span class="brand-title" onclock>PikPak</span>
+					<span class="brand-title" onclick="location.href='/home';">PikPak</span>
 				</a>
 			</div>
 			
@@ -78,8 +78,8 @@
 						</a>
 						<div id="subPages" class="collapse ">
 							<ul class="nav">
-								<li><a href="" class="">거래처 관리</a></li>
-								<li><a href="" class="">품목 관리</a></li>
+								<li><a href="/client/list" class="">거래처 관리</a></li>
+								<li><a href="/product/list" class="">품목 관리</a></li>
 							</ul>
 						</div>
 					</li>
@@ -91,8 +91,8 @@
 						</a>
 						<div id="subPages2" class="collapse ">
 							<ul class="nav">
-								<li><a href="" class="">주문 관리</a></li>
-								<li><a href="" class="">반품 관리</a></li>
+								<li><a href="/order/order_list" class="">주문 관리</a></li>
+								<li><a href="/return/return_list" class="">반품 관리</a></li>
 							</ul>
 						</div>
 					</li>
@@ -104,8 +104,8 @@
 						</a>
 						<div id="subPages3" class="collapse ">
 							<ul class="nav">
-								<li><a href="" class="">재고 현황</a></li>
-								<li><a href="" class="">창고 관리</a></li>
+								<li><a href="/inventory/inventorylist" class="">재고 현황</a></li>
+								<li><a href="/inventory/warehouse_inventory" class="">창고 관리</a></li>
 							</ul>
 						</div>
 					</li>
@@ -117,8 +117,8 @@
 						</a>
 						<div id="subPages4" class="collapse ">
 							<ul class="nav">
-								<li><a href="" class="">입고 관리</a></li>
-								<li><a href="" class="">출고 관리</a></li>
+								<li><a href="/inoutbound/inboundreq" class="">입고 관리</a></li>
+								<li><a href="/inoutbound/outenroll" class="">출고 관리</a></li>
 							</ul>
 						</div>
 					</li>
@@ -130,7 +130,7 @@
 						</a>
 						<div id="subPages5" class="collapse ">
 							<ul class="nav">
-								<li><a href="" class="">납품 관리</a></li>
+								<li><a href="/delivery/inreqstate" class="">납품 관리</a></li>
 							</ul>
 						</div>
 					</li>
@@ -142,7 +142,8 @@
 						</a>
 						<div id="subPages6" class="collapse ">
 							<ul class="nav">
-								<li><a href="" class="">재고기록 관리</a></li>
+								<li><a href="/stocklogrecord/list" class="">재고기록 관리</a></li>
+								<li><a href="/notice/list" class="">공지사항</a></li>
 								<li><a href="/admin/users" class="">인사 관리</a></li>
 							</ul>
 						</div>

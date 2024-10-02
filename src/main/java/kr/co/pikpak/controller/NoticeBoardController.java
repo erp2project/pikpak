@@ -73,7 +73,6 @@ public class NoticeBoardController {
 
 	@PostMapping(value = "/list", consumes = "application/json")
 	public @ResponseBody HashMap<String, Object> selectList(@RequestBody HashMap<String, Object> param) {
-		
 		int page = Integer.parseInt(param.getOrDefault("page", "1").toString());
 		int size = Integer.parseInt(param.getOrDefault("size", "10").toString());
 

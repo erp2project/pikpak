@@ -96,9 +96,36 @@
 	<script>
 		$(document).ready(
 				function() {
-					
+					// 상품코드/상품명 모달 닫힐 때
+				    $('#productModal').on('hide.bs.modal', function () {
+				        $(this).find('input:not([readonly])').val(''); // readonly 제외한 입력 필드 초기화
+				    });
+
+				    // 매입처 회사명 모달 닫힐 때
+				    $('#companyModal').on('hide.bs.modal', function () {
+				        $(this).find('input:not([readonly])').val(''); // readonly 제외한 입력 필드 초기화
+				    });
+
+				    // 입고 요청 관리 모달 닫힐 때
+				    $('#inreqManageModal').on('hide.bs.modal', function () {
+				        $(this).find('input:not([readonly])').val(''); // readonly 제외한 입력 필드 초기화
+				        $(this).find('textarea:not([readonly])').val(''); // readonly 제외한 입력 필드 초기화
+				        
+				    });
+
+				    // 입고 등록 모달 닫힐 때
+				    $('#inreqModal').on('hide.bs.modal', function () {
+				        $(this).find('input').val(''); // readonly 제외한 입력 필드 초기화
+				        
+				        // select2 필드 초기화
+				        $(this).find('select.select2').val(null).trigger('change');
+				        
+				        $(this).find('textarea:not([readonly])').val(''); // readonly 제외한 입력 필드 초기화
+				    });
+				    
 					// 상품코드/상품명 모달 검색 버튼 클릭 시
 					$("#pd_search").on("click", function() {
+						
 						$("#productModal").modal('show');
 
 						// 모달이 열릴 때 첫 번째 페이지 로드
@@ -109,6 +136,7 @@
 
 					//매입처 회사명 모달 검색 버튼 클릭 시 (새로 추가)
 					$("#cp_search").on("click", function() {
+						
 						$("#companyModal").modal('show');
 
 						// 모달이 열릴 때 첫 번째 페이지 로드
@@ -141,7 +169,6 @@
     					$("#hope_dt_input").val(hope_dt);
     					$("#request_idx_input").val(request_idx);
 						
-    					
     					// 모달 보여주기
     					$("#inreqManageModal").modal('show');
     					
