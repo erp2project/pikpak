@@ -39,13 +39,21 @@ function fn_renderlist(data = null){
 
                 info_html += "<tr>";
                 info_html += "<td>" + (i + 1) + "</td>";
-                info_html += "<td>" + response[i].product_cd + "</td>";
-                info_html += "<td style='text-align:left;'>" + response[i].product_nm + "</td>";
-                info_html += "<td>" + response[i].location_cd + "</td>";
-                info_html += "<td>" + response[i].inventory_chg + "</td>";
-                info_html += "<td>" + response[i].action_type + "</td>";
-                info_html += "<td>" + formattedDate + "</td>";  // 포맷된 날짜를 사용
-                info_html += "<td>" + response[i].operator_nm + "</td>";
+                info_html += "<td>" + (response[i].product_cd || '-') + "</td>";
+                info_html += "<td style='text-align:left;'>" + (response[i].product_nm || '-') + "</td>";
+                info_html += "<td>" + (response[i].location_cd || '-') + "</td>";
+                info_html += "<td>" + (response[i].before_qty || '-') + "</td>";
+                info_html += "<td>" + (response[i].after_qty || '-') + "</td>";
+                info_html += "<td>" + (response[i].changed_qty || '-') + "</td>";
+                info_html += "<td>" + (response[i].before_location_cd || '-') + "</td>";
+                info_html += "<td>" + (response[i].after_location_cd || '-') + "</td>";
+                info_html += "<td style='text-align:left;'>" + (response[i].before_product_nm || '-') + "</td>";
+                info_html += "<td style='text-align:left;'>" + (response[i].after_product_nm || '-') + "</td>";
+                info_html += "<td style='text-align:left;'>" + (response[i].action_type || '-') + "</td>";
+                info_html += "<td style='text-align:left;'>" + (response[i].dispose_reason || '-') + "</td>";
+                info_html += "<td>" + formattedDate + "</td>"; 
+                info_html += "<td>" + (response[i].operator_nm || '-') + "</td>";
+                info_html += "<td style='text-align:left;'>" + (response[i].notes || '-') + "</td>";
                 info_html += "</tr>";
             }
             }

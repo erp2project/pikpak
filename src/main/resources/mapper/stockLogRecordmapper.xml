@@ -7,12 +7,21 @@
         l.product_cd,
         l.product_nm,
         l.location_cd,
-        l.inventory_chg,
+        l.before_qty,
+        l.after_qty,
+        l.changed_qty,
+        l.before_location_cd,
+        l.after_location_cd,
+        l.before_product_nm,
+        l.after_product_nm,
         l.action_type,
+        l.dispose_reason,
         l.log_dt,
+        l.dispose_reason,
+        l.notes,
         o.operator_nm
     FROM stock_log_record l
-    JOIN login_operator o ON l.operator_id = o.operator_id  <!-- 조인 -->
+    JOIN login_operator o ON l.operator_nm = o.operator_id  <!-- 조인 -->
     ORDER BY l.log_dt DESC
 	</select>
 	
@@ -21,12 +30,12 @@
         l.product_cd AS product_cd,
         l.product_nm AS product_nm,
         l.location_cd AS location_cd,
-        l.inventory_chg AS inventory_chg,
+        l.changed_qty AS changed_qty,
         l.action_type AS action_type,
         l.log_dt AS log_dt,
         lo.operator_nm AS operator_nm
     FROM stock_log_record l
-    JOIN login_operator lo ON l.operator_id = lo.operator_id  <!-- login_operator 테이블과 조인 -->
+    JOIN login_operator lo ON l.operator_nm = lo.operator_id  <!-- login_operator 테이블과 조인 -->
     WHERE 1=1
     <!-- 날짜 필터 조건 (fromDate와 toDate가 있을 경우 적용) -->
     <if test="fromDate != null and fromDate != '' and toDate != null and toDate != ''">
