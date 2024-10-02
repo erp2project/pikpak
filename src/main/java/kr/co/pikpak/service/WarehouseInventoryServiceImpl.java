@@ -165,6 +165,7 @@ public class WarehouseInventoryServiceImpl implements WarehouseInventoryService{
 		return wr.getCheckRecordDetailsByIdx(a_check_idx);
 	}
 	
+	//창고 관리 페이지 - 점검구역 담당자 정보 
 	@Override
 	public Map<String, Object> getAreaAndOperatorData(String zoneId) {
 		return wr.getAreaAndOperatorData(zoneId);

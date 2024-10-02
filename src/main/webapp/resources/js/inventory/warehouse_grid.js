@@ -31,7 +31,6 @@ $(document).ready(function () {
             data: JSON.stringify({ location_cd: locationCode }),
             contentType: 'application/json',
             success: function(response) {
-				console.log(response);
                 if (response.status === 'occupied') {
                     // 이미 사용 중인 위치일 때
                     alert('이미 사용 중인 위치입니다. 위치를 수정하거나 다른 위치를 선택하세요.');
@@ -126,7 +125,6 @@ function loadZoneData(zoneId){
 	.then(response => response.json())
 	.then(data => {
 		inventoryData[zoneId] = data.getAreaStockData;	//구역 전체 데이터를 저장
-		console.log(data);
 		//가져온 데이터를 기반으로 각 위치에 맞는 정보 설정
 		updateRackInfo(zoneId,inventoryData[zoneId]);
 		
@@ -274,15 +272,12 @@ function updateRackColors(zoneId){
 	   const locationData = zoneData.find(item => item.location_cd === formattedLocation);
         if (locationData) {
             const maxCapacity = locationData.max_capacity;
-            //console.log(maxCapacity='최대 수용량');
             const currentCapacity = locationData.current_capacity;
-			//console.log(currentCapacity+'현재 수용량');
             // 색상 설정 로직
             if (currentCapacity === 0) {
                 // 민트색 (할당된 위치, 재고 없음)
                 part.classList.add('assigned-no-stock');
             } else if (currentCapacity == maxCapacity) {
-				console.log(locationData);
                 // 빨간색 (공간 다 찬 상태)
                 part.classList.add('no-space');
             } else {

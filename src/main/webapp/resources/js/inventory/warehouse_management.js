@@ -72,7 +72,6 @@ document.getElementById("wareck_enroll").addEventListener('click',async function
         zoneId: document.getElementById('StockCheckZone').value  // 구역 정보 가져오기
     };
     
-    console.log(fields.managerNm);
      // 구역 담당자 정보 가져오기
    	await fetch(`/inventory/getZoneManager?zoneId=${fields.zoneId}`)
         .then(response => response.json())

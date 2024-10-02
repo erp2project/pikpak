@@ -138,7 +138,6 @@ function selectRack(areaId) {
     .then(response => response.json())
     .then(data => {
         const { getAreaRackData } = data;
-        console.log(getAreaRackData);
         updateStockList(getAreaRackData); // 재고 리스트 업데이트
 
         // 선택된 랙에 클래스 추가
@@ -178,7 +177,6 @@ function inventory_specific_position(level_part) {
 	})
 	.then(response => response.json())
 	.then(data => {
-		console.log("된거임?");
 		const { getTotalLocationData } = data;
 		updateStockList(getTotalLocationData);
 	})
