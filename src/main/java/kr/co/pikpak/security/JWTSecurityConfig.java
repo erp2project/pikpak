@@ -54,19 +54,19 @@ public class JWTSecurityConfig {
 					.requestMatchers("/resources/**").permitAll()
 					.requestMatchers("/favicon.ico").permitAll()
 					// HBK
-					.requestMatchers("/client/**").hasAnyAuthority("operator","admin")
-					.requestMatchers("/product/**").hasAnyAuthority("operator","admin")
+					.requestMatchers("/client/**").hasAuthority("operator")
+					.requestMatchers("/product/**").hasAuthority("operator")
 					.requestMatchers("/stocklogrecord/**").hasAuthority("admin")
-					.requestMatchers("/notice/list").hasAnyAuthority("admin","operator","supplier","vendor")
 					.requestMatchers("/notice/**").hasAuthority("admin")
+					.requestMatchers("/notice/list").hasAnyAuthority("admin","operator","supplier","vendor")
 					// LHH
-					.requestMatchers("/order/order_aplist").hasAnyAuthority("operator","admin")
-					.requestMatchers("/return/return_aplist").hasAnyAuthority("operator","admin")
+					.requestMatchers("/order/order_aplist").hasAuthority("operator")
+					.requestMatchers("/return/return_aplist").hasAnyAuthority("operator")
 					// KMJ
-					.requestMatchers("/inventory/**").hasAnyAuthority("operator","admin")
+					.requestMatchers("/inventory/**").hasAuthority("operator")
 					// LHW
-					.requestMatchers("/inoutbound/**").hasAnyAuthority("operator","admin")
-					.requestMatchers("/delivery/**").hasAnyAuthority("supplier","admin")
+					.requestMatchers("/inoutbound/**").hasAuthority("operator")
+					.requestMatchers("/delivery/**").hasAuthority("supplier")
 					// PSH
 					.requestMatchers("/admin/**").hasAuthority("admin")
 					.anyRequest().authenticated())
