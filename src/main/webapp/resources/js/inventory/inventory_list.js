@@ -7,10 +7,24 @@ function toggleCheckbox(row) {
         checkbox.checked = !checkbox.checked;
     }
 }
-//엑셀 버튼 클릭
-document.getElementById("excelButton").addEventListener("click", function() {
-    window.location.href = "/exportExcel";
-});
+let activeUser= "";
+window.onload = function() {
+    getSessionInfo();
+};
+
+function getSessionInfo() {
+    fetch('/inventory/getSessionInfo')
+        .then(response => response.json())
+        .then(data => {
+            console.log("Session info: ", data.activeUserID);
+            // 세션 정보를 필요한 곳에 사용
+            document.getElementById('operator_id').value = data.activeUserID;
+        })
+        .catch(error => {
+            console.error('Error fetching session info:', error);
+        });
+}
+
 
 //조회 버튼 클릭 (form전송)
 document.getElementById('searchButton').addEventListener('click', function(event){
@@ -155,6 +169,9 @@ document.getElementById('IvDelete').addEventListener('click', function() {
         // 사용자가 '취소'를 눌렀을 때 아무 작업도 하지 않음
         return;
     }
+    
+    
+    
     // 폐기 처리 요청
     fetch('/inventory/deleteWarehouse', {
         method: 'POST', // POST 메소드로 변경 (DELETE는 데이터 전송에 제한이 있을 수 있음)

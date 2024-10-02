@@ -33,15 +33,16 @@ public interface WarehouseInventoryService {
 	//재고 리스트 출력 페이지 - 관리 버튼 팝업 / 재고 전체 폐기
 	public int deleteWarehouseByIdx(Integer wh_warehouse_idx);
 	
+	
 	//재고 리스트 출력 페이지 - 관리 버튼 팝업 / 재고 일부 폐기
-	public int updateWarehouseQuantity(Integer wh_warehouse_idx, Integer disposeQuantity);
+	public int updateWarehouseQuantity(Integer wh_warehouse_idx, Integer disposeQuantity,String operator_id);
 	
 	//재고 리스트 출력 페이지 - 관리 버튼 팝업 / 비고란 수정
-	public int updateWarehouseNotes(Integer wh_warehouse_idx, String notes);
+	public int updateWarehouseNotes(Integer wh_warehouse_idx,String operator_id, String notes);
 	
 	
 	//폐기사유 업데이트
-	public int updateDisposeReason(Integer wh_warehouse_idx,String disposeReason);	
+	public int updateDisposeReason(Integer wh_warehouse_idx,String disposeReason,String operator_id);	
 	
 	
 	//입고 예정 수량
@@ -63,7 +64,11 @@ public interface WarehouseInventoryService {
 	//창고 위치 관리 페이지 - 위치 삭제
 	int deleteLocationByCode(String location_cd);	
 	
+	//창고 위치 관리 페이지 - 위치 등록시 로그 기록
+	void insertLocationsLog(String operatorId,String locationCd,String operationType);	
 	
+	//창고 위치 관리 페이지 - 위치 삭제시 로그 기록
+	void deleteLocationsLog(String operatorId,String locationCd,String operationType);
 	
 	//창고 관리 페이지 - 점검 등록/ 재고 수량 일치여부 확인
 	public List<WarehouseInspection_dto> getCheckData();
@@ -76,4 +81,6 @@ public interface WarehouseInventoryService {
 	
 	//창고 관리 페이지 - 상세 보기
 	public Map<String, Object> getCheckRecordDetailsByIdx(Integer a_check_idx);
+	
+	public Map<String, Object> getAreaAndOperatorData(String zoneId);
 }

@@ -52,13 +52,16 @@
 	
 	<!-- 재고 폐기 (전체 수량일 경우) -->
 	<delete id="deleteWarehouseByIdx" parameterType="Integer">
-	    DELETE FROM warehouse WHERE wh_warehouse_idx = #{wh_warehouse_idx}
-	</delete>	
+	    DELETE FROM warehouse 
+	    WHERE wh_warehouse_idx = #{wh_warehouse_idx}
+	</delete>		
 	
 	<!-- 재고 일부 수량 폐기 (수량을 줄이는 경우) -->
 	<update id="updateWarehouseQuantity" parameterType="Map">
 	    UPDATE warehouse
-	    SET product_qty = product_qty - #{disposeQuantity}
+	    SET product_qty = product_qty - #{disposeQuantity},
+	    update_by = #{operator_id},
+	    update_dt = CURRENT_TIMESTAMP
 	    WHERE wh_warehouse_idx = #{wh_warehouse_idx}
 	    AND product_qty >= #{disposeQuantity}
 	</update>	
@@ -66,7 +69,9 @@
 	<!-- 재고 비고란 수정 -->
 	<update id="updateWarehouseNotes" parameterType="map">
 	    UPDATE warehouse
-	    SET inventory_log = #{notes}
+	    SET inventory_log = #{notes},
+	    update_by = #{operator_id},
+	    update_dt = CURRENT_TIMESTAMP
 	    WHERE wh_warehouse_idx = #{wh_warehouse_idx}
 	</update>	
 	
@@ -75,7 +80,8 @@
 	<update id="updateDisposeReason" parameterType="Map">
 	    UPDATE stock_log_record 
 	    SET dispose_reason = #{disposeReason},
-	    action_type = '일부 폐기'
+	    action_type = '일부 폐기',
+	    operator_nm = #{operator_id}
 	    WHERE wh_warehouse_idx = #{wh_warehouse_idx}
 	    ORDER BY log_dt DESC
 	    LIMIT 1
@@ -212,6 +218,12 @@
 	<delete id="deleteLocationByCode" parameterType="String">
 		DELETE FROM warehouse_locations WHERE location_cd = #{location_cd}
 	</delete>
+	<!-- 창고 위치 관리 페이지 - 위치 로그 기록 -->
+    <insert id="insertLocationsLog" parameterType="String">
+        INSERT INTO warehouse_locations_log (operator_id, location_cd, operation_type)
+        VALUES (#{operatorId}, #{locationCd}, #{operationType})
+    </insert>	
+	
 	
 	<!-- 창고 위치 관리 페이지 -  -->
 	<select id="getLocationWithStockData" parameterType="String" resultType="Map">
@@ -293,5 +305,12 @@
 	<select id="getCheckRecordDetailsByIdx" parameterType="Integer" resultType="Map">
 		SELECT * FROM warehouse_area_check WHERE a_check_idx =#{a_check_idx}
 	</select>
+	
+	<select id="getAreaAndOperatorData" parameterType="String" resultType="Map">
+	    SELECT w.manager_nm, o.operator_id
+	    FROM warehouse_area_info w
+	    JOIN login_operator o ON w.manager_nm = o.operator_nm
+	    WHERE w.area_cd = #{zoneId}
+	</select>	
 	
 </mapper>

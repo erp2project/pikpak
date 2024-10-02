@@ -1,3 +1,6 @@
+window.onload = function() {
+    getSessionInfo();
+};
 document.addEventListener('click', function(event){
 	
 	//상세보기 클릭시 
@@ -24,6 +27,18 @@ document.addEventListener('click', function(event){
 		})
 	}
 });
+//제발제발
+let activeUser= "";
+function getSessionInfo() {
+    fetch('/inventory/getSessionInfo')
+        .then(response => response.json())
+        .then(data =>  {
+            activeUser = data.activeUserID;  // 세션 정보를 반환
+        })
+        .catch(error => {
+            console.error('Error fetching session info:', error);
+        });
+}
 
 //back-end 에서 받은 시간 커스텀
 function formatDateTime(dateTimeString) {
@@ -40,8 +55,9 @@ function formatDateTime(dateTimeString) {
 
 //점검 등록 제출 
 document.getElementById("wareck_enroll").disabled = true; // 기본적으로 비활성화
-
-document.getElementById("wareck_enroll").addEventListener('click',function(){
+let zoneOperatorId ="";
+let zoneOperatorNm ="";
+document.getElementById("wareck_enroll").addEventListener('click',async function(){
 	const form = document.getElementById("frm_wareck_enroll");
 	const formdata = new FormData(form);
 
@@ -52,9 +68,33 @@ document.getElementById("wareck_enroll").addEventListener('click',function(){
         endDate: document.getElementById("check_end").value,
         temperature: document.getElementById("temperature").value,
         humidity: document.getElementById("humidity").value,
-        statement: document.getElementById("statement").value
+        statement: document.getElementById("statement").value,
+        zoneId: document.getElementById('StockCheckZone').value  // 구역 정보 가져오기
     };
     
+     // 구역 담당자 정보 가져오기
+   	await fetch(`/inventory/getZoneManager?zoneId=${fields.zoneId}`)
+        .then(response => response.json())
+        .then(data => {
+			zoneOperatorId = data.operator_id;
+			zoneOperatorNm = data.manager_nm;
+		     // 권한 체크 - 세션 정보와 구역 담당자 비교	
+		})
+        .catch(error => {
+            console.error('구역 정보를 가져오는 중 오류 발생:', error);
+            return null;
+        });
+  		    if (activeUser !== zoneOperatorId) {
+		        alert('이 구역에 대한 권한이 없습니다.');
+		        return;
+		    }		
+		        // 담당자 이름 확인
+		    if (zoneOperatorNm!==fields.managerNm) {
+		        alert('담당자 이름이 일치하지 않습니다. 올바르게 입력하세요.');
+		        document.getElementById("manager_nm").focus();
+		        return;
+		    }     
+              
     // 유효성 검사를 위한 필드별 조건 체크
     const checks = [
         { condition: !fields.managerNm, message: '담당자를 입력하세요.' },
@@ -126,10 +166,7 @@ document.getElementById("checkButton").addEventListener('click',function(){
             if (item.product_type === '중형') totalType2Stock += item.product_qty;
             if (item.product_type === '소형') totalType3Stock += item.product_qty;
         });
-			
-		console.log(totalType1Stock);
-		console.log(totalType2Stock);
-		console.log(totalType3Stock);
+
         // 유형별로 입력한 값과 서버에서 가져온 값을 비교
         const isType1Match = (type1Stock == totalType1Stock);
         const isType2Match = (type2Stock == totalType2Stock);

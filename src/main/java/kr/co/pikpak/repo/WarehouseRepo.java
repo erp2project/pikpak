@@ -39,14 +39,17 @@ public interface WarehouseRepo {
 	//재고 리스트 출력 페이지 - 관리 모달창 재고 폐기(재고 수량 전체 폐기)
 	int deleteWarehouseByIdx(Integer wh_warehouse_idx);
 	
+	// 전체폐기 전 update_by를 업데이트
+	int deleteWarehouseByIdx(int whWarehouseIdx, String operatorId);
+	
 	//재고 리스트 출력 페이지 - 관리 모달창 재고 폐기(재고 수량 일부 폐기)
-	int updateWarehouseQuantity(Integer wh_warehouse_idx, Integer disposeQuantity);
+	int updateWarehouseQuantity(Integer wh_warehouse_idx, Integer disposeQuantity, String operator_id);
 	
 	//재고 리스트 출력 페이지 - 관리 모달창 수정
-	int updateWarehouseNotes(Integer wh_warehouse_idx, String notes);
+	int updateWarehouseNotes(Integer wh_warehouse_idx, String operator_id,String notes);
 
 	//폐기사유 업데이트
-	int updateDisposeReason(Integer wh_warehouse_idx,String disposeReason);
+	int updateDisposeReason(Integer wh_warehouse_idx,String disposeReason,String operator_id);
 	
 	/* warehouse 조회 */
 	WarehouseInventory_dto getProductInfo (int keyType, String data);
@@ -68,6 +71,8 @@ public interface WarehouseRepo {
 	//창고 위치 관리 페이지 - 위치 삭제
 	int deleteLocationByCode(String location_cd);
 	
+	//창고 위치 관리 페이지 - 위치 삭제시 로그 기록
+	void insertLocationsLog(String operatorId,String locationCd,String operationType);
 	
 	
 	//창고 관리 페이지 - 구역 점검 기록 리스트
@@ -81,5 +86,7 @@ public interface WarehouseRepo {
 
 	//창고 관리 페이지 - 상세 보기
 	Map<String, Object> getCheckRecordDetailsByIdx(Integer a_check_idx);
+	
+	Map<String, Object> getAreaAndOperatorData(String zoneId);
 	
 }

@@ -1,7 +1,7 @@
-window.onload = () => {
+window.addEventListener("load",() => {
 	const expiryTime = localStorage.getItem("expiryTime");
 	startTimer(expiryTime);
-}
+});
 
 const refreshSession = () => {
 	fetch("/login/refresh",{

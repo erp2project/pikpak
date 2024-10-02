@@ -58,26 +58,28 @@ public class WarehouseInventoryServiceImpl implements WarehouseInventoryService{
 	//재고 리스트 출력 페이지 - 관리 버튼 팝업 / 재고 전체 폐기
 	@Override
 	public int deleteWarehouseByIdx(Integer wh_warehouse_idx) {
+		
 		return wr.deleteWarehouseByIdx(wh_warehouse_idx);
 	}
 	
+	
 	//재고 리스트 출력 페이지 - 관리 버튼 팝업 / 재고 일부 폐기
 	@Override
-	public int updateWarehouseQuantity(Integer wh_warehouse_idx, Integer disposeQuantity) {
-		return wr.updateWarehouseQuantity(wh_warehouse_idx, disposeQuantity);
+	public int updateWarehouseQuantity(Integer wh_warehouse_idx, Integer disposeQuantity,String operator_id) {
+		return wr.updateWarehouseQuantity(wh_warehouse_idx, disposeQuantity,operator_id);
 	}
 	
 	//재고 리스트 출력 페이지 - 관리 버튼 팝업 / 비고란 수정
 	@Override
-	public int updateWarehouseNotes(Integer wh_warehouse_idx, String notes) {
-		return wr.updateWarehouseNotes(wh_warehouse_idx, notes);
+	public int updateWarehouseNotes(Integer wh_warehouse_idx, String operator_id,String notes) {
+		return wr.updateWarehouseNotes(wh_warehouse_idx,operator_id, notes);
 	}
 
 	
 	//폐기사유 업데이트
 	@Override
-	public int updateDisposeReason(Integer wh_warehouse_idx, String disposeReason) {
-		return wr.updateDisposeReason(wh_warehouse_idx, disposeReason);
+	public int updateDisposeReason(Integer wh_warehouse_idx, String disposeReason,String operator_id) {
+		return wr.updateDisposeReason(wh_warehouse_idx, disposeReason,operator_id);
 	}
 	
 	
@@ -132,9 +134,17 @@ public class WarehouseInventoryServiceImpl implements WarehouseInventoryService{
 		
 		return wr.deleteLocationByCode(location_cd);
 	}
+	//창고 위치 관리 페이지 - 위치 등록시 로그 기록
+	@Override
+	public void insertLocationsLog(String operatorId, String locationCd, String operationType) {
+		wr.insertLocationsLog(operatorId, locationCd, operationType);
+	}
 	
-	
-	
+	//창고 위치 관리 페이지 - 위치 삭제시 로그 기록
+	@Override
+	public void deleteLocationsLog(String operatorId, String locationCd, String operationType) {
+		wr.insertLocationsLog(operatorId, locationCd, operationType);
+	}
 	
 	
 	//창고 관리 페이지 - 점검 등록/ 재고 수량 일치여부 확인
@@ -153,5 +163,11 @@ public class WarehouseInventoryServiceImpl implements WarehouseInventoryService{
 	@Override
 	public Map<String, Object> getCheckRecordDetailsByIdx(Integer a_check_idx) {
 		return wr.getCheckRecordDetailsByIdx(a_check_idx);
+	}
+	
+	//창고 관리 페이지 - 점검구역 담당자 정보 
+	@Override
+	public Map<String, Object> getAreaAndOperatorData(String zoneId) {
+		return wr.getAreaAndOperatorData(zoneId);
 	}
 }

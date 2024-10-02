@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import kr.co.pikpak.dto.InventoryListDTO;
 import kr.co.pikpak.dto.LocationDTO;
@@ -35,6 +36,22 @@ public class InventoryController {
 	private WarehouseInventoryService wis;
 	
 	
+	//창고 점검 페이지 - 구역 정보 조회
+	
+    @GetMapping("/getZoneManager")
+    @ResponseBody
+    public Map<String, Object> getZoneManager(@RequestParam("zoneId") String zoneId) {
+        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> managerInfo = wis.getAreaAndOperatorData(zoneId);
+        if (managerInfo != null) {
+            response.put("manager_nm", managerInfo.get("manager_nm"));
+            response.put("operator_id", managerInfo.get("operator_id"));
+        } else {
+            response.put("error", "구역 또는 운영자 정보를 찾을 수 없습니다.");
+        }
+        return response;
+    }	
+    
 	//창고 점검 페이지 - 점검 등록 
 	@PostMapping("/insertInspectData")
 	@ResponseBody
@@ -72,16 +89,22 @@ public class InventoryController {
 	//창고 위치 관리 페이지 - 위치 삭제
 	@PostMapping("/deleteLocation")
 	@ResponseBody
-	public ResponseEntity<Map<String, Object>>deleteLocation(@RequestBody Map<String, Object>data){
+	public ResponseEntity<Map<String, Object>>deleteLocation(@RequestBody Map<String, Object>data,
+			@SessionAttribute(name = "activeUserID", required = false) String operator_id){
 		String location_cd = (String) data.get("location_cd");
 		int result = wis.deleteLocationByCode(location_cd);
+		
 		Map<String, Object> response = new HashMap<>();
+		
 		if(result>0) {
+			wis.deleteLocationsLog(operator_id, location_cd ,"위치 삭제");
+			
 			response.put("success", true);
 			response.put("message", "위치가 삭제되었습니다.");
+			
 		}else {
 			response.put("success", false);
-			response.put("message", "위치삭제에 실해했습니다.");
+			response.put("message", "위치삭제에 실패했습니다.");
 		}
 		return ResponseEntity.ok(response);
 	}
@@ -91,7 +114,8 @@ public class InventoryController {
 	//창고 위치 관리 페이지 - 위치 지정
 	@PostMapping("/assignLocation")
 	@ResponseBody
-	public Map<String, String> assignLocation(@RequestBody Map<String, Object> data){
+	public Map<String, String> assignLocation(@RequestBody Map<String, Object> data,
+			@SessionAttribute(name = "activeUserID", required = false) String operator_id){
 		String location_cd = (String) data.get("location_cd");
 		String supplier_cd = (String)data.get("supplier_cd");
 		Integer max_capacity = 0;
@@ -106,6 +130,8 @@ public class InventoryController {
 		int result = wis.insertLocation(location_cd, supplier_cd,max_capacity);
 		Map<String, String> response = new HashMap<>();
 		if(result>0) {
+			wis.deleteLocationsLog(operator_id, location_cd ,"위치 등록");
+			
 			response.put("status", "success");
 			response.put("message", "위치지정이 완료되었습니다.");
 		}else {
@@ -122,12 +148,13 @@ public class InventoryController {
 		String locationCd = request.get("location_cd");
 		 LocationDTO location = wis.findLocationByCode(locationCd);
 		 Map<String, Object> response = new HashMap<>();
-	        if (location != null && location.getIsOccupied()) {
-	            response.put("status", "occupied");
-	            response.put("has_stock", location.getHasStock());
-	        } else {
-	            response.put("status", "available");
-	        }	 
+		    // 조회 결과가 null일 때만 위치 지정 가능
+		    if (location == null) {
+		        response.put("status", "available");  // 위치 사용 가능
+		    } else {
+		        response.put("status", "occupied");   // 위치 사용 불가능
+		        response.put("has_stock", location.getHasStock());  // 해당 위치에 재고가 있는지 여부
+		    }	 
 		return response;
 	}
 	
@@ -167,7 +194,8 @@ public class InventoryController {
 	// 재고 현황 페이지 - 관리 모달창 /재고 폐기 
 	@PostMapping("/deleteWarehouse")
 	@ResponseBody
-	public Map<String, Object> deleteWarehouse(@RequestBody Map<String, Object> requestData) {
+	public Map<String, Object> deleteWarehouse(@RequestBody Map<String, Object> requestData,
+			@SessionAttribute(name = "activeUserID", required = false) String operator_id) {
 		int keyType = 3;
 		//폐기사요
 	    String disposeReason = (String) requestData.get("disposeReason");
@@ -184,21 +212,21 @@ public class InventoryController {
 	            int deletedRows = wis.deleteWarehouseByIdx(wh_warehouse_idx);
 	            if (deletedRows > 0) {
 	            	//재고 로그에 폐기사유 업데이트
-	            	wis.updateDisposeReason(wh_warehouse_idx, disposeReason);
+	            	wis.updateDisposeReason(wh_warehouse_idx, disposeReason, operator_id);
 	                result.put("success", true);
 	                result.put("action", "delete");
 	                result.put("deletedRows", deletedRows);
 	            } else {
 	                result.put("success", false);
-	                result.put("message", "삭제 실패");
+	                result.put("message", "폐기 실패");
 	            }
 	        } 
 	        // 일부 수량만 폐기하는 경우
 	        else {
-	            int updatedRows = wis.updateWarehouseQuantity(wh_warehouse_idx, disposeQuantity);
+	            int updatedRows = wis.updateWarehouseQuantity(wh_warehouse_idx, disposeQuantity,operator_id);
 	            if (updatedRows > 0) {
 	            	//재고 로그에 폐기사유 업데이트
-	            	wis.updateDisposeReason(wh_warehouse_idx, disposeReason);	            	
+	            	wis.updateDisposeReason(wh_warehouse_idx, disposeReason, operator_id);	            	
 	                result.put("success", true);
 	                result.put("action", "update");
 	                result.put("updatedRows", updatedRows);
@@ -218,14 +246,15 @@ public class InventoryController {
 	//재고 현황 페이지 - 관리 모달창 / 수정
 	@PostMapping("/updateWarehouseNotes")
 	@ResponseBody
-	public Map<String, Object> updateWarehouseNotes(@RequestBody Map<String, Object> requestData) {
+	public Map<String, Object> updateWarehouseNotes(@RequestBody Map<String, Object> requestData,
+			@SessionAttribute(name = "activeUserID", required = false) String operator_id) {
 	    Map<String, Object> result = new HashMap<>();
 	    try {
 	        Integer wh_warehouse_idx = Integer.parseInt(requestData.get("wh_warehouse_idx").toString());
 	        String notes = (String) requestData.get("notes");
 
 	        // 서비스 호출하여 비고란 업데이트
-	        int updatedRows = wis.updateWarehouseNotes(wh_warehouse_idx, notes);
+	        int updatedRows = wis.updateWarehouseNotes(wh_warehouse_idx,operator_id, notes);
 
 	        if (updatedRows > 0) {
 	            result.put("success", true);

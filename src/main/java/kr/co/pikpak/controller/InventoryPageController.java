@@ -1,5 +1,6 @@
 package kr.co.pikpak.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import jakarta.servlet.http.HttpSession;
 import kr.co.pikpak.dto.InventoryListDTO;
 import kr.co.pikpak.dto.WarehouseInspection_dto;
 import kr.co.pikpak.dto.WarehouseInventory_dto;
@@ -22,6 +24,15 @@ import kr.co.pikpak.service.WarehouseInventoryService;
 public class InventoryPageController {
 	@Autowired
 	private WarehouseInventoryService wis;
+	
+	
+	@GetMapping("/getSessionInfo")
+	@ResponseBody
+	public Map<String, String> getSessionInfo(HttpSession session) {
+	    Map<String, String> sessionInfo = new HashMap<>();
+	    sessionInfo.put("activeUserID", (String) session.getAttribute("activeUserID"));
+	    return sessionInfo;
+	}
 	
 	//재고 현황 페이지 - 재고 리스트 페이지 출력
 	@GetMapping("/inventorylist")
