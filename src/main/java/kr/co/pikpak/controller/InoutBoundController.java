@@ -295,7 +295,6 @@ public class InoutBoundController {
 	@ResponseBody
 	public ResponseEntity<?> inventory_locations(@RequestParam(defaultValue = "", required = true) String supplier_cd) {
 		try {
-			System.out.println("입고모달 위치코드: " + supplier_cd);
 			List<warehouse_locations_dto_lhwtemp> locations = ioservice.select_locations(supplier_cd);
 			return ResponseEntity.ok(locations); // JSON으로 변환되어 전송
 		} catch (Exception e) {
