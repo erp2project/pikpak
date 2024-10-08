@@ -49,13 +49,13 @@
 						<div class="panel-body" >
 							<p class = "menu" style="border-bottom: 1px solid black; height: 30px;">
 								<span class="menu-item active">
-									<a href="./warehouse_inventory" onclick="selectMenu(this, 'inventory')">창고별 재고 현황</a>
+									<a href="/inventory/warehouse_inventory" onclick="selectMenu(this, 'inventory')">창고별 재고 현황</a>
 								</span>
 								<span class="menu-item">
-									<a href="./warehouse_location" onclick="selectMenu(this, 'location')"class="active">창고 위치 관리</a>
+									<a href="/inventory/warehouse_location" onclick="selectMenu(this, 'location')"class="active">창고 위치 관리</a>
 								</span>
 								<span class="menu-item">
-									<a href="./warehouse_management" onclick="selectMenu(this, 'warehouse')">창고 관리</a>
+									<a href="/inventory/warehouse_management" onclick="selectMenu(this, 'warehouse')">창고 관리</a>
 								</span>
 							</p>
 						</div>
@@ -78,7 +78,7 @@
 		</div>
 
 	    
-	    <div th:replace="~{/inventory/location_assignment :: location_assignment}"></div>
+	    <div th:replace="~{./Inventory/location_assignment.html :: location_assignment}"></div>
         <div class="wms-rack-container">
 	        <!-- 랙 01 -->
 	        <div class="wms-rack" data-rack-number="01">
@@ -380,13 +380,13 @@
 </body>
 <!-- Bootstrap JS and jQuery -->
 	<!-- Javascript -->
-	<script src="/resources/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="../resources/assets/vendor/jquery/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-	<script src="/resources/assets/vendor/bootstrap/js/bootstrap.js?v=1"></script>
-	<script src="/resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-	<script src="/resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
-	<script src="/resources/assets/vendor/chartist/js/chartist.min.js"></script>
-	<script src="/resources/assets/scripts/klorofil-common.js"></script>	
-	<script src="/resources/js/inventory/warehouse_grid.js?v=3"></script>
+	<script src="../resources/assets/vendor/bootstrap/js/bootstrap.js?v=1"></script>
+	<script src="../resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="../resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
+	<script src="../resources/assets/scripts/klorofil-common.js"></script>	
+	<script src="../resources/js/inventory/warehouse_grid.js?v=3"></script>
 </html>
 

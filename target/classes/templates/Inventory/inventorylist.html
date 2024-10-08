@@ -195,15 +195,16 @@
 						</div>	
 					</div>
 					<!-- MAIN DATAVIEW -->
+					<!-- test -->
 				</div>
 			</div>
 			<!-- MAIN -->
 		</div>
-		<div th:replace="~{/inventory/product_search :: product_search_popup}">
+		<div th:replace="~{./Inventory/product_search.html :: product_search_popup}">
 		</div>
-		<div th:replace="~{/inventory/corp_search :: corp_search_popup}">
+		<div th:replace="~{./Inventory/corp_search.html :: corp_search_popup}">
 		</div>
-		<div th:replace="~{/inventory/inventory_popup :: inventory_popup}"></div>
+		<div th:replace="~{./Inventory/inventory_popup.html :: inventory_popup}"></div>
 		<div class="clearfix"></div>
 	<!-- footer 시작 -->
 	<footer th:replace="~{/shared/components.html :: footer}"></footer>
@@ -211,13 +212,13 @@
 	</div>
 	<!-- END WRAPPER -->
 	<!-- Javascript -->
-	<script src="/resources/assets/vendor/jquery/jquery.min.js"></script>
-	<script src="/resources/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
-	<script src="/resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-	<script src="/resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
-	<script src="/resources/assets/vendor/chartist/js/chartist.min.js"></script>
-	<script src="/resources/assets/scripts/klorofil-common.js"></script>
-	<script src="/resources/js/inventory/inventory_list.js"></script>
+	<script src="../resources/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="../resources/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="../resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="../resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
+	<script src="../resources/assets/scripts/klorofil-common.js"></script>
+	<script src="../resources/js/inventory/inventory_list.js"></script>
 </body>
 
 </html>

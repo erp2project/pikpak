@@ -148,7 +148,7 @@ const sendModUserForm = () => {
 				.then(result => {
 					if (result == "Y") {
 						alert("정상적으로 수정되었습니다.");
-						window.location.reload();
+						location.href="/admin/users";
 					}
 					else {
 						responseArea.innerHTML = "서버 오류로 회원 수정 실패하였습니다. 사이트 관리자에게 문의 부탁합니다.";
