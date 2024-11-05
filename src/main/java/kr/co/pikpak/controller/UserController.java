@@ -83,7 +83,7 @@ public class UserController {
 		return responseText;
 	}
 	
-	@PostMapping("admin/users/mod")
+	@PostMapping("/admin/users/mod")
 	public String modUser(UserAddDTO userModDto) {
 		String responseText = "";
 		

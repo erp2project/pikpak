@@ -57,11 +57,16 @@ public class JWTSecurityConfig {
 					.requestMatchers("/client/**").hasAuthority("operator")
 					.requestMatchers("/product/**").hasAuthority("operator")
 					.requestMatchers("/stocklogrecord/**").hasAuthority("admin")
-					.requestMatchers("/notice/**").hasAuthority("admin")
-					.requestMatchers("/notice/list").hasAnyAuthority("admin","operator","supplier","vendor")
+					.requestMatchers("/notice/regnotice").hasAuthority("admin")
+					.requestMatchers("/notice/write").hasAuthority("admin")
+					.requestMatchers("/notice/update").hasAuthority("admin")
+					.requestMatchers("/notice/updateNotice").hasAuthority("admin")
+					.requestMatchers("/notice/**").hasAnyAuthority("admin","operator","supplier","vendor")
 					// LHH
 					.requestMatchers("/order/order_aplist").hasAuthority("operator")
+					.requestMatchers("/order/**").hasAnyAuthority("operator","admin","vendor")
 					.requestMatchers("/return/return_aplist").hasAnyAuthority("operator")
+					.requestMatchers("/return/**").hasAnyAuthority("operator","admin","vendor")
 					// KMJ
 					.requestMatchers("/inventory/**").hasAuthority("operator")
 					// LHW
